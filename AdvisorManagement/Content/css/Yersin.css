@@ -1,0 +1,195 @@
+
+.cus-stypewidth50{
+    width: 50px;
+}
+  .cus-linkchucnang{
+        font-size: 13px; 
+    }
+.cus-background-f{
+    background: #fff;
+}
+
+/*Ma mau cho lauyout 7a1214 */
+.stylecolor{
+    background-color: black  !important;/*#609810*/
+}
+
+
+.bgtitle{
+    border-radius:3px;
+    background-color: #D41B29;
+    color:#FFF;
+    font-weight:bold;
+    padding:10px;
+    margin-bottom:10px;
+}
+.menuhome{
+    background-color:#D41B29; /*218500*/
+}
+
+/*----------------------------------*/
+/*mau chu trang*/
+.word-color{
+    color:#fff !important;
+}
+
+/*mau chu ghi chu va mau chu ghi chu*/
+.style-color-note{
+    background-color:#ff0000  !important;/*#609810*/
+}
+
+.word-color-note{
+    color:#fff !important;
+}
+
+.magin-bottom-5px {
+    margin-bottom: 5px !important;
+}
+
+
+.badge-success {
+    color: #fff;
+    background-color: #28a745;
+    
+
+}
+
+.badge-fail{
+    color: #fff;
+    background-color: red;
+}
+
+.badge-hold{
+    color: #fff;
+    background-color: rgb(239, 127, 6);
+}
+
+.badges {
+    display: inline-block;
+    text-align: center;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    box-sizing: border-box;
+    width: 50%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+    text-indent: initial;
+    border-spacing: 2px;
+}
+
+
+
+
+
+
+.max-width-100 {
+    max-width:100% !important;
+}
+
+.width-100 {
+    width:100% !important;
+}
+
+.register-form{
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    padding: 15px;
+    border: 2px solid #cccccc;
+    border-radius: 10px;
+}
+
+.input-box{
+    margin-bottom: 10px;
+}
+.input-box input[type='text'],
+.input-box input[type='password'],
+.input-box input[type='date']{
+    padding: 7.5px 15px;
+    width: 100%;
+    border: 1px solid #cccccc;
+    outline: none;
+    font-size: 16px;
+    display: inline-block;
+    height: 40px;
+    color: #0f0f0f;
+}
+.input-box select{
+    padding: 7.5px 15px;
+    width: 100%;
+    border: 1px solid #cccccc;
+    outline: none;
+    font-size: 16px;
+    display: inline-block;
+    height: 40px;
+    color: #070707;
+}
+.input-box option{
+    font-size: 16px;
+}
+.input-box input[type='checkbox']{
+    height: 1em;
+    width: 1em;
+    vertical-align: middle;
+    line-height: 1em;
+}
+.input-box textarea{
+    padding: 7.5px 15px;
+    width: 100%;
+    border: 1px solid #cccccc;
+    outline: none;
+    font-size: 16px;
+    min-height: 120px;
+    color: #050505;
+}
+.btn-box{
+    text-align: center;
+    margin-top: 30px;
+}
+.btn-box button{
+    padding: 8px 40px;
+    border-radius: 2px;
+    background-color: #050505;
+    color: #ffffff;
+    border: none;
+    outline: none;
+}
+a:link{
+    text-decoration: none;
+    
+  }
+  
+  a:visited {
+    text-decoration: none;
+    color: #f1f1f1;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  a:active {
+    text-decoration: underline;
+  }
+
+
+
+
+/*------------------ css respon--------------------*/
+@media (min-width: 768px) {
+    .width-70 {
+        width:70% !important;
+    }
+     .width-50 {
+        width:50% !important;
+    }
+}
+

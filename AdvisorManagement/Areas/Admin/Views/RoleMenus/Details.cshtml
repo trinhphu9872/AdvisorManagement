@@ -1,0 +1,35 @@
+﻿@model AdvisorManagement.Models.RoleMenu
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RoleMenu</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Menu.nameMenu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Menu.nameMenu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Role.roleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role.roleName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

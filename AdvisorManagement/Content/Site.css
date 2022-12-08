@@ -1,0 +1,327 @@
+/* Set width on the form input elements since they're 100% wide by default */
+
+.cus-ttcedu {
+    float: left;
+    font-weight: bold;
+    padding: 15px 15px;
+    font-size: 12px;
+}
+
+.cus-ttcedu-footer {
+    font-size: 13px;
+    padding: 1px;
+}
+
+.cus-tilelayout {
+    color: #FCB684;
+    font-weight:bold;
+    padding-top: 30px;
+}
+
+.cus-bodylayout {
+    font-size: 11px;
+    font-weight: bold;
+}
+/*input,
+select,
+textarea {
+max-width: 280px;
+}
+
+* {
+padding: 0px;
+}
+/* styles for validation helpers */
+
+body {
+background: #fff;
+overflow-x:hidden;
+}
+
+.field-validation-error {
+color: #b94a48;
+}
+
+.field-validation-valid {
+display: none;
+}
+
+input.input-validation-error {
+border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+border: 0 none;
+}
+
+.validation-summary-errors {
+color: #b94a48;
+}
+
+.validation-summary-valid {
+display: none;
+}
+
+.divmain {
+border: 1px solid #dfdfdf;
+border-top: 0px;
+background: #fff;
+margin-bottom:20px;
+}
+
+.bgtitle {
+padding: 5px;
+border-radius: 0px !important;
+}
+
+
+table tr th {
+margin: 0px !important;
+padding: 0px !important;
+}
+
+table tr th {
+padding: 3px !important;
+background: #FECE7A;
+font-size: 13px;
+color: black;
+vertical-align: central !important;
+}
+
+table tr td {
+padding: 7px !important;
+vertical-align: central !important;
+}
+
+.modal-header {
+background-color: #003768;
+color: #FFF;
+border-radius: 0px;
+}
+
+.modal-header h4 {
+margin: 3px !important;
+}
+
+.modal-body {
+padding: 30px 10px !important;
+}
+
+.modal-content {
+border-radius: 0px;
+width: 700px;
+}
+
+thead {
+background-color: #CCC;
+}
+
+thead tr th {
+text-align: center;
+}
+
+.title_topicdisplay {
+color: #074C95;
+text-align: justify;
+font-weight: bold;
+font-size: 15px;
+text-decoration: none;
+}
+
+/*.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+padding-right: 5px;
+padding-left: 5px;
+}*/
+
+
+
+/*------- css dkhp --------*/
+* {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+/* pannel */
+.panel {
+border-radius: 0px;
+margin-top: 19px;
+}
+
+.panel-heading {
+border-color: #428bca;
+background: #428bca;
+border-radius: 0px;
+color: #fff;
+font-weight: bold;
+border-bottom: 0px;
+}
+
+.panel-heading .panel-title {
+color: #fff;
+font-size: inherit;
+font-weight: 700;
+/*text-transform: uppercase;*/
+}
+
+.panel-body {
+border: 1px solid #dadada;
+border-top: 0px;
+width: 100%;
+}
+/* /pannelx*/
+
+
+/* message box*/
+.window-header {
+width: 368px;
+}
+
+.window-shadow {
+display: none !important;
+}
+
+.messager-window {
+width: 384px;
+}
+
+.window-body {
+max-width: 299px;
+min-width: 299px;
+}
+
+span.l-btn-left {
+min-height: 24px;
+}
+/* /message box*/
+
+/* table */
+.table-hover tr:hover {
+background-color: #cee7f5;
+}
+
+.table thead {
+color: #808080;
+}
+
+th {
+text-align: center;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+/*padding:8px 0px 8px 0px;*/
+}
+
+.tr-no-hover:hover {
+/*background: #fff !important;*/
+}
+/* /table */
+
+/* cus btn */
+.a_link {
+padding: 7px;
+border: 1px solid #074590;
+color: #fff;
+background: #2a7de2;
+margin: 10px;
+float: right;
+font-size: 13px;
+cursor: pointer;
+}
+
+.a_link:hover {
+color: #2a7de2;
+background: #fff;
+}
+
+.btn-cus1 {
+border-radius: 0px;
+padding: 7px;
+border: 1px solid #074590;
+color: #fff;
+background: #2a7de2;
+font-size: 13px;
+}
+
+.btn-cus1 :hover {
+color: #2a7de2;
+background: #fff;
+}
+
+select {
+max-width: 280px;
+height: 31px;
+padding: 5px;
+}
+
+input {
+/*max-width: 280px;*/
+height: 31px;
+padding: 5px;
+}
+
+/* /cus btn */
+
+/* top menu */
+
+.navbar {
+border-radius: 0px;
+color: #FFF;
+min-height: 40px;
+border-radius: 0px !important;
+border: 0px !important;
+}
+
+.navbar-nav li a {
+color: #555;
+margin-bottom: 0px;
+margin-top: 0px;
+font-weight: bold;
+}
+
+#header .navbar-nav > li > a {
+padding-top: 9px !important;
+padding-bottom: 5px !important;
+color: #fff !important;
+font-weight: bold;
+}
+
+/* left menu */
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+color: #fff;
+}
+
+.nav-pills > li > a {
+border-radius: 0px;
+}
+
+.nav-stacked > li + li {
+margin-top: 0px;
+margin-left: 0;
+border-bottom: 1px solid #dadada;
+border-left: 1px solid #dadada;
+border-right: 1px solid #dadada;
+}
+
+.margintop20 {
+margin-top: 20px;
+}
+/* /left menu */
+
+.tab-content {
+background: #eee;
+padding: 5px;
+border: 1px solid #dfdfdf;
+border-top: 0px;
+}
+
+
+/* mobile */
+@media only screen and (max-width: 500px) {
+.panel-body {
+padding: 5px;
+border-top: 1px solid #dadada;
+}
+
+.main-container {
+padding: 0px;
+}
+}

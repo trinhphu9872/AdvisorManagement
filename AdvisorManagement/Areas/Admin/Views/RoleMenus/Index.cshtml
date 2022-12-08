@@ -1,0 +1,47 @@
+﻿
+
+@{
+    ViewBag.Title = "RoleMenu";
+    Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+}
+
+<body>
+    <h2>Quản lý menu</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create", new { @style = "color:#333;margin-left:3px" })
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                Role
+            </th>
+            <th>
+                Menu
+            </th>
+            <th></th>
+        </tr>
+        @if (ViewBag.roleMenu != null)
+        {
+            List<AdvisorManagement.Models.ViewModel.MenuRole> listRoleMenu = (List<AdvisorManagement.Models.ViewModel.MenuRole>)ViewBag.roleMenu;
+            foreach (var item in listRoleMenu)
+            {
+                <tr>
+                    <td>
+                        @item.roleName
+                    </td>
+                    <td>
+                        @item.menuName
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id }, new { @style = "color:#333;margin-left:3px" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.id }, new { @style = "color:#333;margin-left:3px" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @style = "color:#333;margin-left:3px" })
+                    </td>
+                </tr>
+            }
+        }
+
+
+    </table>
+</body>
