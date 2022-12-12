@@ -23,6 +23,7 @@ namespace AdvisorManagement.Models
         public int id { get; set; }
         public string nameMenu { get; set; }
         public string actionlink { get; set; }
+        public Nullable<int> orderid { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleMenu> RoleMenu { get; set; }

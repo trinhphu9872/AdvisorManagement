@@ -1,0 +1,34 @@
+﻿
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body>
+    <div>
+        @if (Request.IsAuthenticated)
+        {<ul class="dropdown-menu stylecolor">
+                <li>
+
+                    @Html.ActionLink("Hello " + User.Identity.Name + "!", "Index", "UserProfile", htmlAttributes: null)
+                </li>
+                <li>
+
+                    @Html.ActionLink("Sign out", "SignOut", "Account")
+
+                </li>
+            </ul>
+        }
+        else
+        {
+            <ul class="nav navbar-nav navbar-right">
+                @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            </ul>
+        }
+    </div>
+</body>
+</html>

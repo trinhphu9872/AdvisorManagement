@@ -29,7 +29,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         // GET: Admin/AccountUsers/Details/5
-        public ActionResult Details(Guid? id)
+        public ActionResult Details(int? id)
         {
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
@@ -64,7 +64,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                accountUser.ID = Guid.NewGuid();
+                //accountUser.ID = Guid.NewGuid();
                 if (accountUser.ImageUpload != null)
                 {
                     string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
@@ -85,7 +85,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         // GET: Admin/AccountUsers/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Edit(int? id)
         {
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
@@ -132,7 +132,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         // GET: Admin/AccountUsers/Delete/5
-        public ActionResult Delete(Guid? id)
+        public ActionResult Delete(int? id)
         {
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
@@ -151,7 +151,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // POST: Admin/AccountUsers/Delete/5
         [HttpPost, ActionName("Delete")]
 
-        public ActionResult DeleteConfirmed(Guid id)
+        public ActionResult DeleteConfirmed(int id)
         {
             AccountUser accountUser = db.AccountUser.Find(id);
             db.AccountUser.Remove(accountUser);

@@ -31,7 +31,7 @@ namespace AdvisorManagement.Controllers
                     // get Claims
                     StudentClass student = (StudentClass)(accountService.UserProfile((ClaimsIdentity)User.Identity, roles));
 
-                    userNew.ID = Guid.NewGuid();
+                    //userNew.ID = Guid.NewGuid();
                     userNew.email = user_mail;
                     userNew.createtime = DateTime.Now;
                     //userNew.user_code = student.user_code;

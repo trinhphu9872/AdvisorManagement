@@ -251,8 +251,8 @@
     <Content Include="Images\search.png" />
     <Content Include="Models\DataManagement.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DataManagement.Context.cs</LastGenOutput>
       <DependentUpon>DataManagement.edmx</DependentUpon>
+      <LastGenOutput>DataManagement.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\DataManagement.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -262,13 +262,6 @@
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\DataManagement.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DataManagement.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\DataManagement.edmx.diagram">
-      <DependentUpon>DataManagement.edmx</DependentUpon>
-    </Content>
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\AccountUsers\Create.cshtml" />
     <Content Include="Areas\Admin\Views\AccountUsers\Delete.cshtml" />
@@ -280,6 +273,13 @@
     <Content Include="Areas\Admin\Views\RoleMenus\Details.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\Index.cshtml" />
+    <EntityDeploy Include="Models\DataManagement.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DataManagement.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DataManagement.edmx.diagram">
+      <DependentUpon>DataManagement.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\function.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

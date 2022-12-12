@@ -16,7 +16,7 @@ namespace AdvisorManagement.Models
 
     public partial class AccountUser
     {
-        public System.Guid ID { get; set; }
+        public int ID { get; set; }
         public string user_code { get; set; }
         public int id_Role { get; set; }
         public string username { get; set; }
@@ -26,10 +26,9 @@ namespace AdvisorManagement.Models
         public string email { get; set; }
         public string dateofbirth { get; set; }
         public System.DateTime createtime { get; set; }
+        public string picture { get; set; }
         [NotMapped]
         public HttpPostedFileBase ImageUpload { get; set; }
-        public string picture { get; set; }
-    
         public virtual Role Role { get; set; }
     }
 }
