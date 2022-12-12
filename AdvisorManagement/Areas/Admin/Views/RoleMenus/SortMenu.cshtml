@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Sắp xếp Menu";
+    Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+}
+
+<h2>Sắp xếp menu</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            STT
+        </th>
+        <th>
+            Tên danh mục
+        </th>
+        <th></th>
+    </tr>
+    @if (ViewBag.Menu != null)
+    {
+        List<AdvisorManagement.Models.ViewModel.MenuItem> listMenu = (List<AdvisorManagement.Models.ViewModel.MenuItem>)ViewBag.ListMenu;
+        foreach (var item in listMenu)
+        {
+            <tr>
+                <td>
+                    @item.orderID
+                </td>
+                <td>
+                    @item.menuName
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditMenu", new { id = item.ID }, new { @style = "color:#333;margin-left:3px" })
+                </td>
+            </tr>
+        }
+    }
+
+</table>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

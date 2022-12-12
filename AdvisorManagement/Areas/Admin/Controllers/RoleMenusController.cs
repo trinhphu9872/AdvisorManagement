@@ -151,5 +151,89 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult SortMenu()
+        {
+            var ListMenu = serviceMenu.MenuItem();
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.ListMenu = ListMenu;
+            return View(ListMenu);
+        }
+
+        public ActionResult EditMenu(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Menu menu = db.Menu.Find(id);
+            if (menu == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.nameMenu = new SelectList(db.Menu, "nameMenu", "nameMenu");
+            ViewBag.orderID = new SelectList(db.Menu, "orderid", "orderid");
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            Session["orderId_truoc"] = menu.orderid;
+
+            return View(menu);
+        }
+
+        // POST: RoleMenus/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        
+        public ActionResult EditMenu([Bind(Include = "id,nameMenu,orderId")] Menu menu)
+        {
+
+            int orderID_truoc = (int)Session["orderId_truoc"];
+            var MenuItem = serviceMenu.MenuItem();
+            if (ModelState.IsValid)
+            {
+                db.Entry(menu).State = EntityState.Modified;
+                db.SaveChanges();
+                if (MenuItem != null)
+                {
+                    if (menu.orderid > orderID_truoc)
+                    {
+                        foreach (var item in MenuItem)
+                        {
+                            if (item.orderID <= menu.orderid && item.orderID > orderID_truoc)
+                            {
+                                Menu menu1 = db.Menu.Find(item.ID);
+                                menu1.orderid -= 1;
+                                db.Entry(menu1).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                    else if (menu.orderid < orderID_truoc)
+                    {
+                        foreach (var item in MenuItem)
+                        {
+                            if (item.orderID >= menu.orderid && item.orderID < orderID_truoc)
+                            {
+                                Menu menu1 = db.Menu.Find(item.ID);
+                                menu1.orderid += 1;
+                                db.Entry(menu1).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        db.Entry(menu).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                return RedirectToAction("sortMenu");
+            }
+            /* Session.Remove("orderId_truoc");*/
+            ViewBag.Menu = MenuItem;
+            ViewBag.nameMenu = new SelectList(db.Menu, "nameMenu", "nameMenu");
+            ViewBag.orderID = new SelectList(db.Menu, "orderid", "orderid");
+            return View(menu);
+        }
     }
 }

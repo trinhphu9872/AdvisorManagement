@@ -18,8 +18,10 @@ namespace AdvisorManagement.Middleware
                            where pq.email == userMail && pq.id_Role == mnrole.id_Role
                            select new Models.ViewModel.MenuItem
                            {
-                               menuName = mn.nameMenu
-                           }).ToList();
+                               menuName = mn.nameMenu,
+                               actionLink = mn.actionlink,
+                               orderID = (int)mn.orderid
+                           }).OrderBy(x=>x.orderID).ToList();
             return seeMenu;
         }
 
@@ -34,8 +36,21 @@ namespace AdvisorManagement.Middleware
                                 id = mnrole.id,
                                 roleName = role.roleName,
                                 menuName = mn.nameMenu
-                            }).ToList();
+                            }).OrderBy(x=>x.roleName).ToList();
             return roleMenu;
+        }
+
+        public List<Models.ViewModel.MenuItem> MenuItem()
+        {
+            var MenuItem = (from mn in db.Menu
+                            select new Models.ViewModel.MenuItem
+                            {
+                                ID = mn.id,
+                                menuName = mn.nameMenu,
+                                orderID = (int)mn.orderid
+                            }).OrderBy(x => x.orderID).ToList();
+
+            return MenuItem;
         }
     }
 }
