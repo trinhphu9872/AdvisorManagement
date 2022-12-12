@@ -42,5 +42,16 @@ namespace AdvisorManagement.Middleware
             return itemStudent;
         }
 
+        public int getID()
+        {
+            var lastRecordUser =  db.AccountUser.
+               OrderByDescending(s => s.ID).
+               Select(user => new
+               {
+                   Id = user.ID,
+               }).FirstOrDefault();
+            return (int)lastRecordUser.Id + 1;
+        }
+
     }
 }
