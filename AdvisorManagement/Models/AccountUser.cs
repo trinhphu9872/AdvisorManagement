@@ -29,6 +29,7 @@ namespace AdvisorManagement.Models
         public string picture { get; set; }
         [NotMapped]
         public HttpPostedFileBase ImageUpload { get; set; }
+
         public virtual Role Role { get; set; }
     }
 }

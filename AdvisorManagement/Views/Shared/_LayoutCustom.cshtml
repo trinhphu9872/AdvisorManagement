@@ -77,9 +77,7 @@
                                         @Html.ActionLink("Hello " + User.Identity.Name + "!", "Index", "UserProfile", htmlAttributes: null)
                                         </li>
                                         <li>
-                                   
-                                        @Html.ActionLink("Sign out", "SignOut", "Account")
-
+                                            <a href=@Url.Action("SignOut", "Account",new {area = ""})> Đăng xuất</a>
                                         </li>
                                         </ul>
                                     }
