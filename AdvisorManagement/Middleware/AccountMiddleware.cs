@@ -12,6 +12,9 @@ namespace AdvisorManagement.Middleware
     {
 
         private CP25Team09Entities db = new CP25Team09Entities();
+     
+
+        // Get Role
         public string getRoles(string roles)
         {
             var sql = db.AccountUser.FirstOrDefault(x => x.user_code == roles);
@@ -22,7 +25,7 @@ namespace AdvisorManagement.Middleware
             return db.Role.SingleOrDefault(x => x.id == 4).role_name;
         }
 
-
+        // Register Profile
         public void UserProfile(ClaimsIdentity logData)
         {
             var objectTest = logData;
@@ -57,7 +60,7 @@ namespace AdvisorManagement.Middleware
             db.SaveChanges();
         }
 
-
+        // write init user
         public void writeRecordUser(AccountInitModel data,string mail)
         {
             AccountUser accountUser = new AccountUser();
@@ -71,7 +74,7 @@ namespace AdvisorManagement.Middleware
             db.AccountUser.Add(accountUser);
             db.SaveChanges();
         }
-
+        // get new id 
         public int getID()
         {
             var lastRecordUser =  db.AccountUser.
@@ -82,12 +85,19 @@ namespace AdvisorManagement.Middleware
                }).FirstOrDefault();
             return (lastRecordUser != null) ? (int)lastRecordUser.Id : 0;
         }
-
-
-        public void addTypeUser(string mail)
+        // get Roles for Prodile
+        public bool getPermission(string userMail,string routeAccess)
         {
-            
-        }
+            var seeMenu = (from pq in db.AccountUser
+                           join mnrole in db.RoleMenu on pq.id_role equals mnrole.id_role
+                           join mn in db.Menu on mnrole.id_menu equals mn.id
+                           where pq.email == userMail && pq.id_role == mnrole.id_role && mn.action_link == routeAccess
+                           select new Models.ViewModel.MenuItem
+                           {      
+                               actionLink = mn.action_link
+                           });
+            return (seeMenu.FirstOrDefault(x => x.actionLink == routeAccess) != null ) ? true : false;
 
+        }
     }
 }
