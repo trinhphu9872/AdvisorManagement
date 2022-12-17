@@ -5,7 +5,7 @@ using System.Web;
 
 namespace AdvisorManagement.Models.ViewModel
 {
-    public class StudentClass
+    public class AccountInitModel
     {
         public int role_id { get; set; }
         public string user_code { get; set; }

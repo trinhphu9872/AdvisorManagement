@@ -7,48 +7,28 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using AdvisorManagement.Middleware;
+using System.Threading.Tasks;
 
 namespace AdvisorManagement.Controllers
 {
 
     public class HomeController : Controller
     {
+        // Service and Database
         private CP25Team09Entities dbApp = new CP25Team09Entities();
         private AccountMiddleware accountService = new AccountMiddleware();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         public ActionResult Index()
         {
-            string SessionRe = "";
-            int roles = 3;
             string user_mail = User.Identity.Name;
             if (user_mail != null && user_mail != "")
             {
                 var sql = dbApp.AccountUser.FirstOrDefault(x => x.email == user_mail);
                 if (sql == null)
                 {
-                    AccountUser userNew = new AccountUser();
-                    userNew.id_Role = roles;
-                    // get Claims
-                    StudentClass student = (StudentClass)(accountService.UserProfile((ClaimsIdentity)User.Identity, roles));
-
-                    userNew.ID = accountService.getID();
-                    userNew.email = user_mail;
-                    userNew.createtime = DateTime.Now;
-                    userNew.user_code = student.user_code;
-                    userNew.username = student.user_name;
-
-                    //userNew.user_code =1
-                    dbApp.AccountUser.Add(userNew);
-                    dbApp.SaveChanges();
-                    SessionRe = user_mail;
+                    accountService.UserProfile((ClaimsIdentity) User.Identity);
                 }
-                else
-                {
-                    SessionRe = sql.email;
-                }
-                var seeMenu = serviceMenu.getMenu(user_mail);
-                ViewBag.menu = seeMenu;
-                return View(seeMenu);
+                ViewBag.menu = serviceMenu.getMenu(user_mail);
             }
             return View();
         }
@@ -59,7 +39,7 @@ namespace AdvisorManagement.Controllers
 
             return View();
         }
-
+        [Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

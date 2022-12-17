@@ -7,68 +7,71 @@
       <Schema Namespace="CP25Team09Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccountUser">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" />
           <Property Name="user_code" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="id_Role" Type="int" Nullable="false" />
-          <Property Name="username" Type="nvarchar" MaxLength="100" />
+          <Property Name="id_role" Type="int" Nullable="false" />
+          <Property Name="user_name" Type="nvarchar" MaxLength="100" />
           <Property Name="gender" Type="nvarchar" MaxLength="10" />
+          <Property Name="img_profile" Type="varchar" MaxLength="100" />
           <Property Name="phone" Type="varchar" MaxLength="10" />
           <Property Name="address" Type="nvarchar" MaxLength="100" />
           <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="dateofbirth" Type="varchar" MaxLength="100" />
-          <Property Name="createtime" Type="datetime" Nullable="false" />
-          <Property Name="picture" Type="varchar" MaxLength="100" />
+          <Property Name="create_time" Type="datetime" Nullable="false" />
+          <Property Name="update_time" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Advisor">
           <Key>
-            <PropertyRef Name="advisorcode" />
+            <PropertyRef Name="advisor_code" />
           </Key>
-          <Property Name="advisorcode" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="id_status" Type="int" />
+          <Property Name="advisor_code" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="status_id" Type="int" />
+          <Property Name="account_id" Type="int" />
         </EntityType>
         <EntityType Name="Class">
           <Key>
-            <PropertyRef Name="classCode" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="classCode" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="id_Advisor" Type="nvarchar" MaxLength="100" />
-          <Property Name="dateCreated" Type="date" />
+          <Property Name="id" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="advisor_code" Type="nvarchar" MaxLength="100" />
+          <Property Name="create_time" Type="date" />
+          <Property Name="update_time" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Menu">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nameMenu" Type="nvarchar" MaxLength="100" />
-          <Property Name="actionlink" Type="nvarchar" MaxLength="100" />
-          <Property Name="orderid" Type="int" />
+          <Property Name="menu_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="action_link" Type="nvarchar" MaxLength="100" />
+          <Property Name="order_id" Type="int" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="roleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="role_name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="RoleMenu">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="id_Role" Type="int" />
-          <Property Name="id_Menu" Type="int" />
+          <Property Name="id_role" Type="int" />
+          <Property Name="id_menu" Type="int" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
-            <PropertyRef Name="studentcode" />
+            <PropertyRef Name="student_code" />
           </Key>
-          <Property Name="studentcode" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="id_Class" Type="varchar" MaxLength="50" />
-          <Property Name="trainningPoint" Type="varchar" MaxLength="10" />
-          <Property Name="gradePointAverage" Type="varchar" MaxLength="10" />
-          <Property Name="id_Status" Type="int" />
+          <Property Name="student_code" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_class" Type="varchar" MaxLength="50" />
+          <Property Name="training_point" Type="varchar" MaxLength="10" />
+          <Property Name="grade_training_point" Type="varchar" MaxLength="10" />
+          <Property Name="status_id" Type="int" />
+          <Property Name="account_id" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -88,7 +91,19 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="AccountUser">
-              <PropertyRef Name="id_Role" />
+              <PropertyRef Name="id_role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Advisor_AccountUser">
+          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="0..1" />
+          <End Role="Advisor" Type="Self.Advisor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Advisor">
+              <PropertyRef Name="account_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -97,10 +112,10 @@
           <End Role="Class" Type="Self.Class" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Advisor">
-              <PropertyRef Name="advisorcode" />
+              <PropertyRef Name="advisor_code" />
             </Principal>
             <Dependent Role="Class">
-              <PropertyRef Name="id_Advisor" />
+              <PropertyRef Name="advisor_code" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -112,7 +127,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="RoleMenu">
-              <PropertyRef Name="id_Menu" />
+              <PropertyRef Name="id_menu" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -124,7 +139,19 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="RoleMenu">
-              <PropertyRef Name="id_Role" />
+              <PropertyRef Name="id_role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_AccountUser">
+          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="0..1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="account_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -133,10 +160,10 @@
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Class">
-              <PropertyRef Name="classCode" />
+              <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Student">
-              <PropertyRef Name="id_Class" />
+              <PropertyRef Name="id_class" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -153,6 +180,10 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
           </AssociationSet>
+          <AssociationSet Name="FK_Advisor_AccountUser" Association="Self.FK_Advisor_AccountUser">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="Advisor" EntitySet="Advisor" />
+          </AssociationSet>
           <AssociationSet Name="FK_Class_Advisor" Association="Self.FK_Class_Advisor">
             <End Role="Advisor" EntitySet="Advisor" />
             <End Role="Class" EntitySet="Class" />
@@ -164,6 +195,10 @@
           <AssociationSet Name="FK_RoleMenu_Role" Association="Self.FK_RoleMenu_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="RoleMenu" EntitySet="RoleMenu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_AccountUser" Association="Self.FK_Student_AccountUser">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="Student" EntitySet="Student" />
           </AssociationSet>
           <AssociationSet Name="FK_Student_Class" Association="Self.FK_Student_Class">
             <End Role="Class" EntitySet="Class" />
@@ -177,36 +212,41 @@
       <Schema Namespace="CP25Team09Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="AccountUser">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="user_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="id_Role" Type="Int32" Nullable="false" />
-          <Property Name="username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_role" Type="Int32" Nullable="false" />
+          <Property Name="user_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="img_profile" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="dateofbirth" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="createtime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="picture" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="create_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="update_time" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Role" Relationship="Self.FK_AccountUser_Role" FromRole="AccountUser" ToRole="Role" />
+          <NavigationProperty Name="Advisor" Relationship="Self.FK_Advisor_AccountUser" FromRole="AccountUser" ToRole="Advisor" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Student_AccountUser" FromRole="AccountUser" ToRole="Student" />
         </EntityType>
         <EntityType Name="Advisor">
           <Key>
-            <PropertyRef Name="advisorcode" />
+            <PropertyRef Name="advisor_code" />
           </Key>
-          <Property Name="advisorcode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="id_status" Type="Int32" />
+          <Property Name="advisor_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="status_id" Type="Int32" />
+          <Property Name="account_id" Type="Int32" />
+          <NavigationProperty Name="AccountUser" Relationship="Self.FK_Advisor_AccountUser" FromRole="Advisor" ToRole="AccountUser" />
           <NavigationProperty Name="Class" Relationship="Self.FK_Class_Advisor" FromRole="Advisor" ToRole="Class" />
         </EntityType>
         <EntityType Name="Class">
           <Key>
-            <PropertyRef Name="classCode" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="classCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="id_Advisor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="dateCreated" Type="DateTime" Precision="0" />
+          <Property Name="id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="advisor_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="create_time" Type="DateTime" Precision="0" />
+          <Property Name="update_time" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="Class" ToRole="Advisor" />
           <NavigationProperty Name="Student" Relationship="Self.FK_Student_Class" FromRole="Class" ToRole="Student" />
         </EntityType>
@@ -215,9 +255,9 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nameMenu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="actionlink" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="orderid" Type="Int32" />
+          <Property Name="menu_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="action_link" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="order_id" Type="Int32" />
           <NavigationProperty Name="RoleMenu" Relationship="Self.FK_RoleMenu_Menu" FromRole="Menu" ToRole="RoleMenu" />
         </EntityType>
         <EntityType Name="Role">
@@ -225,7 +265,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="role_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_AccountUser_Role" FromRole="Role" ToRole="AccountUser" />
           <NavigationProperty Name="RoleMenu" Relationship="Self.FK_RoleMenu_Role" FromRole="Role" ToRole="RoleMenu" />
         </EntityType>
@@ -234,20 +274,22 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_Role" Type="Int32" />
-          <Property Name="id_Menu" Type="Int32" />
+          <Property Name="id_role" Type="Int32" />
+          <Property Name="id_menu" Type="Int32" />
           <NavigationProperty Name="Menu" Relationship="Self.FK_RoleMenu_Menu" FromRole="RoleMenu" ToRole="Menu" />
           <NavigationProperty Name="Role" Relationship="Self.FK_RoleMenu_Role" FromRole="RoleMenu" ToRole="Role" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
-            <PropertyRef Name="studentcode" />
+            <PropertyRef Name="student_code" />
           </Key>
-          <Property Name="studentcode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="id_Class" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="trainningPoint" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="gradePointAverage" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="id_Status" Type="Int32" />
+          <Property Name="student_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_class" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="training_point" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="grade_training_point" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="status_id" Type="Int32" />
+          <Property Name="account_id" Type="Int32" />
+          <NavigationProperty Name="AccountUser" Relationship="Self.FK_Student_AccountUser" FromRole="Student" ToRole="AccountUser" />
           <NavigationProperty Name="Class" Relationship="Self.FK_Student_Class" FromRole="Student" ToRole="Class" />
         </EntityType>
         <EntityType Name="sysdiagrams">
@@ -268,7 +310,31 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="AccountUser">
-              <PropertyRef Name="id_Role" />
+              <PropertyRef Name="id_role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Advisor_AccountUser">
+          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="0..1" />
+          <End Role="Advisor" Type="Self.Advisor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Advisor">
+              <PropertyRef Name="account_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_AccountUser">
+          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="0..1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="account_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -277,10 +343,10 @@
           <End Role="Class" Type="Self.Class" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Advisor">
-              <PropertyRef Name="advisorcode" />
+              <PropertyRef Name="advisor_code" />
             </Principal>
             <Dependent Role="Class">
-              <PropertyRef Name="id_Advisor" />
+              <PropertyRef Name="advisor_code" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -289,10 +355,10 @@
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Class">
-              <PropertyRef Name="classCode" />
+              <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Student">
-              <PropertyRef Name="id_Class" />
+              <PropertyRef Name="id_class" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -304,7 +370,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="RoleMenu">
-              <PropertyRef Name="id_Menu" />
+              <PropertyRef Name="id_menu" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -316,7 +382,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="RoleMenu">
-              <PropertyRef Name="id_Role" />
+              <PropertyRef Name="id_role" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -332,6 +398,14 @@
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Advisor_AccountUser" Association="Self.FK_Advisor_AccountUser">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="Advisor" EntitySet="Advisor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_AccountUser" Association="Self.FK_Student_AccountUser">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="Student" EntitySet="Student" />
           </AssociationSet>
           <AssociationSet Name="FK_Class_Advisor" Association="Self.FK_Class_Advisor">
             <End Role="Advisor" EntitySet="Advisor" />
@@ -359,34 +433,36 @@
           <EntitySetMapping Name="AccountUser">
             <EntityTypeMapping TypeName="CP25Team09Model.AccountUser">
               <MappingFragment StoreEntitySet="AccountUser">
-                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="user_code" ColumnName="user_code" />
-                <ScalarProperty Name="id_Role" ColumnName="id_Role" />
-                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="id_role" ColumnName="id_role" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="img_profile" ColumnName="img_profile" />
                 <ScalarProperty Name="phone" ColumnName="phone" />
                 <ScalarProperty Name="address" ColumnName="address" />
                 <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="dateofbirth" ColumnName="dateofbirth" />
-                <ScalarProperty Name="createtime" ColumnName="createtime" />
-                <ScalarProperty Name="picture" ColumnName="picture" />
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="update_time" ColumnName="update_time" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Advisor">
             <EntityTypeMapping TypeName="CP25Team09Model.Advisor">
               <MappingFragment StoreEntitySet="Advisor">
-                <ScalarProperty Name="advisorcode" ColumnName="advisorcode" />
-                <ScalarProperty Name="id_status" ColumnName="id_status" />
+                <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
+                <ScalarProperty Name="status_id" ColumnName="status_id" />
+                <ScalarProperty Name="account_id" ColumnName="account_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Class">
             <EntityTypeMapping TypeName="CP25Team09Model.Class">
               <MappingFragment StoreEntitySet="Class">
-                <ScalarProperty Name="classCode" ColumnName="classCode" />
-                <ScalarProperty Name="id_Advisor" ColumnName="id_Advisor" />
-                <ScalarProperty Name="dateCreated" ColumnName="dateCreated" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="update_time" ColumnName="update_time" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -394,9 +470,9 @@
             <EntityTypeMapping TypeName="CP25Team09Model.Menu">
               <MappingFragment StoreEntitySet="Menu">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="nameMenu" ColumnName="nameMenu" />
-                <ScalarProperty Name="actionlink" ColumnName="actionlink" />
-                <ScalarProperty Name="orderid" ColumnName="orderid" />
+                <ScalarProperty Name="menu_name" ColumnName="menu_name" />
+                <ScalarProperty Name="action_link" ColumnName="action_link" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -404,7 +480,7 @@
             <EntityTypeMapping TypeName="CP25Team09Model.Role">
               <MappingFragment StoreEntitySet="Role">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="roleName" ColumnName="roleName" />
+                <ScalarProperty Name="role_name" ColumnName="role_name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -412,19 +488,20 @@
             <EntityTypeMapping TypeName="CP25Team09Model.RoleMenu">
               <MappingFragment StoreEntitySet="RoleMenu">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="id_Role" ColumnName="id_Role" />
-                <ScalarProperty Name="id_Menu" ColumnName="id_Menu" />
+                <ScalarProperty Name="id_role" ColumnName="id_role" />
+                <ScalarProperty Name="id_menu" ColumnName="id_menu" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Student">
             <EntityTypeMapping TypeName="CP25Team09Model.Student">
               <MappingFragment StoreEntitySet="Student">
-                <ScalarProperty Name="studentcode" ColumnName="studentcode" />
-                <ScalarProperty Name="id_Class" ColumnName="id_Class" />
-                <ScalarProperty Name="trainningPoint" ColumnName="trainningPoint" />
-                <ScalarProperty Name="gradePointAverage" ColumnName="gradePointAverage" />
-                <ScalarProperty Name="id_Status" ColumnName="id_Status" />
+                <ScalarProperty Name="student_code" ColumnName="student_code" />
+                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="training_point" ColumnName="training_point" />
+                <ScalarProperty Name="grade_training_point" ColumnName="grade_training_point" />
+                <ScalarProperty Name="status_id" ColumnName="status_id" />
+                <ScalarProperty Name="account_id" ColumnName="account_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

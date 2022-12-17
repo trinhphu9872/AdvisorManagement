@@ -20,7 +20,6 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             ViewBag.Message = "Role Menu";
             var roleMenu = serviceMenu.getRoleMenu();
-
             ViewBag.roleMenu = roleMenu;
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             return View(roleMenu);
@@ -46,8 +45,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus/Create
         public ActionResult Create()
         {
-            ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu");
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName");
+            ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name");
+            ViewBag.id_role = new SelectList(db.Role, "id", "role_name");
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             return View();
@@ -58,7 +57,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 
-        public ActionResult Create([Bind(Include = "id,id_Role,id_Menu")] RoleMenu roleMenu)
+        public ActionResult Create([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +66,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_Menu);
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_Role);
+            ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_menu);
+            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_role);
 
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             return View(roleMenu);
@@ -86,9 +85,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_Menu);
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_Role);
-
+            ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name", roleMenu.id_menu);
+            ViewBag.id_role = new SelectList(db.Role, "id", "role_name", roleMenu.id_role);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             return View(roleMenu);
         }
@@ -98,7 +96,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 
-        public ActionResult Edit([Bind(Include = "id,id_Role,id_Menu")] RoleMenu roleMenu)
+        public ActionResult Edit([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
             if (ModelState.IsValid)
             {
@@ -106,8 +104,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_Menu);
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_Role);
+            ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name", roleMenu.id_menu);
+            ViewBag.id_role = new SelectList(db.Role, "id", "role_name", roleMenu.id_role);
 
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             return View(roleMenu);
@@ -154,10 +152,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult SortMenu()
         {
-            var ListMenu = serviceMenu.MenuItem();
+            //var ListMenu = serviceMenu.MenuItem();
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            ViewBag.ListMenu = ListMenu;
-            return View(ListMenu);
+            ViewBag.ListMenu = serviceMenu.MenuItem();
+            return View();
         }
 
         public ActionResult EditMenu(int? id)
@@ -171,10 +169,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.nameMenu = new SelectList(db.Menu, "nameMenu", "nameMenu");
-            ViewBag.orderID = new SelectList(db.Menu, "orderid", "orderid");
+            
+            ViewBag.nameMenu = new SelectList(db.Menu, "name_menu", "name_menu");
+            ViewBag.orderID = new SelectList(db.Menu, "order_id", "order_id");
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            Session["orderId_truoc"] = menu.orderid;
+            Session["orderId_truoc"] = menu.order_id;
+            Session["maxValueOrder"] = db.Menu.AsQueryable().Count();
 
             return View(menu);
         }
@@ -183,10 +183,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        
-        public ActionResult EditMenu([Bind(Include = "id,nameMenu,orderId")] Menu menu)
-        {
 
+        public ActionResult EditMenu([Bind(Include = "id,menu_name,order_id")] Menu menu)
+        {
             int orderID_truoc = (int)Session["orderId_truoc"];
             var MenuItem = serviceMenu.MenuItem();
             if (ModelState.IsValid)
@@ -195,27 +194,27 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 db.SaveChanges();
                 if (MenuItem != null)
                 {
-                    if (menu.orderid > orderID_truoc)
+                    if (menu.order_id > orderID_truoc)
                     {
                         foreach (var item in MenuItem)
                         {
-                            if (item.orderID <= menu.orderid && item.orderID > orderID_truoc)
+                            if (item.orderID <= menu.order_id && item.orderID > orderID_truoc)
                             {
                                 Menu menu1 = db.Menu.Find(item.ID);
-                                menu1.orderid -= 1;
+                                menu1.order_id -= 1;
                                 db.Entry(menu1).State = EntityState.Modified;
                                 db.SaveChanges();
                             }
                         }
                     }
-                    else if (menu.orderid < orderID_truoc)
+                    else if (menu.order_id < orderID_truoc)
                     {
                         foreach (var item in MenuItem)
                         {
-                            if (item.orderID >= menu.orderid && item.orderID < orderID_truoc)
+                            if (item.orderID >= menu.order_id && item.orderID < orderID_truoc)
                             {
                                 Menu menu1 = db.Menu.Find(item.ID);
-                                menu1.orderid += 1;
+                                menu1.order_id += 1;
                                 db.Entry(menu1).State = EntityState.Modified;
                                 db.SaveChanges();
                             }
@@ -236,4 +235,5 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             return View(menu);
         }
     }
+
 }

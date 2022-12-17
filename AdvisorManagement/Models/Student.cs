@@ -14,12 +14,14 @@ namespace AdvisorManagement.Models
     
     public partial class Student
     {
-        public string studentcode { get; set; }
-        public string id_Class { get; set; }
-        public string trainningPoint { get; set; }
-        public string gradePointAverage { get; set; }
-        public Nullable<int> id_Status { get; set; }
+        public string student_code { get; set; }
+        public string id_class { get; set; }
+        public string training_point { get; set; }
+        public string grade_training_point { get; set; }
+        public Nullable<int> status_id { get; set; }
+        public Nullable<int> account_id { get; set; }
     
+        public virtual AccountUser AccountUser { get; set; }
         public virtual Class Class { get; set; }
     }
 }

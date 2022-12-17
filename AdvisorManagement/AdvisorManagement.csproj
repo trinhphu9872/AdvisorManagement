@@ -219,6 +219,8 @@
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\AccountInitModel.cs" />
+    <Compile Include="Models\ViewModel\AccountUserModel.cs" />
     <Compile Include="Models\ViewModel\MenuItem.cs" />
     <Compile Include="Models\ViewModel\MenuRole.cs" />
     <Compile Include="Models\ViewModel\StudentClass.cs" />
@@ -267,12 +269,13 @@
     <Content Include="Areas\Admin\Views\AccountUsers\Delete.cshtml" />
     <Content Include="Areas\Admin\Views\AccountUsers\Details.cshtml" />
     <Content Include="Areas\Admin\Views\AccountUsers\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\AccountUsers\Index.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\Create.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\Delete.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\Details.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\RoleMenus\SortMenu.cshtml" />
+    <Content Include="Areas\Admin\Views\RoleMenus\EditMenu.cshtml" />
     <EntityDeploy Include="Models\DataManagement.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DataManagement.Designer.cs</LastGenOutput>
@@ -280,8 +283,7 @@
     <Content Include="Models\DataManagement.edmx.diagram">
       <DependentUpon>DataManagement.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\RoleMenus\SortMenu.cshtml" />
-    <Content Include="Areas\Admin\Views\RoleMenus\EditMenu.cshtml" />
+    <Content Include="Areas\Admin\Views\AccountUsers\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\function.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

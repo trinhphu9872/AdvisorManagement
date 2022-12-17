@@ -18,7 +18,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         private CP25Team09Entities db = new CP25Team09Entities();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
 
-        // GET: Admin/AccountUsers
+        //GET: Admin/AccountUsers
         public ActionResult Index()
         {
             var accountUser = db.AccountUser.Include(a => a.Role);
@@ -50,7 +50,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName");
+            ViewBag.id_Role = new SelectList(db.Role, "id", "role_name");
             AccountUser user = new AccountUser();
             return View(user);
         }
@@ -70,17 +70,18 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
                     string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
                     filename = filename + extension;
-                    accountUser.picture = "~/Image/imageProfile/" + filename;
+                    accountUser.img_profile = "~/Image/imageProfile/" + filename;
                     accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Image/imageProfile/"), filename));
                 }
 
-                accountUser.createtime = DateTime.Now;
+                accountUser.create_time = DateTime.Now;
+                accountUser.update_time = DateTime.Now;
                 db.AccountUser.Add(accountUser);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_Role);
+            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
             return View(accountUser);
         }
 
@@ -98,7 +99,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_Role);
+            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
             return View(accountUser);
         }
 
@@ -117,17 +118,17 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
                     string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
                     filename = filename + extension;
-                    accountUser.picture = "~/Image/imageProfile/" + filename;
+                    accountUser.img_profile = "~/Image/imageProfile/" + filename;
                     accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Image/imageProfile/"), filename));
                 }
 
-                accountUser.createtime = DateTime.Now;
+                accountUser.create_time = DateTime.Now;
                 db.Entry(accountUser).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_Role);
+            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
             return View(accountUser);
         }
 

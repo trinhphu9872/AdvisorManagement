@@ -19,19 +19,19 @@
         @Html.HiddenFor(model => model.id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.nameMenu,"Tên danh mục", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.menu_name,"Tên danh mục", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.nameMenu, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.nameMenu, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.menu_name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.menu_name, "", new { @class = "text-danger" })
             </div>
         </div>
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.orderid,"Vị trí", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.order_id,"Vị trí", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.orderid, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.orderid, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.order_id, new { htmlAttributes = new { @class = "form-control", @min = "1", @max = @Session["maxValueOrder"]  } })
+                @Html.ValidationMessageFor(model => model.order_id, "", new { @class = "text-danger" })
             </div>
         </div>
 

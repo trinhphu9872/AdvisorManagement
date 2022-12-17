@@ -20,9 +20,10 @@ namespace AdvisorManagement.Models
             this.Student = new HashSet<Student>();
         }
     
-        public string classCode { get; set; }
-        public string id_Advisor { get; set; }
-        public Nullable<System.DateTime> dateCreated { get; set; }
+        public string id { get; set; }
+        public string advisor_code { get; set; }
+        public Nullable<System.DateTime> create_time { get; set; }
+        public string update_time { get; set; }
     
         public virtual Advisor Advisor { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

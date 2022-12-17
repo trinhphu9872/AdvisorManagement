@@ -4,16 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e3431081b76345de815c58d306d35077" Name="Diagram1" ZoomLevel="86">
-        <EntityTypeShape EntityType="CP25Team09Model.AccountUser" Width="1.5" PointX="3.5" PointY="6.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CP25Team09Model.Advisor" Width="1.5" PointX="0.5" PointY="9.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CP25Team09Model.Class" Width="1.5" PointX="3.5" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CP25Team09Model.Menu" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CP25Team09Model.Role" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CP25Team09Model.RoleMenu" Width="1.5" PointX="7.375" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CP25Team09Model.Student" Width="1.5" PointX="6.125" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="CP25Team09Model.sysdiagrams" Width="1.5" PointX="12.625" PointY="7.625" IsExpanded="true" />
+      <Diagram DiagramId="2d951635b314492b88480d645427decd" Name="Diagram1">
+        <EntityTypeShape EntityType="CP25Team09Model.AccountUser" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CP25Team09Model.Advisor" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CP25Team09Model.Class" Width="1.5" PointX="7.5" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CP25Team09Model.Menu" Width="1.5" PointX="3.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CP25Team09Model.Role" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CP25Team09Model.RoleMenu" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CP25Team09Model.Student" Width="1.5" PointX="9.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CP25Team09Model.sysdiagrams" Width="1.5" PointX="5.75" PointY="7.125" IsExpanded="true" />
         <AssociationConnector Association="CP25Team09Model.FK_AccountUser_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="CP25Team09Model.FK_Advisor_AccountUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CP25Team09Model.FK_Student_AccountUser" ManuallyRouted="false" />
         <AssociationConnector Association="CP25Team09Model.FK_Class_Advisor" ManuallyRouted="false" />
         <AssociationConnector Association="CP25Team09Model.FK_Student_Class" ManuallyRouted="false" />
         <AssociationConnector Association="CP25Team09Model.FK_RoleMenu_Menu" ManuallyRouted="false" />

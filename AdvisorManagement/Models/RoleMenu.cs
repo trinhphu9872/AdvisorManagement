@@ -15,8 +15,8 @@ namespace AdvisorManagement.Models
     public partial class RoleMenu
     {
         public int id { get; set; }
-        public Nullable<int> id_Role { get; set; }
-        public Nullable<int> id_Menu { get; set; }
+        public Nullable<int> id_role { get; set; }
+        public Nullable<int> id_menu { get; set; }
     
         public virtual Menu Menu { get; set; }
         public virtual Role Role { get; set; }

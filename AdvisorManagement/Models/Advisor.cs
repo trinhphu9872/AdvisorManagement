@@ -20,9 +20,11 @@ namespace AdvisorManagement.Models
             this.Class = new HashSet<Class>();
         }
     
-        public string advisorcode { get; set; }
-        public Nullable<int> id_status { get; set; }
+        public string advisor_code { get; set; }
+        public Nullable<int> status_id { get; set; }
+        public Nullable<int> account_id { get; set; }
     
+        public virtual AccountUser AccountUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Class { get; set; }
     }
