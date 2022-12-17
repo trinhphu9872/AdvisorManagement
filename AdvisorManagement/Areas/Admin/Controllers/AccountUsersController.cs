@@ -25,6 +25,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+
                 var accountUser = db.AccountUser.Include(a => a.Role);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 return View(accountUser.ToList());
