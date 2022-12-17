@@ -18,8 +18,8 @@
           <Property Name="phone" Type="varchar" MaxLength="10" />
           <Property Name="address" Type="nvarchar" MaxLength="100" />
           <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="create_time" Type="datetime" Nullable="false" />
-          <Property Name="update_time" Type="datetime" Nullable="false" />
+          <Property Name="create_time" Type="datetime" />
+          <Property Name="update_time" Type="datetime" />
         </EntityType>
         <EntityType Name="Advisor">
           <Key>
@@ -223,8 +223,8 @@
           <Property Name="phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="create_time" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="update_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="update_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Role" Relationship="Self.FK_AccountUser_Role" FromRole="AccountUser" ToRole="Role" />
           <NavigationProperty Name="Advisor" Relationship="Self.FK_Advisor_AccountUser" FromRole="AccountUser" ToRole="Advisor" />
           <NavigationProperty Name="Student" Relationship="Self.FK_Student_AccountUser" FromRole="AccountUser" ToRole="Student" />

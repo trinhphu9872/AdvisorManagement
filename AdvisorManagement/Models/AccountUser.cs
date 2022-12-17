@@ -10,9 +10,9 @@
 namespace AdvisorManagement.Models
 {
     using System;
-    using System.Web;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Web;
 
     public partial class AccountUser
     {
@@ -32,8 +32,9 @@ namespace AdvisorManagement.Models
         public string phone { get; set; }
         public string address { get; set; }
         public string email { get; set; }
-        public System.DateTime create_time { get; set; }
-        public System.DateTime update_time { get; set; }
+        public Nullable<System.DateTime> create_time { get; set; }
+        public Nullable<System.DateTime> update_time { get; set; }
+
         [NotMapped]
         public HttpPostedFileBase ImageUpload { get; set; }
 

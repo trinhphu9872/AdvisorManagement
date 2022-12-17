@@ -70,8 +70,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
                     string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
                     filename = filename + extension;
-                    accountUser.img_profile = "~/Image/imageProfile/" + filename;
-                    accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Image/imageProfile/"), filename));
+                    accountUser.img_profile = "~/Images/imageProfile/" + filename;
+                    accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
                 }
 
                 accountUser.create_time = DateTime.Now;
@@ -81,7 +81,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
+            ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
             return View(accountUser);
         }
 
@@ -99,7 +99,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
+            ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
             return View(accountUser);
         }
 
@@ -118,17 +118,17 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
                     string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
                     filename = filename + extension;
-                    accountUser.img_profile = "~/Image/imageProfile/" + filename;
-                    accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Image/imageProfile/"), filename));
+                    accountUser.img_profile = "~/Images/imageProfile/" + filename;
+                    accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
                 }
 
-                accountUser.create_time = DateTime.Now;
+                accountUser.update_time = DateTime.Now;
                 db.Entry(accountUser).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
+            ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
             return View(accountUser);
         }
 
