@@ -78,10 +78,11 @@
           <Key>
             <PropertyRef Name="class_code" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="class_code" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="advisor_code" Type="nvarchar" MaxLength="100" />
-          <Property Name="create_time" Type="date" />
-          <Property Name="update_time" Type="nchar" MaxLength="10" />
+          <Property Name="create_time" Type="datetime" />
+          <Property Name="update_time" Type="datetime" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -295,10 +296,11 @@
           <Key>
             <PropertyRef Name="class_code" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="class_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="advisor_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="create_time" Type="DateTime" Precision="0" />
-          <Property Name="update_time" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="update_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="VLClass" ToRole="Advisor" />
           <NavigationProperty Name="Student" Relationship="Self.FK_Student_Class" FromRole="VLClass" ToRole="Student" />
         </EntityType>
@@ -509,6 +511,7 @@
           <EntitySetMapping Name="VLClass">
             <EntityTypeMapping TypeName="CP25Team09Model.VLClass">
               <MappingFragment StoreEntitySet="VLClass">
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="class_code" ColumnName="class_code" />
                 <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
