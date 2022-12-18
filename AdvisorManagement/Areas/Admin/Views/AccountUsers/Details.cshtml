@@ -20,11 +20,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.username)
+            @Html.DisplayNameFor(model => model.user_name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.username)
+            @Html.DisplayFor(model => model.user_name)
         </dd>
 
         <dt>
@@ -59,41 +59,41 @@
             @Html.DisplayFor(model => model.email)
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.dateofbirth)
-        </dt>
+        </dt>*@
 
-        <dd>
+        @*<dd>
             @Html.DisplayFor(model => model.dateofbirth)
-        </dd>
+        </dd>*@
 
         <dt>
-            @Html.DisplayNameFor(model => model.createtime)
+            @Html.DisplayNameFor(model => model.create_time)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.createtime)
+            @Html.DisplayFor(model => model.create_time)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.picture)
+            @Html.DisplayNameFor(model => model.img_profile)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.picture)
+            @Html.DisplayFor(model => model.img_profile)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Role.roleName)
+            @Html.DisplayNameFor(model => model.Role.role_name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Role.roleName)
+            @Html.DisplayFor(model => model.Role.role_name)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

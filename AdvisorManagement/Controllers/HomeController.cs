@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using AdvisorManagement.Middleware;
 using System.Threading.Tasks;
+using System.Data.Entity;
+using System.IO;
 
 namespace AdvisorManagement.Controllers
 {
@@ -45,6 +47,37 @@ namespace AdvisorManagement.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+        public ActionResult UserProfile(string email)
+        {
+            AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(email));
+
+            return View(user);
+        }
+        public ActionResult EditUserProfile(int id)
+        {
+            AccountUser user = dbApp.AccountUser.Find(id);
+
+            return View(user);
+        }
+        [HttpPost]
+        public ActionResult EditUserProfile(AccountUser user)
+        {
+            AccountUser edituser = dbApp.AccountUser.Find(user.id);
+            edituser.user_name = user.user_name;
+            edituser.user_code = user.user_code;
+            edituser.phone = user.phone;
+            if (user.ImageUpload != null)
+            {
+                string filename = Path.GetFileNameWithoutExtension(user.ImageUpload.FileName).ToString();
+                string extension = Path.GetExtension(user.ImageUpload.FileName);
+                filename = filename + extension;
+                edituser.img_profile = "~/Images/imageProfile/" + filename;
+                user.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+            }
+            dbApp.Entry(edituser).State = EntityState.Modified;
+            dbApp.SaveChanges();
+            return RedirectToAction("UserProfile", "Home", edituser);
         }
     }
 }

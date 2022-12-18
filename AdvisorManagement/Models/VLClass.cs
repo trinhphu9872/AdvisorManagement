@@ -12,15 +12,16 @@ namespace AdvisorManagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Class
+    public partial class VLClass
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Class()
+        public VLClass()
         {
             this.Student = new HashSet<Student>();
         }
     
-        public string id { get; set; }
+        public int id { get; set; }
+        public string class_code { get; set; }
         public string advisor_code { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public string update_time { get; set; }

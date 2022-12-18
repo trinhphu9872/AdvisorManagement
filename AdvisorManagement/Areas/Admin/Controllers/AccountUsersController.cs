@@ -19,7 +19,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         private string routePermission = "Admin/AccountUsers";
-
+        private string picture;
         //GET: Admin/AccountUsers
         public ActionResult Index()
         {
@@ -86,21 +86,45 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //accountUser.ID = Guid.NewGuid();
-                    if (accountUser.ImageUpload != null)
-                    {
-                        string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
-                        string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
-                        filename = filename + extension;
-                        accountUser.img_profile = "~/Images/imageProfile/" + filename;
-                        accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
-                    }
+                    if (accountUser.id_role == 2) {
+                        
+                        
+                        if (accountUser.ImageUpload != null)
+                        {
+                            string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
+                            string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
+                            filename = filename + extension;
+                            accountUser.img_profile = "~/Images/imageProfile/" + filename;
+                            accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                        }
+                        accountUser.id = db.AccountUser.ToList().Count() + 1;
+                        accountUser.create_time = DateTime.Now;
 
-                    accountUser.create_time = DateTime.Now;
-                    accountUser.update_time = DateTime.Now;
-                    db.AccountUser.Add(accountUser);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                        db.AccountUser.Add(accountUser);
+                        var addAdvisor = new Advisor();
+
+                        addAdvisor.advisor_code = accountUser.user_code;
+                        addAdvisor.account_id = accountUser.id;
+                        db.Advisor.Add(addAdvisor);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    } else { 
+                    //accountUser.ID = Guid.NewGuid();
+                        if (accountUser.ImageUpload != null)
+                        {
+                            string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
+                            string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
+                            filename = filename + extension;
+                            accountUser.img_profile = "~/Images/imageProfile/" + filename;
+                            accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                        }
+                        accountUser.id= db.AccountUser.ToList().Count() + 1;
+                        accountUser.create_time = DateTime.Now;
+                    
+                        db.AccountUser.Add(accountUser);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 }
 
                 ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
@@ -114,27 +138,22 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/AccountUsers/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                AccountUser accountUser = db.AccountUser.Find(id);
-                if (accountUser == null)
-                {
-                    return HttpNotFound();
-                }
-                ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
-                return View(accountUser);
-            }
-            else
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            AccountUser accountUser = db.AccountUser.Find(id);
+            if (accountUser == null)
+            {
+                return HttpNotFound();
+            }
+            picture = accountUser.img_profile;
+            ViewBag.id_Role = db.Role.ToList();
+            return View(accountUser);
         }
+
         // POST: Admin/AccountUsers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -142,32 +161,32 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Edit(AccountUser accountUser)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                var edituser = db.AccountUser.Find(accountUser.id);
+                if (accountUser.ImageUpload != null)
                 {
-                    if (accountUser.ImageUpload != null)
-                    {
-                        string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
-                        string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
-                        filename = filename + extension;
-                        accountUser.img_profile = "~/Images/imageProfile/" + filename;
-                        accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
-                    }
-
-                    accountUser.update_time = DateTime.Now;
-                    db.Entry(accountUser).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
+                    string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
+                    filename = filename + extension;
+                    edituser.img_profile = "~/Images/imageProfile/" + filename;
+                    accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
                 }
+                edituser.address = accountUser.address;
+                edituser.user_name = accountUser.user_name;
+                edituser.user_code = accountUser.user_code;
+                //edituser.dateofbirth = accountUser.dateofbirth;
+                edituser.phone = accountUser.phone;
+                edituser.gender = accountUser.gender;
+                edituser.id_role = accountUser.id_role;
 
-                ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
-                return View(accountUser);
+                db.Entry(edituser).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }   
+
+            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
+            return View(accountUser);
         }
 
         // GET: Admin/AccountUsers/Delete/5
@@ -201,8 +220,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                AccountUser accountUser = db.AccountUser.Find(id);
+                var accountUser = db.AccountUser.Find(id);
+                var advisor= db.Advisor.Find(accountUser.user_code);
                 db.AccountUser.Remove(accountUser);
+                db.Advisor.Remove(advisor);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

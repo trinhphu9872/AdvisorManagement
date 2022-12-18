@@ -22,6 +22,6 @@ namespace AdvisorManagement.Models
         public Nullable<int> account_id { get; set; }
     
         public virtual AccountUser AccountUser { get; set; }
-        public virtual Class Class { get; set; }
+        public virtual VLClass VLClass { get; set; }
     }
 }
