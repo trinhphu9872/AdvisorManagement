@@ -22,7 +22,7 @@ namespace AdvisorManagement.Models
             this.Advisor = new HashSet<Advisor>();
             this.Student = new HashSet<Student>();
         }
-    
+
         public int id { get; set; }
         public string user_code { get; set; }
         public int id_role { get; set; }
