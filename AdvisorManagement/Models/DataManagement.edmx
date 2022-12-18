@@ -29,15 +29,6 @@
           <Property Name="status_id" Type="int" />
           <Property Name="account_id" Type="int" />
         </EntityType>
-        <EntityType Name="Class">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="advisor_code" Type="nvarchar" MaxLength="100" />
-          <Property Name="create_time" Type="date" />
-          <Property Name="update_time" Type="nchar" MaxLength="10" />
-        </EntityType>
         <EntityType Name="Menu">
           <Key>
             <PropertyRef Name="id" />
@@ -83,6 +74,15 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="VLClass">
+          <Key>
+            <PropertyRef Name="class_code" />
+          </Key>
+          <Property Name="class_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="advisor_code" Type="nvarchar" MaxLength="100" />
+          <Property Name="create_time" Type="date" />
+          <Property Name="update_time" Type="nchar" MaxLength="10" />
+        </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
           <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="*" />
@@ -109,12 +109,12 @@
         </Association>
         <Association Name="FK_Class_Advisor">
           <End Role="Advisor" Type="Self.Advisor" Multiplicity="0..1" />
-          <End Role="Class" Type="Self.Class" Multiplicity="*" />
+          <End Role="VLClass" Type="Self.VLClass" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Advisor">
               <PropertyRef Name="advisor_code" />
             </Principal>
-            <Dependent Role="Class">
+            <Dependent Role="VLClass">
               <PropertyRef Name="advisor_code" />
             </Dependent>
           </ReferentialConstraint>
@@ -156,11 +156,11 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Student_Class">
-          <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
+          <End Role="VLClass" Type="Self.VLClass" Multiplicity="0..1" />
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Class">
-              <PropertyRef Name="id" />
+            <Principal Role="VLClass">
+              <PropertyRef Name="class_code" />
             </Principal>
             <Dependent Role="Student">
               <PropertyRef Name="id_class" />
@@ -170,12 +170,12 @@
         <EntityContainer Name="CP25Team09ModelStoreContainer">
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Class" EntityType="Self.Class" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VLClass" EntityType="Self.VLClass" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
@@ -186,7 +186,7 @@
           </AssociationSet>
           <AssociationSet Name="FK_Class_Advisor" Association="Self.FK_Class_Advisor">
             <End Role="Advisor" EntitySet="Advisor" />
-            <End Role="Class" EntitySet="Class" />
+            <End Role="VLClass" EntitySet="VLClass" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleMenu_Menu" Association="Self.FK_RoleMenu_Menu">
             <End Role="Menu" EntitySet="Menu" />
@@ -201,7 +201,7 @@
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
           <AssociationSet Name="FK_Student_Class" Association="Self.FK_Student_Class">
-            <End Role="Class" EntitySet="Class" />
+            <End Role="VLClass" EntitySet="VLClass" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
         </EntityContainer>
@@ -237,18 +237,7 @@
           <Property Name="status_id" Type="Int32" />
           <Property Name="account_id" Type="Int32" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_Advisor_AccountUser" FromRole="Advisor" ToRole="AccountUser" />
-          <NavigationProperty Name="Class" Relationship="Self.FK_Class_Advisor" FromRole="Advisor" ToRole="Class" />
-        </EntityType>
-        <EntityType Name="Class">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="advisor_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="create_time" Type="DateTime" Precision="0" />
-          <Property Name="update_time" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="Class" ToRole="Advisor" />
-          <NavigationProperty Name="Student" Relationship="Self.FK_Student_Class" FromRole="Class" ToRole="Student" />
+          <NavigationProperty Name="VLClass" Relationship="Self.FK_Class_Advisor" FromRole="Advisor" ToRole="VLClass" />
         </EntityType>
         <EntityType Name="Menu">
           <Key>
@@ -290,7 +279,7 @@
           <Property Name="status_id" Type="Int32" />
           <Property Name="account_id" Type="Int32" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_Student_AccountUser" FromRole="Student" ToRole="AccountUser" />
-          <NavigationProperty Name="Class" Relationship="Self.FK_Student_Class" FromRole="Student" ToRole="Class" />
+          <NavigationProperty Name="VLClass" Relationship="Self.FK_Student_Class" FromRole="Student" ToRole="VLClass" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -301,6 +290,17 @@
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="VLClass">
+          <Key>
+            <PropertyRef Name="class_code" />
+          </Key>
+          <Property Name="class_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="advisor_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="create_time" Type="DateTime" Precision="0" />
+          <Property Name="update_time" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="VLClass" ToRole="Advisor" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Student_Class" FromRole="VLClass" ToRole="Student" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -340,25 +340,13 @@
         </Association>
         <Association Name="FK_Class_Advisor">
           <End Role="Advisor" Type="Self.Advisor" Multiplicity="0..1" />
-          <End Role="Class" Type="Self.Class" Multiplicity="*" />
+          <End Role="VLClass" Type="Self.VLClass" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Advisor">
               <PropertyRef Name="advisor_code" />
             </Principal>
-            <Dependent Role="Class">
+            <Dependent Role="VLClass">
               <PropertyRef Name="advisor_code" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Student_Class">
-          <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
-          <End Role="Student" Type="Self.Student" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Class">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Student">
-              <PropertyRef Name="id_class" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -386,15 +374,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Student_Class">
+          <End Role="VLClass" Type="Self.VLClass" Multiplicity="0..1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VLClass">
+              <PropertyRef Name="class_code" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="id_class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CP25Team09Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" />
-          <EntitySet Name="Class" EntityType="Self.Class" />
           <EntitySet Name="Menu" EntityType="Self.Menu" />
           <EntitySet Name="Role" EntityType="Self.Role" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" />
           <EntitySet Name="Student" EntityType="Self.Student" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="VLClass" EntityType="Self.VLClass" />
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
@@ -409,11 +409,7 @@
           </AssociationSet>
           <AssociationSet Name="FK_Class_Advisor" Association="Self.FK_Class_Advisor">
             <End Role="Advisor" EntitySet="Advisor" />
-            <End Role="Class" EntitySet="Class" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Student_Class" Association="Self.FK_Student_Class">
-            <End Role="Class" EntitySet="Class" />
-            <End Role="Student" EntitySet="Student" />
+            <End Role="VLClass" EntitySet="VLClass" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleMenu_Menu" Association="Self.FK_RoleMenu_Menu">
             <End Role="Menu" EntitySet="Menu" />
@@ -422,6 +418,10 @@
           <AssociationSet Name="FK_RoleMenu_Role" Association="Self.FK_RoleMenu_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="RoleMenu" EntitySet="RoleMenu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_Class" Association="Self.FK_Student_Class">
+            <End Role="VLClass" EntitySet="VLClass" />
+            <End Role="Student" EntitySet="Student" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -453,16 +453,6 @@
                 <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
                 <ScalarProperty Name="status_id" ColumnName="status_id" />
                 <ScalarProperty Name="account_id" ColumnName="account_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Class">
-            <EntityTypeMapping TypeName="CP25Team09Model.Class">
-              <MappingFragment StoreEntitySet="Class">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
-                <ScalarProperty Name="create_time" ColumnName="create_time" />
-                <ScalarProperty Name="update_time" ColumnName="update_time" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -513,6 +503,16 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VLClass">
+            <EntityTypeMapping TypeName="CP25Team09Model.VLClass">
+              <MappingFragment StoreEntitySet="VLClass">
+                <ScalarProperty Name="class_code" ColumnName="class_code" />
+                <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="update_time" ColumnName="update_time" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

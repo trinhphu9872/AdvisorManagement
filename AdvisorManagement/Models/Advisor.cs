@@ -17,7 +17,7 @@ namespace AdvisorManagement.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Advisor()
         {
-            this.Class = new HashSet<Class>();
+            this.VLClass = new HashSet<VLClass>();
         }
     
         public string advisor_code { get; set; }
@@ -26,6 +26,6 @@ namespace AdvisorManagement.Models
     
         public virtual AccountUser AccountUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Class> Class { get; set; }
+        public virtual ICollection<VLClass> VLClass { get; set; }
     }
 }
