@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="CP25Team09Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="CP25Team09Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccountUser">
           <Key>
             <PropertyRef Name="id" />
@@ -78,14 +78,11 @@
           <Key>
             <PropertyRef Name="class_code" />
           </Key>
-<<<<<<< HEAD
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-=======
->>>>>>> 0892596a05d181d614ac6a149979e7ce5f0110b6
           <Property Name="class_code" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="advisor_code" Type="nvarchar" MaxLength="100" />
-          <Property Name="create_time" Type="date" />
-          <Property Name="update_time" Type="nchar" MaxLength="10" />
+          <Property Name="create_time" Type="datetime" />
+          <Property Name="update_time" Type="datetime" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -209,7 +206,8 @@
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CP25Team09Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -240,11 +238,7 @@
           <Property Name="status_id" Type="Int32" />
           <Property Name="account_id" Type="Int32" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_Advisor_AccountUser" FromRole="Advisor" ToRole="AccountUser" />
-<<<<<<< HEAD
-          <NavigationProperty Name="VLClass" Relationship="CP25Team09Model.FK_Class_Advisor1" FromRole="Advisor" ToRole="VLClass" />
-=======
           <NavigationProperty Name="VLClass" Relationship="Self.FK_Class_Advisor" FromRole="Advisor" ToRole="VLClass" />
->>>>>>> 0892596a05d181d614ac6a149979e7ce5f0110b6
         </EntityType>
         <EntityType Name="Menu">
           <Key>
@@ -286,11 +280,7 @@
           <Property Name="status_id" Type="Int32" />
           <Property Name="account_id" Type="Int32" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_Student_AccountUser" FromRole="Student" ToRole="AccountUser" />
-<<<<<<< HEAD
-          <NavigationProperty Name="VLClass" Relationship="CP25Team09Model.FK_Student_Class1" FromRole="Student" ToRole="VLClass" />
-=======
           <NavigationProperty Name="VLClass" Relationship="Self.FK_Student_Class" FromRole="Student" ToRole="VLClass" />
->>>>>>> 0892596a05d181d614ac6a149979e7ce5f0110b6
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -306,10 +296,11 @@
           <Key>
             <PropertyRef Name="class_code" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="class_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="advisor_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="create_time" Type="DateTime" Precision="0" />
-          <Property Name="update_time" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="update_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="VLClass" ToRole="Advisor" />
           <NavigationProperty Name="Student" Relationship="Self.FK_Student_Class" FromRole="VLClass" ToRole="Student" />
         </EntityType>
@@ -349,8 +340,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-<<<<<<< HEAD
-=======
         <Association Name="FK_Class_Advisor">
           <End Role="Advisor" Type="Self.Advisor" Multiplicity="0..1" />
           <End Role="VLClass" Type="Self.VLClass" Multiplicity="*" />
@@ -363,7 +352,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
->>>>>>> 0892596a05d181d614ac6a149979e7ce5f0110b6
         <Association Name="FK_RoleMenu_Menu">
           <End Role="Menu" Type="Self.Menu" Multiplicity="0..1" />
           <End Role="RoleMenu" Type="Self.RoleMenu" Multiplicity="*" />
@@ -421,13 +409,10 @@
             <End Role="AccountUser" EntitySet="AccountUser" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
-<<<<<<< HEAD
-=======
           <AssociationSet Name="FK_Class_Advisor" Association="Self.FK_Class_Advisor">
             <End Role="Advisor" EntitySet="Advisor" />
             <End Role="VLClass" EntitySet="VLClass" />
           </AssociationSet>
->>>>>>> 0892596a05d181d614ac6a149979e7ce5f0110b6
           <AssociationSet Name="FK_RoleMenu_Menu" Association="Self.FK_RoleMenu_Menu">
             <End Role="Menu" EntitySet="Menu" />
             <End Role="RoleMenu" EntitySet="RoleMenu" />
@@ -436,56 +421,11 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="RoleMenu" EntitySet="RoleMenu" />
           </AssociationSet>
-<<<<<<< HEAD
-          <EntitySet Name="VLClass" EntityType="CP25Team09Model.VLClass" />
-          <AssociationSet Name="FK_Class_Advisor1" Association="CP25Team09Model.FK_Class_Advisor1">
-            <End Role="Advisor" EntitySet="Advisor" />
-            <End Role="VLClass" EntitySet="VLClass" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Student_Class1" Association="CP25Team09Model.FK_Student_Class1">
-=======
           <AssociationSet Name="FK_Student_Class" Association="Self.FK_Student_Class">
->>>>>>> 0892596a05d181d614ac6a149979e7ce5f0110b6
             <End Role="VLClass" EntitySet="VLClass" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="VLClass">
-          <Key>
-            <PropertyRef Name="class_code" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="class_code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="advisor_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="create_time" Type="DateTime" Precision="0" />
-          <Property Name="update_time" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Advisor" Relationship="CP25Team09Model.FK_Class_Advisor1" FromRole="VLClass" ToRole="Advisor" />
-          <NavigationProperty Name="Student" Relationship="CP25Team09Model.FK_Student_Class1" FromRole="VLClass" ToRole="Student" />
-        </EntityType>
-        <Association Name="FK_Class_Advisor1">
-          <End Type="CP25Team09Model.Advisor" Role="Advisor" Multiplicity="0..1" />
-          <End Type="CP25Team09Model.VLClass" Role="VLClass" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Advisor">
-              <PropertyRef Name="advisor_code" />
-            </Principal>
-            <Dependent Role="VLClass">
-              <PropertyRef Name="advisor_code" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Student_Class1">
-          <End Type="CP25Team09Model.VLClass" Role="VLClass" Multiplicity="0..1" />
-          <End Type="CP25Team09Model.Student" Role="Student" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VLClass">
-              <PropertyRef Name="class_code" />
-            </Principal>
-            <Dependent Role="Student">
-              <PropertyRef Name="id_class" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -571,18 +511,11 @@
           <EntitySetMapping Name="VLClass">
             <EntityTypeMapping TypeName="CP25Team09Model.VLClass">
               <MappingFragment StoreEntitySet="VLClass">
-<<<<<<< HEAD
-                <ScalarProperty Name="update_time" ColumnName="update_time" />
-                <ScalarProperty Name="create_time" ColumnName="create_time" />
-                <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
-                <ScalarProperty Name="class_code" ColumnName="class_code" />
                 <ScalarProperty Name="id" ColumnName="id" />
-=======
                 <ScalarProperty Name="class_code" ColumnName="class_code" />
                 <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="update_time" ColumnName="update_time" />
->>>>>>> 0892596a05d181d614ac6a149979e7ce5f0110b6
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

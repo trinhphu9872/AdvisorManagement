@@ -20,14 +20,11 @@ namespace AdvisorManagement.Models
             this.Student = new HashSet<Student>();
         }
     
-<<<<<<< HEAD
         public int id { get; set; }
-=======
->>>>>>> 0892596a05d181d614ac6a149979e7ce5f0110b6
         public string class_code { get; set; }
         public string advisor_code { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
-        public string update_time { get; set; }
+        public Nullable<System.DateTime> update_time { get; set; }
     
         public virtual Advisor Advisor { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
