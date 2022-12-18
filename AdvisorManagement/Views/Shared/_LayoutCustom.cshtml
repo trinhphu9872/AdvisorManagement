@@ -74,7 +74,7 @@
                                     {<ul class="dropdown-menu stylecolor">
                                         <li>
 
-                                        @Html.ActionLink("Hello " + User.Identity.Name + "!", "Index", "UserProfile", htmlAttributes: null)
+                                            @Html.ActionLink("Hello " + User.Identity.Name + "!", "UserProfile", "Home", new { id = "", email = User.Identity.Name }, null)
                                         </li>
                                         <li>
                                             <a href=@Url.Action("SignOut", "Account",new {area = ""})> Đăng xuất</a>

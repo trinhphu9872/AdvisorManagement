@@ -1,8 +1,9 @@
 ﻿@model AdvisorManagement.Models.AccountUser
-
+@using AdvisorManagement.Models;
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+    IEnumerable<Role> rolelist = ViewBag.id_Role as IEnumerable<Role>;
 }
 
 <h2>Edit</h2>
@@ -61,7 +62,12 @@
                                                             </div>
                                                         </div>
                                                         <div class="row">
-                                                
+                                                            @*<div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Ngày sinh</label>
+                                                                    <input class="form-control" type="text" name="dateofbirth" placeholder="" value="@Model.dateofbirth">
+                                                                </div>
+                                                            </div>*@
                                                             <div class="col">
                                                                 <div class="form-group">
                                                                     <label>Giới tính</label>
@@ -89,7 +95,7 @@
                                                             <div class="col">
                                                                 <div class="form-group">
                                                                     <label>Email</label>
-                                                                    <input class="form-control" type="text" name="email" placeholder="" value="@Model.email">
+                                                                    <input class="form-control"  type="text" name="email" placeholder="" disabled="disabled" value="@Model.email">
                                                                 </div>
                                                             </div>
 
@@ -110,12 +116,25 @@
                                                 <div class="row">
                                                     <div class="form-group">
                                                         <label>Chọn quyền:</label>
-                                                        @*<select name="role" style=" width: 155px;
+                                                        <select name="id_role" style=" width: 155px;
                                                                 height: 35px; text-align: center; font-size: 15px;" , required="true">
-                                                                <option value="0">-----Chọn Quyền-----</option>
+                                                            <option value="0">-----Chọn Quyền-----</option>
+                                                            @foreach (var item in rolelist)
+                                                            {
+                                                                if (Model.id_role == item.id)
+                                                                {
+                                                                    <option selected value="@item.id">@item.role_name</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.id">@item.role_name</option>
+                                                                }
 
-                                                            </select>*@
-                                                        @Html.DropDownList("id_Role", (IEnumerable<SelectListItem>)ViewBag.id_Role, null, new { @class = "form-control", @style = " width: 255px;    height: 40px; " })
+                                                            }
+
+
+                                                        </select>
+                                                        @*@Html.DropDownList("id_Role", (IEnumerable<SelectListItem>)ViewBag.id_Role, null, new { @class = "form-control", @style = " width: 255px;    height: 40px; " })*@
                                                         <p class="text-danger">@ViewBag.ErrorMessage</p>
                                                     </div>
                                                 </div>

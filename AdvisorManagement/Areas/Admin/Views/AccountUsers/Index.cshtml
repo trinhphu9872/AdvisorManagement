@@ -5,84 +5,94 @@
     Layout = "~/Views/Shared/_LayoutCustom.cshtml";
 }
 
-<h2>Index</h2>
+<div class="bgtitle">
+    VLU - Management and Decentralization
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.user_code)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.user_name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.gender)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.img_profile)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.phone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.address)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.create_time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.update_time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Role.role_name)
-        </th>
-        <th></th>
-    </tr>
+</div>
+<div class="container h-100">
+    <div class="d-flex justify-content-center h-100">
+        <div class="searchbar">
+            <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
+            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+        </div>
+    </div>
+</div>
+<div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.user_code)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.user_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.gender)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.img_profile)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.phone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.address)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.create_time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.update_time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Role.role_name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+    <div>
+        <a href="@Url.Action("Create", "AccountUsers")" id="btnCreate" class="btn btn-success">
+            Create
+        </a>
+        <table width="100%" class="table table-bordered table-striped table-responsive">
+            <div class="card-body p-3">
 
-</table>
+            </div>
+            <thead>
+                <tr>
+                    <th width="10%">Stt</th>
+                    <th width="25%" style="text-align:center">Họ tên</th>
+                    <th width="15%" style="text-align:center">Chức vụ</th>
+                    <th width="15%" style="text-align:center">Ngày tham gia</th>
+                    @*<th width="15%" style="text-align:center">Tình trạng</th>*@
+                    <th width="20%" style="text-align:center">Hoạt động</th>
+
+            </thead>
+            <tbody id="myTable">
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr id="myUL" style="font-weight: bold">
+                        <td style="text-align: center ;">@item.user_code</td>
+                        <td style="text-align:center">@item.user_name</td>
+                        <td style="text-align:center">@item.Role.role_name</td>
+                        <td style="text-align:center">@item.create_time</td>
+                        @*<td class="project-state" style="text-align: center;">
+                                <span class="badge badge-success">Đang làm</span>
+                            </td>*@
+                        <td style="text-align:center">
+                            <a href="@Url.Action("Edit", "AccountUsers", new { id = item.id })" id="btnUpdate" class="btn btn-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="@Url.Action("Delete", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+
+
+
+
+
+
+        </table>
+
+        @*<ul class="pagination" style="margin-left: 70% ;">
+                <li class="page-item"> <a class="page-link" href="#">&laquo;</a> </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item "><a class="page-link" href="#">...</span></a></li>
+                <li class="page-item"><a class="page-link" href="#">50</a></li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>*@
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
