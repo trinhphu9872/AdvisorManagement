@@ -1,0 +1,88 @@
+﻿@model IEnumerable<AdvisorManagement.Models.VLClass>
+@using AdvisorManagement.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+    IEnumerable<AccountUser> nameUser = ViewBag.nameUser as IEnumerable<AccountUser>;
+}
+
+<div class="bgtitle">
+    VLU - Class list
+
+</div>
+
+<div class="container h-100">
+    <div class="d-flex justify-content-center h-100">
+        <a href="#" class="btn btn-primary" style="margin-bottom: 2%;margin-left:5%; width: 170px;">
+            THÊM LỚP HỌC  <i class="fas fa-plus"></i>
+        </a>
+        <div class="searchbar">
+            <input class="search_input" type="text" name="" placeholder="Search...">
+            <a href="#" class="search_icon">
+                <i class="fas fa-search"></i>
+            </a>
+
+        </div>
+    </div>
+</div>
+<div>
+
+
+    <div>
+        <table width="100%" class="table table-bordered table-striped table-responsive">
+            <div class="card-body p-3">
+            </div>
+
+
+            <tr>
+                <th width="10%">Stt</th>
+                <th width="25%" style="text-align:center">MSSV</th>
+                <th width="15%" style="text-align:center">CVHT</th>
+                <th width="15%" style="text-align:center">Khóa</th>
+                <th width="15%" style="text-align:center">Tổng SV</th>
+                <th width="20%" style="text-align:center">Hoạt động</th>
+
+
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr style="font-weight: bold">
+                    <td style="text-align: center ;">1</td>
+                    <td style="text-align:center">@item.class_code</td>
+                    @foreach (var itemUser in nameUser)
+                    {
+                        if (item.advisor_code.Equals(itemUser.user_code)) {
+                            <td style="text-align:center">@itemUser.user_name</td>
+                        }
+                    }
+                    <td style="text-align:center"></td>
+                    <td style="text-align:center"></td>
+                    <td style="text-align:center">
+                        <a href="@Url.Action("EditClass", "ClassManagements", new { classCode = item.class_code })" id="btnUpdate" class="btn btn-primary">
+                                    <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="" id="btnDelete" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                        </a>
+                     </td>
+                 </tr>
+            }
+
+        </table>
+
+        <ul class="pagination" style="margin-left: 70% ;">
+            <li class="page-item"> <a class="page-link" href="#">&laquo;</a> </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item "><a class="page-link" href="#">...</span></a></li>
+            <li class="page-item"><a class="page-link" href="#">50</a></li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+

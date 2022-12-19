@@ -175,6 +175,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountUsersController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ClassManagementsController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleMenusController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -287,6 +288,8 @@
     <Content Include="Models\DataManagement.edmx.diagram">
       <DependentUpon>DataManagement.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\Admin\Views\ClassManagements\EditClass.cshtml" />
+    <Content Include="Areas\Admin\Views\ClassManagements\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\function.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
