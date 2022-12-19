@@ -61,7 +61,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public ActionResult Create()
         {
             ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
-            return View();
+            return View();   
         }
 
         // POST: Admin/VLClasses/Create
