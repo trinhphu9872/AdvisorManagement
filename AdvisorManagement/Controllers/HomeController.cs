@@ -30,7 +30,7 @@ namespace AdvisorManagement.Controllers
                 {
                     accountService.UserProfile((ClaimsIdentity) User.Identity);
                 }
-                ViewBag.menu = serviceMenu.getMenu(user_mail);
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             }
             return View();
         }
@@ -38,6 +38,7 @@ namespace AdvisorManagement.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             return View();
         }
@@ -45,18 +46,21 @@ namespace AdvisorManagement.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             return View();
         }
         public ActionResult UserProfile(string email)
         {
             AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(email));
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             return View(user);
         }
         public ActionResult EditUserProfile(int id)
         {
             AccountUser user = dbApp.AccountUser.Find(id);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             return View(user);
         }
@@ -77,6 +81,7 @@ namespace AdvisorManagement.Controllers
             }
             dbApp.Entry(edituser).State = EntityState.Modified;
             dbApp.SaveChanges();
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             return RedirectToAction("UserProfile", "Home", edituser);
         }
     }

@@ -21,7 +21,6 @@ namespace AdvisorManagement.Controllers
             }
         }
 
-
         public void SignOut()
         {
             HttpContext.GetOwinContext().Authentication.SignOut(

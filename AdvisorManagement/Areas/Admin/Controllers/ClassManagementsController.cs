@@ -14,6 +14,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
     {
       
         private AccountMiddleware serviceAccount = new AccountMiddleware();
+        private MenuMiddleware serviceMenu = new MenuMiddleware();
+
         private string routePermission = "Admin/ClassManagements";
         CP25Team09Entities db = new CP25Team09Entities();
         // GET: Admin/ClassManagements
@@ -23,6 +25,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                  var listClass = db.VLClass.ToList();
                 ViewBag.nameUser = db.AccountUser.ToList();
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
                 return View(listClass);
             }
             else
@@ -30,6 +34,80 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+        //// get create class
+        //public ActionResult Create()
+        //{
+        //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
+        //    return View();
+        //}
+
+        //// post create class
+        //[HttpPost]
+        //public ActionResult Create([Bind(Include = "id,class_code,advisor_code")] VLClass vLClass)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        vLClass.create_time = DateTime.Now;
+        //        db.VLClass.Add(vLClass);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
+        //    return View(vLClass);
+        //}
+
+        // GET: Admin/VLClasses/Create
+        public ActionResult Create()
+        {
+            ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
+            return View();
+        }
+
+        // POST: Admin/VLClasses/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+  
+        public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,update_time")] VLClass vLClass)
+        {
+            if (ModelState.IsValid)
+            {
+                db.VLClass.Add(vLClass);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
+            return View(vLClass);
+        }
+
+        // GET: Admin/VLClasses/Delete/5
+        public ActionResult Delete(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            VLClass vLClass = db.VLClass.Find(id);
+            if (vLClass == null)
+            {
+                return HttpNotFound();
+            }
+            return View(vLClass);
+        }
+
+        // POST: Admin/VLClasses/Delete/5
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(string id)
+        {
+            VLClass vLClass = db.VLClass.Find(id);
+            db.VLClass.Remove(vLClass);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // HTTP GET
         public ActionResult EditClass(string classCode)
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
@@ -51,6 +129,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             //ViewBag.Advisor = new SelectList(AV);
                 ViewBag.Advisor = db.Advisor.ToList();
                 ViewBag.nameUser = db.AccountUser.ToList();
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
                 return View(detailClass);
             }
             else
@@ -58,6 +138,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+        // http post edit class
         [HttpPost]
         public ActionResult EditClass(VLClass cdeatilclass)
         {
@@ -65,6 +146,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 db.Entry(cdeatilclass).State = EntityState.Modified;
                 db.SaveChanges();
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
             else

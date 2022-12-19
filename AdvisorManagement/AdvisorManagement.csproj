@@ -290,6 +290,8 @@
     </Content>
     <Content Include="Areas\Admin\Views\ClassManagements\EditClass.cshtml" />
     <Content Include="Areas\Admin\Views\ClassManagements\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ClassManagements\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\ClassManagements\Create.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\function.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
