@@ -26,7 +26,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                  var listClass = db.VLClass.ToList();
                 ViewBag.nameUser = db.AccountUser.ToList();
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
+                ViewBag.hocky = db.Semester.ToList();
                 return View(listClass);
             }
             else
@@ -61,6 +61,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public ActionResult Create()
         {
             ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
+            ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
             return View();   
         }
 
@@ -83,7 +84,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         // GET: Admin/VLClasses/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int id)
         {
             if (id == null)
             {
@@ -99,7 +100,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         // POST: Admin/VLClasses/Delete/5
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(int id)
         {
             VLClass vLClass = db.VLClass.Find(id);
             db.VLClass.Remove(vLClass);

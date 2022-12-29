@@ -2,29 +2,44 @@
 
 @{
     ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 }
 
 <h2>Create</h2>
 
 @using (Html.BeginForm())
 {
-  
+
 
     <div class="form-horizontal">
         <h4>VLClass</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.class_code, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+        <div id="return" class="form-group">
+            <p id="labelclass" class="control-label col-md-2">Lớp học</p>
+            <div class="col-7">
+                @Html.DropDownList("class_code", null, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.class_code, "", new { @class = "text-danger" })
+                <a id="buttonadd" class="btn btn-primary" onclick="myFunctionadd()">
+                    thêm
+                </a>
+            </div>
+           
+        </div>
+        <div class="form-group" id="demo" style="display:none">
+            <p id="labelclass" class="control-label col-md-2">Lớp học</p>
+            <div class="col-7">
                 @Html.EditorFor(model => model.class_code, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.class_code, "", new { @class = "text-danger" })
+                <a id="buttoreturn" class="btn btn-primary" onclick="myFunctionreturn()">
+                    quay lại
+                </a>
             </div>
+           
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.advisor_code, "advisor_code", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.advisor_code, "Giảng viên", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("advisor_code", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.advisor_code, "", new { @class = "text-danger" })
@@ -43,3 +58,29 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+<script>
+    //function myFunctionadd() {
+    //    var x = document.getElementById("return");
+    //    var y = document.getElementById("vlclass");
+    //    if (x.style.display === "none") {
+    //        x.style.display = "block";
+    //        y.style.display = "none"
+    //    } else {
+    //        x.style.display = "none";
+    //    }
+    //}
+        function myFunctionadd() {
+
+            $('#return').hide();
+            $('#demo').show();
+
+        }
+        function myFunctionreturn() {
+
+            $('#demo').hide();
+            $('#return').show();
+
+        }
+</script>
+

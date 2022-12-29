@@ -214,6 +214,9 @@
     <Compile Include="Models\RoleMenu.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Semester.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Student.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
@@ -1066,13 +1069,6 @@
     <Content Include="Areas\Admin\Views\AccountUsers\Details.cshtml" />
     <Content Include="Areas\Admin\Views\AccountUsers\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\AccountUsers\Index.cshtml" />
-    <EntityDeploy Include="Models\DataManagement.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DataManagement.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\DataManagement.edmx.diagram">
-      <DependentUpon>DataManagement.edmx</DependentUpon>
-    </Content>
     <Content Include="Areas\Admin\Views\ClassManagements\EditClass.cshtml" />
     <Content Include="Areas\Admin\Views\ClassManagements\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ClassManagements\Delete.cshtml" />
@@ -1281,6 +1277,13 @@
     <Content Include="Dist\css\icons\weather-icons\sass\weather-icons.min.scss" />
     <Content Include="Dist\css\icons\weather-icons\sass\weather-icons.scss" />
     <Content Include="Dist\css\materialdesignicons.min.css.map" />
+    <EntityDeploy Include="Models\DataManagement.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DataManagement.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DataManagement.edmx.diagram">
+      <DependentUpon>DataManagement.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\function.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

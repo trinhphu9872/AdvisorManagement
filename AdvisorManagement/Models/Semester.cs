@@ -12,15 +12,10 @@ namespace AdvisorManagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Student
+    public partial class Semester
     {
-        public string student_code { get; set; }
-        public string id_class { get; set; }
-        public string training_point { get; set; }
-        public string grade_training_point { get; set; }
-        public Nullable<int> status_id { get; set; }
-        public Nullable<int> account_id { get; set; }
-    
-        public virtual AccountUser AccountUser { get; set; }
+        public int id { get; set; }
+        public string semester_name { get; set; }
+        public string scholastic { get; set; }
     }
 }

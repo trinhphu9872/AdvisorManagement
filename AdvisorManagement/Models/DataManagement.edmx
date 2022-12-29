@@ -53,6 +53,16 @@
           <Property Name="id_role" Type="int" />
           <Property Name="id_menu" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Semester">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="semester_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="scholastic" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="Student">
           <Key>
             <PropertyRef Name="student_code" />
@@ -76,13 +86,14 @@
         </EntityType>
         <EntityType Name="VLClass">
           <Key>
-            <PropertyRef Name="class_code" />
+            <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="class_code" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="advisor_code" Type="nvarchar" MaxLength="100" />
           <Property Name="create_time" Type="datetime" />
           <Property Name="update_time" Type="datetime" />
+          <Property Name="semester_name" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -156,18 +167,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Student_Class">
-          <End Role="VLClass" Type="Self.VLClass" Multiplicity="0..1" />
-          <End Role="Student" Type="Self.Student" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VLClass">
-              <PropertyRef Name="class_code" />
-            </Principal>
-            <Dependent Role="Student">
-              <PropertyRef Name="id_class" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="CP25Team09ModelStoreContainer">
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" Schema="dbo" store:Type="Tables" />
@@ -177,6 +176,13 @@
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Semester" EntityType="Self.Semester" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Semester].[id] AS [id], 
+    [Semester].[semester_name] AS [semester_name], 
+    [Semester].[scholastic] AS [scholastic]
+    FROM [dbo].[Semester] AS [Semester]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
@@ -199,10 +205,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_Student_AccountUser" Association="Self.FK_Student_AccountUser">
             <End Role="AccountUser" EntitySet="AccountUser" />
-            <End Role="Student" EntitySet="Student" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Student_Class" Association="Self.FK_Student_Class">
-            <End Role="VLClass" EntitySet="VLClass" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
         </EntityContainer>
@@ -280,7 +282,6 @@
           <Property Name="status_id" Type="Int32" />
           <Property Name="account_id" Type="Int32" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_Student_AccountUser" FromRole="Student" ToRole="AccountUser" />
-          <NavigationProperty Name="VLClass" Relationship="Self.FK_Student_Class" FromRole="Student" ToRole="VLClass" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -294,15 +295,23 @@
         </EntityType>
         <EntityType Name="VLClass">
           <Key>
-            <PropertyRef Name="class_code" />
+            <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="class_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="advisor_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="update_time" Type="DateTime" Precision="3" />
+          <Property Name="semester_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="VLClass" ToRole="Advisor" />
-          <NavigationProperty Name="Student" Relationship="Self.FK_Student_Class" FromRole="VLClass" ToRole="Student" />
+        </EntityType>
+        <EntityType Name="Semester">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="semester_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="scholastic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -376,18 +385,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Student_Class">
-          <End Role="VLClass" Type="Self.VLClass" Multiplicity="0..1" />
-          <End Role="Student" Type="Self.Student" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VLClass">
-              <PropertyRef Name="class_code" />
-            </Principal>
-            <Dependent Role="Student">
-              <PropertyRef Name="id_class" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="CP25Team09Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" />
@@ -397,6 +394,7 @@
           <EntitySet Name="Student" EntityType="Self.Student" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" />
+          <EntitySet Name="Semester" EntityType="Self.Semester" />
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
@@ -420,10 +418,6 @@
           <AssociationSet Name="FK_RoleMenu_Role" Association="Self.FK_RoleMenu_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="RoleMenu" EntitySet="RoleMenu" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Student_Class" Association="Self.FK_Student_Class">
-            <End Role="VLClass" EntitySet="VLClass" />
-            <End Role="Student" EntitySet="Student" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -516,6 +510,16 @@
                 <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="update_time" ColumnName="update_time" />
+                <ScalarProperty Name="semester_name" ColumnName="semester_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Semester">
+            <EntityTypeMapping TypeName="CP25Team09Model.Semester">
+              <MappingFragment StoreEntitySet="Semester">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="semester_name" ColumnName="semester_name" />
+                <ScalarProperty Name="scholastic" ColumnName="scholastic" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
