@@ -2,16 +2,42 @@
 @using AdvisorManagement.Models;
 @{
     ViewBag.Title = "EditClass";
-    Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
     IEnumerable<Advisor> advisor = ViewBag.Advisor as IEnumerable<Advisor>;
     IEnumerable<AccountUser> nameUser = ViewBag.nameUser as IEnumerable<AccountUser>;
 }
 
-<h2>Editclass</h2>
+
 
 @using (Html.BeginForm())
 {
-   
+   <div class="card">
+       <div class="card-body">
+           <h5 class="card-title mb-0">Thông tin lớp - VLU</h5>
+       </div>
+       <div class="page-breadcrumb">
+           <div class="row">
+
+               <div class="col-12 d-flex no-block align-items-center">
+                   
+
+                   @*<div class="ms-auto text-end">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Library
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>*@
+               </div>
+           </div>
+
+       </div>
+
+   </div>
+  
 
     <div class="form-horizontal">
         <h4>Class</h4>
@@ -54,7 +80,7 @@
                                 <option value="@item.advisor_code">@itemUser.user_name</option>
                             }
                         }
-                        
+
                     }
 
                 }

@@ -31,6 +31,7 @@ namespace AdvisorManagement.Controllers
                     accountService.UserProfile((ClaimsIdentity) User.Identity);
                 }
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                ViewBag.avatar = sql.img_profile;
             }
             return View();
         }
@@ -54,14 +55,14 @@ namespace AdvisorManagement.Controllers
         {
             AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(email));
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
+            ViewBag.avatar = user.img_profile;
             return View(user);
         }
         public ActionResult EditUserProfile(int id)
         {
             AccountUser user = dbApp.AccountUser.Find(id);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
+            ViewBag.avatar = user.img_profile;
             return View(user);
         }
         [HttpPost]

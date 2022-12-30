@@ -113,7 +113,7 @@
                             </a>
                         </li>
                     </ul>
-                    @if (Request.IsAuthenticated)
+                    @*@if (Request.IsAuthenticated)
                     {
                         <ul class="dropdown-menu stylecolor">
                             <li>
@@ -129,7 +129,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
                         </ul>
-                    }
+                    }*@
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
@@ -138,18 +138,45 @@
                                role="button"
                                data-bs-toggle="dropdown"
                                aria-expanded="false">
-                                <img src="~/Assets/images/users/1.jpg"
+                                @if (Request.IsAuthenticated)
+                                { <img src="@Url.Content(ViewBag.avatar+" ")"
                                      alt="user"
                                      class="rounded-circle"
                                      width="31" />
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end user-dd animated"
-                                aria-labelledby="navbarDropdown">
+                                 }
+                                else {
+                                    <img src="~/Assets/images/users/1.jpg"
+                                         alt="user"
+                                         class="rounded-circle"
+                                         width="31" />
+                                }
+                                </a>
+                            <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                                @if (Request.IsAuthenticated)
+                                {
+                                    <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name })">
+                                        <i class="mdi mdi-account me-1 ms-1"></i> My
+                                        Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Logout</a>
+                                    <div class="dropdown-divider"></div>
+                                    <div class="ps-4 p-10">
+                                        <a href="./Profile.html" class="btn btn-sm btn-success btn-rounded text-white">View Profile</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="@Url.Action("SignIn", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Login</a>
+                                   
+                                }
                             </ul>
                         </li>
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
+
                     </ul>
                 </div>
             </nav>
