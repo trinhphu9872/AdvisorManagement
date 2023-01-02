@@ -76,16 +76,5 @@
             emailError = false;
         }
     });
-    $("#submitbtn").click(function () {
-        if (
-            usernameError == true &&
-            passwordError == true &&
-            confirmPasswordError == true &&
-            emailError == true
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    });
+   
 });

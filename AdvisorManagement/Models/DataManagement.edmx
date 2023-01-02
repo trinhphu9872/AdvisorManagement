@@ -53,8 +53,6 @@
           <Property Name="id_role" Type="int" />
           <Property Name="id_menu" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Semester">
           <Key>
             <PropertyRef Name="id" />
@@ -73,6 +71,13 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
           <Property Name="grade_training_point" Type="varchar" MaxLength="10" />
           <Property Name="status_id" Type="int" />
           <Property Name="account_id" Type="int" />
+        </EntityType>
+        <EntityType Name="StudentStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="status_name" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -173,16 +178,11 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Semester" EntityType="Self.Semester" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Semester" EntityType="Self.Semester" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Semester].[id] AS [id], 
-    [Semester].[semester_name] AS [semester_name], 
-    [Semester].[scholastic] AS [scholastic]
-    FROM [dbo].[Semester] AS [Semester]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
@@ -271,6 +271,14 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
           <NavigationProperty Name="Menu" Relationship="Self.FK_RoleMenu_Menu" FromRole="RoleMenu" ToRole="Menu" />
           <NavigationProperty Name="Role" Relationship="Self.FK_RoleMenu_Role" FromRole="RoleMenu" ToRole="Role" />
         </EntityType>
+        <EntityType Name="Semester">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="semester_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="scholastic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Student">
           <Key>
             <PropertyRef Name="student_code" />
@@ -282,6 +290,13 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
           <Property Name="status_id" Type="Int32" />
           <Property Name="account_id" Type="Int32" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_Student_AccountUser" FromRole="Student" ToRole="AccountUser" />
+        </EntityType>
+        <EntityType Name="StudentStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -304,14 +319,6 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
           <Property Name="update_time" Type="DateTime" Precision="3" />
           <Property Name="semester_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="VLClass" ToRole="Advisor" />
-        </EntityType>
-        <EntityType Name="Semester">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="semester_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="scholastic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -391,10 +398,11 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
           <EntitySet Name="Menu" EntityType="Self.Menu" />
           <EntitySet Name="Role" EntityType="Self.Role" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" />
+          <EntitySet Name="Semester" EntityType="Self.Semester" />
           <EntitySet Name="Student" EntityType="Self.Student" />
+          <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" />
-          <EntitySet Name="Semester" EntityType="Self.Semester" />
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
@@ -479,6 +487,15 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Semester">
+            <EntityTypeMapping TypeName="CP25Team09Model.Semester">
+              <MappingFragment StoreEntitySet="Semester">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="semester_name" ColumnName="semester_name" />
+                <ScalarProperty Name="scholastic" ColumnName="scholastic" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Student">
             <EntityTypeMapping TypeName="CP25Team09Model.Student">
               <MappingFragment StoreEntitySet="Student">
@@ -488,6 +505,14 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
                 <ScalarProperty Name="grade_training_point" ColumnName="grade_training_point" />
                 <ScalarProperty Name="status_id" ColumnName="status_id" />
                 <ScalarProperty Name="account_id" ColumnName="account_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentStatus">
+            <EntityTypeMapping TypeName="CP25Team09Model.StudentStatus">
+              <MappingFragment StoreEntitySet="StudentStatus">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="status_name" ColumnName="status_name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -511,15 +536,6 @@ warning 6002: The table/view 'CP25Team09.dbo.Semester' does not have a primary k
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="update_time" ColumnName="update_time" />
                 <ScalarProperty Name="semester_name" ColumnName="semester_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Semester">
-            <EntityTypeMapping TypeName="CP25Team09Model.Semester">
-              <MappingFragment StoreEntitySet="Semester">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="semester_name" ColumnName="semester_name" />
-                <ScalarProperty Name="scholastic" ColumnName="scholastic" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

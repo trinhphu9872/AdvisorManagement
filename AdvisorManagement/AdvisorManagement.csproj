@@ -220,6 +220,9 @@
     <Compile Include="Models\Student.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StudentStatus.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
@@ -1300,6 +1303,8 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
+    <Content Include="Validation\AccountUsers\Validation_AccountUsers.js" />
+    <Content Include="Validation\ClassManagement\Validation_ClassManagement.js" />
     <Content Include="Validation\UserProfile\Validation_UserProfile.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

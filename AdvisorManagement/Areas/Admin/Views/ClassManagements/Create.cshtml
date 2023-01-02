@@ -5,59 +5,98 @@
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 }
 
-<h2>Create</h2>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+    <script src="~/Validation/ClassManagement/Validation_ClassManagement.js"></script>
+</head>
 
 @using (Html.BeginForm())
 {
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-0">Tạo lớp - VLU</h5>
+        </div>
+        <div class="page-breadcrumb">
+            <div class="row">
 
+                <div class="col-12 d-flex no-block align-items-center">
+
+
+                    @*<div class="ms-auto text-end">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        Library
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>*@
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
     <div class="form-horizontal">
-        <h4>VLClass</h4>
+
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div id="return" class="form-group">
             <p id="labelclass" class="control-label col-md-2">Lớp học</p>
             <div class="col-7">
-                @Html.DropDownList("class_code", null, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("class_code", null, new { htmlAttributes = new { @class = "form-control", @Style = "width: 300px;" } })
                 @Html.ValidationMessageFor(model => model.class_code, "", new { @class = "text-danger" })
                 <a id="buttonadd" class="btn btn-primary" onclick="myFunctionadd()">
-                    thêm
+                    Thêm
                 </a>
             </div>
-           
+
         </div>
         <div class="form-group" id="demo" style="display:none">
             <p id="labelclass" class="control-label col-md-2">Lớp học</p>
             <div class="col-7">
-                @Html.EditorFor(model => model.class_code, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.class_code, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập mã lớp", @Style = "width: 300px;" } })
                 @Html.ValidationMessageFor(model => model.class_code, "", new { @class = "text-danger" })
                 <a id="buttoreturn" class="btn btn-primary" onclick="myFunctionreturn()">
-                    quay lại
+                    Quay lại
                 </a>
             </div>
-           
+
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.advisor_code, "Giảng viên", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("advisor_code", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("advisor_code", null, htmlAttributes: new { @class = "form-control", @Style = "width: 300px;" })
                 @Html.ValidationMessageFor(model => model.advisor_code, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div class="form-group">
+            <p id="labelclass" class="control-label col-md-2">Học kỳ</p>
+            <div class="col-7">
+                @Html.EditorFor(model => model.semester_name, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập học kỳ vd: Học kỳ 1 - 2022", @Style = "width: 300px;" } })
+                @Html.ValidationMessageFor(model => model.semester_name, "", new { @class = "text-danger" })
+                <p id="valid_semester" style="color:red"></p>
+            </div>
 
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+
+                <a href="@Url.Action("Index","ClassManagements")" class="btn btn-default">
+                    Quay lại
+                </a>
+                <input type="submit" value="Tạo" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 <script>
     //function myFunctionadd() {
@@ -70,17 +109,17 @@
     //        x.style.display = "none";
     //    }
     //}
-        function myFunctionadd() {
+    function myFunctionadd() {
 
-            $('#return').hide();
-            $('#demo').show();
+        $('#return').hide();
+        $('#demo').show();
 
-        }
-        function myFunctionreturn() {
+    }
+    function myFunctionreturn() {
 
-            $('#demo').hide();
-            $('#return').show();
+        $('#demo').hide();
+        $('#return').show();
 
-        }
+    }
 </script>
 

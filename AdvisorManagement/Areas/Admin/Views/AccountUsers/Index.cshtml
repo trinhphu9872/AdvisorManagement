@@ -2,14 +2,92 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_LayoutCustom.cshtml";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 }
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-0">Người dùng và phân quyền - VLU</h5>
+            </div>
+            <div class="page-breadcrumb">
+                <div class="row">
 
-<div class="bgtitle">
-    VLU - Management and Decentralization
+                    <div class="col-12 d-flex no-block align-items-center">
+                        <a href="@Url.Action("Create", "AccountUsers")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                            Thêm<i class="fas fa-plus"></i>
+                        </a>
 
+                        <div class="ms-auto text-end">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    @*<li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        Library
+                                    </li>*@
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+                <div class="table-responsive">
+                    <table id="zero_config" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Stt</th>
+                                <th>Mã số</th>
+                                <th>Họ tên</th>
+                                <th>Chức vụ</th>
+                                <th>Ngày tham gia</th>
+                                <th>Email</th>
+                                <th>Hoạt động</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.id</td>
+                                    <td>@item.user_code</td>
+                                    <td>@item.user_name</td>
+                                    <td>@item.Role.role_name</td>
+                                    <td>@item.create_time</td>
+                                    <td>@item.email</td>
+                                    <td>
+                                        <a href="@Url.Action("Details", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-success"
+                                           style="margin-bottom: 5px; margin-left: 5px;">
+                                            Chi tiết <i class="fas fa-tasks"></i>
+                                        </a>
+                                        <a href="@Url.Action("Edit", "AccountUsers", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
+                                            Sửa <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="@Url.Action("Delete", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-danger"
+                                           style="margin-bottom: 5px; margin-left: 5px;">
+                                            XÓA <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                         </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="container h-100">
+
+@*<div class="container h-100">
     <div class="d-flex justify-content-center h-100">
         <div class="searchbar">
             <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
@@ -17,73 +95,9 @@
         </div>
     </div>
 </div>
-<div>
+<div>*@
 
-    <div>
-        <a href="@Url.Action("Create", "AccountUsers")" id="btnCreate" class="btn btn-success">
-            Create
-        </a>
-        <table width="100%" class="table table-bordered table-striped table-responsive">
-            <div class="card-body p-3">
-
-            </div>
-            <thead>
-                <tr>
-                    <th width="10%">Stt</th>
-                    <th width="25%" style="text-align:center">Họ tên</th>
-                    <th width="15%" style="text-align:center">Chức vụ</th>
-                    <th width="15%" style="text-align:center">Ngày tham gia</th>
-                    @*<th width="15%" style="text-align:center">Tình trạng</th>*@
-                    <th width="20%" style="text-align:center">Hoạt động</th>
-
-            </thead>
-            <tbody id="myTable">
-                </tr>
-                @foreach (var item in Model)
-                {
-                    <tr id="myUL" style="font-weight: bold">
-                        <td style="text-align: center ;">@item.user_code</td>
-                        <td style="text-align:center">@item.user_name</td>
-                        <td style="text-align:center">@item.Role.role_name</td>
-                        <td style="text-align:center">@item.create_time</td>
-                        @*<td class="project-state" style="text-align: center;">
-                                <span class="badge badge-success">Đang làm</span>
-                            </td>*@
-                        <td style="text-align:center">
-                            <a href="@Url.Action("Edit", "AccountUsers", new { id = item.id })" id="btnUpdate" class="btn btn-primary">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="@Url.Action("Delete", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-
-
-
-
-
-
-
-        </table>
-
-        @*<ul class="pagination" style="margin-left: 70% ;">
-                <li class="page-item"> <a class="page-link" href="#">&laquo;</a> </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item "><a class="page-link" href="#">...</span></a></li>
-                <li class="page-item"><a class="page-link" href="#">50</a></li>
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>*@
-    </div>
-</div>
+                 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>

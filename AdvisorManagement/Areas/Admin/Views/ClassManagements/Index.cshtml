@@ -8,10 +8,7 @@
     IEnumerable<Semester> hocky = ViewBag.hocky as IEnumerable<Semester>;
 }
 
-<div class="bgtitle">
-    VLU - Class list
 
-</div>
 
 <div class="container-fluid">
     <!-- ============================================================== -->
@@ -114,10 +111,10 @@
                                         <td>@item.semester_name</td>
                                         <td></td>
                                         <td>
-                                            <a href="" id="btnDelete" class="btn btn-success"
+                                            @*<a href="" id="btnDelete" class="btn btn-success"
                                                style="margin-bottom: 5px; margin-left: 5px;">
                                                 Chi tiết <i class="fas fa-tasks"></i>
-                                            </a>
+                                            </a>*@
                                             <a href="@Url.Action("EditClass", "ClassManagements", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
                                                 Sửa <i class="fas fa-edit"></i>
                                             </a>

@@ -70,10 +70,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
   
-        public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,update_time")] VLClass vLClass)
+        public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,semester_name")] VLClass vLClass)
         {
             if (ModelState.IsValid)
             {
+                vLClass.create_time = DateTime.Now;
                 db.VLClass.Add(vLClass);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -141,14 +142,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
         // http post edit class
         [HttpPost]
-        public ActionResult EditClass(VLClass cdeatilclass)
+        public ActionResult EditClass(VLClass vLClass)
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                db.Entry(cdeatilclass).State = EntityState.Modified;
+                vLClass.update_time = DateTime.Now;
+                db.Entry(vLClass).State = EntityState.Modified;
                 db.SaveChanges();
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
                 return RedirectToAction("Index");
             }
             else

@@ -23,23 +23,23 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         //GET: Admin/AccountUsers
         public ActionResult Index()
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
 
                 var accountUser = db.AccountUser.Include(a => a.Role);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 return View(accountUser.ToList());
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
         // GET: Admin/AccountUsers/Details/5
         public ActionResult Details(int? id)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 if (id == null)
@@ -52,28 +52,28 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     return HttpNotFound();
                 }
                 return View(accountUser);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
 
         // GET: Admin/AccountUsers/Create
         public ActionResult Create()
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 ViewBag.id_Role = new SelectList(db.Role, "id", "role_name");
                 AccountUser user = new AccountUser();
                 return View(user);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
 
         // POST: Admin/AccountUsers/Create
@@ -82,8 +82,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Create(AccountUser accountUser, HttpPostedFileBase ImageUpload)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
                 if (ModelState.IsValid)
                 {
                     if (accountUser.id_role == 2) {
@@ -108,7 +108,30 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                         db.Advisor.Add(addAdvisor);
                         db.SaveChanges();
                         return RedirectToAction("Index");
-                    } else { 
+                    }else if (accountUser.id_role == 3)
+                    {
+
+                    if (accountUser.ImageUpload != null)
+                    {
+                        string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
+                        string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
+                        filename = filename + extension;
+                        accountUser.img_profile = "~/Images/imageProfile/" + filename;
+                        accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                    }
+                    accountUser.id = db.AccountUser.ToList().Count() + 1;
+                    accountUser.create_time = DateTime.Now;
+
+                    db.AccountUser.Add(accountUser);
+                    var addstudent = new Student ();
+
+                    addstudent.student_code = accountUser.user_code;
+                    addstudent.account_id = accountUser.id;
+                    db.Student.Add(addstudent);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                    }
+                    else { 
                     //accountUser.ID = Guid.NewGuid();
                         if (accountUser.ImageUpload != null)
                         {
@@ -129,11 +152,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
                 ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
                 return View(accountUser);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
         // GET: Admin/AccountUsers/Edit/5
         public ActionResult Edit(int? id)
@@ -192,8 +215,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/AccountUsers/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 if (id == null)
@@ -206,11 +229,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     return HttpNotFound();
                 }
                 return View(accountUser);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            } 
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //} 
         }
 
         // POST: Admin/AccountUsers/Delete/5
@@ -218,19 +241,19 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
                 var accountUser = db.AccountUser.Find(id);
                 var advisor= db.Advisor.Find(accountUser.user_code);
                 db.AccountUser.Remove(accountUser);
                 db.Advisor.Remove(advisor);
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
 
         protected override void Dispose(bool disposing)

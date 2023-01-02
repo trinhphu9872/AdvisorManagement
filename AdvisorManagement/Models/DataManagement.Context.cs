@@ -30,9 +30,10 @@ namespace AdvisorManagement.Models
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<RoleMenu> RoleMenu { get; set; }
+        public virtual DbSet<Semester> Semester { get; set; }
         public virtual DbSet<Student> Student { get; set; }
+        public virtual DbSet<StudentStatus> StudentStatus { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<VLClass> VLClass { get; set; }
-        public virtual DbSet<Semester> Semester { get; set; }
     }
 }
