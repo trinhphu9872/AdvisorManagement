@@ -192,8 +192,6 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-
-
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 RoleMenu roleMenu = db.RoleMenu.Find(id);
