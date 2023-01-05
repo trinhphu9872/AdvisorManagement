@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AdvisorManagement.Models;
 using AdvisorManagement.Middleware;
+using System.Data.Entity.Migrations;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
@@ -228,101 +229,28 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //var ListMenu = serviceMenu.MenuItem();
-         
         }
-
-        public ActionResult EditMenu(int? id)
+        public ActionResult UpdateMenu(string itemIDs)
         {
-
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            int count = 1;
+            List<int> listIDlist = new List<int>();
+            listIDlist = itemIDs.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            foreach (var itemID in listIDlist)
             {
-                if (id == null)
+                try
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                Menu menu = db.Menu.Find(id);
-                if (menu == null)
-                {
-                    return HttpNotFound();
-                }
-                ViewBag.nameMenu = new SelectList(db.Menu, "name_menu", "name_menu");
-                ViewBag.orderID = new SelectList(db.Menu, "order_id", "order_id");
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                Session["orderId_truoc"] = menu.order_id;
-                Session["maxValueOrder"] = db.Menu.AsQueryable().Count();
-
-                return View(menu);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-        }
-
-        // POST: RoleMenus/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-
-        public ActionResult EditMenu([Bind(Include = "id,menu_name,order_id")] Menu menu)
-        {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
-                int orderID_truoc = (int)Session["orderId_truoc"];
-                var MenuItem = serviceMenu.MenuItem();
-                if (ModelState.IsValid)
-                {
-                    db.Entry(menu).State = EntityState.Modified;
+                    Menu menu = db.Menu.Where(x => x.id == itemID).FirstOrDefault();
+                    menu.order_id = count;
+                    db.Menu.AddOrUpdate(menu);
                     db.SaveChanges();
-                    if (MenuItem != null)
-                    {
-                        if (menu.order_id > orderID_truoc)
-                        {
-                            foreach (var item in MenuItem)
-                            {
-                                if (item.orderID <= menu.order_id && item.orderID > orderID_truoc)
-                                {
-                                    Menu menu1 = db.Menu.Find(item.ID);
-                                    menu1.order_id -= 1;
-                                    db.Entry(menu1).State = EntityState.Modified;
-                                    db.SaveChanges();
-                                }
-                            }
-                        }
-                        else if (menu.order_id < orderID_truoc)
-                        {
-                            foreach (var item in MenuItem)
-                            {
-                                if (item.orderID >= menu.order_id && item.orderID < orderID_truoc)
-                                {
-                                    Menu menu1 = db.Menu.Find(item.ID);
-                                    menu1.order_id += 1;
-                                    db.Entry(menu1).State = EntityState.Modified;
-                                    db.SaveChanges();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            db.Entry(menu).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    }
-                    return RedirectToAction("sortMenu");
                 }
-                /* Session.Remove("orderId_truoc");*/
-                ViewBag.Menu = MenuItem;
-                ViewBag.nameMenu = new SelectList(db.Menu, "nameMenu", "nameMenu");
-                ViewBag.orderID = new SelectList(db.Menu, "orderid", "orderid");
-                return View(menu);
+                catch (Exception)
+                {
+                    continue;
+                }
+                count++;
             }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
-
 }

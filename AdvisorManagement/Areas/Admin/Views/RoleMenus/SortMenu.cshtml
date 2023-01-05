@@ -4,9 +4,13 @@
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
 }
-
-
-
+<script src="~/Scripts/jquery-ui-1.13.2.min.js"></script>
+<style>
+    #sortMenu tr:hover {
+        background-color: #0094ff;
+        color: #fff;
+    }
+</style>
 
 <div class="container-fluid">
     <!-- ============================================================== -->
@@ -20,7 +24,6 @@
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
-
                         <div class="col-12 d-flex no-block align-items-center">
                             <a href="@Url.Action("Create", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                 Thêm Menu<i class="fas fa-plus"></i>
@@ -56,9 +59,9 @@
                         <select id="semester" name="semester" onchange="myFunction()">
                             <option selected value="0">All</option>
                             @*@foreach (var item in hocky)
-                {
-                    <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
-                }*@
+                                {
+                                    <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
+                                }*@
 
 
                         </select>
@@ -71,41 +74,33 @@
 
                     </div>
                     <div class="table-responsive">
-                        <table id="zero_config" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        STT
-                                    </th>
-                                    <th>
-                                        Tên danh mục
-                                    </th>
-
-                                </tr>
-                            </thead>
-                            <tbody id="myTable">
-                                @if (ViewBag.Menu != null)
-                                {
-                                    List<AdvisorManagement.Models.ViewModel.MenuItem> listMenu = (List<AdvisorManagement.Models.ViewModel.MenuItem>)ViewBag.ListMenu;
-                                    foreach (var item in listMenu)
+                        <table class="table table-bordered">
+                            @if (ViewBag.Menu != null)
+                            {
+                                List<AdvisorManagement.Models.ViewModel.MenuItem> listMenu = (List<AdvisorManagement.Models.ViewModel.MenuItem>)ViewBag.ListMenu;
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên danh mục</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sortMenu" style="cursor:pointer;">
+                                    @foreach (var item in listMenu)
                                     {
                                         <tr>
                                             <td>
                                                 @item.orderID
                                             </td>
-                                            <td>
+                                            <td class="taskSingleInline" id="task@(item.ID)" data-taskid="@(item.ID)">
                                                 @item.menuName
-                                            </td>
-                                            <td>
-                                                @Html.ActionLink("Edit", "EditMenu", new { id = item.ID }, new { @style = "color:#333;margin-left:3px" })
                                             </td>
                                         </tr>
                                     }
-                                }
-
-                            </tbody>
+                                </tbody>
+                            }
                         </table>
                     </div>
+                    <a class="btn btn-primary" href="@Url.Action("SortMenu","RoleMenus")">Reload</a>
                     @Html.ActionLink("Back to List", "Index")
 
                 </div>
@@ -125,8 +120,6 @@
 
 
     <script>
-
-
         function myFunction() {
             var input, filter, table, tr, td, i;
             input = document.getElementById("semester");
@@ -144,14 +137,35 @@
                 }
             }
         }
-
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function () {
+                $("#sortMenu tr").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
         });
+
+
+        $(document).ready(function () {
+            $("#sortMenu").sortable({
+            update: function (even, ui) {
+                var itemIDs = "";
+                $("#sortMenu").find(".taskSingleInline").each(function () {
+                    var itemID = $(this).attr("data-taskid");
+                    itemIDs = itemIDs + itemID + ",";
+                });
+                $.ajax({
+                    url: '@Url.Action("UpdateMenu","RoleMenus")',
+                    data: { itemIDs: itemIDs },
+                    type: 'POST',
+                    success: function (data) {
+                    },
+                    error: function (xhr, status, error) {
+                    }
+                });
+            }
+        });
+    });
     </script>
 

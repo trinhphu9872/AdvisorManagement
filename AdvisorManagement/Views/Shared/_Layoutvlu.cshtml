@@ -24,6 +24,9 @@
           rel="stylesheet" />
     <link href="~/Assets/extra-libs/calendar/calendar.css" rel="stylesheet" />
     <link href="~/Dist/css/style.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
 </head>
 
 <body>
@@ -55,7 +58,7 @@
                     <!-- ============================================================== -->
                     <!-- Logo -->
                     <!-- ============================================================== -->
-                    <a class="navbar-brand" href="@Url.Action("Index", "Home",new {area = ""})" >
+                    <a class="navbar-brand" href="@Url.Action("Index", "Home",new {area = ""})">
                         <!-- Logo icon -->
                         <b class="logo-icon ps-2">
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -114,22 +117,22 @@
                         </li>
                     </ul>
                     @*@if (Request.IsAuthenticated)
-                    {
-                        <ul class="dropdown-menu stylecolor">
-                            <li>
-                                @Html.ActionLink("Hello " + User.Identity.Name + "!", "UserProfile", "Home", new { id = "", email = User.Identity.Name }, null)
-                            </li>
-                            <li>
-                                <a href=@Url.Action("SignOut", "Account",new {area = ""})> Đăng xuất</a>
-                            </li>
-                        </ul>
-                    }
-                    else
-                    {
-                        <ul class="nav navbar-nav navbar-right">
-                            @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-                        </ul>
-                    }*@
+                        {
+                            <ul class="dropdown-menu stylecolor">
+                                <li>
+                                    @Html.ActionLink("Hello " + User.Identity.Name + "!", "UserProfile", "Home", new { id = "", email = User.Identity.Name }, null)
+                                </li>
+                                <li>
+                                    <a href=@Url.Action("SignOut", "Account",new {area = ""})> Đăng xuất</a>
+                                </li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <ul class="nav navbar-nav navbar-right">
+                                @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+                            </ul>
+                        }*@
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
@@ -139,18 +142,19 @@
                                data-bs-toggle="dropdown"
                                aria-expanded="false">
                                 @if (Request.IsAuthenticated)
-                                { <img src="@Url.Content(ViewBag.avatar+" ")"
-                                     alt="user"
-                                     class="rounded-circle"
-                                     width="31" />
-                                 }
-                                else {
+                                {<img src="@Url.Content(ViewBag.avatar+" ")"
+                                      alt="user"
+                                      class="rounded-circle"
+                                      width="31" />
+                                }
+                                else
+                                {
                                     <img src="~/Assets/images/users/1.jpg"
                                          alt="user"
                                          class="rounded-circle"
                                          width="31" />
                                 }
-                                </a>
+                            </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
                                 @if (Request.IsAuthenticated)
                                 {
@@ -169,7 +173,7 @@
                                 {
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="@Url.Action("SignIn", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Login</a>
-                                   
+
                                 }
                             </ul>
                         </li>
@@ -281,37 +285,37 @@
                                         </li>
                                         break;
                                     case "Báo cáo cuối học kì":
-                                        <ul aria-expanded="false" class="collapse first-level">
-                                            <li class="sidebar-item">
-                                                <a href="~/@item.actionLink/Index" class="sidebar-link">
-                                                    <i class="mdi mdi-calendar-check"></i><span class="hide-menu"> @item.menuName </span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        @*  <ul aria-expanded="false" class="collapse first-level">*@
+                                        <li class="sidebar-item">
+                                            <a href="~/@item.actionLink/Index" class="sidebar-link">
+                                                <i class="mdi mdi-calendar-check"></i><span class="hide-menu"> @item.menuName </span>
+                                            </a>
+                                        </li>
+                                        @* </ul>*@
                                         break;
                                     case "Xử lí học tập":
+                                        @*<li class="sidebar-item">
+                                            <ul aria-expanded="false" class="collapse second-level">*@
                                         <li class="sidebar-item">
-                                            <ul aria-expanded="false" class="collapse second-level">
-                                                <li class="sidebar-item">
-                                                    <a href="~/@item.actionLink/Index" class="sidebar-link">
-                                                        <i class="mdi mdi-calendar-check"></i><span class="hide-menu"> @item.menuName </span>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                            <a href="~/@item.actionLink/Index" class="sidebar-link">
+                                                <i class="mdi mdi-calendar-check"></i><span class="hide-menu"> @item.menuName </span>
+                                            </a>
                                         </li>
+                                        @*</ul>
+                                            </li>*@
                                         break;
                                     case "Cài đặt":
-                                        <ul aria-expanded="false" class="collapse first-level">
-                                            <li class="sidebar-item">
-                                                <a class="sidebar-link has-arrow waves-effect waves-dark"
-                                                   href="#"
-                                                   aria-expanded="false">
-                                                    <i class="fas fa-cog"></i><span class="hide-menu" style="margin-left: 3px">
-                                                        Cài đặt
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        @* <ul aria-expanded="false" class="collapse first-level">*@
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link has-arrow waves-effect waves-dark"
+                                               href="~/@item.actionLink/Index"
+                                               aria-expanded="false">
+                                                <i class="fas fa-cog"></i><span class="hide-menu" style="margin-left: 3px">
+                                                    @item.menuName
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @*</ul>*@
 
                                         break;
                                     case "Phân quyền":
@@ -320,9 +324,20 @@
                                                href="~/@item.actionLink/Index"
                                                aria-expanded="false">
                                                 <i class="mdi mdi-emoticon"></i><span class="hide-menu"> @item.menuName </span>
-
                                             </a>
                                         </li>
+                                        break;
+                                    case "Menu":
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                               href="~/@item.actionLink/Index"
+                                               aria-expanded="false">
+                                                <i class="fas fa-tasks"></i><span class="hide-menu" style="margin-left: 3px">
+                                                    @item.menuName
+                                                </span>
+                                            </a>
+                                        </li>
+
                                         break;
                                 }
                             }
@@ -354,7 +369,7 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">
-                                        
+
                                     </li>
                                 </ol>
                             </nav>
@@ -373,7 +388,7 @@
                 <!-- Start Page Content -->
                 <!-- ============================================================== -->
                 <div class="row">
-                     @RenderBody()
+                    @RenderBody()
                 </div>
 
                 <!-- ============================================================== -->

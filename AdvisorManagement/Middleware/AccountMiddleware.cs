@@ -99,5 +99,74 @@ namespace AdvisorManagement.Middleware
             return (seeMenu.FirstOrDefault(x => x.actionLink == routeAccess) != null ) ? true : false;
 
         }
+
+        public bool WriteDataFromExcelClass(string email, string name_advisor, string id_class)
+        {
+            var flag = false;
+            AccountInitModel itemAccount = new AccountInitModel();
+            string[] mailGet = email.Trim().Split('@');
+            var user = db.AccountUser.Where(x => x.email == email).Count();
+            if (user == 0)
+            {
+                itemAccount.role_id = 2;
+                itemAccount.user_name = name_advisor;
+                itemAccount.user_code = mailGet[0] + "_cntt";
+                writeRecordUser(itemAccount, email);
+                Advisor advisor = new Advisor();
+                advisor.advisor_code = itemAccount.user_code;
+                advisor.account_id = getID();
+                advisor.status_id = 1;
+                db.Advisor.Add(advisor);
+                db.SaveChanges();
+                VLClass vlclass = new VLClass();
+                var checkClas = checkClass(id_class);
+                if (checkClas)
+                {
+                    vlclass.class_code = id_class;
+                    vlclass.advisor_code = itemAccount.user_code;
+                    db.VLClass.Add(vlclass);
+                    db.SaveChanges();
+                }
+                flag = true;
+            }
+            else
+            {
+                VLClass vlclass = new VLClass();
+                var checkClas = checkClass(id_class);
+                if (checkClas)
+                {
+                    var advisor_coe = db.AccountUser.FirstOrDefault(x => x.email == email).user_code;
+                    vlclass.class_code = id_class;
+                    vlclass.advisor_code = advisor_coe;
+                    db.VLClass.Add(vlclass);
+                    db.SaveChanges();
+                }
+                flag = false;
+            }
+            /* else
+             {
+                 itemAccount.role_id = 2;
+                 itemAccount.user_code = data[0].Trim();
+                 itemAccount.user_name = data[1].Trim();
+                 writeRecordUser(itemAccount, logData.Name);
+                 Student student = new Student();
+                 student.student_code = itemAccount.user_code;
+                 student.account_id = getID();
+                 student.status_id = 1;
+                 db.Student.Add(student);
+             }*/
+            return flag;
+        }
+
+        public bool checkClass(object id_class)
+        {
+            var flag = false;
+            var isClass = db.VLClass.Where(x => x.class_code == id_class).Count();
+            if (isClass == 0)
+            {
+                return true;
+            }
+            return flag;
+        }
     }
 }

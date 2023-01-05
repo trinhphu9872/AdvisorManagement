@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
-   
+
     IEnumerable<AccountUser> nameUser = ViewBag.nameUser as IEnumerable<AccountUser>;
     IEnumerable<Semester> hocky = ViewBag.hocky as IEnumerable<Semester>;
 }
@@ -27,17 +27,19 @@
                             <a href="@Url.Action("create", "ClassManagements",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                 Thêm<i class="fas fa-plus"></i>
                             </a>
-
+                            <a onclick="ImportExcelFile()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                Import<i class="fas fa-plus"></i>
+                            </a>
                             @*<div class="ms-auto text-end">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">
-                                            Library
-                                        </li>
-                                    </ol>
-                                </nav>
-                            </div>*@
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">
+                                                Library
+                                            </li>
+                                        </ol>
+                                    </nav>
+                                </div>*@
                         </div>
                     </div>
 
@@ -83,52 +85,51 @@
                                 </tr>
                             </thead>
                             <tbody id="myTable">
-                                @foreach (var item in Model)
+                                @if (ViewBag.listClass != null)
                                 {
-                                    <tr>
-                                        <td>@item.id</td>
-                                        <td>@item.class_code</td>
-                                        @if (item.advisor_code != null)
-                                        {
-                                            foreach (var itemUser in nameUser)
+                                    var i = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.class_code</td>
+                                            @if (item.advisor_code != null)
                                             {
-
-                                                if (item.advisor_code.Equals(itemUser.user_code))
+                                                foreach (var itemUser in nameUser)
                                                 {
-                                                    <td>@itemUser.user_name</td>
+
+                                                    if (item.advisor_code.Equals(itemUser.user_code))
+                                                    {
+                                                        <td>@itemUser.user_name</td>
+                                                    }
+
                                                 }
-
-
-
-
                                             }
-                                        }
-                                        else
-                                        {
-                                            <td style="text-align:center"></td>
-                                        }
+                                            else
+                                            {
+                                                <td style="text-align:center"></td>
+                                            }
 
-                                        <td>@item.semester_name</td>
-                                        <td></td>
-                                        <td>
-                                            @*<a href="" id="btnDelete" class="btn btn-success"
-                                               style="margin-bottom: 5px; margin-left: 5px;">
-                                                Chi tiết <i class="fas fa-tasks"></i>
-                                            </a>*@
-                                            <a href="@Url.Action("EditClass", "ClassManagements", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
-                                                Sửa <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="@Url.Action("Delete", "ClassManagements", new { id = item.id })" id="btnDelete" class="btn btn-danger"
-                                               style="margin-bottom: 5px; margin-left: 5px;">
-                                                XÓA <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-
-
+                                            <td>@item.semester_name</td>
+                                            <td></td>
+                                            <td>
+                                                <a href="" id="btnDelete" class="btn btn-success"
+                                                   style="margin-bottom: 5px; margin-left: 5px;">
+                                                    Chi tiết <i class="fas fa-tasks"></i>
+                                                </a>
+                                                <a href="@Url.Action("EditClass", "ClassManagements", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
+                                                    Sửa <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="@Url.Action("Delete", "ClassManagements", new { id = item.id })" id="btnDelete" class="btn btn-danger"
+                                                   style="margin-bottom: 5px; margin-left: 5px;">
+                                                    XÓA <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
                                 }
                             </tbody>
-
                         </table>
                     </div>
                 </div>
@@ -147,108 +148,133 @@
     <!-- ============================================================== -->
 </div>
 @*<div class="container h-100">
-    <div class="d-flex justify-content-center h-100">
-        <a href=@Url.Action("create", "ClassManagements",new {area = "Admin"}) class="btn btn-primary" style="margin-bottom: 2%;margin-left:5%; width: 170px;">
-            THÊM LỚP HỌC  <i class="fas fa-plus"></i>
-        </a>
-        <div class="searchbar">
-            <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
-            <a href="#" class="search_icon">
-                <i class="fas fa-search"></i>
+        <div class="d-flex justify-content-center h-100">
+            <a href=@Url.Action("create", "ClassManagements",new {area = "Admin"}) class="btn btn-primary" style="margin-bottom: 2%;margin-left:5%; width: 170px;">
+                THÊM LỚP HỌC  <i class="fas fa-plus"></i>
             </a>
+            <div class="searchbar">
+                <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
+                <a href="#" class="search_icon">
+                    <i class="fas fa-search"></i>
+                </a>
 
+            </div>
+            <div>
+                <label for="cars">Chọn học kỳ:</label>
+
+                <select id="semester" name="semester" onchange="myFunction()">
+                    <option selected value="0">All</option>
+                    @foreach (var item in hocky)
+                    {
+                        <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
+                    }
+
+
+                </select>
+            </div>
         </div>
+    </div>
+    <div>
+
+
         <div>
-            <label for="cars">Chọn học kỳ:</label>
+            <table width="100%" class="table table-bordered table-striped table-responsive">
+                <div class="card-body p-3">
+                </div>
 
-            <select id="semester" name="semester" onchange="myFunction()">
-                <option selected value="0">All</option>
-                @foreach (var item in hocky)
-                {
-                    <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
-                }
+                <thead>
+                    <tr>
+                        <th width="10%">Stt</th>
+                        <th width="25%" style="text-align:center">Mã lớp</th>
+                        <th width="15%" style="text-align:center">CVHT</th>
+                        <th width="15%" style="text-align:center">Học kỳ</th>
+                        <th width="15%" style="text-align:center">Tổng SV</th>
+                        <th width="20%" style="text-align:center">Hoạt động</th>
 
 
-            </select>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                    @foreach (var item in Model)
+                    {
+                        <tr style="font-weight: bold">
+                            <td style="text-align: center ;">@item.id</td>
+                            <td style="text-align:center">@item.class_code</td>
+                            @if (item.advisor_code != null)
+                            {
+                                foreach (var itemUser in nameUser)
+                                {
+
+                                    if (item.advisor_code.Equals(itemUser.user_code))
+                                    {
+                                        <td style="text-align:center">@itemUser.user_name</td>
+                                    }
+
+
+
+
+                                }
+                            }
+                            else
+                            {
+                                <td style="text-align:center"></td>
+                            }
+
+                            <td style="text-align:center">@item.semester_name</td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center">
+                                <a href="@Url.Action("EditClass", "ClassManagements", new { id = item.id })" id="btnUpdate" class="btn btn-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="" id="btnDelete" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <ul class="pagination" style="margin-left: 70% ;">
+                <li class="page-item"> <a class="page-link" href="#">&laquo;</a> </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item "><a class="page-link" href="#">...</span></a></li>
+                <li class="page-item"><a class="page-link" href="#">50</a></li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>*@
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Import Class</h4>
+            </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px;">
+                        <div class="col-md-4"><span>Chọn file:</span></div>
+                        <div class="col-md-8">
+                            @Html.Raw(ViewBag.Error)
+                            <input name="postedFile" type="file" id="fileExcel" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnImportExcel" class="btn btn-primary" type="submit">Import</button>
+                </div>
         </div>
     </div>
 </div>
-<div>
 
-
-    <div>
-        <table width="100%" class="table table-bordered table-striped table-responsive">
-            <div class="card-body p-3">
-            </div>
-
-            <thead>
-                <tr>
-                    <th width="10%">Stt</th>
-                    <th width="25%" style="text-align:center">Mã lớp</th>
-                    <th width="15%" style="text-align:center">CVHT</th>
-                    <th width="15%" style="text-align:center">Học kỳ</th>
-                    <th width="15%" style="text-align:center">Tổng SV</th>
-                    <th width="20%" style="text-align:center">Hoạt động</th>
-
-
-                </tr>
-            </thead>
-            <tbody id="myTable">
-                @foreach (var item in Model)
-                {
-                    <tr style="font-weight: bold">
-                        <td style="text-align: center ;">@item.id</td>
-                        <td style="text-align:center">@item.class_code</td>
-                        @if (item.advisor_code != null)
-                        {
-                            foreach (var itemUser in nameUser)
-                            {
-
-                                if (item.advisor_code.Equals(itemUser.user_code))
-                                {
-                                    <td style="text-align:center">@itemUser.user_name</td>
-                                }
-
-
-
-
-                            }
-                        }
-                        else
-                        {
-                            <td style="text-align:center"></td>
-                        }
-
-                        <td style="text-align:center">@item.semester_name</td>
-                        <td style="text-align:center"></td>
-                        <td style="text-align:center">
-                            <a href="@Url.Action("EditClass", "ClassManagements", new { id = item.id })" id="btnUpdate" class="btn btn-primary">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="" id="btnDelete" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <ul class="pagination" style="margin-left: 70% ;">
-            <li class="page-item"> <a class="page-link" href="#">&laquo;</a> </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item "><a class="page-link" href="#">...</span></a></li>
-            <li class="page-item"><a class="page-link" href="#">50</a></li>
-            <li class="page-item disabled">
-                <a class="page-link" href="#">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>*@
 
 <script>
 
@@ -279,4 +305,35 @@
             });
         });
     });
+
+    function ImportExcelFile() {
+        $("#myModal").modal("show");
+    }
+    function HideModal() {
+        $("#myModal").modal("hide");
+    }
+    $(document).ready(function () {
+        $('#btnImportExcel').click(function () {
+            var formData = new FormData();
+            var fileExcel = document.getElementById("fileExcel");
+            var myFile = fileExcel.files[0];
+            formData.append("postedfile", myFile);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ImportClass", "ClassManagements",new {area = "Admin"})',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success == false) {
+                        alert(data.message);
+                    } else {
+                        $("#myModal").modal("hide");
+                        alert(data.message);
+                        location.reload();
+                    }
+                }
+            })
+        })
+    }) 
 </script>
