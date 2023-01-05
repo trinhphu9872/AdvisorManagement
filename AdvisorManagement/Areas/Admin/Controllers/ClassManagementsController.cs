@@ -31,9 +31,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 var listClass = db.VLClass.ToList();
                 ViewBag.listClass = listClass;
+                Session["listClass"] = listClass;
                 ViewBag.nameUser = db.AccountUser.ToList();
+                Session["nameUser"] = db.AccountUser.ToList();
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 ViewBag.hocky = db.Semester.ToList();
+                Session["hocky"] = db.Semester.ToList();
                 return View(listClass);
             }
             else
@@ -247,6 +250,60 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             }
             return result;
+        }
+
+        public void ExcelExport()
+        {
+            var listClass = Session["listClass"];
+            var nameUser = Session["nameUser"];
+            IEnumerable<AccountUser> name = nameUser as IEnumerable<AccountUser>;
+            var hocky = Session["hocky"];
+            List<VLClass> listStudent = (List<VLClass>)listClass;
+            try
+            {
+                using (ExcelPackage pck = new ExcelPackage())
+                {
+                    var ws = pck.Workbook.Worksheets.Add("Danh sách lớp");
+                    ws.Cells["A1"].Value = "STT";
+                    ws.Cells["B1"].Value = "Mã lớp";
+                    ws.Cells["C1"].Value = "Tên cố vấn";
+                    ws.Cells["D1"].Value = "Học kỳ";
+                    ws.Cells["E1"].Value = "Tổng sinh viên";
+                    var i = 1;
+                    int rowStart = 2;
+                    foreach (var item in listStudent)
+                    {
+                        ws.Cells[string.Format("A{0}", rowStart)].Value = i;
+                        ws.Cells[string.Format("B{0}", rowStart)].Value = item.class_code;
+                        if(item.advisor_code != null)
+                        {
+                            foreach (var itemUser in name)
+                            {
+                                if (item.advisor_code.Equals(itemUser.user_code))
+                                {
+                                    ws.Cells[string.Format("C{0}", rowStart)].Value = itemUser.user_name;
+                                    break;
+                                }
+                            }
+                        }
+                        ws.Cells[string.Format("D{0}", rowStart)].Value = item.semester_name;
+                        ws.Cells[string.Format("E{0}", rowStart)].Value = null;
+                        rowStart++;
+                        i++;
+                    }
+                    ws.Cells["A:AZ"].AutoFitColumns();
+                    Response.Clear();
+                    Response.Clear();
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment; filename=" + "Danhsachlop.xlsx");
+                    Response.BinaryWrite(pck.GetAsByteArray());
+                    Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }
