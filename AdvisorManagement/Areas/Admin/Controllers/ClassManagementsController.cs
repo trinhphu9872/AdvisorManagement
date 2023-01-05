@@ -62,6 +62,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
         //    return View(vLClass);
+
+
         //}
 
         // GET: Admin/VLClasses/Create
