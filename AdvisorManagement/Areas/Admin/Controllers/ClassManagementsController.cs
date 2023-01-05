@@ -116,11 +116,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         // HTTP GET
-        public ActionResult EditClass(string classCode)
+        public ActionResult EditClass(int id )
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                var detailClass = db.VLClass.Find(classCode);
+                var detailClass = db.VLClass.Find(id);
 
 
                 //List<string> AV = new List<string>();
