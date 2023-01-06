@@ -1107,6 +1107,15 @@
     <Content Include="Images\avata.png" />
     <Content Include="Images\banner.jpg" />
     <Content Include="Images\bell.png" />
+    <Content Include="Images\imageProfile\287821327_513281947146072_1386749984878314502_n.jpg" />
+    <Content Include="Images\imageProfile\313443749_834713797858267_4991515248327447805_n.jpg" />
+    <Content Include="Images\imageProfile\Background.jpg" />
+    <Content Include="Images\imageProfile\code.jpg" />
+    <Content Include="Images\imageProfile\dancing-dog-holding-soju-efc6oclakdnyzi0t.gif" />
+    <Content Include="Images\imageProfile\Dashboard%28sv%29.png" />
+    <Content Include="Images\imageProfile\View file list.png" />
+    <Content Include="Images\imageProfile\ViewlistQ&amp;A.png" />
+    <Content Include="Images\imageProfile\Write_Q&amp;A.png" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\logo2.png" />
     <Content Include="Images\logon.png" />
@@ -1399,7 +1408,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Images\imageProfile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
