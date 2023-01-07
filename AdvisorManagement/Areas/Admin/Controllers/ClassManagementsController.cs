@@ -27,6 +27,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/ClassManagements
         public ActionResult Index()
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 var listClass = db.VLClass.ToList();
@@ -74,6 +76,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/VLClasses/Create
         public ActionResult Create()
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
             ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
             return View();
@@ -86,6 +90,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,update_time")] VLClass vLClass)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (ModelState.IsValid)
             {
                 db.VLClass.Add(vLClass);
@@ -100,6 +106,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/VLClasses/Delete/5
         public ActionResult Delete(int id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -116,6 +124,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             VLClass vLClass = db.VLClass.Find(id);
             db.VLClass.Remove(vLClass);
             db.SaveChanges();
@@ -125,6 +135,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // HTTP GET
         public ActionResult EditClass(int id )
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 var detailClass = db.VLClass.Find(id);
@@ -157,6 +169,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult EditClass(VLClass cdeatilclass)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 db.Entry(cdeatilclass).State = EntityState.Modified;
@@ -174,6 +188,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult ImportClass(HttpPostedFileBase postedfile)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             try
             {
                 string filePath = string.Empty;
@@ -217,6 +233,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
         private bool ImportData(out int count, string filePath)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             var result = false;
             count = 0;
             try
@@ -254,6 +272,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public void ExcelExport()
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             var listClass = Session["listClass"];
             var nameUser = Session["nameUser"];
             IEnumerable<AccountUser> name = nameUser as IEnumerable<AccountUser>;

@@ -1042,6 +1042,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Dist\css\admin.css" />
     <Content Include="Dist\css\icons\font-awesome\css\all.css" />
     <Content Include="Dist\css\icons\font-awesome\css\bootstrap.min.css" />
     <Content Include="Dist\css\icons\font-awesome\css\fa-brands.css" />
@@ -1088,6 +1089,7 @@
     <Content Include="Dist\js\bootstrap.min.js" />
     <Content Include="Dist\js\custom.js" />
     <Content Include="Dist\js\custom.min.js" />
+    <Content Include="Dist\js\greet.js" />
     <Content Include="Dist\js\jquery-ui.min.js" />
     <Content Include="Dist\js\jquery.min.js" />
     <Content Include="Dist\js\jquery.ui.touch-punch-improved.js" />
@@ -1099,6 +1101,7 @@
     <Content Include="Dist\js\pages\mask\mask.init.js" />
     <Content Include="Dist\js\pages\sparkline\jquery.charts-sparkline.js" />
     <Content Include="Dist\js\sidebarmenu.js" />
+    <Content Include="Dist\js\time.js" />
     <Content Include="Dist\js\waves.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

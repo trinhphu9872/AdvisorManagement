@@ -19,6 +19,7 @@ namespace AdvisorManagement.Controllers
                 HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = Url.Action("HomeRedirect") },
                     OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
+
         }
 
         public void SignOut()

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using System.Web.Mvc;
 
 namespace AdvisorManagement.Middleware
 {
@@ -13,7 +14,7 @@ namespace AdvisorManagement.Middleware
 
         private CP25Team09Entities db = new CP25Team09Entities();
      
-
+        
         // Get Role
         public string getRoles(string roles)
         {
@@ -167,6 +168,12 @@ namespace AdvisorManagement.Middleware
                 return true;
             }
             return flag;
+        }
+
+        public string getAvatar(string user_mail)
+        {
+            var sql = db.AccountUser.FirstOrDefault(x => x.email == user_mail);
+            return sql.img_profile.Replace("~/Images/imageProfile/", "");
         }
     }
 }

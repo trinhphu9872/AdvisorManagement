@@ -20,6 +20,8 @@ namespace AdvisorManagement.Controllers
         private CP25Team09Entities dbApp = new CP25Team09Entities();
         private AccountMiddleware accountService = new AccountMiddleware();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
+        
+
         public ActionResult Index()
         {
             string user_mail = User.Identity.Name;
@@ -31,7 +33,7 @@ namespace AdvisorManagement.Controllers
                     accountService.UserProfile((ClaimsIdentity) User.Identity);
                 }
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                ViewBag.avatar = sql.img_profile;
+                ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
             }
             return View();
         }
@@ -55,7 +57,7 @@ namespace AdvisorManagement.Controllers
         {
             AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(email));
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            ViewBag.avatar = user.img_profile;
+            ViewBag.avatar = user.img_profile.Replace("~","");
             return View(user);
         }
         public ActionResult EditUserProfile(int id)

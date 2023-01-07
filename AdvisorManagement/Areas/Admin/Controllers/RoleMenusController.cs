@@ -22,6 +22,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus
         public ActionResult Index()
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 ViewBag.Message = "Role Menu";
@@ -39,6 +41,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus/Details/5
         public ActionResult Details(int? id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 if (id == null)
@@ -65,6 +69,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus/Create
         public ActionResult Create()
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name");
@@ -86,6 +92,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Create([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 if (ModelState.IsValid)
@@ -111,6 +119,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus/Edit/5
         public ActionResult Edit(int? id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 if (id == null)
@@ -140,6 +150,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Edit([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 if (ModelState.IsValid)
@@ -164,6 +176,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus/Delete/5
         public ActionResult Delete(int? id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 if (id == null)
@@ -193,6 +207,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 RoleMenu roleMenu = db.RoleMenu.Find(id);
@@ -219,6 +235,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult SortMenu()
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
@@ -232,6 +250,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
         public ActionResult UpdateMenu(string itemIDs)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             int count = 1;
             List<int> listIDlist = new List<int>();
             listIDlist = itemIDs.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();

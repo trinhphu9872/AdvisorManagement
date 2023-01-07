@@ -27,6 +27,8 @@ namespace AdvisorManagement.Controllers
         // GET: Class
         public ActionResult Index()
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             var listClass = serviceStudents.getClass(User.Identity.Name);
             var role = serviceStudents.getRoles(User.Identity.Name);
@@ -49,6 +51,8 @@ namespace AdvisorManagement.Controllers
 
         public ActionResult DetailClass(string classCode)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (serviceStudents.getPermission(classCode, User.Identity.Name))
             {
                 var detailClass = serviceStudents.getStudent(classCode);
@@ -71,6 +75,8 @@ namespace AdvisorManagement.Controllers
         }
         public ActionResult UpdateStudent(int id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             int roleUser = serviceStudents.getRolesUser(id);
             if (roleUser == 2 || roleUser == 1)
             {
@@ -86,6 +92,8 @@ namespace AdvisorManagement.Controllers
         [HttpPost]
         public ActionResult UpdateStudent([Bind(Include = "id,user_name,phone")] AccountUser accountUser)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             if (ModelState.IsValid)
             {
                 var tempUser = db.AccountUser.FirstOrDefault(x => x.id == accountUser.id);
@@ -101,6 +109,8 @@ namespace AdvisorManagement.Controllers
         [HttpPost]
         public ActionResult ImportStudent(HttpPostedFileBase postedfile)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
             try
             {
                 string filePath = string.Empty;
@@ -151,6 +161,7 @@ namespace AdvisorManagement.Controllers
         }
         private bool ImportData(out int count, string filePath)
         {
+
             var result = false;
             count = 0;
             try

@@ -28,7 +28,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
                 var accountUser = db.AccountUser.Include(a => a.Role);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                return View(accountUser.ToList());
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
+            return View(accountUser.ToList());
             //}
             //else
             //{
@@ -40,7 +42,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             //{
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 if (id == null)
                 {
@@ -64,7 +67,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             //{
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 ViewBag.id_Role = new SelectList(db.Role, "id", "role_name");
                 AccountUser user = new AccountUser();
@@ -84,7 +88,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             //{
-                if (ModelState.IsValid)
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            if (ModelState.IsValid)
                 {
                     if (accountUser.id_role == 2) {
                         
@@ -161,6 +166,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/AccountUsers/Edit/5
         public ActionResult Edit(int? id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             if (id == null)
@@ -184,6 +190,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Edit(AccountUser accountUser)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             if (ModelState.IsValid)
             {
                 var edituser = db.AccountUser.Find(accountUser.id);
@@ -215,9 +222,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/AccountUsers/Delete/5
         public ActionResult Delete(int? id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             //{
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 if (id == null)
                 {
@@ -241,9 +249,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             //{
-                var accountUser = db.AccountUser.Find(id);
+            var accountUser = db.AccountUser.Find(id);
                 var advisor= db.Advisor.Find(accountUser.user_code);
                 db.AccountUser.Remove(accountUser);
                 db.Advisor.Remove(advisor);

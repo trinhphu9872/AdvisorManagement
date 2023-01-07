@@ -9,11 +9,9 @@
 
 namespace AdvisorManagement.Models
 {
-    using System.Web;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class AccountUser
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -34,8 +32,7 @@ namespace AdvisorManagement.Models
         public string email { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public Nullable<System.DateTime> update_time { get; set; }
-        [NotMapped]
-        public HttpPostedFileBase ImageUpload { get; set; }
+    
         public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Advisor> Advisor { get; set; }

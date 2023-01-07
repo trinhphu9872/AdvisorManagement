@@ -8,10 +8,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords"
-          content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Matrix lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Matrix admin lite design, Matrix admin lite dashboard bootstrap 5 dashboard template" />
-    <meta name="description"
-          content="Matrix Admin Lite Free Version is powerful and clean admin dashboard template, inpired from Bootstrap Framework" />
+    <link rel="icon" href="~/Assets/images/Logo2022.png" type="image/x-icon" />
+    @*<meta name="keywords"
+        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Matrix lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Matrix admin lite design, Matrix admin lite dashboard bootstrap 5 dashboard template" />*@
+    @*<meta name="description"
+        content="Matrix Admin Lite Free Version is powerful and clean admin dashboard template, inpired from Bootstrap Framework" />*@
     <meta name="robots" content="noindex,nofollow" />
     <title>@ViewBag.Title</title>
     <!-- Favicon icon -->
@@ -23,6 +24,7 @@
     <link href="~/Assets/libs/fullcalendar/dist/fullcalendar.min.css"
           rel="stylesheet" />
     <link href="~/Assets/extra-libs/calendar/calendar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Dist/css/admin.css" />
     <link href="~/Dist/css/style.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
@@ -142,7 +144,7 @@
                                data-bs-toggle="dropdown"
                                aria-expanded="false">
                                 @if (Request.IsAuthenticated)
-                                {<img src="@Url.Content(ViewBag.avatar+" ")"
+                                { <img src="~/Images/imageProfile/@ViewBag.avatar"
                                       alt="user"
                                       class="rounded-circle"
                                       width="31" />
@@ -158,21 +160,18 @@
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
                                 @if (Request.IsAuthenticated)
                                 {
-                                    <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name })">
+                                    <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
                                         <i class="mdi mdi-account me-1 ms-1"></i> My
-                                        Profile
+                                        Tài Khoản
                                     </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Logout</a>
+                                    <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
                                     <div class="dropdown-divider"></div>
-                                    <div class="ps-4 p-10">
-                                        <a href="./Profile.html" class="btn btn-sm btn-success btn-rounded text-white">View Profile</a>
-                                    </div>
                                 }
                                 else
                                 {
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="@Url.Action("SignIn", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Login</a>
+                                    <a class="dropdown-item" href="@Url.Action("SignIn", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
 
                                 }
                             </ul>
@@ -360,23 +359,23 @@
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-                <div class="row">
-                    <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Dashboard</h4>
-                        <div class="ms-auto text-end">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">
+            @*<div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <h4 class="page-title">Dashboard</h4>
+                            <div class="ms-auto text-end">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">
 
-                                    </li>
-                                </ol>
-                            </nav>
+                                        </li>
+                                    </ol>
+                                </nav>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div>*@
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
@@ -440,6 +439,10 @@
     <script src="~/Dist/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
     <script src="~/Dist/js/custom.min.js"></script>
+    <!-- this page js -->
+    <script src="~/Dist/js/time.js"></script>
+    <!-- this page js -->
+    <script src="~/Dist/js/greet.js"></script>
     <!-- this page js -->
     <script src="~/Assets/libs/moment/min/moment.min.js"></script>
     <script src="~/Assets/libs/fullcalendar/dist/fullcalendar.min.js"></script>
