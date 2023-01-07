@@ -92,7 +92,7 @@ namespace AdvisorManagement.Middleware
                                  name = pq.user_name,
                                  email = pq.email,
                                  phone = pq.phone,
-                             }).OrderBy(x => x.idClass).ToList();
+                             }).ToList();
             return classInfo;
         }
 
@@ -106,7 +106,8 @@ namespace AdvisorManagement.Middleware
             {
                 var user_code = db.AccountUser.FirstOrDefault(x => x.email == user_email).user_code;
                 var advisor_code = db.VLClass.FirstOrDefault(x => x.class_code.Equals(classCode)).advisor_code;
-                if (advisor_code == user_code)
+                var role_admin = db.AccountUser.FirstOrDefault(x => x.email == user_email).id_role; 
+                if (advisor_code == user_code || role_admin == 1)
                 {
                     return true;
                 }
@@ -184,13 +185,14 @@ namespace AdvisorManagement.Middleware
             }
         }
 
-        public void UpdateStudentImport(String mssv, String status, CP25Team09Entities db)
+        public void UpdateStudentImport(String mssv, String status, CP25Team09Entities db, string id_class)
         {
             try
             {
                 var status_id = db.StudentStatus.FirstOrDefault(x => x.status_name.Equals(status)).id;
                 Student user = db.Student.Find(mssv);
                 user.status_id = status_id;
+                user.id_class= id_class;
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
             }

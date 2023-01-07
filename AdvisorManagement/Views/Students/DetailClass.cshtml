@@ -27,7 +27,7 @@
                                 <label for="ngaysinh" style="margin-left: 10px;">Số điện thoại:<input style="margin-left: 4px; width: 250px;" disabled tyle="text" value="@item.phone"></label><br>
                             </div>
                         </form>
-                        if (ViewBag.role == "Advisor")
+                        if (ViewBag.role == "Advisor" || ViewBag.role == "Admin")
                         {
                         <div class="page-breadcrumb">
                             <div class="row">
@@ -90,7 +90,7 @@
                                                 <td style="text-align:center">@item.phone</td>
                                                 <td style="text-align:center">@item.course</td>
                                                 <td style="text-align:center">@item.status</td>
-                                                @if (ViewBag.role == "Advisor")
+                                                @if (ViewBag.role == "Advisor" || ViewBag.role == "Admin")
                                                 {
                                                     <td style="text-align:center">
                                                         <a href="@Url.Action("UpdateStudent", "Students", new {id = item.id })" id="btnUpdate" class="btn btn-primary">
@@ -112,7 +112,14 @@
                                 <p>Bạn đang không thực hiện cố vấn lớp nào</p>
                             }
                         </div>
-                        @Html.ActionLink("Back to List", "Index")
+                        @if (ViewBag.role == "Admin")
+                        {
+                            @Html.ActionLink("Back to List", "Index", "ClassManagements" , new {area = "Admin"}, null)
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Back to List", "Index")
+                        }
                     </div>
                 </div>
             </div>

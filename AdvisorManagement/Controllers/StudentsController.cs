@@ -213,7 +213,7 @@ namespace AdvisorManagement.Controllers
                             }
                             else
                             {
-                                serviceStudents.UpdateStudentImport(mssv.ToString(), status.ToString(), db);
+                                serviceStudents.UpdateStudentImport(mssv.ToString(), status.ToString(), db, id_class.ToString());
                             }
                             if (isSuccessAcc && isSuccessStd)
                             {
