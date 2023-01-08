@@ -11,7 +11,7 @@
     <script src="~/Validation/AccountUsers/Validation_AccountUsers.js"></script>
 </head>
 
-@using (Html.BeginForm("Edit", "AccountUsers", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Delete", "AccountUsers", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -78,7 +78,7 @@
 
                                                     <div class="tab-content pt-3">
                                                         <div class="tab-pane active">
-                                                            <form class="form" novalidate="">
+                                                            <form class="form" novalidate="" >
                                                                 <div class="row">
                                                                     <div class="col">
                                                                         <div class="row">

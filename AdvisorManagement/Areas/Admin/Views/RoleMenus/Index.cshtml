@@ -51,24 +51,10 @@
                 <div class="card-body">
                     <h5 class="card-title"></h5>
                     <div class="col-md-1">
-                        <label for="cars">Chọn học kỳ:</label>
-
-                        <select id="semester" name="semester" onchange="myFunction()">
-                            <option selected value="0">All</option>
-                            @*@foreach (var item in hocky)
-                            {
-                                <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
-                            }*@
-
-
-                        </select>
+                 
                     </div>
                     <div class="searchbar">
-                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
-                        <a href="#" class="search_icon">
-                            <i class="fas fa-search"></i>
-                        </a>
-
+                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
                     </div>
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">

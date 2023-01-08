@@ -101,7 +101,7 @@ namespace AdvisorManagement.Middleware
 
         }
 
-        public bool WriteDataFromExcelClass(string email, string name_advisor, string id_class)
+        public bool WriteDataFromExcelClass(string email, string name_advisor, string id_class,string hk_year)
         {
             var flag = false;
             AccountInitModel itemAccount = new AccountInitModel();
@@ -125,6 +125,7 @@ namespace AdvisorManagement.Middleware
                 {
                     vlclass.class_code = id_class;
                     vlclass.advisor_code = itemAccount.user_code;
+                    vlclass.semester_name = hk_year;
                     db.VLClass.Add(vlclass);
                     db.SaveChanges();
                 }
@@ -139,6 +140,7 @@ namespace AdvisorManagement.Middleware
                     var advisor_coe = db.AccountUser.FirstOrDefault(x => x.email == email).user_code;
                     vlclass.class_code = id_class;
                     vlclass.advisor_code = advisor_coe;
+                    vlclass.semester_name = hk_year;
                     db.VLClass.Add(vlclass);
                     db.SaveChanges();
                 }

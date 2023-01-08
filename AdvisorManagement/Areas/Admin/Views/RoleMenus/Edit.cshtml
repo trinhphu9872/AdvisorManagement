@@ -6,20 +6,20 @@
 
 }
 
-<h2>Edit</h2>
+<h2>Sửa menu người dùng</h2>
 
 @using (Html.BeginForm())
 {
 
 
     <div class="form-horizontal">
-        <h4>RoleMenu</h4>
+        <h4>Sửa menu</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.id_role, "id_role", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.id_role, "Người dùng", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("id_role", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.id_role, "", new { @class = "text-danger" })
@@ -27,7 +27,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.id_menu, "id_menu", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.id_menu, "Tên Menu", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("id_menu", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.id_menu, "", new { @class = "text-danger" })
@@ -36,12 +36,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Lưu" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index", new { @style = "color:#333;margin-left:3px" })
+    @Html.ActionLink("Quay lại", "Index", new { @style = "color:#333;margin-left:3px" })
 </div>

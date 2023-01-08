@@ -14,6 +14,10 @@ using Microsoft.Ajax.Utilities;
 using System.Web.Services.Description;
 using System.Data;
 
+
+using System.Drawing;
+using Spire.Xls.Core;
+
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
     public class ClassManagementsController : Controller
@@ -37,8 +41,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 ViewBag.nameUser = db.AccountUser.ToList();
                 Session["nameUser"] = db.AccountUser.ToList();
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                ViewBag.hocky = db.Semester.ToList();
-                Session["hocky"] = db.Semester.ToList();
+                ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
+                Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
                 return View(listClass);
             }
             else
@@ -76,10 +80,13 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/VLClasses/Create
         public ActionResult Create()
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
             ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
+            ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
+            Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
             return View();
         }
 
@@ -88,9 +95,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 
-        public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,update_time")] VLClass vLClass)
+        public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,update_time,semester_name")] VLClass vLClass)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+           
 
             if (ModelState.IsValid)
             {
@@ -107,6 +114,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public ActionResult Delete(int id)
         {
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             if (id == null)
             {
@@ -136,6 +144,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public ActionResult EditClass(int id )
         {
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
@@ -169,7 +178,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult EditClass(VLClass cdeatilclass)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+           
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
@@ -251,13 +260,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     data = worksheet.Cells[startRow, startColumn].Value;
                     Object stt = worksheet.Cells[startRow, startColumn].Value;
-                    Object name_advisor = worksheet.Cells[startRow, startColumn + 2].Value;
-                    Object email = worksheet.Cells[startRow, startColumn + 3].Value;
-                    Object id_class = worksheet.Cells[startRow, startColumn + 4].Value;
+                    Object name_advisor = worksheet.Cells[startRow, startColumn + 1].Value;
+                    Object email = worksheet.Cells[startRow, startColumn + 2].Value;
+                    Object id_class = worksheet.Cells[startRow, startColumn + 3].Value;
+                    Object hk_year = worksheet.Cells[startRow, startColumn + 4].Value;
                     var isSuccess = false;
                     if (data != null && stt != null && name_advisor != null && email != null && id_class != null)
                     {
-                        serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), id_class.ToString());
+                        serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), id_class.ToString(), hk_year.ToString());
                     }
                     startRow++;
                 }
@@ -284,11 +294,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 using (ExcelPackage pck = new ExcelPackage())
                 {
                     var ws = pck.Workbook.Worksheets.Add("Danh sách lớp");
+             
                     ws.Cells["A1"].Value = "STT";
                     ws.Cells["B1"].Value = "Mã lớp";
                     ws.Cells["C1"].Value = "Tên cố vấn";
                     ws.Cells["D1"].Value = "Học kỳ";
-                    ws.Cells["E1"].Value = "Tổng sinh viên";
+ 
                     var i = 1;
                     int rowStart = 2;
                     foreach (var item in listStudent)
@@ -307,7 +318,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                             }
                         }
                         ws.Cells[string.Format("D{0}", rowStart)].Value = item.semester_name;
-                        ws.Cells[string.Format("E{0}", rowStart)].Value = null;
+               
                         rowStart++;
                         i++;
                     }

@@ -37,22 +37,22 @@
             }
         }
     });
-    $('#user_code').on('input', function () {
-        var regex = new RegExp("^[a-zA-Z0-9 -]*$");
-        if ($(this).val() == "") {
-            $('#valid_usercode').text("Mã không được bỏ trống").show();
-        } else {
-            $('#valid_usercode').hide();
-            if (regex.test($(this).val())) {
-                $('#valid_usercode').hide();
+    //$('#user_code').on('input', function () {
+    //    var regex = new RegExp("^[a-zA-Z0-9 -]*$");
+    //    if ($(this).val() == "") {
+    //        $('#valid_usercode').text("Mã không được bỏ trống").show();
+    //    } else {
+    //        $('#valid_usercode').hide();
+    //        if (regex.test($(this).val())) {
+    //            $('#valid_usercode').hide();
 
-            }
-            else {
-                $('#valid_usercode').text("Mã có chứa ký tự đặc biệt").show();
+    //        }
+    //        else {
+    //            $('#valid_usercode').text("Mã có chứa ký tự đặc biệt").show();
 
-            }
-        }
-    });
+    //        }
+    //    }
+    //});
     $('#gender').on('input', function () {
         var regex = new RegExp("^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ]*$");
         if ($(this).val() == "") {

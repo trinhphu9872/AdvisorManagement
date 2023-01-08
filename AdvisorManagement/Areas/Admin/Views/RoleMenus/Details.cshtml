@@ -6,14 +6,14 @@
 
 }
 
-<h2>Details</h2>
+<h2>Chi tiết quyền của người dùng</h2>
 
 <div>
-    <h4>RoleMenu</h4>
+    <h4>Quyền menu người dùng</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Menu.menu_name)
+           Tên Menu
         </dt>
 
         <dd>
@@ -21,7 +21,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Role.role_name)
+           Người dùng
         </dt>
 
         <dd>
@@ -31,6 +31,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Quay lại trang", "Index")
 </p>

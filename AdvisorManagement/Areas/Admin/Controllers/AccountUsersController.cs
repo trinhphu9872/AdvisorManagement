@@ -23,31 +23,29 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         //GET: Admin/AccountUsers
         public ActionResult Index()
         {
-            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            //{
-
-                var accountUser = db.AccountUser.Include(a => a.Role);
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
-            return View(accountUser.ToList());
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                 var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1).OrderBy(y => y.id_role);
+                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                return View(accountUser.ToList());
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            }
         }
         // GET: Admin/AccountUsers/Details/5
         public ActionResult Details(int? id)
         {
-            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            //{
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 if (id == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
                 AccountUser accountUser = db.AccountUser.Find(id);
                 if (accountUser == null)
@@ -55,29 +53,29 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     return HttpNotFound();
                 }
                 return View(accountUser);
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            }
         }
 
         // GET: Admin/AccountUsers/Create
         public ActionResult Create()
         {
-            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            //{
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 ViewBag.id_Role = new SelectList(db.Role, "id", "role_name");
                 AccountUser user = new AccountUser();
                 return View(user);
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            }
         }
 
         // POST: Admin/AccountUsers/Create
@@ -86,10 +84,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Create(AccountUser accountUser, HttpPostedFileBase ImageUpload)
         {
-            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            //{
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            if (ModelState.IsValid)
+
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
+                if (ModelState.IsValid)
                 {
                     if (accountUser.id_role == 2) {
                         
@@ -157,30 +157,37 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
                 ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
                 return View(accountUser);
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            }
         }
         // GET: Admin/AccountUsers/Edit/5
         public ActionResult Edit(int? id)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                }
+                AccountUser accountUser = db.AccountUser.Find(id);
+                if (accountUser == null)
+                {
+                    return HttpNotFound();
+                }
+                picture = accountUser.img_profile;
+                ViewBag.id_Role = db.Role.ToList();
+                return View(accountUser);
             }
-            AccountUser accountUser = db.AccountUser.Find(id);
-            if (accountUser == null)
+            else
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
-            picture = accountUser.img_profile;
-            ViewBag.id_Role = db.Role.ToList();
-            return View(accountUser);
         }
 
         // POST: Admin/AccountUsers/Edit/5
@@ -190,46 +197,53 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Edit(AccountUser accountUser)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            if (ModelState.IsValid)
-            {
-                var edituser = db.AccountUser.Find(accountUser.id);
-                if (accountUser.ImageUpload != null)
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission)) {         
+          
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                if (ModelState.IsValid)
                 {
-                    string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
-                    string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
-                    filename = filename + extension;
-                    edituser.img_profile = "~/Images/imageProfile/" + filename;
-                    accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                    var edituser = db.AccountUser.Find(accountUser.id);
+                    if (accountUser.ImageUpload != null)
+                    {
+                        string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
+                        string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
+                        filename = filename + extension;
+                        edituser.img_profile = "~/Images/imageProfile/" + filename;
+                        accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                    }
+                    edituser.address = accountUser.address;
+                    edituser.user_name = accountUser.user_name;
+                    edituser.user_code = edituser.user_code;
+                    //edituser.dateofbirth = accountUser.dateofbirth;
+                    edituser.phone = accountUser.phone;
+                    edituser.gender = accountUser.gender;
+                    edituser.id_role = accountUser.id_role;
+
+                    db.Entry(edituser).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-                edituser.address = accountUser.address;
-                edituser.user_name = accountUser.user_name;
-                edituser.user_code = accountUser.user_code;
-                //edituser.dateofbirth = accountUser.dateofbirth;
-                edituser.phone = accountUser.phone;
-                edituser.gender = accountUser.gender;
-                edituser.id_role = accountUser.id_role;
 
-                db.Entry(edituser).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
+                 return View(accountUser);
             }
-
-            ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
-            return View(accountUser);
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            }
         }
 
         // GET: Admin/AccountUsers/Delete/5
         public ActionResult Delete(int? id)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            //{
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
                 if (id == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
                 AccountUser accountUser = db.AccountUser.Find(id);
                 if (accountUser == null)
@@ -237,11 +251,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     return HttpNotFound();
                 }
                 return View(accountUser);
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //} 
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            }
         }
 
         // POST: Admin/AccountUsers/Delete/5
@@ -249,20 +263,28 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            //{
-            var accountUser = db.AccountUser.Find(id);
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                var accountUser = db.AccountUser.Find(id);
                 var advisor= db.Advisor.Find(accountUser.user_code);
+                var student = db.Student.Find(accountUser.user_code);
+                if (advisor != null)
+                {
+                    db.Advisor.Remove(advisor);
+                }
+                if (student != null)
+                {
+                    db.Student.Remove(student);
+                }
                 db.AccountUser.Remove(accountUser);
-                db.Advisor.Remove(advisor);
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            }
         }
 
         protected override void Dispose(bool disposing)

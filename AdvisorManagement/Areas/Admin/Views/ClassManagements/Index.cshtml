@@ -18,7 +18,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Danh sách lớp - VLU</h5>
+                    <h5 class="card-title mb-0">Phân Công lớp - VLU</h5>
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
@@ -63,15 +63,10 @@
                                 <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
                             }
 
-
                         </select>
                     </div>
                     <div class="searchbar">
-                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
-                        <a href="#" class="search_icon">
-                            <i class="fas fa-search"></i>
-                        </a>
-
+                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá"
                     </div>
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
@@ -81,7 +76,7 @@
                                     <th>Lớp</th>
                                     <th>CVHT</th>
                                     <th>Học kỳ</th>
-                                    <th>Tổng Sinh viên</th>
+                     
                                     <th>Hoạt động</th>
 
 
@@ -114,7 +109,7 @@
                                             }
 
                                             <td>@item.semester_name</td>
-                                            <td></td>
+                                    
                                             <td>
                                                 <a href="@Url.Action("DetailClass", "Students",new {area = "", classcode = item.class_code})" id="btnDelete" class="btn btn-success"
                                                    style="margin-bottom: 5px; margin-left: 5px;">

@@ -22,10 +22,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus
         public ActionResult Index()
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.Message = "Role Menu";
                 var roleMenu = serviceMenu.getRoleMenu();
                 ViewBag.roleMenu = roleMenu;
@@ -34,17 +33,18 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
         }
 
         // GET: Admin/RoleMenus/Details/5
         public ActionResult Details(int? id)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -61,7 +61,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
 
         }
@@ -69,10 +69,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus/Create
         public ActionResult Create()
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name");
                 ViewBag.id_role = new SelectList(db.Role, "id", "role_name");
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
@@ -81,7 +81,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
         }
 
@@ -92,17 +92,16 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Create([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 if (ModelState.IsValid)
                 {
                     db.RoleMenu.Add(roleMenu);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-
                 ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_menu);
                 ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_role);
 
@@ -111,7 +110,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
        
         }
@@ -139,7 +138,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
         }
 
@@ -150,10 +149,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Edit([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
                 if (ModelState.IsValid)
                 {
                     db.Entry(roleMenu).State = EntityState.Modified;
@@ -168,7 +168,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
 
         }
@@ -176,10 +176,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus/Delete/5
         public ActionResult Delete(int? id)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -195,7 +196,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
         
 
@@ -207,20 +208,19 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 RoleMenu roleMenu = db.RoleMenu.Find(id);
                 db.RoleMenu.Remove(roleMenu);
                 db.SaveChanges();
-
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 return RedirectToAction("Index");
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
         }
 
@@ -235,10 +235,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult SortMenu()
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 ViewBag.ListMenu = serviceMenu.MenuItem();
                 return View();
@@ -250,27 +250,33 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
         public ActionResult UpdateMenu(string itemIDs)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
-            int count = 1;
-            List<int> listIDlist = new List<int>();
-            listIDlist = itemIDs.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
-            foreach (var itemID in listIDlist)
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                try
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                int count = 1;
+                List<int> listIDlist = new List<int>();
+                listIDlist = itemIDs.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+                foreach (var itemID in listIDlist)
                 {
-                    Menu menu = db.Menu.Where(x => x.id == itemID).FirstOrDefault();
-                    menu.order_id = count;
-                    db.Menu.AddOrUpdate(menu);
-                    db.SaveChanges();
+                    try
+                    {
+                        Menu menu = db.Menu.Where(x => x.id == itemID).FirstOrDefault();
+                        menu.order_id = count;
+                        db.Menu.AddOrUpdate(menu);
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                    count++;
                 }
-                catch (Exception)
-                {
-                    continue;
+                return Json(true, JsonRequestBehavior.AllowGet);
                 }
-                count++;
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

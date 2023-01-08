@@ -22,9 +22,9 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     @*<li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        Library
-                                    </li>*@
+                                        <li class="breadcrumb-item active" aria-current="page">
+                                            Library
+                                        </li>*@
                                 </ol>
                             </nav>
                         </div>
@@ -37,6 +37,9 @@
 
         <div class="card">
             <div class="card-body">
+                <div class="searchbar">
+                    <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
+                </div>
                 <h5 class="card-title"></h5>
                 <div class="table-responsive">
                     <table id="zero_config" class="table table-striped table-bordered">
@@ -78,7 +81,7 @@
                                     </td>
                                 </tr>
                             }
-                         </tbody>
+                        </tbody>
 
                     </table>
                 </div>
@@ -88,19 +91,49 @@
 </div>
 
 @*<div class="container h-100">
-    <div class="d-flex justify-content-center h-100">
-        <div class="searchbar">
-            <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
-            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+        <div class="d-flex justify-content-center h-100">
+            <div class="searchbar">
+                <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
+                <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+            </div>
         </div>
     </div>
-</div>
-<div>*@
+    <div>*@
 
-                 
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<script>
+
+
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("semester");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
     $(document).ready(function () {
         $("#myInput").on("keyup", function () {
             var value = $(this).val().toLowerCase();

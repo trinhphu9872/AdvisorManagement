@@ -6,18 +6,18 @@
 
 }
 
-<h2>Create</h2>
+<h2>Thêm menu vào phân quyền</h2>
 
 @using (Html.BeginForm())
 {
 
 
     <div class="form-horizontal">
-        <h4>RoleMenu</h4>
+        <h4>Phân quyền theo menu</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.id_role, "id_Role", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.id_role, "Người dùng", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("id_role", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.id_role, "", new { @class = "text-danger" })
@@ -25,7 +25,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.id_menu, "id_Menu", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.id_menu, "Tên menu có trong hệ thống", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("id_menu", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.id_menu, "", new { @class = "text-danger" })
