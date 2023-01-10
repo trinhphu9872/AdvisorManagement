@@ -73,7 +73,7 @@
                             <thead>
                                 <tr>
                                     <th>Stt</th>
-                                    <th>Lớp</th>
+                                    <th width="250px">Lớp</th>
                                     <th>CVHT</th>
                                     <th>Học kỳ</th>
                      
@@ -90,7 +90,7 @@
                                     {
                                         <tr>
                                             <td>@i</td>
-                                            <td>@item.class_code</td>
+                                            <td>@Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", classcode = item.class_code }, null)</td>
                                             @if (item.advisor_code != null)
                                             {
                                                 foreach (var itemUser in nameUser)
@@ -111,7 +111,7 @@
                                             <td>@item.semester_name</td>
                                     
                                             <td>
-                                                <a href="@Url.Action("DetailClass", "Students",new {area = "", classcode = item.class_code})" id="btnDelete" class="btn btn-success"
+                                                <a href="@Url.Action("Details", "ClassManagements",new {id = item.id})" id="btnDelete" class="btn btn-success"
                                                    style="margin-bottom: 5px; margin-left: 5px;">
                                                     Chi tiết <i class="fas fa-tasks"></i>
                                                 </a>

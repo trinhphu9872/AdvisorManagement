@@ -1,0 +1,131 @@
+﻿@model AdvisorManagement.Models.VLClass
+@using AdvisorManagement.Models;
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+    IEnumerable<Advisor> advisor = ViewBag.Advisor as IEnumerable<Advisor>;
+    IEnumerable<AccountUser> nameUser = ViewBag.nameUser as IEnumerable<AccountUser>;
+}
+
+
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+    <script src="~/Validation/ClassManagement/Validation_ClassManagement.js"></script>
+</head>
+
+@using (Html.BeginForm())
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-0">Thông tin lớp - VLU</h5>
+        </div>
+        <div class="page-breadcrumb">
+            <div class="row">
+
+                <div class="col-12 d-flex no-block align-items-center">
+
+
+                    @*<div class="ms-auto text-end">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        Library
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>*@
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="form-horizontal">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.class_code, "Mã lớp", htmlAttributes: new { @class = "control-label col-md-2"})
+                    <div class="col-md-10">
+                        @Html.DisplayFor(model => model.class_code, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                        @Html.ValidationMessageFor(model => model.class_code, "", new { @class = "text-danger" })
+                        <p id="valid_VLuclass" style="color:red"></p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Giảng viên:</label>
+
+
+
+                    @foreach (var item in advisor)
+                    {
+                        if (Model.Advisor.advisor_code == item.advisor_code)
+                        {
+                            foreach (var itemUser in nameUser)
+                            {
+                                if (item.advisor_code.Equals(itemUser.user_code))
+                                {
+                                    <td>@itemUser.user_name</td>
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            <td style="text-align:center"></td>
+                        }
+
+                    }
+
+
+
+                    <p class="text-danger">@ViewBag.ErrorMessage</p>
+
+                </div>
+                <div class="form-group">
+                    <p id="labelclass" class="control-label col-md-2">Học kỳ</p>
+                    <div class="col-7">
+                        @Html.DisplayFor(model => model.semester_name, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập học kỳ vd: Học kỳ 1 - 2022", @Style = "width: 300px;" } })
+                        @Html.ValidationMessageFor(model => model.semester_name, "", new { @class = "text-danger" })
+                        <p id="valid_semester" style="color:red"></p>
+                    </div>
+
+                </div>
+                <div class="form-group" hidden>
+                    <p id="labelclass" class="control-label col-md-2">Học kỳ</p>
+                    <div class="col-7">
+                        @Html.EditorFor(model => model.create_time, new { htmlAttributes = new { @class = "form-control", @Style = "width: 300px;" } })
+
+
+                    </div>
+
+                </div>
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.create_time, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.create_time, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.create_time, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <a href="@Url.Action("Index","ClassManagements")" class="btn btn-default">
+                            Quay lại
+                        </a>
+                        <a href="@Url.Action("EditClass","ClassManagements",new {@id = Model.id})" class="btn btn-default">
+                            Sửa
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

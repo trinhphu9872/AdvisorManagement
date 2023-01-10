@@ -69,7 +69,7 @@ namespace AdvisorManagement.Middleware
                                 where std.id_class == class_code && std.student_code == acc.user_code
                                 select new Models.ViewModel.ListStudent
                                 {
-                                    id = acc.id,
+                                    id = acc.id,    
                                     idStudent = std.student_code,
                                     name = acc.user_name,
                                     email = acc.email,

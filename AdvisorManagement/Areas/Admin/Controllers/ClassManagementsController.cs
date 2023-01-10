@@ -50,6 +50,40 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+        public ActionResult Details(int? id)
+        {
+
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                var detailClass = db.VLClass.Find(id);
+
+
+                //List<string> AV = new List<string>();
+                //for(int i =0; i<db.AccountUser.Count();i++)
+                //{
+                //    var user = db.AccountUser.Find(i);
+                //    var advisor = db.Advisor.Find(user.user_code);
+                //    if (advisor !=null)
+                //    {
+                //        AV.Add(user.username);
+                //    }
+
+                //}
+                //ViewBag.Advisor = new SelectList(AV);
+                ViewBag.Advisor = db.Advisor.ToList();
+                ViewBag.nameUser = db.AccountUser.ToList();
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
+                return View(detailClass);
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+        }
         //// get create class
         //public ActionResult Create()
         //{
