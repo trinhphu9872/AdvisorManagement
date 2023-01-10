@@ -1107,7 +1107,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\avata.png" />
+    <Content Include="Images\imageProfile\avata.png" />
     <Content Include="Images\banner.jpg" />
     <Content Include="Images\bell.png" />
     <Content Include="Images\imageProfile\287821327_513281947146072_1386749984878314502_n.jpg" />
