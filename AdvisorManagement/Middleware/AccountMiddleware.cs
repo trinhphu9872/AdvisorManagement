@@ -175,7 +175,17 @@ namespace AdvisorManagement.Middleware
         public string getAvatar(string user_mail)
         {
             var sql = db.AccountUser.FirstOrDefault(x => x.email == user_mail);
-            return sql.img_profile.Replace("~/Images/imageProfile/", "");
+            if(sql.img_profile != null)
+            {
+                return sql.img_profile.Replace("~/Images/imageProfile/", "");
+            }
+            else
+            {
+                sql.img_profile = "avata.png";
+                return sql.img_profile;
+
+            }
+            
         }
     }
 }
