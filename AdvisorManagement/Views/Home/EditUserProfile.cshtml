@@ -11,6 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
     </script>
     <script src="~/Validation/UserProfile/Validation_UserProfile.js"></script>
+    
 </head>
 @using (Html.BeginForm("EditUserProfile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -54,11 +55,11 @@
                                     @if (Model.img_profile != null)
                                     {
                                         <img src="@Url.Content(Model.img_profile+" ")" alt="avatar"
-                                             class="rounded-circle img-fluid" style="width: 150px;">
+                                             class="rounded-circle img-fluid" style="width: 150px;"id="previewImage">
                                     }
                                     else
                                     {
-                                        <img src="@Url.Content("~/Images/imageProfile/avata.png"+" ")" alt="avatar"
+                                        <img src="@Url.Content("~/Images/imageProfile/avata.png"+" ")" alt="avatar"id="previewImage"
                                              class="rounded-circle img-fluid" style="width: 150px;">
                                     }
 
@@ -69,7 +70,7 @@
       <button type="button" class="btn btn-primary">Message</button>
 
     </div> -->
-                                    <input class="btn btn-primary" accept="image/*" type="file" name="ImageUpload" onchange="ShowImageProduct(this, document.getElementById('previewimage'))" />
+                                    <input class="btn btn-primary" accept="image/*" type="file" name="ImageUpload" onchange="ShowImageProduct(this, document.getElementById('previewImage'))" />
                                 </div>
                                 <label for="fname" class="col-sm-3 text-end control-label col-form-label">MSSV:</label>
                                 <div class="col-sm-7">

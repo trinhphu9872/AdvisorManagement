@@ -53,28 +53,10 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
-                    <div class="col-md-1">
-                        <label for="cars">Chọn học kỳ:</label>
-
-                        <select id="semester" name="semester" onchange="myFunction()">
-                            <option selected value="0">All</option>
-                            @*@foreach (var item in hocky)
-                                {
-                                    <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
-                                }*@
-
-
-                        </select>
-                    </div>
-                    <div class="searchbar">
-                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Search...">
-                        <a href="#" class="search_icon">
-                            <i class="fas fa-search"></i>
-                        </a>
-
-                    </div>
+                 
+                 
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table id="zero_config" class="table table-bordered">
                             @if (ViewBag.Menu != null)
                             {
                                 List<AdvisorManagement.Models.ViewModel.MenuItem> listMenu = (List<AdvisorManagement.Models.ViewModel.MenuItem>)ViewBag.ListMenu;
@@ -101,7 +83,9 @@
                         </table>
                     </div>
                     <a class="btn btn-primary" href="@Url.Action("SortMenu","RoleMenus")">Load lại dữ liệu menu</a>
-                    @Html.ActionLink("Quay lại ", "Index")
+                    <a href="@Url.Action("Index", "RoleMenus")" class="btn btn-primary" style="margin-right : 70%;width: 100px;">
+                        Quay lại
+                    </a>
 
                 </div>
             </div>
@@ -117,9 +101,10 @@
     <!-- ============================================================== -->
     <!-- End Right sidebar -->
     <!-- ============================================================== -->
-
+    <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 
     <script>
+        $("#zero_config").DataTable();
         function myFunction() {
             var input, filter, table, tr, td, i;
             input = document.getElementById("semester");

@@ -57,23 +57,15 @@ namespace AdvisorManagement.Controllers
         {
             AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(email));
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            if (user.img_profile !=null)
-            {
-                ViewBag.avatar = user.img_profile.Replace("~", "");
-            }
-            else
-            {
-                ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
+            ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
 
-            }
-           
             return View(user);
         }
         public ActionResult EditUserProfile(int id)
         {
             AccountUser user = dbApp.AccountUser.Find(id);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            ViewBag.avatar = user.img_profile;
+            ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
             return View(user);
         }
         [HttpPost]

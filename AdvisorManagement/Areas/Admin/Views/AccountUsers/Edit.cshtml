@@ -61,7 +61,16 @@
                                                                 <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
                                                                     <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">
 
-                                                                        <img src="@Url.Content(Model.img_profile+" ")" id="previewimage" width="140" height="140" />
+                                                                        @if (Model.img_profile != null)
+                                                                        {
+                                                                            <img src="@Url.Content(Model.img_profile+" ")" alt="avatar"
+                                                                                 class="rounded-circle img-fluid" style="width: 150px;" id="previewImage">
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <img src="@Url.Content("~/Images/imageProfile/avata.png"+" ")" alt="avatar"
+                                                                                 class="rounded-circle img-fluid" style="width: 150px;" id="previewImage">
+                                                                        }
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -70,7 +79,7 @@
                                                             <div class="text-center text-sm-left mb-2 mb-sm-0">
 
                                                                 <div class="mt-2">
-                                                                    <input class="btn btn-outline-secondary" accept="image/*" type="file" name="ImageUpload" onchange="ShowImageProduct(this, document.getElementById('previewimage'))" />
+                                                                    <input class="btn btn-outline-secondary" accept="image/*" type="file" name="ImageUpload" onchange="ShowImageProduct(this, document.getElementById('previewImage'))" />
                                                                 </div>
                                                             </div>
 

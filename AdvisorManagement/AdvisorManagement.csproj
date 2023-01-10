@@ -298,6 +298,7 @@
     <Content Include="Assets\extra-libs\DataTables\datatables.min.js" />
     <Content Include="Assets\extra-libs\gritter\jquery.gritter.css" />
     <Content Include="Assets\extra-libs\gritter\jquery.gritter.min.js" />
+    <Content Include="Assets\extra-libs\ImageUpload\showImage.js" />
     <Content Include="Assets\extra-libs\multicheck\datatable-checkbox-init.js" />
     <Content Include="Assets\extra-libs\multicheck\jquery.multicheck.js" />
     <Content Include="Assets\extra-libs\multicheck\multicheck.css" />
