@@ -51,10 +51,7 @@ namespace AdvisorManagement.Controllers
 
         public ActionResult DetailClass(string classCode)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
-            if (serviceStudents.getPermission(classCode, User.Identity.Name))
-            {
+                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 var detailClass = serviceStudents.getStudent(classCode);
                 if (detailClass == null)
                 {
@@ -67,11 +64,6 @@ namespace AdvisorManagement.Controllers
                 var role = serviceStudents.getRoles(User.Identity.Name);
                 ViewBag.role = role;
                 return View();
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
         }
         public ActionResult UpdateStudent(int id)
         {
@@ -215,7 +207,7 @@ namespace AdvisorManagement.Controllers
                             {
                                 serviceStudents.UpdateStudentImport(mssv.ToString(), status.ToString(), db, id_class.ToString());
                             }
-                            if (isSuccessAcc && isSuccessStd)
+                            if (isSuccessStd)
                             {
                                 count++;
                             }

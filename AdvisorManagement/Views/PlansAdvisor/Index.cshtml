@@ -1,0 +1,138 @@
+﻿@model IEnumerable<AdvisorManagement.Models.TitlePlan>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+}
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-0">Quản lí kế hoạch đầu học kì</h5>
+                </div>
+                @if (ViewBag.role == "Admin") {
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <a href="@Url.Action("Create", "PlansAdvisor")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                Tạo đề mục<i class="fas fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <div class="col-md-1">
+
+                    </div>
+                    <div class="searchbar">
+                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
+                    </div>
+                    <div class="table-responsive">
+                        <table id="zero_config" class="table table-striped table-bordered">
+                            <thead>
+                            <th width="200px">
+                                Tiêu đề
+                            </th>
+                            <th>
+                                Nội dung
+                            </th>
+                            <th width="300px">
+                                Hoạt động
+                            </th>
+
+                            </tr>
+                            </thead>
+                            <tbody id="myTable">
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.title)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.content)
+                                        </td>
+                                        <td>
+                                            @if (ViewBag.role == "Admin")
+                                            {
+                                                <a href="@Url.Action("Edit", "PlansAdvisor",new {area = "", id = item.id})" id="btnDelete" class="btn btn-success"
+                                                   style="margin-bottom: 5px; margin-left: 5px;">
+                                                    Sửa <i class="fas fa-tasks"></i>
+                                                </a>
+                                                <a href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
+                                                    Chi tiết <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="@Url.Action("Delete", "PlansAdvisor", new { id = item.id })" id="btnDelete" class="btn btn-danger"
+                                                   style="margin-bottom: 5px; margin-left: 5px;">
+                                                    XÓA <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            }
+                                            else if (ViewBag.role == "Advisor")
+                                            {
+                                                <a href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
+                                                    Minh chứng <i class="fas fa-edit"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right sidebar -->
+    <!-- ============================================================== -->
+    <!-- .right-sidebar -->
+    <!-- ============================================================== -->
+    <!-- End Right sidebar -->
+    <!-- ============================================================== -->
+
+
+    <script>
+
+
+        function myFunction() {
+            var input, filter, table, tr, td, i;
+            input = document.getElementById("semester");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[3];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+

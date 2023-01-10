@@ -7,6 +7,7 @@ namespace AdvisorManagement.Models.ViewModel
 {
     public class AdvisorClass
     {
+        public int ID { get; set; }
         public string idClass { get; set; }
         public string idAdvisor { get; set; }
         public string name { get; set; }

@@ -38,6 +38,20 @@
           <Property Name="action_link" Type="nvarchar" MaxLength="100" />
           <Property Name="order_id" Type="int" />
         </EntityType>
+        <EntityType Name="ProofPlan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="content" Type="nvarchar" MaxLength="200" />
+          <Property Name="file_proof" Type="nvarchar" MaxLength="100" />
+          <Property Name="create_time" Type="datetime" />
+          <Property Name="semester" Type="nvarchar" MaxLength="100" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
+          <Property Name="id_creator" Type="int" />
+          <Property Name="id_browser" Type="int" />
+          <Property Name="id_titleplan" Type="int" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="id" />
@@ -88,6 +102,14 @@
           <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TitlePlan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="content" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="VLClass">
           <Key>
@@ -176,12 +198,14 @@
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProofPlan" EntityType="Self.ProofPlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semester" EntityType="Self.Semester" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TitlePlan" EntityType="Self.TitlePlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
@@ -252,6 +276,20 @@
           <Property Name="order_id" Type="Int32" />
           <NavigationProperty Name="RoleMenu" Relationship="Self.FK_RoleMenu_Menu" FromRole="Menu" ToRole="RoleMenu" />
         </EntityType>
+        <EntityType Name="ProofPlan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="content" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="file_proof" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="semester" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_creator" Type="Int32" />
+          <Property Name="id_browser" Type="Int32" />
+          <Property Name="id_titleplan" Type="Int32" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="id" />
@@ -307,6 +345,14 @@
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TitlePlan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="content" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VLClass">
           <Key>
@@ -396,12 +442,14 @@
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" />
           <EntitySet Name="Menu" EntityType="Self.Menu" />
+          <EntitySet Name="ProofPlan" EntityType="Self.ProofPlan" />
           <EntitySet Name="Role" EntityType="Self.Role" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" />
           <EntitySet Name="Semester" EntityType="Self.Semester" />
           <EntitySet Name="Student" EntityType="Self.Student" />
           <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="TitlePlan" EntityType="Self.TitlePlan" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" />
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
@@ -470,6 +518,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ProofPlan">
+            <EntityTypeMapping TypeName="CP25Team09Model.ProofPlan">
+              <MappingFragment StoreEntitySet="ProofPlan">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="file_proof" ColumnName="file_proof" />
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="semester" ColumnName="semester" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="id_creator" ColumnName="id_creator" />
+                <ScalarProperty Name="id_browser" ColumnName="id_browser" />
+                <ScalarProperty Name="id_titleplan" ColumnName="id_titleplan" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Role">
             <EntityTypeMapping TypeName="CP25Team09Model.Role">
               <MappingFragment StoreEntitySet="Role">
@@ -524,6 +587,15 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TitlePlan">
+            <EntityTypeMapping TypeName="CP25Team09Model.TitlePlan">
+              <MappingFragment StoreEntitySet="TitlePlan">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="content" ColumnName="content" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

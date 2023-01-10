@@ -1,0 +1,221 @@
+﻿@model AdvisorManagement.Models.TitlePlan
+@using AdvisorManagement.Models;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+    IEnumerable<Semester> listSemester = ViewBag.hocky as IEnumerable<Semester>;
+}
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-0">Danh sách file minh chứng</h5>
+                </div>
+                @if (ViewBag.role == "Advisor")
+                {
+                    <div class="page-breadcrumb">
+                        <div class="row">
+                            <div class="col-12 d-flex no-block align-items-center">
+                                <a onclick="Upload()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                    Upload<i class="fas fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(model => model.content)</h5>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="searchbar">
+                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
+                    </div>
+                    <div class="table-responsive">
+                        @if (ViewBag.plan != null)
+                        {
+                            int i = 1;
+                            List<AdvisorManagement.Models.ViewModel.ListProofPlan> proofs = (List<AdvisorManagement.Models.ViewModel.ListProofPlan>)ViewBag.plan;
+                            if (proofs.Count() > 0)
+                            {
+                                <table id="zero_config" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td>STT</td>
+                                            <td>Nội dung</td>
+                                            <td>Tên file</td>
+                                            <td>Người tạo</td>
+                                            <td>Ngày tạo</td>
+                                            <td>Học kì</td>
+                                            @if (ViewBag.role == "Advisor")
+                                            {
+                                                <td></td>
+                                            }
+                                            </tr>
+                                            
+                                    </thead>
+                                    <tbody id="myTable">
+                                        @foreach (var item in proofs)
+                                        {
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@item.content</td>
+                                                <td>@Html.ActionLink(@item.proof, "Download", "PlansAdvisor", new { nameProof = @item.proof }, null)</td>
+                                                <td>@item.creator</td>
+                                                <td>@item.create_time</td>
+                                                <td>@item.semester</td>
+                                                @if (ViewBag.role == "Advisor")
+                                                {
+                                                    <td>
+                                                        <a href="" id="btnDelete" class="btn btn-danger"
+                                                           style="margin-bottom: 5px; margin-left: 5px;">
+                                                            XÓA <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                    </td>
+                                                }
+                                                </tr>
+                                            i++;
+                                        }
+                                    </tbody>
+
+                                </table>
+                            } else
+                {
+                    <p>Chưa có file minh chứng nào</p>
+                }
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Upload file</h4>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px;">
+                        <div class="col-md-4"><span>Mô tả:</span></div>
+                        <div class="col-md-8">
+                            <input id="motaPlan" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px;">
+                    <div class="col-md-4"><span>Chọn file:</span></div>
+                    <div class="col-md-8">
+                        <input name="" type="file" id="fileExcel" class="" />
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px;">
+                    <div class="col-md-4"><span>Chọn học kỳ:</span></div>
+                    <div class="col-md-8">
+                        <select id="semester" style=" width: 155px; height: 35px; text-align: center; font-size: 15px;" , required="true">
+
+                            @foreach (var item in listSemester)
+                            {
+                                <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
+
+                            }
+                        </select>
+                        @* @Html.DropDownList("id_semester", null, htmlAttributes: new { @id = "" })*@
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnUpload" class="btn btn-primary" type="submit">Import</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function myFunction() {
+            var input, filter, table, tr, td, i;
+            input = document.getElementById("semester");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[3];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+
+    function Upload() {
+        $("#myModal").modal("show");
+    }
+
+    function HideModal() {
+        $("#myModal").modal("hide");
+    }
+
+    $(document).ready(function () {
+        $('#btnUpload').click(function () {
+            var formData = new FormData();
+            var fileExcel = document.getElementById("fileExcel");
+            var myFile = fileExcel.files[0];
+            var mota = $("#motaPlan").val();
+            var sel_semester = document.getElementById("semester");
+            var semester = sel_semester.value;
+            formData.append("postedfile", myFile);
+            formData.append("mota", mota);
+            formData.append("semester", semester);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Upload", "PlansAdvisor")',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success == false) {
+                        alert(data.message);
+                    } else {
+                        $("#myModal").modal("hide");
+                        alert(data.message);
+                        location.reload();
+                    }
+                }
+             })
+        })
+    })
+
+    </script>

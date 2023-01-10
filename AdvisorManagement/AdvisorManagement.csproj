@@ -199,12 +199,14 @@
     <Compile Include="Areas\Admin\Controllers\RoleMenusController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlansAdvisorController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Middleware\AccountMiddleware.cs" />
     <Compile Include="Middleware\MenuMiddleware.cs" />
+    <Compile Include="Middleware\ProofMiddleware.cs" />
     <Compile Include="Middleware\StudentsMiddleware.cs" />
     <Compile Include="Models\AccountUser.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
@@ -230,6 +232,9 @@
     <Compile Include="Models\Menu.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProofPlan.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Role.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
@@ -248,10 +253,14 @@
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TitlePlan.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModel\AccountInitModel.cs" />
     <Compile Include="Models\ViewModel\AccountUserModel.cs" />
     <Compile Include="Models\ViewModel\ClassModel\AdvisorClass.cs" />
     <Compile Include="Models\ViewModel\ClassModel\ListStudent.cs" />
+    <Compile Include="Models\ViewModel\ListProofPlan.cs" />
     <Compile Include="Models\ViewModel\MenuItem.cs" />
     <Compile Include="Models\ViewModel\MenuRole.cs" />
     <Compile Include="Models\ViewModel\StudentClass.cs" />
@@ -1407,6 +1416,11 @@
     <Content Include="Views\Students\Index.cshtml" />
     <Content Include="Views\Students\DetailClass.cshtml" />
     <Content Include="Views\Students\UpdateStudent.cshtml" />
+    <Content Include="Views\PlansAdvisor\Create.cshtml" />
+    <Content Include="Views\PlansAdvisor\Delete.cshtml" />
+    <Content Include="Views\PlansAdvisor\Details.cshtml" />
+    <Content Include="Views\PlansAdvisor\Edit.cshtml" />
+    <Content Include="Views\PlansAdvisor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
