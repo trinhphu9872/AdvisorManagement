@@ -196,6 +196,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountUsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\ClassManagementsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleMenusController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1052,6 +1053,9 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Dist\chart\FileManager.js" />
+    <Content Include="Dist\chart\SumClass.js" />
+    <Content Include="Dist\chart\SumUser.js" />
     <Content Include="Dist\css\admin.css" />
     <Content Include="Dist\css\icons\font-awesome\css\all.css" />
     <Content Include="Dist\css\icons\font-awesome\css\bootstrap.min.css" />
@@ -1374,6 +1378,7 @@
       <DependentUpon>DataManagement.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\ClassManagements\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\function.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

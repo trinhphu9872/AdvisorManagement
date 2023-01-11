@@ -29,6 +29,14 @@
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="~/Assets/extra-libs/ImageUpload/showImage.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/variable-pie.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/cylinder.js"></script>
 </head>
 
 <body>
@@ -144,7 +152,7 @@
                                data-bs-toggle="dropdown"
                                aria-expanded="false">
                                 @if (Request.IsAuthenticated)
-                                { <img src="~/Images/imageProfile/@ViewBag.avatar"
+                                {<img src="~/Images/imageProfile/@ViewBag.avatar"
                                       alt="user"
                                       class="rounded-circle"
                                       width="31" />
@@ -161,7 +169,7 @@
                                 @if (Request.IsAuthenticated)
                                 {
                                     <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
-                                        <i class="mdi mdi-account me-1 ms-1"></i> 
+                                        <i class="mdi mdi-account me-1 ms-1"></i>
                                         Tài Khoản
                                     </a>
                                     <div class="dropdown-divider"></div>
@@ -425,6 +433,11 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
+    <script src="~/Dist/chart/SumClass.js"></script>
+    <script src="~/Dist/chart/FileManager.js"></script>
+    <script src="~/Dist/chart/SumUser.js"></script>
+
+
     <script src="~/Assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="~/Dist/js/jquery.ui.touch-punch-improved.js"></script>
     <script src="~/Dist/js/jquery-ui.min.js"></script>
@@ -446,7 +459,7 @@
     <!-- this page js -->
     <script src="~/Assets/libs/moment/min/moment.min.js"></script>
     <script src="~/Assets/libs/fullcalendar/dist/fullcalendar.min.js"></script>
-    <script src="~/Dist/js/pages/calendar/cal-init.js"></script>    
-    
+    <script src="~/Dist/js/pages/calendar/cal-init.js"></script>
+
 </body>
 </html>
