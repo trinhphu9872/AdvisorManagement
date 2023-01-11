@@ -20,24 +20,22 @@
 {
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title mb-0">Tạo lớp - VLU</h5>
+            <h5 class="card-title mb-0">Tạo phân công lớp - VLU</h5>
         </div>
         <div class="page-breadcrumb">
             <div class="row">
 
                 <div class="col-12 d-flex no-block align-items-center">
-
-
-                    @*<div class="ms-auto text-end">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        Library
-                                    </li>
-                                </ol>
-                            </nav>
-                        </div>*@
+                    <div class="ms-auto text-end">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/Admin/ClassManagements/Index">Phân Công Lớp</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Chỉnh Sửa Lớp
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
             </div>
 
@@ -47,7 +45,7 @@
 
     <div class="form-horizontal">
 
-        <hr />
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div id="return" class="form-group">
             <p id="labelclass" class="control-label col-md-2">Lớp học</p>
@@ -55,8 +53,8 @@
                 @Html.DropDownList("class_code", null, new { htmlAttributes = new { @class = "form-control", @Style = "width: 300px;" } })
                 @Html.ValidationMessageFor(model => model.class_code, "", new { @class = "text-danger" })
                 @*<a id="buttonadd" class="btn btn-primary" onclick="myFunctionadd()">
-                    Thêm
-                </a>*@
+                        Thêm
+                    </a>*@
             </div>
 
         </div>
@@ -81,10 +79,11 @@
 
         <div class="form-group">
             <p id="labelclass" class="control-label col-md-2">Học kỳ</p>
-            <select id="semester" name="semester_name" onchange="myFunction()">
-                <option selected value="0">All</option>
+            <select id="semester" name="semester_name" onchange="myFunction()" required>
+
                 @foreach (var item in hocky)
                 {
+               
                     <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
                 }
 

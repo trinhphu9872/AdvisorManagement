@@ -96,12 +96,14 @@
                                                                                 <div class="form-group">
                                                                                     <label>Họ và tên</label>
                                                                                     <input class="form-control" type="text" name="user_name" placeholder="Họ và tên" value="@Model.user_name" style="width:190px">
+                                                                                    @Html.ValidationMessageFor(model => model.user_name, "", new { @class = "text-danger" })
+
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">
                                                                                 <div class="form-group">
                                                                                     <label>Mã số</label>
-                                                                                    <input class="form-control" type="text" name="user_code" placeholder="" value="@Model.user_code" style="width:190px"  disabled="disabled">
+                                                                                    <input class="form-control" type="text" name="user_code" placeholder="" value="@Model.user_code" style="width:190px" disabled="disabled"
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -116,12 +118,16 @@
                                                                                 <div class="form-group">
                                                                                     <label>Giới tính</label>
                                                                                     <input class="form-control" type="text" name="gender" placeholder="" value="@Model.gender">
+                                                                                    @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">
                                                                                 <div class="form-group">
                                                                                     <label>địa chỉ</label>
                                                                                     <input class="form-control" type="text" name="address" placeholder="" value="@Model.address">
+                                                                                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">
@@ -147,6 +153,9 @@
                                                                                 <div class="form-group">
                                                                                     <label>Số điện thoại</label>
                                                                                     <input class="form-control" type="text" name="phone" placeholder="" value="@Model.phone">
+                                                                                    @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
+
+
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">

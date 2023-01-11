@@ -18,7 +18,7 @@
     <div class="page-breadcrumb">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title mb-0">Profile - VLU</h5>
+                <h5 class="card-title mb-0">Thông tin cá nhân - VLU</h5>
             </div>
             <div class="page-breadcrumb">
                 <div class="row">
@@ -26,9 +26,9 @@
                         <div class="ms-auto text-end">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="/Home/Index">Home</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">
-                                        Library
+                                        Thông tin cá nhân
                                     </li>
                                 </ol>
                             </nav>
@@ -74,7 +74,7 @@
                                 </div>
                                 <label for="fname" class="col-sm-3 text-end control-label col-form-label">MSSV:</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="user_code" name="user_code" placeholder="197PM29124" value="@Model.user_code" />
+                                    <input type="text" class="form-control" id="user_code" name="user_code" placeholder="197PM29124" value="@Model.user_code"  disabled="disabled"/>
                                     <p id="valid_code" style="color:red"></p>
                                 </div>
                             </div>
@@ -133,10 +133,9 @@
                                         <button id="submitbtn" type="submit" class="btn btn-success text-white" style="margin-left: 30%;width: 100px;">
                                             Lưu
                                         </button>
-
-                                        <button type="submit" class="btn btn-danger text-white" style="margin-left: 30%;width: 100px;">
-                                            Hủy
-                                        </button>
+                                            <a href="@Url.Action("Index","Home")" class="btn btn-danger text-white" style="margin-left: 30%;width: 100px;">
+                                                Hủy
+                                            </a
                                     </div>
                                 </div>
                             </div>

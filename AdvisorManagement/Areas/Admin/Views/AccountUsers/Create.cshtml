@@ -86,6 +86,7 @@
                                                                                     <label>Họ và tên</label>
                                                                                     <input class="form-control" type="text" id="user_name" name="user_name" placeholder="Họ và tên" value="@Model.user_name">
                                                                                     <p id="valid_username" style="color:red"></p>
+                                                                                    @Html.ValidationMessageFor(model => model.user_name, "", new { @class = "text-danger" })
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">
@@ -93,6 +94,8 @@
                                                                                     <label>Mã số</label>
                                                                                     <input class="form-control" type="text" id="user_code" name="user_code" placeholder="Mã số cá nhân" value="@Model.user_code">
                                                                                     <p id="valid_usercode" style="color:red"></p>
+                                                                                    @Html.ValidationMessageFor(model => model.user_code, "", new { @class = "text-danger" })
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -108,13 +111,17 @@
                                                                                     <label>Giới tính</label>
                                                                                     <input class="form-control" type="text" id="gender" name="gender" placeholder="VD: Nam hoặc Nữ" value="@Model.gender">
                                                                                     <p id="valid_gender" style="color:red"></p>
+                                                                                    @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">
                                                                                 <div class="form-group">
                                                                                     <label>địa chỉ</label>
-                                                                                    <input class="form-control" type="text"  id="address" name="address" placeholder="Địa chỉ" value="@Model.address">
+                                                                                    <input class="form-control" type="text" id="address" name="address" placeholder="Địa chỉ" value="@Model.address">
                                                                                     <p id="valid_address" style="color:red"></p>
+                                                                                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">
@@ -134,13 +141,17 @@
                                                                                     <label>Email</label>
                                                                                     <input class="form-control" type="text" id="email" name="email" placeholder="Vd:Ten@vanlanguni.vn" value="@Model.email">
                                                                                     <p id="valid_email" style="color:red"></p>
+                                                                                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+
                                                                                 </div>
                                                                             </div>
 
                                                                             <div class="col">
                                                                                 <div class="form-group">
                                                                                     <label>Số điện thoại</label>
-                                                                                    <input class="form-control" type="number" name="phone" placeholder="Vd:0901234567" value="@Model.phone"pattern = "[0-9]{10}">
+                                                                                    <input class="form-control" type="number" name="phone" placeholder="Vd:0901234567" value="@Model.phone" pattern="[0-9]{10}">
+                                                                                    @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
+
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">

@@ -59,10 +59,11 @@
                             </tr>
                         </thead>
                         <tbody id="myTable">
+                            @{int indexer = 1; } 
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>@item.id</td>
+                                    <td>@indexer</td>
                                     <td>@item.user_code</td>
                                     <td>@item.user_name</td>
                                     <td>@item.Role.role_name</td>
@@ -82,6 +83,7 @@
                                         </a>
                                     </td>
                                 </tr>
+                                indexer++;
                             }
                         </tbody>
                     </table>

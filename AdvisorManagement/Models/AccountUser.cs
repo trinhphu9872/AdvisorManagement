@@ -11,6 +11,7 @@ namespace AdvisorManagement.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Web;
 
@@ -24,13 +25,18 @@ namespace AdvisorManagement.Models
         }
     
         public int id { get; set; }
+       
         public string user_code { get; set; }
         public int id_role { get; set; }
+     
         public string user_name { get; set; }
+       
         public string gender { get; set; }
         public string img_profile { get; set; }
         public string phone { get; set; }
+       
         public string address { get; set; }
+      
         public string email { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public Nullable<System.DateTime> update_time { get; set; }

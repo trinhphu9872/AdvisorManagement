@@ -29,6 +29,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 var roleMenu = serviceMenu.getRoleMenu();
                 ViewBag.roleMenu = roleMenu;
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                ViewBag.errMess = null;
                 return View(roleMenu);
             }
             else
@@ -96,15 +97,18 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-                if (ModelState.IsValid)
+                var checkedRoles = db.RoleMenu.Where(x => x.id_role == roleMenu.id_role).Where(y => y.id_menu == roleMenu.id_menu).ToList();
+                if (ModelState.IsValid && checkedRoles.Count() < 1)
                 {
                     db.RoleMenu.Add(roleMenu);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_menu);
-                ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_role);
-
+                ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name", roleMenu.id_menu);
+                ViewBag.id_role = new SelectList(db.Role, "id", "role_name", roleMenu.id_role);
+                //ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_menu);
+                //ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_role);
+                ViewBag.errMess = "Đã tồn tại phân quyền với menu này";
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 return View(roleMenu);
             }

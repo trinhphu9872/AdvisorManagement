@@ -73,7 +73,7 @@ namespace AdvisorManagement.Controllers
         {
             AccountUser edituser = dbApp.AccountUser.Find(user.id);
             edituser.user_name = user.user_name;
-            edituser.user_code = user.user_code;
+            //edituser.user_code = user.user_code;
             edituser.phone = user.phone;
             if (user.ImageUpload != null)
             {

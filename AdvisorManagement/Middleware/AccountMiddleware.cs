@@ -61,6 +61,8 @@ namespace AdvisorManagement.Middleware
             db.SaveChanges();
         }
 
+
+
         // write init user
         public void writeRecordUser(AccountInitModel data,string mail)
         {

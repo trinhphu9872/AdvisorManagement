@@ -41,7 +41,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
                 if (id == null)
                 {
@@ -67,8 +67,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-                ViewBag.id_Role = new SelectList(db.Role, "id", "role_name");
+                ViewBag.id_Role = new SelectList(db.Role.Where(x => x.id != 1), "id", "role_name");
                 AccountUser user = new AccountUser();
                 return View(user);
             }
@@ -84,7 +83,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Create(AccountUser accountUser, HttpPostedFileBase ImageUpload)
         {
-
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
@@ -102,9 +101,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                             accountUser.img_profile = "~/Images/imageProfile/" + filename;
                             accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
                         }
-                        accountUser.id = db.AccountUser.ToList().Count() + 1;
+                        accountUser.id = serviceAccount.getID() + 1;
                         accountUser.create_time = DateTime.Now;
-
+                        accountUser.id_role = 2;
                         db.AccountUser.Add(accountUser);
                         var addAdvisor = new Advisor();
 
@@ -124,9 +123,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                         accountUser.img_profile = "~/Images/imageProfile/" + filename;
                         accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
                     }
-                    accountUser.id = db.AccountUser.ToList().Count() + 1;
+                    accountUser.id = serviceAccount.getID() + 1;
                     accountUser.create_time = DateTime.Now;
-
+                    accountUser.id_role = 3;
                     db.AccountUser.Add(accountUser);
                     var addstudent = new Student ();
 
@@ -146,16 +145,17 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                             accountUser.img_profile = "~/Images/imageProfile/" + filename;
                             accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
                         }
-                        accountUser.id= db.AccountUser.ToList().Count() + 1;
+                        accountUser.id= serviceAccount.getID() + 1;
                         accountUser.create_time = DateTime.Now;
-                    
+                        accountUser.id_role = 1;
+
                         db.AccountUser.Add(accountUser);
                         db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                 }
 
-                ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
+                ViewBag.id_Role = new SelectList(db.Role.Where(x => x.id != 1), "id", "role_name");
                 return View(accountUser);
             }
             else
@@ -181,7 +181,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     return HttpNotFound();
                 }
                 picture = accountUser.img_profile;
-                ViewBag.id_Role = db.Role.ToList();
+                ViewBag.id_Role = db.Role.Where(x => x.id != 1).ToList();
+                //ViewBag.id_Role = new SelectList(db.Role.Where(x => x.id != 1), "id", "role_name");
+                //ViewBag.id_Role = new SelectList(db.Role.Where(x => x.id != 1), "id", "role_name");
+
                 return View(accountUser);
             }
             else
@@ -197,35 +200,43 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Edit(AccountUser accountUser)
         {
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             if (serviceAccount.getPermission(User.Identity.Name, routePermission)) {         
           
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-                if (ModelState.IsValid)
-                {
-                    var edituser = db.AccountUser.Find(accountUser.id);
-                    if (accountUser.ImageUpload != null)
-                    {
-                        string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
-                        string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
-                        filename = filename + extension;
-                        edituser.img_profile = "~/Images/imageProfile/" + filename;
-                        accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
-                    }
-                    edituser.address = accountUser.address;
-                    edituser.user_name = accountUser.user_name;
-                    edituser.user_code = edituser.user_code;
-                    //edituser.dateofbirth = accountUser.dateofbirth;
-                    edituser.phone = accountUser.phone;
-                    edituser.gender = accountUser.gender;
-                    edituser.id_role = accountUser.id_role;
+                var edituser = db.AccountUser.Find(accountUser.id);
+                accountUser.user_code = edituser.user_code;
+                accountUser.email = edituser.email;
 
-                    db.Entry(edituser).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
 
-                ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
-                 return View(accountUser);
+                //if (ModelState.IsValid)
+                //{
+
+                 if (accountUser.ImageUpload != null)
+                 {
+                     string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
+                     string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
+                     filename = filename + extension;
+                     edituser.img_profile = "~/Images/imageProfile/" + filename;
+                     accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                 }
+                 edituser.address = accountUser.address;
+                 edituser.user_name = accountUser.user_name;
+                 //edituser.user_code = edituser.user_code;
+                 //edituser.dateofbirth = accountUser.dateofbirth;
+                 edituser.phone = accountUser.phone;
+                 edituser.gender = accountUser.gender;
+                 edituser.id_role = accountUser.id_role;
+
+                 db.Entry(edituser).State = EntityState.Modified;
+                 db.SaveChanges();
+                 return RedirectToAction("Index");
+                //}
+
+                //ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
+                ViewBag.id_Role = db.Role.Where(x => x.id != 1).ToList();
+
+                return View(accountUser);
             }
             else
             {
