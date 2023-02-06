@@ -27,6 +27,7 @@ namespace AdvisorManagement.Models
     
         public virtual DbSet<AccountUser> AccountUser { get; set; }
         public virtual DbSet<Advisor> Advisor { get; set; }
+        public virtual DbSet<ListStudents> ListStudents { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<ProofPlan> ProofPlan { get; set; }
         public virtual DbSet<Role> Role { get; set; }

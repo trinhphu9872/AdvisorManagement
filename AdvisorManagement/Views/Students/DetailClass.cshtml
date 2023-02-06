@@ -19,7 +19,7 @@
                     foreach (var item in classInfo)
                     {
                         <div class="card-body">
-                            <h5 class="card-title mb-0">VLU - @item.idClass</h5>
+                            <h5 class="card-title mb-0">VLU - @item.semester</h5>
                         </div>
                         <form action="" method="post">
                             <div class="input-box">
@@ -83,7 +83,7 @@
                                     <tbody id="myTable">
                                         @foreach (var item in listStudent)
                                         {
-                                            <tr>
+                                            <tr id="@item.id">
                                                 <td style="text-align: center ;">@i</td>
                                                 <td style="text-align: center ;">@item.idStudent</td>
                                                 <td style="text-align:center">@item.name</td>
@@ -94,12 +94,12 @@
                                                 @if (ViewBag.role == "Advisor" || ViewBag.role == "Admin")
                                                 {
                                                     <td style="text-align:center">
-                                                        <a href="@Url.Action("UpdateStudent", "Students", new {id = item.id })" id="btnUpdate" class="btn btn-primary">
+                                                        <a href="@Url.Action("UpdateStudent", "Students", new {id = item.idAcc })" id="btnUpdate" class="btn btn-primary">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <a href="" id="btnDelete" class="btn btn-danger">
+                                                        <button name="delete" class="btn btn-danger">
                                                             <i class="fas fa-trash-alt"></i>
-                                                        </a>
+                                                        </button>
                                                     </td>
                                                 }
                                             </tr>
@@ -325,6 +325,29 @@
              })
         })
     })
+
+    //Sự kiện xóa
+    $(document).on('click', "button[name=delete]", function () {
+        let id_std = $(this).closest('tr').attr('id');
+        if (confirm("Bạn thực sự muốn xóa sinh viên này?")) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Students")',
+                type: 'POST',
+                data: {
+                    id: id_std
+                },
+                success: function (data) {
+                     if (data.success == true) {
+                         alert(data.message);
+                         location.reload();
+                     } else {
+                         alert(data.message);
+                     }
+                }
+            })
+        }
+    })
+
 
 </script>
 

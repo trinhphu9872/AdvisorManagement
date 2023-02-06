@@ -8,6 +8,8 @@ namespace AdvisorManagement.Models.ViewModel
     public class ListStudent
     {
         public int id { get; set; }
+
+        public int idAcc { get; set; }
         public string idStudent { get; set; }
         public string name { get; set; }
         public string email { get; set; }

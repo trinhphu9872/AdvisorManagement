@@ -59,29 +59,34 @@
                             </tr>
                         </thead>
                         <tbody id="myTable">
-                            @foreach (var item in Model)
+                            @if (ViewBag.menu != null)
                             {
-                                <tr>
-                                    <td>@item.id</td>
-                                    <td>@item.user_code</td>
-                                    <td>@item.user_name</td>
-                                    <td>@item.Role.role_name</td>
-                                    <td>@item.create_time</td>
-                                    <td>@item.email</td>
-                                    <td>
-                                        <a href="@Url.Action("Details", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-success"
-                                           style="margin-bottom: 5px; margin-left: 5px;">
-                                            Chi tiết <i class="fas fa-tasks"></i>
-                                        </a>
-                                        <a href="@Url.Action("Edit", "AccountUsers", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
-                                            Sửa <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="@Url.Action("Delete", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-danger"
-                                           style="margin-bottom: 5px; margin-left: 5px;">
-                                            XÓA <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                int i = 1;
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@item.user_code</td>
+                                        <td>@item.user_name</td>
+                                        <td>@item.Role.role_name</td>
+                                        <td>@item.create_time</td>
+                                        <td>@item.email</td>
+                                        <td>
+                                            <a href="@Url.Action("Details", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-success"
+                                               style="margin-bottom: 5px; margin-left: 5px;">
+                                                Chi tiết <i class="fas fa-tasks"></i>
+                                            </a>
+                                            <a href="@Url.Action("Edit", "AccountUsers", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
+                                                Sửa <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="@Url.Action("Delete", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-danger"
+                                               style="margin-bottom: 5px; margin-left: 5px;">
+                                                XÓA <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
                             }
                         </tbody>
                     </table>

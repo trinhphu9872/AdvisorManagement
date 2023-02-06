@@ -71,8 +71,14 @@
                                                                     <div class="col">
                                                                         <div class="row">
                                                                             <div class="col">
+                                                                                
                                                                                 <div class="form-group">
-                                                                                    <label>Người dùng</label>
+                                                                                    @if (ViewBag.error != null)
+                                                                                    {
+                                                                                        var Error = (string)ViewBag.error;
+
+                                                                                    @Html.Raw(Error)
+                                                                                    }
                                                                                     @Html.DropDownList("id_role", null, htmlAttributes: new { @class = "form-control" })
                                                                                     @Html.ValidationMessageFor(model => model.id_role, "", new { @class = "text-danger" })
                                                                                 </div>

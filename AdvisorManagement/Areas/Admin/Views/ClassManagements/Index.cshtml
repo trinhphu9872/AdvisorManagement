@@ -90,7 +90,7 @@
                                     {
                                         <tr>
                                             <td>@i</td>
-                                            <td>@Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", classcode = item.class_code }, null)</td>
+                                            <td>@Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", id = item.id }, null)</td>
                                             @if (item.advisor_code != null)
                                             {
                                                 foreach (var itemUser in nameUser)

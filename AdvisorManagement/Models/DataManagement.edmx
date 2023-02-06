@@ -29,6 +29,14 @@
           <Property Name="status_id" Type="int" />
           <Property Name="account_id" Type="int" />
         </EntityType>
+        <EntityType Name="ListStudents">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_class" Type="int" />
+          <Property Name="student_code" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="Menu">
           <Key>
             <PropertyRef Name="id" />
@@ -80,7 +88,7 @@
             <PropertyRef Name="student_code" />
           </Key>
           <Property Name="student_code" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="id_class" Type="varchar" MaxLength="50" />
+          <Property Name="id_class" Type="int" />
           <Property Name="training_point" Type="varchar" MaxLength="10" />
           <Property Name="grade_training_point" Type="varchar" MaxLength="10" />
           <Property Name="status_id" Type="int" />
@@ -182,21 +190,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Student_AccountUser">
-          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="0..1" />
-          <End Role="Student" Type="Self.Student" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AccountUser">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Student">
-              <PropertyRef Name="account_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="CP25Team09ModelStoreContainer">
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ListStudents" EntityType="Self.ListStudents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProofPlan" EntityType="Self.ProofPlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
@@ -227,10 +224,6 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="RoleMenu" EntitySet="RoleMenu" />
           </AssociationSet>
-          <AssociationSet Name="FK_Student_AccountUser" Association="Self.FK_Student_AccountUser">
-            <End Role="AccountUser" EntitySet="AccountUser" />
-            <End Role="Student" EntitySet="Student" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -254,7 +247,6 @@
           <Property Name="update_time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Role" Relationship="Self.FK_AccountUser_Role" FromRole="AccountUser" ToRole="Role" />
           <NavigationProperty Name="Advisor" Relationship="Self.FK_Advisor_AccountUser" FromRole="AccountUser" ToRole="Advisor" />
-          <NavigationProperty Name="Student" Relationship="Self.FK_Student_AccountUser" FromRole="AccountUser" ToRole="Student" />
         </EntityType>
         <EntityType Name="Advisor">
           <Key>
@@ -265,6 +257,14 @@
           <Property Name="account_id" Type="Int32" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_Advisor_AccountUser" FromRole="Advisor" ToRole="AccountUser" />
           <NavigationProperty Name="VLClass" Relationship="Self.FK_Class_Advisor" FromRole="Advisor" ToRole="VLClass" />
+        </EntityType>
+        <EntityType Name="ListStudents">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_class" Type="Int32" />
+          <Property Name="student_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Menu">
           <Key>
@@ -322,12 +322,11 @@
             <PropertyRef Name="student_code" />
           </Key>
           <Property Name="student_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="id_class" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_class" Type="Int32" />
           <Property Name="training_point" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="grade_training_point" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="status_id" Type="Int32" />
           <Property Name="account_id" Type="Int32" />
-          <NavigationProperty Name="AccountUser" Relationship="Self.FK_Student_AccountUser" FromRole="Student" ToRole="AccountUser" />
         </EntityType>
         <EntityType Name="StudentStatus">
           <Key>
@@ -390,18 +389,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Student_AccountUser">
-          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="0..1" />
-          <End Role="Student" Type="Self.Student" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AccountUser">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Student">
-              <PropertyRef Name="account_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Class_Advisor">
           <End Role="Advisor" Type="Self.Advisor" Multiplicity="0..1" />
           <End Role="VLClass" Type="Self.VLClass" Multiplicity="*" />
@@ -441,6 +428,7 @@
         <EntityContainer Name="CP25Team09Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" />
+          <EntitySet Name="ListStudents" EntityType="Self.ListStudents" />
           <EntitySet Name="Menu" EntityType="Self.Menu" />
           <EntitySet Name="ProofPlan" EntityType="Self.ProofPlan" />
           <EntitySet Name="Role" EntityType="Self.Role" />
@@ -458,10 +446,6 @@
           <AssociationSet Name="FK_Advisor_AccountUser" Association="Self.FK_Advisor_AccountUser">
             <End Role="AccountUser" EntitySet="AccountUser" />
             <End Role="Advisor" EntitySet="Advisor" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Student_AccountUser" Association="Self.FK_Student_AccountUser">
-            <End Role="AccountUser" EntitySet="AccountUser" />
-            <End Role="Student" EntitySet="Student" />
           </AssociationSet>
           <AssociationSet Name="FK_Class_Advisor" Association="Self.FK_Class_Advisor">
             <End Role="Advisor" EntitySet="Advisor" />
@@ -505,6 +489,15 @@
                 <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
                 <ScalarProperty Name="status_id" ColumnName="status_id" />
                 <ScalarProperty Name="account_id" ColumnName="account_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ListStudents">
+            <EntityTypeMapping TypeName="CP25Team09Model.ListStudents">
+              <MappingFragment StoreEntitySet="ListStudents">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="student_code" ColumnName="student_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

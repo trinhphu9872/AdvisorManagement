@@ -76,6 +76,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name");
                 ViewBag.id_role = new SelectList(db.Role, "id", "role_name");
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                
 
             return View();
             }
@@ -98,6 +99,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 if (ModelState.IsValid)
                 {
+                    if(roleMenu.id_role == 1)
+                    {
+                        ViewBag.Error = "Sai phan quyen";
+                        return RedirectToAction("Create");
+                    }
                     db.RoleMenu.Add(roleMenu);
                     db.SaveChanges();
                     return RedirectToAction("Index");

@@ -12,13 +12,10 @@ namespace AdvisorManagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Student
+    public partial class ListStudents
     {
-        public string student_code { get; set; }
+        public int id { get; set; }
         public Nullable<int> id_class { get; set; }
-        public string training_point { get; set; }
-        public string grade_training_point { get; set; }
-        public Nullable<int> status_id { get; set; }
-        public Nullable<int> account_id { get; set; }
+        public string student_code { get; set; }
     }
 }

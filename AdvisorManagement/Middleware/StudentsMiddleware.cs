@@ -6,6 +6,7 @@ using System.Linq;
 using AdvisorManagement.Middleware;
 using System.Web;
 using System.Data.Entity;
+using System.IdentityModel.Protocols.WSTrust;
 
 namespace AdvisorManagement.Middleware
 {
@@ -32,14 +33,14 @@ namespace AdvisorManagement.Middleware
             }
             return db.Role.SingleOrDefault(x => x.id == 3).id;
         }
-        public string getClassCode(string user_email)
+        public int getClassCode(string user_email)
         {
             var sql = db.AccountUser.FirstOrDefault(x => x.email == user_email);
             if (sql != null)
             {
-                return db.Student.SingleOrDefault(x => x.student_code == sql.user_code).id_class;
+                return (int)db.Student.SingleOrDefault(x => x.student_code == sql.user_code).id_class;
             }
-            return null;
+            return 0;
         }
         public object getClass(string user_email)
         {
@@ -49,10 +50,12 @@ namespace AdvisorManagement.Middleware
                                 where pq.email == user_email && ad.advisor_code == cl.advisor_code
                                 select new Models.ViewModel.AdvisorClass
                                 {
+                                    ID = cl.id,
                                     idClass = cl.class_code,
                                     idAdvisor = ad.advisor_code,
                                     name = pq.user_name,
-                                    amount = 20
+                                    /*amount = 20,*/
+                                    semester = cl.semester_name
                                 }).OrderBy(x => x.idClass).ToList();
             if (classAdvisor.Count() != 0)
             {
@@ -60,16 +63,17 @@ namespace AdvisorManagement.Middleware
             }
             return null;
         }
-        public object getStudent(string class_code)
+        public object getStudentList(int id_class)
         {
             var classStudent = (from std in db.Student
                                 join acc in db.AccountUser on std.student_code equals acc.user_code
-                                join cl in db.VLClass on std.id_class equals cl.class_code
                                 join st in db.StudentStatus on std.status_id equals st.id
-                                where std.id_class == class_code && std.student_code == acc.user_code
+                                join lstd in db.ListStudents on std.student_code equals lstd.student_code
+                                where lstd.id_class == id_class && std.student_code == lstd.student_code
                                 select new Models.ViewModel.ListStudent
                                 {
-                                    id = acc.id,    
+                                    id = lstd.id,    
+                                    idAcc = acc.id,
                                     idStudent = std.student_code,
                                     name = acc.user_name,
                                     email = acc.email,
@@ -79,33 +83,35 @@ namespace AdvisorManagement.Middleware
                                 }).OrderBy(x => x.name).ToList();
             return classStudent;
         }
-        public object getInfoClass(string class_code)
+        public object getInfoClass(int id)
         {
             var classInfo = (from pq in db.AccountUser
                              join ad in db.Advisor on pq.user_code equals ad.advisor_code
                              join cl in db.VLClass on ad.advisor_code equals cl.advisor_code
-                             where ad.advisor_code == cl.advisor_code && cl.class_code == class_code
+                             where ad.advisor_code == cl.advisor_code && cl.id == id
                              select new Models.ViewModel.AdvisorClass
                              {
+                                 ID = cl.id,
                                  idClass = cl.class_code,
                                  idAdvisor = ad.advisor_code,
                                  name = pq.user_name,
                                  email = pq.email,
                                  phone = pq.phone,
+                                 semester = cl.semester_name
                              }).ToList();
             return classInfo;
         }
 
-        public bool getPermission(string classCode, string user_email)
+        public bool getPermission(int id_class, string user_email)
         {
-            if (db.VLClass.Where(x => x.class_code.Equals(classCode)).Count() == 0)
+            if (db.VLClass.Where(x => x.id.Equals(id_class)).Count() == 0)
             {
                 return false;
             }
             else
             {
                 var user_code = db.AccountUser.FirstOrDefault(x => x.email == user_email).user_code;
-                var advisor_code = db.VLClass.FirstOrDefault(x => x.class_code.Equals(classCode)).advisor_code;
+                var advisor_code = db.VLClass.FirstOrDefault(x => x.id.Equals(id_class)).advisor_code;
                 var role_admin = db.AccountUser.FirstOrDefault(x => x.email == user_email).id_role; 
                 if (advisor_code == user_code || role_admin == 1)
                 {
@@ -141,16 +147,17 @@ namespace AdvisorManagement.Middleware
             return result;
         }
 
-        public bool saveStudent(String mssv, String id_class, String status, CP25Team09Entities db)
+        public bool saveStudent(String mssv, String status, CP25Team09Entities db, int classCode)
         {
             var result = false;
             try
             {
                 var account_id = db.AccountUser.FirstOrDefault(x => x.user_code.Equals(mssv)).id;
                 var status_id = db.StudentStatus.FirstOrDefault(x => x.status_name.Equals(status)).id;
+
                 var item = new Student();
                 item.student_code = mssv;
-                item.id_class = id_class;
+                item.id_class = classCode;
                 item.status_id = status_id;
                 item.account_id = account_id;
                 db.Student.Add(item);
@@ -166,12 +173,17 @@ namespace AdvisorManagement.Middleware
             return result;
         }
 
-        public void UpdateAccount(String mssv, String name, String phone, String address, String gender, CP25Team09Entities db)
+        public bool UpdateAccount(String mssv, String name, String phone, String address, String gender, CP25Team09Entities db)
         {
+            var result = false;
             try
             {
                 var account_id = db.AccountUser.FirstOrDefault(x => x.user_code.Equals(mssv)).id;
                 AccountUser user = db.AccountUser.Find(account_id);
+                if (user.user_name != name || user.phone != phone|| user.address != address || user.gender != getGender(gender))
+                {
+                    result = true;
+                }
                 user.user_name = name;
                 user.phone = phone;
                 user.address = address;
@@ -183,16 +195,22 @@ namespace AdvisorManagement.Middleware
             {
 
             }
+            return result;
         }
 
-        public void UpdateStudentImport(String mssv, String status, CP25Team09Entities db, string id_class)
+        public bool UpdateStudentImport(String mssv, String status, CP25Team09Entities db, int classCode)
         {
+            var result = false;
             try
             {
                 var status_id = db.StudentStatus.FirstOrDefault(x => x.status_name.Equals(status)).id;
                 Student user = db.Student.Find(mssv);
+                if (user.status_id != status_id)
+                {
+                    result = true;
+                }
                 user.status_id = status_id;
-                user.id_class= id_class;
+                user.id_class = classCode;
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -200,6 +218,7 @@ namespace AdvisorManagement.Middleware
             {
 
             }
+            return result;
         }
         public string getGender(String gender)
         {
@@ -209,6 +228,26 @@ namespace AdvisorManagement.Middleware
             }
 
             return "Nữ";
+        }
+
+        public bool AddListStudent(int classCode, string mssv)
+        {
+            var result = false;
+            try
+            {
+                ListStudents std = new ListStudents();
+                std.id_class = classCode;
+                std.student_code = mssv;
+                db.ListStudents.Add(std);
+                db.SaveChanges();
+                result = true;
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return result;
         }
     }
 }

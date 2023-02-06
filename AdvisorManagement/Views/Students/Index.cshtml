@@ -37,7 +37,7 @@
                                         <th width="25%" style="text-align:center">Mã lớp học</th>
                                         <th width="15%" style="text-align:center">Người cố vấn</th>
                                         <th width="15%" style="text-align:center">Khóa</th>
-                                        <th width="15%" style="text-align:center">Tổng SV</th>
+                                        <th width="15%" style="text-align:center">Học kì</th>
                                     </tr>
                                 </thead>
                                 @if (ViewBag.classAdvisor != null)
@@ -50,13 +50,13 @@
                                             <tr>
                                                 <td style="text-align: center ;">@i</td>
                                                 <td style="text-align: center ;">
-                                                    @Html.ActionLink(item.idClass, "DetailClass", new { classCode = item.idClass }, new { @style = "color:#333;margin-left:3px" })
+                                                    @Html.ActionLink(item.idClass, "DetailClass", new { id = item.ID }, new { @style = "color:#333;margin-left:3px" })
                                                 </td>
                                                 <td style="text-align: center ;">
                                                     @item.name
                                                 </td>
                                                 <td style="text-align:center">K25</td>
-                                                <td style="text-align:center">@item.amount</td>
+                                                <td style="text-align:center">@item.semester</td>
                                             </tr>
                                             i++;
                                         }
