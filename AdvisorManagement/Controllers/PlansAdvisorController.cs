@@ -10,6 +10,7 @@ using AdvisorManagement.Models;
 using AdvisorManagement.Middleware;
 using Spire.Xls;
 using System.IO;
+using Microsoft.Ajax.Utilities;
 
 namespace AdvisorManagement.Controllers
 {
@@ -27,8 +28,9 @@ namespace AdvisorManagement.Controllers
             var role = serviceStd.getRoles(User.Identity.Name);
             ViewBag.role = role;
             Session["role"] = role;
+            ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == 4).ToList();
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            return View(db.TitlePlan.ToList());
+            return View(db.PlanAdvisor.ToList().OrderBy(x=>x.number_title));
         }
 
         // GET: PlansAdvisor/Details/5
@@ -38,7 +40,7 @@ namespace AdvisorManagement.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TitlePlan titlePlan = db.TitlePlan.Find(id);
+            PlanAdvisor titlePlan = db.PlanAdvisor.Find(id);
             if (titlePlan == null)
             {
                 return HttpNotFound();
@@ -49,7 +51,7 @@ namespace AdvisorManagement.Controllers
             var listProof = serviceProof.getListProof(User.Identity.Name, (int)id);
             ViewBag.plan = listProof;
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
+            ViewBag.hocky = db.Semester.DistinctBy(x=>x.semester_name).ToList();
             return View(titlePlan);
         }
 
@@ -109,31 +111,21 @@ namespace AdvisorManagement.Controllers
             return View(titlePlan);
         }
 
-        // GET: PlansAdvisor/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TitlePlan titlePlan = db.TitlePlan.Find(id);
-            if (titlePlan == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            return View(titlePlan);
-        }
 
-        // POST: PlansAdvisor/Delete/5
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            TitlePlan titlePlan = db.TitlePlan.Find(id);
-            db.TitlePlan.Remove(titlePlan);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                var title = db.PlanAdvisor.SingleOrDefault(x => x.id == id);
+                db.PlanAdvisor.Remove(title);
+                db.SaveChanges();
+                return Json(new { success = true, message = "Xóa thành công" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Xóa thất bại" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -209,6 +201,89 @@ namespace AdvisorManagement.Controllers
         {
             var filePath = Server.MapPath("~/Proof/") + nameProof;
             return File(filePath, "application/force- download", Path.GetFileName(filePath));
+        }
+
+        [HttpPost]
+        public ActionResult CreateTitle(int idtitle, string content, /*string HK1, string HK2, string HK3,*/ string describe, string source, string note )
+        {
+
+            try
+            {
+                PlanAdvisor plan = new PlanAdvisor();
+                plan.number_title = idtitle;
+                plan.content = content;
+               /* plan.hk1 = HK1;
+                plan.hk2 = HK2;
+                plan.hk3 = HK3;*/
+                plan.describe= describe;
+                plan.source= source;
+                plan.note = note;
+                var i = describe.Length;
+                db.PlanAdvisor.Add(plan);
+                db.SaveChanges();
+                return Json(new { success = true, message = "Thêm thành công" });
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Vui lòng chọn file excel hoặc word" });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Update(int id)
+        {
+            try
+            {
+                var title = db.PlanAdvisor.SingleOrDefault(x => x.id == id);
+                return Json(new { success = true, T = title, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpdateTittle(int id, int numTitle, string content, string describe, string source, string note)
+        {
+            try
+            {
+                if (numTitle != null && content != "" && describe != "" && source!= "" && note !="")
+                {
+                    var title = db.PlanAdvisor.SingleOrDefault(x => x.id == id);
+                    title.number_title = numTitle;
+                    title.content = content;
+                    title.describe = describe;
+                    title.source = source;
+                    title.note = note;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập đầy đủ các trường thông tin" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Cập nhật thất bại" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteProof(int id)
+        {
+            try
+            {
+                var proof = db.ProofPlan.SingleOrDefault(x => x.id == id);
+                db.ProofPlan.Remove(proof);
+                db.SaveChanges();
+                return Json(new { success = true, message = "Xóa thành công" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Xóa thất bại" }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

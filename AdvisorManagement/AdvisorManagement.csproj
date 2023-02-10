@@ -235,6 +235,9 @@
     <Compile Include="Models\Menu.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PlanAdvisor.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProofPlan.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>

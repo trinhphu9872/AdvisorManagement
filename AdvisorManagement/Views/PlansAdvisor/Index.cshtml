@@ -1,4 +1,5 @@
-﻿@model IEnumerable<AdvisorManagement.Models.TitlePlan>
+﻿@model IEnumerable<AdvisorManagement.Models.PlanAdvisor>
+@using AdvisorManagement.Models;
 
 @{
     ViewBag.Title = "Index";
@@ -14,16 +15,17 @@
                 <div class="card-body">
                     <h5 class="card-title mb-0">Quản lí kế hoạch đầu học kì</h5>
                 </div>
-                @if (ViewBag.role == "Admin") {
-                <div class="page-breadcrumb">
-                    <div class="row">
-                        <div class="col-12 d-flex no-block align-items-center">
-                            <a href="@Url.Action("Create", "PlansAdvisor")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                Tạo đề mục<i class="fas fa-plus"></i>
-                            </a>
+                @if (ViewBag.role == "Admin")
+                {
+                    <div class="page-breadcrumb">
+                        <div class="row">
+                            <div class="col-12 d-flex no-block align-items-center">
+                                <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                    Tạo đề mục<i class="fas fa-plus"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
                 }
             </div>
 
@@ -36,17 +38,35 @@
                     <div class="searchbar">
                         <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
                     </div>
-                    <div class="table-responsive">
+                    <div style="margin-top:10px">
+                        <i class="fa fa-check" style="color:limegreen"></i>: Cố vấn đã thực hiện nộp minh chứng
+                    </div>
+                    <div class="table-responsive" style="margin-top:10px">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
-                            <th width="200px">
-                                Tiêu đề
+                            <th>
+                                STT
                             </th>
                             <th>
                                 Nội dung
                             </th>
-                            <th width="300px">
-                                Hoạt động
+                            <th>
+                                HK1
+                            </th>
+                            <th>
+                                HK2
+                            </th>
+                            <th>
+                                HK3
+                            </th>
+                            <th>
+                                Mô tả công việc
+                            </th>
+                            <th>
+                                Tài nguyên chuẩn bị
+                            </th>
+                            <th>
+                                Ghi chú
                             </th>
 
                             </tr>
@@ -54,26 +74,87 @@
                             <tbody id="myTable">
                                 @foreach (var item in Model)
                                 {
-                                    <tr>
+                                    <tr id="@item.id">
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.title)
+                                            @Html.DisplayFor(modelItem => item.number_title)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.content)
                                         </td>
+                                        @if (ViewBag.role == "Advisor")
+                                        {
+                                            if (ViewBag.listProof != null)
+                                            {
+                                                List<ProofPlan> proofPlans = (List<ProofPlan>)ViewBag.listProof;
+
+                                                <td style="text-align:center">
+                                                    @foreach (var i in proofPlans)
+                                                    {
+                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 1")
+                                                        {
+                                                            <i class="fa fa-check" style="color:limegreen"></i>
+                                                            break;
+                                                        }
+                                                        
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @foreach (var i in proofPlans)
+                                                    {
+                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 2")
+                                                        {
+
+                                                            <i class="fa fa-check" style="color:limegreen"></i>
+                                                            break;
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @foreach (var i in proofPlans)
+                                                    {
+                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 3")
+                                                        {
+                                                            <i class="fa fa-check" style="color:limegreen"></i>
+                                                            break;
+                                                        }
+                                                    }
+                                                </td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.hk1)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.hk2)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.hk3)
+                                            </td>
+                                        }
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.describe)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.source)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.note)
+                                        </td>
                                         <td>
                                             @if (ViewBag.role == "Admin")
                                             {
-                                                <a href="@Url.Action("Edit", "PlansAdvisor",new {area = "", id = item.id})" id="btnDelete" class="btn btn-success"
-                                                   style="margin-bottom: 5px; margin-left: 5px;">
+                                                <button name="update" id="btnDelete" class="btn btn-success"
+                                                        style="margin-bottom: 5px; margin-left: 5px;">
                                                     Sửa <i class="fas fa-tasks"></i>
-                                                </a>
-                                                <a href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
-                                                    Chi tiết <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="@Url.Action("Delete", "PlansAdvisor", new { id = item.id })" id="btnDelete" class="btn btn-danger"
-                                                   style="margin-bottom: 5px; margin-left: 5px;">
+                                                </button>
+                                                <button name="delete" id="btnDelete" class="btn btn-danger"
+                                                        style="margin-bottom: 5px; margin-left: 5px;">
                                                     XÓA <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                                <a href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
+                                                    Xem minh chứng <i class="fas fa-edit"></i>
                                                 </a>
                                             }
                                             else if (ViewBag.role == "Advisor")
@@ -90,6 +171,171 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalCreate" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm đề mục</h4>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class="col-md-4"><span>Số đề mục:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtIDTitle" type="number" class="form-control" min="1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Nội dung:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtContent" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                @* <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>HK1:</span></div>
+                            <div class="col-md-8">
+                                <input id="txtHk1" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>HK2:</span></div>
+                            <div class="col-md-8">
+                                <input id="txtHk2" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>HK3:</span></div>
+                            <div class="col-md-8">
+                                <input id="txtHk3" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>*@
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Mô tả:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtDescribe" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Tài nguyên:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtSource" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Ghi chú:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtNote" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnUpload" class="btn btn-primary" type="submit">Thêm</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="modalUpdate" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Chỉnh sửa đề mục</h4>
+                </div>
+                <input hidden id="id_title" value="" />
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class="col-md-4"><span>Số đề mục:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Title" type="number" class="form-control" min="1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Nội dung:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Content" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                @* <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>HK1:</span></div>
+                            <div class="col-md-8">
+                                <input id="txtHk1" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>HK2:</span></div>
+                            <div class="col-md-8">
+                                <input id="txtHk2" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>HK3:</span></div>
+                            <div class="col-md-8">
+                                <input id="txtHk3" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>*@
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Mô tả:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Describe" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Tài nguyên:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Source" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Ghi chú:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Note" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnEdit" class="btn btn-primary" type="submit">Sửa</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -134,5 +380,137 @@
                 });
             });
         });
+
+        function CreateTitle() {
+            $("#modalCreate").modal("show");
+        }
+
+        function HideModal() {
+            $("#modalCreate").modal("hide");
+        }
+
+         //Lấy thông tin người dùng để cập nhật
+        $(document).on('click', "button[name=update]", function () {
+            let id_title = $(this).closest('tr').attr('id');
+            $.ajax({
+                url:'@Url.Action("Update", "PlansAdvisor")' ,
+                type: 'get',
+                data: {
+                    id: id_title
+                },
+                success: function (data) {
+                    if (data.success == true) {
+                        $('#up_Title').val(data.T.number_title);
+                        $('#up_Content').val(data.T.content);
+                        $('#up_Describe').val(data.T.describe);
+                        $('#up_Source').val(data.T.source);
+                        $('#up_Note').val(data.T.note);
+                        $('#id_title').val(data.T.id);
+
+                        $('#modalUpdate').modal("show");
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+        })
+
+         //Cập nhật thông tin người dùng
+        $('#btnEdit').click(function () {
+                let id = $('#id_title').val();
+                let numTitle = $('#up_Title').val();
+                let content = $('#up_Content').val();
+                let describe = $('#up_Describe').val();
+                let source = $('#up_Source').val();
+                let note = $('#up_Note').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateTittle", "PlansAdvisor")',
+                    data: {
+                        id: id,
+                        numTitle: numTitle,
+                        content: content,
+                        describe: describe,
+                        source: source,
+                        note: note
+                    },
+                    success: function (data) {
+                            if (data.success == true) {
+                                alert(data.message);
+                                $('#modalUpdate').modal('hide');
+                                location.reload();
+                            } else {
+                                alert(data.message);
+                            }
+                        }
+                     })
+            })
+
+        function HideModalUp() {
+            $("#modalUpdate").modal("hide");
+        }
+
+
+         $(document).ready(function () {
+        $('#btnUpload').click(function () {
+            var formData = new FormData();
+            var idtitle = $("#txtIDTitle").val();
+            var content = $("#txtContent").val();
+          /*  var HK1 = $("#txtHk1").val();
+            var HK2 = $("#txtHk2").val();
+            var HK3 = $("#txtHk3").val();*/
+            var describe = $("#txtDescribe").val();
+            var source = $("#txtSource").val();
+            var note = $("#txtNote").val();
+            formData.append("idtitle", idtitle);
+            formData.append("content", content);
+           /* formData.append("HK1", HK1);
+            formData.append("HK2", HK2);
+            formData.append("HK3", HK3);*/
+            formData.append("describe", describe);
+            formData.append("source", source);
+            formData.append("note", note);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateTitle", "PlansAdvisor")',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success == false) {
+                        alert(data.message);
+                    } else {
+                        $("#modalCreate").modal("hide");
+                        alert(data.message);
+                        location.reload();
+                    }
+                }
+             })
+        })
+         })
+
+         //Sự kiện xóa
+        $(document).on('click', "button[name=delete]", function () {
+        let id_std = $(this).closest('tr').attr('id');
+        if (confirm("Bạn thực sự muốn xóa sinh viên này?")) {
+            $.ajax({
+                url: '@Url.Action("Delete", "PlansAdvisor")',
+                type: 'POST',
+                data: {
+                    id: id_std
+                },
+                success: function (data) {
+                     if (data.success == true) {
+                         alert(data.message);
+                         location.reload();
+                     } else {
+                         alert(data.message);
+                     }
+                }
+            })
+        }
+        })
+
+
     </script>
 

@@ -1,4 +1,4 @@
-﻿@model AdvisorManagement.Models.TitlePlan
+﻿@model AdvisorManagement.Models.PlanAdvisor
 @using AdvisorManagement.Models;
 
 @{
@@ -54,7 +54,7 @@
                                             <td>Tên file</td>
                                             <td>Người tạo</td>
                                             <td>Ngày tạo</td>
-                                            <td>Học kì</td>
+                                            <td>Học kỳ</td>
                                             @if (ViewBag.role == "Advisor")
                                             {
                                                 <td></td>
@@ -65,7 +65,7 @@
                                     <tbody id="myTable">
                                         @foreach (var item in proofs)
                                         {
-                                            <tr>
+                                            <tr id="@item.id">
                                                 <td>@i</td>
                                                 <td>@item.content</td>
                                                 <td>@Html.ActionLink(@item.proof, "Download", "PlansAdvisor", new { nameProof = @item.proof }, null)</td>
@@ -75,10 +75,10 @@
                                                 @if (ViewBag.role == "Advisor")
                                                 {
                                                     <td>
-                                                        <a href="" id="btnDelete" class="btn btn-danger"
+                                                        <button name="delete" class="btn btn-danger"
                                                            style="margin-bottom: 5px; margin-left: 5px;">
                                                             XÓA <i class="fas fa-trash-alt"></i>
-                                                        </a>
+                                                        </button>
                                                     </td>
                                                 }
                                                 </tr>
@@ -133,7 +133,7 @@
 
                             @foreach (var item in listSemester)
                             {
-                                <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
+                                <option value="@item.semester_name">@item.semester_name</option>
 
                             }
                         </select>
@@ -217,5 +217,25 @@
              })
         })
     })
-
+    //Sự kiện xóa
+    $(document).on('click', "button[name=delete]", function () {
+        let id_proof = $(this).closest('tr').attr('id');
+        if (confirm("Bạn thực sự muốn xóa minh chứng này?")) {
+            $.ajax({
+                url: '@Url.Action("DeleteProof", "PlansAdvisor")',
+                type: 'POST',
+                data: {
+                    id: id_proof
+                },
+                success: function (data) {
+                     if (data.success == true) {
+                         alert(data.message);
+                         location.reload();
+                     } else {
+                         alert(data.message);
+                     }
+                }
+            })
+        }
+    })
     </script>
