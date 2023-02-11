@@ -79,7 +79,7 @@
                                                             <div class="text-center text-sm-left mb-2 mb-sm-0">
 
                                                                 <div class="mt-2">
-                                                                    <input class="btn btn-outline-secondary" accept="image/*" type="file" name="ImageUpload" onchange="ShowImageProduct(this, document.getElementById('previewImage'))" />
+                                                                    <input class="btn btn-outline-secondary" accept="image/*" type="file" id="ImageUpload" name="ImageUpload" onchange="ShowImageProduct(this, document.getElementById('previewImage'))" />
                                                                 </div>
                                                             </div>
 
@@ -212,3 +212,22 @@
 
  }
 
+<script>
+    $().ready(function () {
+        $('#ImageUpload').on("input", function () {
+            var fileInput = $(this);
+            if (fileInput.length && fileInput[0].files && fileInput[0].files.length) {
+                var url = window.URL || window.webkitURL;
+                var image = new Image();
+                image.onload = function () {
+
+                };
+                image.onerror = function () {
+                    alert('Vui lòng nhập đúng file ảnh');
+                    location.reload();
+                };
+                image.src = url.createObjectURL(fileInput[0].files[0]);
+            }
+        });
+    });
+</script>

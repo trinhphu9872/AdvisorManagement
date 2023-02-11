@@ -145,6 +145,19 @@
                         }*@
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
+                            @if (ViewBag.RoleName == null)
+                            {
+
+                            }
+                            else if (int.Parse(ViewBag.RoleName) == 1 || int.Parse(ViewBag.RoleName) == 2)
+                            {
+                                <a style="color:white">  Giáo viên: @ViewBag.Name </a>
+                            }
+                            else if (int.Parse(ViewBag.RoleName) == 3)
+                            {
+                                <a style="color:white">  Sinh viên: @ViewBag.Name </a>
+                            }
+
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
                                href="#"
                                id="navbarDropdown"

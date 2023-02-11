@@ -32,44 +32,28 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
-                    <div class="col-md-1">
 
-                    </div>
-                    <div class="searchbar">
-                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
-                    </div>
+                      
                     <div style="margin-top:10px">
-                        <i class="fa fa-check" style="color:limegreen"></i>: Cố vấn đã thực hiện nộp minh chứng
+                        <i class="fa fa-check" style="color:limegreen"></i> : Cố vấn đã thực hiện nộp minh chứng
                     </div>
-                    <div class="table-responsive" style="margin-top:10px">
-                        <table id="zero_config" class="table table-striped table-bordered">
+                    <div class="table-responsive">
+                        <table id="zero_config" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
                             <thead>
-                            <th>
-                                STT
-                            </th>
-                            <th>
-                                Nội dung
-                            </th>
-                            <th>
-                                HK1
-                            </th>
-                            <th>
-                                HK2
-                            </th>
-                            <th>
-                                HK3
-                            </th>
-                            <th>
-                                Mô tả công việc
-                            </th>
-                            <th>
-                                Tài nguyên chuẩn bị
-                            </th>
-                            <th>
-                                Ghi chú
-                            </th>
+                                <tr>
 
-                            </tr>
+
+                                    <th style="text-align:center" >STT</th>
+                                    <th style="text-align:center">Nội dung</th>
+                                    <th style="text-align:center">HK1</th>
+                                    <th style="text-align:center">HK2</th>
+                                    <th style="text-align:center">HK3</th>
+                                    <th style="text-align:center">Mô tả công việc</th>
+                                    <th style="text-align:center">Tài nguyên chuẩn bị</th>
+                                    <th style="text-align:center">Ghi chú</th>
+                                    <th style="text-align:center">Hoạt động</th>
+
+                                </tr>
                             </thead>
                             <tbody id="myTable">
                                 @foreach (var item in Model)
@@ -95,7 +79,7 @@
                                                             <i class="fa fa-check" style="color:limegreen"></i>
                                                             break;
                                                         }
-                                                        
+
                                                     }
                                                 </td>
                                                 <td>
@@ -142,7 +126,7 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.note)
                                         </td>
-                                        <td>
+                                        <td width="350" >
                                             @if (ViewBag.role == "Admin")
                                             {
                                                 <button name="update" id="btnDelete" class="btn btn-success"
@@ -151,7 +135,7 @@
                                                 </button>
                                                 <button name="delete" id="btnDelete" class="btn btn-danger"
                                                         style="margin-bottom: 5px; margin-left: 5px;">
-                                                    XÓA <i class="fas fa-trash-alt"></i>
+                                                    Xóa <i class="fas fa-trash-alt"></i>
                                                 </button>
                                                 <a href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
                                                     Xem minh chứng <i class="fas fa-edit"></i>
@@ -351,7 +335,9 @@
     <!-- ============================================================== -->
 
 
+    <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
     <script>
+
 
 
         function myFunction() {
@@ -380,7 +366,7 @@
                 });
             });
         });
-
+        $("#zero_config").DataTable(); 
         function CreateTitle() {
             $("#modalCreate").modal("show");
         }

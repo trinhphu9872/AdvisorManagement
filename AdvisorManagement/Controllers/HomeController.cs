@@ -32,6 +32,8 @@ namespace AdvisorManagement.Controllers
                 {
                     accountService.UserProfile((ClaimsIdentity) User.Identity);
                 }
+                ViewBag.Name = accountService.getTextName(User.Identity.Name);
+                ViewBag.RoleName = accountService.getRoleTextName(User.Identity.Name);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
             }
@@ -56,6 +58,8 @@ namespace AdvisorManagement.Controllers
         public ActionResult UserProfile(string email)
         {
             AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(email));
+            ViewBag.Name = accountService.getTextName(User.Identity.Name);
+            ViewBag.RoleName = accountService.getRoleTextName(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
 
@@ -64,6 +68,8 @@ namespace AdvisorManagement.Controllers
         public ActionResult EditUserProfile(int id)
         {
             AccountUser user = dbApp.AccountUser.Find(id);
+            ViewBag.Name = accountService.getTextName(User.Identity.Name);
+            ViewBag.RoleName = accountService.getRoleTextName(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
             return View(user);
@@ -73,7 +79,6 @@ namespace AdvisorManagement.Controllers
         {
             AccountUser edituser = dbApp.AccountUser.Find(user.id);
             edituser.user_name = user.user_name;
-            edituser.user_code = user.user_code;
             edituser.phone = user.phone;
             if (user.ImageUpload != null)
             {
@@ -85,6 +90,8 @@ namespace AdvisorManagement.Controllers
             }
             dbApp.Entry(edituser).State = EntityState.Modified;
             dbApp.SaveChanges();
+            ViewBag.Name = accountService.getTextName(User.Identity.Name);
+            ViewBag.RoleName = accountService.getRoleTextName(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             return RedirectToAction("UserProfile", "Home", edituser);
         }

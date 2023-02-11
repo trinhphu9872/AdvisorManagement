@@ -187,5 +187,17 @@ namespace AdvisorManagement.Middleware
             }
             
         }
+        public string getTextName(string user_mail)
+        {
+            var sql = db.AccountUser.FirstOrDefault(x => x.email == user_mail);
+            string text = sql.user_name;
+            return text;
+        }
+        public string getRoleTextName(string user_mail)
+        {
+            var sql = db.AccountUser.FirstOrDefault(x => x.email == user_mail);
+
+            return sql.id_role + "";
+        }
     }
 }
