@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="CP25Team09Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="CP25Team09Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccountUser">
           <Key>
             <PropertyRef Name="id" />
@@ -126,14 +126,6 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
-        <EntityType Name="TitlePlan">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="title" Type="nvarchar" MaxLength="50" />
-          <Property Name="content" Type="nvarchar" MaxLength="200" />
-        </EntityType>
         <EntityType Name="VLClass">
           <Key>
             <PropertyRef Name="id" />
@@ -218,7 +210,6 @@
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TitlePlan" EntityType="Self.TitlePlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
@@ -241,7 +232,8 @@
             <End Role="RoleMenu" EntitySet="RoleMenu" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CP25Team09Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -375,14 +367,6 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="TitlePlan">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="content" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="VLClass">
           <Key>
             <PropertyRef Name="id" />
@@ -468,7 +452,6 @@
           <EntitySet Name="Student" EntityType="Self.Student" />
           <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="TitlePlan" EntityType="Self.TitlePlan" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" />
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
@@ -627,15 +610,6 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TitlePlan">
-            <EntityTypeMapping TypeName="CP25Team09Model.TitlePlan">
-              <MappingFragment StoreEntitySet="TitlePlan">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="content" ColumnName="content" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

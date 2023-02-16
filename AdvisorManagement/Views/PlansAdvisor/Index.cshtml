@@ -23,6 +23,9 @@
                                 <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Tạo đề mục<i class="fas fa-plus"></i>
                                 </a>
+                                <a onclick="CopyTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                    Copy Template<i class="fas fa-plus"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -95,7 +98,7 @@
                                                             <i class="fa fa-check" style="color:limegreen"></i>
                                                             break;
                                                         }
-                                                        
+
                                                     }
                                                 </td>
                                                 <td>
@@ -339,6 +342,41 @@
             </div>
         </div>
     </div>
+
+    <div id="modalCopy" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Copy template</h4>
+                </div>
+                <input hidden id="id_title" value="" />
+                @if (ViewBag.listYear != null)
+                {
+                    List<PlanAdvisor> listYear = (List<PlanAdvisor>)ViewBag.listYear;
+                    foreach (var item in listYear)
+                    {
+                        <div class="">
+                            <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                                <div id="@item.year">
+                                    <span>Năm học: @item.year</span>
+                                    <button name="copy" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                        Copy<i class="fas fa-plus"></i>
+                                    </button>
+                                </div>                                
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="modal-footer">
+                    <button onclick="HideModalCopy()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    @*<button id="btnEdit" class="btn btn-primary" type="submit">Sửa</button>*@
+                </div>
+
+            </div>
+        </div>
+    </div>
     <!-- ============================================================== -->
     <!-- End PAge Content -->
     <!-- ============================================================== -->
@@ -383,6 +421,10 @@
 
         function CreateTitle() {
             $("#modalCreate").modal("show");
+        }
+
+        function CopyTemplate() {
+            $("#modalCopy").modal("show");
         }
 
         function HideModal() {
@@ -450,6 +492,9 @@
             $("#modalUpdate").modal("hide");
         }
 
+        function HideModalCopy() {
+            $("#modalCopy").modal("hide");
+        }
 
          $(document).ready(function () {
         $('#btnUpload').click(function () {
@@ -498,6 +543,28 @@
                 type: 'POST',
                 data: {
                     id: id_std
+                },
+                success: function (data) {
+                     if (data.success == true) {
+                         alert(data.message);
+                         location.reload();
+                     } else {
+                         alert(data.message);
+                     }
+                }
+            })
+        }
+        })
+
+        //Copy template
+        $(document).on('click', "button[name=copy]", function () {
+            let year = $(this).closest('div').attr('id');
+            if (confirm("Bạn muốn sao chép template năm " + year +"?")) {
+            $.ajax({
+                url: '@Url.Action("Copy", "PlansAdvisor")',
+                type: 'POST',
+                data: {
+                    id: year
                 },
                 success: function (data) {
                      if (data.success == true) {

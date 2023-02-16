@@ -37,7 +37,6 @@ namespace AdvisorManagement.Models
         public virtual DbSet<Student> Student { get; set; }
         public virtual DbSet<StudentStatus> StudentStatus { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<TitlePlan> TitlePlan { get; set; }
         public virtual DbSet<VLClass> VLClass { get; set; }
     }
 }

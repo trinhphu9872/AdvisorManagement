@@ -206,7 +206,7 @@
     </Compile>
     <Compile Include="Middleware\AccountMiddleware.cs" />
     <Compile Include="Middleware\MenuMiddleware.cs" />
-    <Compile Include="Middleware\ProofMiddleware.cs" />
+    <Compile Include="Middleware\PlanMiddleware.cs" />
     <Compile Include="Middleware\StudentsMiddleware.cs" />
     <Compile Include="Models\AccountUser.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
@@ -257,9 +257,6 @@
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
-      <DependentUpon>DataManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TitlePlan.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModel\AccountInitModel.cs" />

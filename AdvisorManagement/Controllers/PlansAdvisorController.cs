@@ -19,7 +19,7 @@ namespace AdvisorManagement.Controllers
         private CP25Team09Entities db = new CP25Team09Entities();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         private StudentsMiddleware serviceStd = new StudentsMiddleware();
-        private ProofMiddleware serviceProof = new ProofMiddleware();
+        private PlanMiddleware servicePlan = new PlanMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         // GET: PlansAdvisor
         public ActionResult Index()
@@ -30,7 +30,9 @@ namespace AdvisorManagement.Controllers
             Session["role"] = role;
             ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == 4).ToList();
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            return View(db.PlanAdvisor.ToList().OrderBy(x=>x.number_title));
+            var year = servicePlan.getYear();
+            ViewBag.listYear = db.PlanAdvisor.Where(x => x.year == year-1).DistinctBy(x=>x.year).ToList();
+            return View(db.PlanAdvisor.Where(x=>x.year == year).ToList().OrderBy(x=>x.number_title));
         }
 
         // GET: PlansAdvisor/Details/5
@@ -48,7 +50,7 @@ namespace AdvisorManagement.Controllers
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.role = Session["role"];
             Session["id"] = id;
-            var listProof = serviceProof.getListProof(User.Identity.Name, (int)id);
+            var listProof = servicePlan.getListProof(User.Identity.Name, (int)id);
             ViewBag.plan = listProof;
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             ViewBag.hocky = db.Semester.DistinctBy(x=>x.semester_name).ToList();
@@ -61,54 +63,6 @@ namespace AdvisorManagement.Controllers
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             return View();
-        }
-
-        // POST: PlansAdvisor/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Create([Bind(Include = "id,title,content")] TitlePlan titlePlan)
-        {
-            if (ModelState.IsValid)
-            {
-                db.TitlePlan.Add(titlePlan);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(titlePlan);
-        }
-
-        // GET: PlansAdvisor/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TitlePlan titlePlan = db.TitlePlan.Find(id);
-            if (titlePlan == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            return View(titlePlan);
-        }
-
-        // POST: PlansAdvisor/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Edit([Bind(Include = "id,title,content")] TitlePlan titlePlan)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(titlePlan).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(titlePlan);
         }
 
 
@@ -209,12 +163,11 @@ namespace AdvisorManagement.Controllers
 
             try
             {
+                var year = servicePlan.getYear();
                 PlanAdvisor plan = new PlanAdvisor();
                 plan.number_title = idtitle;
                 plan.content = content;
-               /* plan.hk1 = HK1;
-                plan.hk2 = HK2;
-                plan.hk3 = HK3;*/
+                plan.year = year;
                 plan.describe= describe;
                 plan.source= source;
                 plan.note = note;
@@ -283,6 +236,56 @@ namespace AdvisorManagement.Controllers
             catch (Exception)
             {
                 return Json(new { success = false, message = "Xóa thất bại" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult Copy(int id)
+        {
+            try
+            {
+                var year = servicePlan.getYear();
+                var temp = db.PlanAdvisor.Where(x => x.year == id).Select(y => y.describe).ToList();
+                var listPlan = db.PlanAdvisor.Where(x=>x.year == year).Select(y=>y.describe).ToList();
+               
+                if(id != year)
+                {
+                        var count = 0;
+                        var checkExist = temp.Except(listPlan);
+                        if(checkExist.Count() != 0)
+                        {
+                            foreach(var i in checkExist)
+                            {
+                                if(db.PlanAdvisor.Where(x => x.year == year).Where(y => y.describe == i).ToList().Count() ==0)
+                                {
+                                var newPlan = db.PlanAdvisor.Where(x => x.year == id).Where(y => y.describe == i).ToList();
+                                foreach (var n in newPlan)
+                                    {
+                                        PlanAdvisor plan = new PlanAdvisor();
+                                        plan.year = year;
+                                        plan.number_title = n.number_title;
+                                        plan.content = n.content;
+                                        plan.describe = n.describe;
+                                        plan.source = n.source;
+                                        db.PlanAdvisor.Add(plan);
+                                        db.SaveChanges();
+                                        count++;
+                                    }
+                                }                                              
+                            }
+                        return Json(new { success = true, message = "Copy thành công, có thêm " + count +" đề mục mới" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = true, message = "Không có thêm sự thay đổi" }, JsonRequestBehavior.AllowGet);
+                    }            
+                }
+                return Json(new { success = true, message = "Không có thêm sự thay đổi" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Copy thất bại" }, JsonRequestBehavior.AllowGet);
             }
         }
     }

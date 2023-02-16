@@ -8,7 +8,7 @@ using System.IdentityModel.Protocols.WSTrust;
 
 namespace AdvisorManagement.Middleware
 {
-    public class ProofMiddleware
+    public class PlanMiddleware
     {
         private CP25Team09Entities db = new CP25Team09Entities();
         public object getListProof(string user_email, int id)
@@ -50,6 +50,21 @@ namespace AdvisorManagement.Middleware
             }
             
             return null;
+        }
+
+        public int getYear()
+        {
+            int year;
+            DateTime date = DateTime.Now.Date;
+            if (date.Month < 9)
+            {
+                year = date.Year;
+            }
+            else
+            {
+                year = date.Year + 1;
+            }
+            return year;
         }
     }
 }
