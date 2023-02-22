@@ -249,5 +249,16 @@ namespace AdvisorManagement.Middleware
             }
             return result;
         }
+        public int getID(string user_email)
+        {
+            var id_account = db.AccountUser.FirstOrDefault(x => x.email == user_email).id;
+            if(id_account != null)
+            {
+                return id_account;
+            }
+            
+            return id_account;
+        }
+
     }
 }

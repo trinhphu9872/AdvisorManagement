@@ -28,11 +28,13 @@ namespace AdvisorManagement.Controllers
             var role = serviceStd.getRoles(User.Identity.Name);
             ViewBag.role = role;
             Session["role"] = role;
-            ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == 4).ToList();
+            var id_account = serviceStd.getID(User.Identity.Name);
+            ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             var year = servicePlan.getYear();
-            ViewBag.listYear = db.PlanAdvisor.Where(x => x.year == year-1).DistinctBy(x=>x.year).ToList();
-            return View(db.PlanAdvisor.Where(x=>x.year == year).ToList().OrderBy(x=>x.number_title));
+            ViewBag.listYear = db.PlanAdvisor.Where(x => x.year < year).DistinctBy(x=>x.year).ToList();
+            Session["yearNow"] = year;
+            return View(db.PlanAdvisor.ToList().OrderBy(x=>x.number_title));
         }
 
         // GET: PlansAdvisor/Details/5
@@ -109,9 +111,10 @@ namespace AdvisorManagement.Controllers
                 }
                 else
                 {
-                    if (postedfile.FileName.EndsWith(".xls") || postedfile.FileName.EndsWith(".xlsx") || postedfile.FileName.EndsWith(".docx"))
+                    if (postedfile.FileName.EndsWith(".xls") || postedfile.FileName.EndsWith(".xlsx") || postedfile.FileName.EndsWith(".docx") || postedfile.FileName.EndsWith(".doc") || 
+                        postedfile.FileName.EndsWith(".pdf") || postedfile.FileName.EndsWith(".png") || postedfile.FileName.EndsWith(".jpg"))
                     {
-                        string path = Server.MapPath("~/Proof/");
+                        string path = Server.MapPath("~/Proof/"+ Session["yearNow"].ToString() + "/");
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);
@@ -141,7 +144,7 @@ namespace AdvisorManagement.Controllers
                     }
                     else
                     {
-                        return Json(new { success = false, message = "Vui lòng chọn file excel hoặc word" });
+                        return Json(new { success = false, message = "Vui lòng chọn file hợp lệ" });
                     }
                 }
             }
@@ -153,7 +156,9 @@ namespace AdvisorManagement.Controllers
 
         public FileResult Download(string nameProof)
         {
-            var filePath = Server.MapPath("~/Proof/") + nameProof;
+            var id = Session["id"];
+            var year = db.PlanAdvisor.Find(id).year;
+            var filePath = Server.MapPath("~/Proof/" + year.ToString() + "/") +nameProof;
             return File(filePath, "application/force- download", Path.GetFileName(filePath));
         }
 
