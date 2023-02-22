@@ -168,6 +168,7 @@ namespace AdvisorManagement.Controllers
 
             try
             {
+                if(content != "" && content != "" && describe != "" && source !="" && note != "") { 
                 var year = servicePlan.getYear();
                 PlanAdvisor plan = new PlanAdvisor();
                 plan.number_title = idtitle;
@@ -180,6 +181,10 @@ namespace AdvisorManagement.Controllers
                 db.PlanAdvisor.Add(plan);
                 db.SaveChanges();
                 return Json(new { success = true, message = "Thêm thành công" });
+                } else
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập đầy đủ trường dữ liệu" });
+                }
             }
             catch
             {

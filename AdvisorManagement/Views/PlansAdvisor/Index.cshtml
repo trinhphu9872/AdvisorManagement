@@ -26,15 +26,9 @@
                                 <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Tạo đề mục<i style="margin-left:5px" class="fas fa-plus"></i>
                                 </a>
-<<<<<<< HEAD
                                 @*<a onclick="CopyTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Copy Template<i class="fas fa-plus"></i>
                                 </a>*@
-=======
-                                <a onclick="CopyTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Copy Template<i style="margin-left:5px" class="fas fa-plus"></i>
-                                </a>
->>>>>>> abf2f59224c64041173421182c4284b9c7ec8bfe
                             </div>
                         </div>
                     </div>
@@ -100,8 +94,7 @@
                             </th>
                             <th>
                                 Hoạt động
-                            </th>
-                                
+                            </th>                                               
                             </tr>
                             </thead>
                             <tbody id="myTable">
@@ -175,14 +168,11 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.note)
                                         </td>
-<<<<<<< HEAD
                                         <td hidden>@Html.DisplayFor(modelItem => item.year)</td>
-                                        <td>
-=======
-                                        <td style="width:350px">
->>>>>>> abf2f59224c64041173421182c4284b9c7ec8bfe
-                                            @if (ViewBag.role == "Admin")
-                                            {
+
+                                        @if (ViewBag.role == "Admin")
+                                        {
+                                            <td style="width:350px">
                                                 <button name="update" id="btnDelete" class="btn btn-success"
                                                         style="margin-bottom: 5px; margin-left: 5px;">
                                                     Sửa <i class="fas fa-tasks"></i>
@@ -194,15 +184,17 @@
                                                 <a href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
                                                     Xem minh chứng <i class="fas fa-edit"></i>
                                                 </a>
-                                            }
-                                            else if (ViewBag.role == "Advisor")
-                                            {
+                                            </td>
+                                        }
+                                        else if (ViewBag.role == "Advisor")
+                                        {
+                                            <td style="width:200px">
                                                 <a href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
                                                     Minh chứng <i class="fas fa-edit"></i>
                                                 </a>
-                                            }
-                                        </td>
-                                    </tr>
+                                                </td>
+                                                }                                           
+                                        </tr>
                                 }
                             </tbody>
 
@@ -224,7 +216,7 @@
                     <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                         <div class="col-md-4"><span>Số đề mục:</span></div>
                         <div class="col-md-8">
-                            <input id="txtIDTitle" type="number" class="form-control" min="1" />
+                            <input id="txtIDTitle" type="number" class="form-control" min="1" value="1"/>
                         </div>
                     </div>
                 </div>
@@ -372,40 +364,6 @@
                 <div class="modal-footer">
                     <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     <button id="btnEdit" class="btn btn-primary" type="submit">Sửa</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div id="modalCopy" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Copy template</h4>
-                </div>
-                <input hidden id="id_title" value="" />
-                @if (ViewBag.listYear != null)
-                {
-                    foreach (var item in listYear)
-                    {
-                        <div class="">
-                            <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                                <div id="@item.year">
-                                    <span>Năm học: @item.year</span>
-                                    <button name="copy" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                        Copy<i class="fas fa-plus"></i>
-                                    </button>
-                                </div>                                
-                            </div>
-                        </div>
-                    }
-                }
-
-                <div class="modal-footer">
-                    <button onclick="HideModalCopy()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    @*<button id="btnEdit" class="btn btn-primary" type="submit">Sửa</button>*@
                 </div>
 
             </div>
