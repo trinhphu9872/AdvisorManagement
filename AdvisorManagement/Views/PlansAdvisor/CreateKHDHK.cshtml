@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "CreateKHDHK";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+}
+
+<h2>Thêm kế hoạch đầu học kì</h2>
+
+@using (Html.BeginForm())
+{
+
+   <div class="page-wrapper">
+       <!-- ============================================================== -->
+       <!-- Bread crumb and right sidebar toggle -->
+       <!-- ============================================================== -->
+       <!-- ============================================================== -->
+       <!-- End Bread crumb and right sidebar toggle -->
+       <!-- ============================================================== -->
+       <!-- ============================================================== -->
+       <!-- Container fluid  -->
+       <!-- ============================================================== -->
+       <div class="container-fluid">
+           <!-- ============================================================== -->
+           <!-- Start Page Content -->
+           <!-- ============================================================== -->
+           <div class="row">
+               <div class="col-12">
+                   <div class="card">
+                       <div class="card-body">
+                           <h5 class="card-title mb-0">Thêm kế hoạch đầu học kì mới - VLU</h5>
+                           <div style="height: 30px;"></div>
+                       </div>
+
+
+                   </div>
+                   <div class="card">
+                   </div>
+                   <div class="card">
+                       <div class="card-body">
+                           <h3 style="text-align: center; color: red;">Kế hoạch đầu học kì 2023</h3>
+                           <div class="form-group">
+                               <label for="hue-demo">Loại đề mục</label>
+                               <div class="col-md-12">
+                                   <select class="select2 form-select shadow-none"
+                                           style="width: 100%; height: 36px">
+                                       <option>Select</option>
+                                       <optgroup label="Học Kì 1">
+                                           <option value="AK">Đề mục 1</option>
+                                           <option value="HI">Đề mục 2</option>
+                                           <option value="HI">Đề mục 3</option>
+                                           <option value="HI">Đề mục 4</option>
+                                       </optgroup>
+                                       <optgroup label="Học Kì 2">
+                                           <option value="AK">Đề mục 1</option>
+                                           <option value="HI">Đề mục 2</option>
+                                           <option value="HI">Đề mục 3</option>
+                                           <option value="HI">Đề mục 4</option>
+                                       </optgroup>
+                                       <optgroup label="Học Kì 3">
+                                           <option value="AK">Đề mục 1</option>
+                                           <option value="HI">Đề mục 2</option>
+                                           <option value="HI">Đề mục 3</option>
+                                           <option value="HI">Đề mục 4</option>
+                                       </optgroup>
+                                       <optgroup label="Học Kì hè">
+                                           <option value="AK">Đề mục 1</option>
+                                           <option value="HI">Đề mục 2</option>
+                                           <option value="HI">Đề mục 3</option>
+                                           <option value="HI">Đề mục 4</option>
+                                       </optgroup>
+
+                                   </select>
+                               </div>
+                           </div>
+                           <div class="form-group">
+                               <label for="position-bottom-left">Nội dung</label>
+                               <input type="text" class="form-control" placeholder="Nhập nội dung đề mục...">
+                           </div>
+                           <div class="form-group">
+                               <label for="hue-demo">Mô tả công việc và tài nguyên chuẩn bị</label>
+                               <div id="editor" style="height: 300px">
+
+                               </div>
+                           </div>
+                           <div class="form-group">
+                               <label for="position-bottom-left">Ghi chú</label>
+                               <div class="col-sm-12">
+                                   <textarea class="form-control"></textarea>
+                               </div>
+                           </div>
+
+                           <div class="form-group">
+                               <label for="position-bottom-left">Học kì</label>
+                               <div class="col-md-9" style="margin-left: 30px;">
+                                   <div class="form-check">
+                                       <input type="radio"
+                                              class="form-check-input"
+                                              id="customControlValidation1"
+                                              name="radio-stacked"
+                                              required />
+                                       <label class="form-check-label mb-0"
+                                              for="customControlValidation1">Học kì 1</label>
+                                   </div>
+                                   <div class="form-check">
+                                       <input type="radio"
+                                              class="form-check-input"
+                                              id="customControlValidation2"
+                                              name="radio-stacked"
+                                              required />
+                                       <label class="form-check-label mb-0"
+                                              for="customControlValidation2">Học kì 2</label>
+                                   </div>
+                                   <div class="form-check">
+                                       <input type="radio"
+                                              class="form-check-input"
+                                              id="customControlValidation3"
+                                              name="radio-stacked"
+                                              required />
+                                       <label class="form-check-label mb-0"
+                                              for="customControlValidation3">Học kì 3</label>
+                                   </div>
+                               </div>
+                           </div>
+                           <label class="mt-3">Ngày bắt đầu</label>
+                           <div class="input-group">
+                               <input type="text"
+                                      class="form-control"
+                                      id="datepicker-autoclose"
+                                      placeholder="mm/dd/yyyy" />
+                               <div class="input-group-append">
+                                   <span class="input-group-text h-100">
+                                       <i class="mdi mdi-calendar"></i>
+                                   </span>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="border-top" style="margin-left: 50%;">
+                           <div class="card-body">
+                               <button type="submit" class="btn btn-success text-white">
+                                   Save
+                               </button>
+                               <button type="submit" class="btn btn-primary">Reset</button>
+                               <!-- <button type="submit" class="btn btn-info">Edit</button> -->
+                               <button type="submit" class="btn btn-danger text-white">
+                                   Cancel
+                               </button>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <!-- editor -->
+           <!-- ============================================================== -->
+           <!-- End PAge Content -->
+           <!-- ============================================================== -->
+           <!-- ============================================================== -->
+           <!-- Right sidebar -->
+           <!-- ============================================================== -->
+           <!-- .right-sidebar -->
+           <!-- ============================================================== -->
+           <!-- End Right sidebar -->
+           <!-- ============================================================== -->
+       </div>
+       <!-- ============================================================== -->
+       <!-- End Container fluid  -->
+       <!-- ============================================================== -->
+       <!-- ============================================================== -->
+       <!-- footer -->
+       <!-- ============================================================== -->
+       <footer class="footer text-center">
+           All Rights Reserved by Matrix-admin. Designed and Developed by
+           <a href="https://www.wrappixel.com">WrapPixel</a>.
+       </footer>
+       <!-- ============================================================== -->
+       <!-- End footer -->
+       <!-- ============================================================== -->
+   </div>
+}
+
+<div>
+    @Html.ActionLink("Quay lại trang", "Index")
+</div>

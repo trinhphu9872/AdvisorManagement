@@ -17,7 +17,7 @@
 
                     <div class="col-12 d-flex no-block align-items-center">
                         <a href="@Url.Action("Create", "AccountUsers")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                            Thêm<i class="fas fa-plus"></i>
+                            Thêm<i style="margin-left:5px" class="fas fa-plus"></i>
                         </a>
 
                         <div class="ms-auto text-end">
@@ -71,7 +71,7 @@
                                         <td>@item.Role.role_name</td>
                                         <td>@item.create_time</td>
                                         <td>@item.email</td>
-                                        <td>
+                                        <td style="width:250px">
                                             <a href="@Url.Action("Details", "AccountUsers", new { id = item.id })" id="btnDelete" class="btn btn-success"
                                                style="margin-bottom: 5px; margin-left: 5px;">
                                                 Chi tiết <i class="fas fa-tasks"></i>

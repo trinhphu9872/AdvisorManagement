@@ -24,11 +24,17 @@
                         <div class="row">
                             <div class="col-12 d-flex no-block align-items-center">
                                 <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Tạo đề mục<i class="fas fa-plus"></i>
+                                    Tạo đề mục<i style="margin-left:5px" class="fas fa-plus"></i>
                                 </a>
+<<<<<<< HEAD
                                 @*<a onclick="CopyTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Copy Template<i class="fas fa-plus"></i>
                                 </a>*@
+=======
+                                <a onclick="CopyTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                    Copy Template<i style="margin-left:5px" class="fas fa-plus"></i>
+                                </a>
+>>>>>>> abf2f59224c64041173421182c4284b9c7ec8bfe
                             </div>
                         </div>
                     </div>
@@ -92,7 +98,10 @@
                             <th>
                                 Ghi chú
                             </th>
-
+                            <th>
+                                Hoạt động
+                            </th>
+                                
                             </tr>
                             </thead>
                             <tbody id="myTable">
@@ -166,8 +175,12 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.note)
                                         </td>
+<<<<<<< HEAD
                                         <td hidden>@Html.DisplayFor(modelItem => item.year)</td>
                                         <td>
+=======
+                                        <td style="width:350px">
+>>>>>>> abf2f59224c64041173421182c4284b9c7ec8bfe
                                             @if (ViewBag.role == "Admin")
                                             {
                                                 <button name="update" id="btnDelete" class="btn btn-success"
