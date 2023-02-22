@@ -26,7 +26,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                  var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1).OrderBy(y => y.id_role);
-                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                  ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 return View(accountUser.ToList());
             }
@@ -40,6 +42,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
@@ -168,6 +172,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
@@ -197,8 +203,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Edit(AccountUser accountUser)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission)) {         
-          
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission)) {
+
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 if (ModelState.IsValid)
                 {

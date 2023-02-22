@@ -31,6 +31,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/ClassManagements
         public ActionResult Index()
         {
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
@@ -52,7 +54,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
         public ActionResult Details(int? id)
         {
-
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
@@ -114,6 +117,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/VLClasses/Create
         public ActionResult Create()
         {
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
@@ -177,6 +182,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // HTTP GET
         public ActionResult EditClass(int id )
         {
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 

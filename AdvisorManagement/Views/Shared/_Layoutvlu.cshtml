@@ -137,6 +137,19 @@
                         }*@
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
+                            @if (ViewBag.RoleName == null)
+                            {
+
+                            }
+                            else if (int.Parse(ViewBag.RoleName) == 1 || int.Parse(ViewBag.RoleName) == 2)
+                            {
+                                <a style="color:white">  Giáo viên: @ViewBag.Name </a>
+                            }
+                            else if (int.Parse(ViewBag.RoleName) == 3)
+                            {
+                                <a style="color:white">  Sinh viên: @ViewBag.Name </a>
+                            }
+
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
                                href="#"
                                id="navbarDropdown"
@@ -144,7 +157,7 @@
                                data-bs-toggle="dropdown"
                                aria-expanded="false">
                                 @if (Request.IsAuthenticated)
-                                { <img src="~/Images/imageProfile/@ViewBag.avatar"
+                                {<img src="~/Images/imageProfile/@ViewBag.avatar"
                                       alt="user"
                                       class="rounded-circle"
                                       width="31" />
@@ -161,7 +174,7 @@
                                 @if (Request.IsAuthenticated)
                                 {
                                     <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
-                                        <i class="mdi mdi-account me-1 ms-1"></i> 
+                                        <i class="mdi mdi-account me-1 ms-1"></i>
                                         Tài Khoản
                                     </a>
                                     <div class="dropdown-divider"></div>

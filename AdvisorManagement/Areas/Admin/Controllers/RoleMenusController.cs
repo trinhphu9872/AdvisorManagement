@@ -24,6 +24,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.Message = "Role Menu";
                 var roleMenu = serviceMenu.getRoleMenu();
@@ -72,6 +74,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name");
                 ViewBag.id_role = new SelectList(db.Role, "id", "role_name");
@@ -96,6 +100,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 if (ModelState.IsValid)
                 {
@@ -124,6 +130,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // GET: Admin/RoleMenus/Edit/5
         public ActionResult Edit(int? id)
         {
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
@@ -158,6 +166,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
                 if (ModelState.IsValid)
@@ -185,6 +195,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
                 if (id == null)
@@ -244,6 +256,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 ViewBag.ListMenu = serviceMenu.MenuItem();
@@ -258,6 +272,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 int count = 1;
                 List<int> listIDlist = new List<int>();

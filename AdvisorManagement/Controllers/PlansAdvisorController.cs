@@ -24,6 +24,8 @@ namespace AdvisorManagement.Controllers
         // GET: PlansAdvisor
         public ActionResult Index()
         {
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             var role = serviceStd.getRoles(User.Identity.Name);
             ViewBag.role = role;
@@ -49,6 +51,8 @@ namespace AdvisorManagement.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.role = Session["role"];
             Session["id"] = id;
