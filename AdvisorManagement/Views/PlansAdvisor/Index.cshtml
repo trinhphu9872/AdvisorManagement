@@ -71,9 +71,12 @@
                             <tr>
                                 <th style="text-align:center">STT</th>
                                 <th style="text-align:center">Nội dung</th>
-                                <th style="text-align:center">HK1</th>
-                                <th style="text-align:center">HK2</th>
-                                <th style="text-align:center">HK3</th>
+                                @if (ViewBag.role == "Advisor")
+                                {
+                                    <th style="text-align:center">HK1</th>
+                                    <th style="text-align:center">HK2</th>
+                                    <th style="text-align:center">HK3</th>
+                                }
                                 <th style="text-align:center">Mô tả công việc</th>
                                 <th style="text-align:center">Tài nguyên chuẩn bị</th>
                                 <th style="text-align:center">Ghi chú</th>
@@ -132,7 +135,7 @@
                                             </td>
                                         }
                                     }
-                                    else
+                                    @*else
                                     {
                                         <td>
                                             @Html.DisplayFor(modelItem => item.hk1)
@@ -143,7 +146,7 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.hk3)
                                         </td>
-                                    }
+                                    }*@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.describe)
                                     </td>
