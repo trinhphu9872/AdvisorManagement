@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+}
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/variable-pie.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/cylinder.js"></script>
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-0">Dashboard - VLU</h5>
+        </div>
+        <div class="page-breadcrumb">
+            <div class="row">
+
+                <div class="col-12 d-flex no-block align-items-center">
+
+
+                    <div class="ms-auto text-end">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/Home/Index">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Dashboard
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-6">
+        <figure class="highcharts-figure text-center">
+            <div id="ChartStudentAndAdvisor"></div>
+            <p class="highcharts-description">
+                Tổng số sinh viên và cố vấn học tập
+            </p>
+        </figure>
+    </div>
+    <div class="col-6 text-center">
+        <figure class="highcharts-figure">
+            <div id="FileManager"></div>
+            <p class="highcharts-description">
+                Tổng minh chứng của cố vấn
+            </p>
+        </figure>
+    </div>
+    <div class="col-6 text-center">
+        <figure class="highcharts-figure">
+            <div id="chartClass"></div>
+            <p class="highcharts-description">
+                Tổng lớp cố vấn nhận trong hệ thống
+            </p>
+        </figure>
+    </div>
+</div>
+
+<script src="~/Dist/chart/SumClass.js"></script>
+<script src="~/Dist/chart/FileManager.js"></script>
+<script src="~/Dist/chart/SumUser.js"></script>
