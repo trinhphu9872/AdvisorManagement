@@ -86,14 +86,14 @@
                                                 @item.menuName
                                             </td>
                                             <td>
-                                                <a href="@Url.Action("Details", "RoleMenus", new { id = item.id })" id="btnDelete" class="btn btn-success"
+                                                <a name="detail"  class="btn btn-success"
                                                    style="margin-bottom: 5px; margin-left: 5px;">
                                                     Chi tiết <i class="fas fa-tasks"></i>
                                                 </a>
                                                 <a name="update" id="update" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
                                                     Sửa <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="@Url.Action("Delete", "RoleMenus", new { id = item.id })" id="btnDelete" class="btn btn-danger"
+                                                <a name="delete" id="btnDelete" class="btn btn-danger"
                                                    style="margin-bottom: 5px; margin-left: 5px;">
                                                     XÓA <i class="fas fa-trash-alt"></i>
                                                 </a>
@@ -211,15 +211,15 @@
                     <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                         <div class="col-md-4"><span>Vai trò:</span></div>
                         <div class="col-md-8">
-                            <select id="id_role" name="id_role" style=" width: 155px;
+                            <select id="edit_id_role" name="edit_id_role" style=" width: 155px;
                                                                 height: 35px; text-align: center; font-size: 15px;">
 
                                 @foreach (var item in rolelist)
                                 {
 
-                                   
-                                     <option value="@item.id">@item.role_name</option>
-                                   
+
+                                    <option value="@item.id">@item.role_name</option>
+
 
 
                                 }
@@ -233,26 +233,60 @@
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                         <div class="col-md-4"><span>Tên menu có trong hệ thống:</span></div>
                         <div class="col-md-8">
-                            <select id="id_menu" name="id_menu" style=" width: 155px;
+                            <select id="edit_id_menu" name="edit_id_menu" style=" width: 155px;
                                                                     height: 35px; text-align: center; font-size: 15px;">
 
-                                    @foreach (var item in menulist)
-                                    {
+                                @foreach (var item in menulist)
+                                {
 
-                                        <option  value="@item.id">@item.menu_name</option>
-
-
-                                    }
+                                    <option value="@item.id">@item.menu_name</option>
 
 
-                             </select>
-                         
+                                }
+
+
+                            </select>
+
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     <button id="btnEdit" class="btn btn-primary" type="submit">Sửa</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="modalDetail" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Xem menu phân quyền</h4>
+                </div>
+                <input hidden id="id_detailrolemenu" value="" />
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class="col-md-4"><span>Vai trò:</span></div>
+                        <div class="col-md-8">
+                            <input  id="detail_role"  type="text" class="form-control" disabled="disabled"/>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Tên menu có trong hệ thống:</span></div>
+                        <div class="col-md-8">
+                            <input id="detail_menu"  type="text" class="form-control"disabled="disabled" />
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="HideModalDtail()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 </div>
 
             </div>
@@ -269,7 +303,6 @@
     <!-- End Right sidebar -->
     <!-- ============================================================== -->
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 <script>
 
@@ -312,7 +345,9 @@
         function HideModal() {
             $("#modalCreate").modal("hide");
         }
-
+    function HideModalDtail() {
+        $("#modalDetail").modal("hide");
+    }
          //Lấy thông tin người dùng để cập nhật
         $(document).on('click', "a[name=update]", function () {
             let id_title = $(this).closest('tr').attr('id');
@@ -324,17 +359,15 @@
                 },
                 success: function (data) {
                     if (data.success == true) {
-                        
-                        
+
+                        $('#modalUpdate').modal("show");
                         /*$("#id_menu" + find + " option[value='" + data.R.id_menu + "']").attr('selected', 'selected');*/
                         /*('#id_menu').find("option:selected").val(data.R.id_menu)*/
-                     /*   $(document).ready(function () {*/
+/*                        $('select[name="id_menu"]').val(data.R_id_menu);*/
+                        $('select[name="edit_id_menu"]').val(data.R_id_menu).prop('selected', true);
+                        $('select[name="edit_id_role"]').val(data.R_id_role);
 
-                            $('select[name="id_menu"]').val(data.R_id_menu);
-                            $('select[name="id_role"]').val(data.R_id_role);
-                            
-                       /* });*/
-                        $('#modalUpdate').modal("show");
+
                         $('#id_rolemenu').val(data.R_id);
                         /*$('#modalUpdate').modal("show");*/
                     } else {
@@ -344,18 +377,18 @@
 
             })
         })
-         //Cập nhật thông tin người dùng
+
+    $(document).ready(function () {     //Cập nhật thông tin người dùng
         $('#btnEdit').click(function () {
-            let id = $('#id_rolemenu').val();
+            var id_role = $("#edit_id_role").val();
+            var id_menu = $("#edit_id_menu").val();
+            var id = $('#id_rolemenu').val();
             //$(document).ready(function () {
 
             //    let id_menu =$('select[name="id_menu"]').val();
             //    let id_role = $('select[name="id_role"]').val();
 
             //});
-            var data = $("#id_menu :selected").val();
-            let id_menu = $('#id_menu').val();
-            let id_role = $('#id_role').val();
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("UpdateRolMenu", "RoleMenus")',
@@ -363,7 +396,6 @@
                         id: id,
                         id_menu: id_menu,
                         id_role: id_role,
-                        
                     },
                     success: function (data) {
                             if (data.success == true) {
@@ -377,6 +409,7 @@
                 })
 
         })
+    })
 
         function HideModalUp() {
             $("#modalUpdate").modal("hide");
@@ -385,7 +418,7 @@
         function HideModalCopy() {
             $("#modalCopy").modal("hide");
         }
-
+    //  thên menu
          $(document).ready(function () {
         $('#btnUpload').click(function () {
             var formData = new FormData();
@@ -415,13 +448,35 @@
              })
         })
          })
+    //xem chi tiet
+    $(document).on('click', "a[name=detail]", function () {
+            let id_iddetail = $(this).closest('tr').attr('id');
+            $.ajax({
+                url:'@Url.Action("Details", "RoleMenus")' ,
+                type: 'get',
+                data: {
+                    id: id_iddetail
+                },
+                success: function (data) {
+                    if (data.success == true) {
+                        $('#detail_menu').val(data.R_id_menu);
+                        $('#detail_role').val(data.R_id_role);
+                        $('#id_detailrolemenu').val(data.R_id);
+                        $('#modalDetail').modal("show");
+                    } else {
+                        alert(data.message);
+                    }
+                }
+
+            })
+        })
 
          //Sự kiện xóa
-        $(document).on('click', "button[name=delete]", function () {
+    $(document).on('click', "a[name=delete]", function () {
         let id_std = $(this).closest('tr').attr('id');
-        if (confirm("Bạn thực sự muốn xóa sinh viên này?")) {
+        if (confirm("Bạn thực sự muốn xóa menu này?")) {
             $.ajax({
-                url: '@Url.Action("Delete", "PlansAdvisor")',
+                url: '@Url.Action("Delete", "RoleMenus")',
                 type: 'POST',
                 data: {
                     id: id_std
