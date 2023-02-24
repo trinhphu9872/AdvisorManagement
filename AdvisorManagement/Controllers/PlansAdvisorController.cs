@@ -36,7 +36,7 @@ namespace AdvisorManagement.Controllers
             var year = servicePlan.getYear();
             ViewBag.listYear = db.PlanAdvisor.Where(x => x.year < year).DistinctBy(x=>x.year).ToList();
             Session["yearNow"] = year;
-            return View(db.PlanAdvisor.ToList().OrderBy(x=>x.number_title));
+            return View(db.PlanAdvisor.Where(x=>x.year == year).ToList().OrderBy(x=>x.number_title));
         }
 
         // GET: PlansAdvisor/Details/5
@@ -301,6 +301,15 @@ namespace AdvisorManagement.Controllers
             {
                 return Json(new { success = false, message = "Copy thất bại" }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [HttpGet]
+        public ActionResult GetData(int year)
+        {
+            var datos = db.PlanAdvisor.Where(x=>x.year == year).ToList().OrderBy(x => x.number_title);
+
+            return Json(new {data = datos }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }
