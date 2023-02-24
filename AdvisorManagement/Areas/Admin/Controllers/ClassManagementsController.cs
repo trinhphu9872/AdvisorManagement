@@ -38,6 +38,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 var listClass = db.VLClass.ToList();
+                ViewBag.Advisor = db.Advisor.ToList();
                 ViewBag.listClass = listClass;
                 Session["listClass"] = listClass;
                 ViewBag.nameUser = db.AccountUser.ToList();
@@ -115,19 +116,19 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         //}
 
         // GET: Admin/VLClasses/Create
-        public ActionResult Create()
-        {
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+        //public ActionResult Create()
+        //{
+        //    ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+        //    ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+        //    ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
-            ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
-            ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
-            Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
-            return View();
-        }
+        //    ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
+        //    ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
+        //    ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
+        //    Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
+        //    return View();
+        //}
 
         // POST: Admin/VLClasses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -136,17 +137,23 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,update_time,semester_name")] VLClass vLClass)
         {
-           
+            db.VLClass.Add(vLClass);
+            db.SaveChanges();
+            return Json(new { success = true, message = "Thêm thành công" });
 
-            if (ModelState.IsValid)
-            {
-                db.VLClass.Add(vLClass);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
-            ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
-            return View(vLClass);
+            //ViewBag.class_code = new SelectList(db.VLClass, "id","class",)
+
+            //if (ModelState.IsValid)
+            //{
+            //    db.VLClass.Add(vLClass);
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+
+            //ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
+            //return View(vLClass);
+            
         }
 
         // GET: Admin/VLClasses/Delete/5

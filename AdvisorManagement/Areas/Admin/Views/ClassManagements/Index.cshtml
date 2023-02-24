@@ -6,6 +6,8 @@
 
     IEnumerable<AccountUser> nameUser = ViewBag.nameUser as IEnumerable<AccountUser>;
     IEnumerable<Semester> hocky = ViewBag.hocky as IEnumerable<Semester>;
+    IEnumerable<VLClass> listClass= ViewBag.listClass as IEnumerable<VLClass>;
+    IEnumerable<Advisor> advisor = ViewBag.Advisor as IEnumerable<Advisor>;
 }
 
 
@@ -24,7 +26,7 @@
                     <div class="row">
 
                         <div class="col-12 d-flex no-block align-items-center">
-                            <a href="@Url.Action("create", "ClassManagements",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                            <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                 Thêm<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                             <a onclick="ImportExcelFile()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
@@ -34,15 +36,15 @@
                                 Export<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                             @*<div class="ms-auto text-end">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Library
-                    </li>
-                </ol>
-            </nav>
-        </div>*@
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">
+                                                Library
+                                            </li>
+                                        </ol>
+                                    </nav>
+                                </div>*@
                         </div>
                     </div>
 
@@ -66,8 +68,8 @@
                         </select>
                     </div>
                     @*<div class="searchbar">
-                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá"
-                    </div>*@
+                            <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá"
+                        </div>*@
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
@@ -76,7 +78,7 @@
                                     <th width="250px">Lớp</th>
                                     <th>CVHT</th>
                                     <th>Học kỳ</th>
-                     
+
                                     <th>Hoạt động</th>
 
 
@@ -109,7 +111,7 @@
                                             }
 
                                             <td>@item.semester_name</td>
-                                    
+
                                             <td>
                                                 <a href="@Url.Action("Details", "ClassManagements",new {id = item.id})" id="btnDelete" class="btn btn-success"
                                                    style="margin-bottom: 5px; margin-left: 5px;">
@@ -130,6 +132,132 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalCreate" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm Lớp</h4>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class="col-md-4"><span>Học kỳ</span></div>
+                        <div class="col-md-8">
+                            @if (ViewBag.error != null)
+                            {
+                                var Error = (string)ViewBag.error;
+
+                                @Html.Raw(Error)
+                            }
+                            <select id="semester_name" name="semestername" style=" width: 155px;
+                                                                height: 35px; text-align: center; font-size: 15px;">
+
+                                @foreach (var item in hocky)
+                                {
+
+                                    <option value="@item.semester_name - @item.scholastic">@item.semester_name - @item.scholastic</option>
+
+
+                                }
+
+
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Lớp học</span></div>
+                        <div class="col-md-8">
+                            <select id="class_code" name="classcode" style=" width: 155px;
+                                                                height: 35px; text-align: center; font-size: 15px;">
+
+                                @foreach (var item in listClass)
+                                {
+
+                                    <option value="@item.id">@item.class_code</option>
+
+
+                                }
+
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Giảng viên</span></div>
+                        <div class="col-md-8">
+                            <select id="advisor_code" name="advisorcode" style=" width: 155px;
+                                                                height: 35px; text-align: center; font-size: 15px;">
+                                @foreach (var item in advisor)
+                                {
+                                    //if (Model.advisor_code == item.advisor_code)
+                                    //{
+                                    foreach (var itemUser in nameUser)
+                                    {
+                                        if (item.advisor_code.Equals(itemUser.user_code))
+                                        {
+
+                                            <option selected value="@item.advisor_code">@itemUser.user_name</option>
+
+                                        }
+                                    }
+
+                                }
+                              
+
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--<div class="form-group">
+                    <label>Chọn giảng viên:</label>
+
+                    <select name="advisor_code" style=" width: 155px;
+                                                                height: 35px; text-align: center; font-size: 15px;" , required="true">-->
+
+                      
+
+
+                  
+                @* <div class="">
+            <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                <div class="col-md-4"><span>HK1:</span></div>
+                <div class="col-md-8">
+                    <input id="txtHk1" type="text" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                <div class="col-md-4"><span>HK2:</span></div>
+                <div class="col-md-8">
+                    <input id="txtHk2" type="text" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                <div class="col-md-4"><span>HK3:</span></div>
+                <div class="col-md-8">
+                    <input id="txtHk3" type="text" class="form-control" />
+                </div>
+            </div>
+        </div>*@
+                <div class="modal-footer">
+                    <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnUpload" class="btn btn-primary" type="submit">Thêm</button>
                 </div>
             </div>
         </div>
@@ -304,6 +432,7 @@
         });
     });
 
+
     function ImportExcelFile() {
         $("#myModal").modal("show");
     }
@@ -333,6 +462,51 @@
                 }
             })
         })
-    }) 
+    })
     $("#zero_config").DataTable();
+
+    function CreateTitle() {
+        $("#modalCreate").modal("show");
+    }
+    function HideModal() {
+        $("#modalCreate").modal("hide");
+    }
+
+
+    $(document).ready(function () {
+        $('#btnUpload').click(function () {
+            var formData = new FormData();
+            var classcode = $("#class_code option:selected").text();
+            var advisorcode = $("#advisor_code option:selected").val();
+            var semestername = $("#semester_name option:selected").text();
+           
+
+            formData.append("class_code", classcode);
+            formData.append("advisor_code", advisorcode);           
+            formData.append("semester_name", semestername);
+
+           /* formData.append("HK1", HK1);
+            formData.append("HK2", HK2);
+            formData.append("HK3", HK3);*/
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Create", "ClassManagements")',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success == false) {
+                        alert(data.message);
+                    } else {
+                        $("#modalCreate").modal("hide");
+                        alert(data.message);
+                        location.reload();
+                    }
+                }
+             })
+        })
+         })
+
+
+
 </script>
