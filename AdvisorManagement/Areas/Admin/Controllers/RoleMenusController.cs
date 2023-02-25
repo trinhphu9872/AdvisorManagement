@@ -24,6 +24,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                ViewBag.id_role = db.Role.ToList();
+                ViewBag.id_menu = db.Menu.ToList();
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
@@ -40,13 +42,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         // GET: Admin/RoleMenus/Details/5
+        [HttpGet]
         public ActionResult Details(int? id)
         {
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
+            try
             {
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -57,38 +60,21 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     return HttpNotFound();
                 }
 
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                return View(roleMenu);
-
+                return Json(new { success = true, R_id_menu = roleMenu.Menu.menu_name, R_id_role = roleMenu.Role.role_name, R_id = roleMenu.id, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            //}
 
         }
 
-        // GET: Admin/RoleMenus/Create
-        public ActionResult Create()
-        {
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
-                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-                ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name");
-                ViewBag.id_role = new SelectList(db.Role, "id", "role_name");
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                
-
-            return View();
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
-            }
-        }
 
         // POST: Admin/RoleMenus/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -98,61 +84,53 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public ActionResult Create([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
+            //    ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            //    ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+            //    ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            //    if (ModelState.IsValid)
+            //    {
+            if (roleMenu.id_role == 1)
             {
-                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-                if (ModelState.IsValid)
-                {
-                    if(roleMenu.id_role == 1)
-                    {
-                        ViewBag.Error = "Sai phan quyen";
-                        return RedirectToAction("Create");
-                    }
-                    db.RoleMenu.Add(roleMenu);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_menu);
-                ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_role);
+                ViewBag.Error = "Sai phan quyen";
+                return Json(new { success = false, message = "Sai phan quyen" });
 
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                return View(roleMenu);
             }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
-            }
-       
+            db.RoleMenu.Add(roleMenu);
+            db.SaveChanges();
+            return Json(new { success = true, message = "Thêm thành công" });
+
+            //}
+            //ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_menu);
+            //ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_role);
+
+            //ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            //    return View(roleMenu);
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            //}
+
         }
 
         // GET: Admin/RoleMenus/Edit/5
-        public ActionResult Edit(int? id)
+        [HttpGet]
+        public ActionResult Update(int id)
         {
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            try
+            {
+                var roleMenu = db.RoleMenu.FirstOrDefault(x => x.id == id);
+                var menu = db.Menu.Find(roleMenu.id_menu);
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                RoleMenu roleMenu = db.RoleMenu.Find(id);
-                if (roleMenu == null)
-                {
-                    return HttpNotFound();
-                }
-                ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name", roleMenu.id_menu);
-                ViewBag.id_role = new SelectList(db.Role, "id", "role_name", roleMenu.id_role);
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                return View(roleMenu);
+                //ViewBag.role = roleMenu.id_role;
+                //ViewBag.menu = roleMenu.id_menu;
+                return Json(new { success = true, R_id_menu = roleMenu.id_menu, R_id_role = roleMenu.id_role, R_id = roleMenu.id, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -161,85 +139,46 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 
-        public ActionResult Edit([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
+        public ActionResult UpdateRolMenu([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
+            if (ModelState.IsValid)
             {
-                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
-                if (ModelState.IsValid)
-                {
-                    db.Entry(roleMenu).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                ViewBag.id_menu = new SelectList(db.Menu, "id", "menu_name", roleMenu.id_menu);
-                ViewBag.id_role = new SelectList(db.Role, "id", "role_name", roleMenu.id_role);
-
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                return View(roleMenu);
+                db.Entry(roleMenu).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
-            }
+            return Json(new { success = false, message = "Vui lòng nhập đầy đủ các trường thông tin" }, JsonRequestBehavior.AllowGet);
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            //}
 
         }
 
-        // GET: Admin/RoleMenus/Delete/5
-        public ActionResult Delete(int? id)
-        {
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
-                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                RoleMenu roleMenu = db.RoleMenu.Find(id);
-                if (roleMenu == null)
-                {
-                    return HttpNotFound();
-                }
-
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                return View(roleMenu);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
-            }
-        
-
-
-        }
 
         // POST: Admin/RoleMenus/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
 
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            try
             {
                 RoleMenu roleMenu = db.RoleMenu.Find(id);
                 db.RoleMenu.Remove(roleMenu);
                 db.SaveChanges();
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Xóa thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+                return Json(new { success = false, message = "Xóa thất bại" }, JsonRequestBehavior.AllowGet);
             }
+
         }
 
         protected override void Dispose(bool disposing)
@@ -294,7 +233,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     count++;
                 }
                 return Json(true, JsonRequestBehavior.AllowGet);
-                }
+            }
             else
             {
                 return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
