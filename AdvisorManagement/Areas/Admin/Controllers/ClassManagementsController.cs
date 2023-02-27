@@ -38,6 +38,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 var listClass = db.VLClass.ToList();
+                ViewBag.Advisor = db.Advisor.ToList();
                 ViewBag.listClass = listClass;
                 Session["listClass"] = listClass;
                 ViewBag.nameUser = db.AccountUser.ToList();
@@ -52,40 +53,53 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+        [HttpGet]
         public ActionResult Details(int? id)
         {
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            try
             {
                 var detailClass = db.VLClass.Find(id);
 
-
-                //List<string> AV = new List<string>();
-                //for(int i =0; i<db.AccountUser.Count();i++)
-                //{
-                //    var user = db.AccountUser.Find(i);
-                //    var advisor = db.Advisor.Find(user.user_code);
-                //    if (advisor !=null)
-                //    {
-                //        AV.Add(user.username);
-                //    }
-
-                //}
-                //ViewBag.Advisor = new SelectList(AV);
-                ViewBag.Advisor = db.Advisor.ToList();
-                ViewBag.nameUser = db.AccountUser.ToList();
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-                return View(detailClass);
+                //ViewBag.role = roleMenu.id_role;
+                //ViewBag.menu = roleMenu.id_menu;
+                return Json(new { success = true, R = detailClass.id, R_semester = detailClass.semester_name, R_advisor = detailClass.advisor_code, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
+            //ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            //ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+            //ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            //ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
+            //    var detailClass = db.VLClass.Find(id);
+
+
+            //    //List<string> AV = new List<string>();
+            //    //for(int i =0; i<db.AccountUser.Count();i++)
+            //    //{
+            //    //    var user = db.AccountUser.Find(i);
+            //    //    var advisor = db.Advisor.Find(user.user_code);
+            //    //    if (advisor !=null)
+            //    //    {
+            //    //        AV.Add(user.username);
+            //    //    }
+
+            //    //}
+            //    //ViewBag.Advisor = new SelectList(AV);
+            //    ViewBag.Advisor = db.Advisor.ToList();
+            //    ViewBag.nameUser = db.AccountUser.ToList();
+            //    ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
+            //    return View(detailClass);
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
         //// get create class
         //public ActionResult Create()
@@ -115,19 +129,19 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         //}
 
         // GET: Admin/VLClasses/Create
-        public ActionResult Create()
-        {
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+        //public ActionResult Create()
+        //{
+        //    ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+        //    ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+        //    ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
-            ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
-            ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
-            Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
-            return View();
-        }
+        //    ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
+        //    ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
+        //    ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
+        //    Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
+        //    return View();
+        //}
 
         // POST: Admin/VLClasses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -136,17 +150,23 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,update_time,semester_name")] VLClass vLClass)
         {
-           
+            db.VLClass.Add(vLClass);
+            db.SaveChanges();
+            return Json(new { success = true, message = "Thêm thành công" });
 
-            if (ModelState.IsValid)
-            {
-                db.VLClass.Add(vLClass);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
-            ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
-            return View(vLClass);
+            //ViewBag.class_code = new SelectList(db.VLClass, "id","class",)
+
+            //if (ModelState.IsValid)
+            //{
+            //    db.VLClass.Add(vLClass);
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+
+            //ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
+            //return View(vLClass);
+
         }
 
         // GET: Admin/VLClasses/Delete/5
@@ -180,60 +200,64 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         // HTTP GET
-        public ActionResult EditClass(int id )
+        [HttpGet]
+        public ActionResult EditClass(int id)
         {
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+           
+            try
             {
                 var detailClass = db.VLClass.Find(id);
 
-
-                //List<string> AV = new List<string>();
-                //for(int i =0; i<db.AccountUser.Count();i++)
-                //{
-                //    var user = db.AccountUser.Find(i);
-                //    var advisor = db.Advisor.Find(user.user_code);
-                //    if (advisor !=null)
-                //    {
-                //        AV.Add(user.username);
-                //    }
-
-                //}
-                //ViewBag.Advisor = new SelectList(AV);
-                ViewBag.Advisor = db.Advisor.ToList();
-                ViewBag.nameUser = db.AccountUser.ToList();
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-                return View(detailClass);
+                //ViewBag.role = roleMenu.id_role;
+                //ViewBag.menu = roleMenu.id_menu;
+                return Json(new { success = true, R = detailClass.id,R_semester=detailClass.semester_name,R_advisor=detailClass.advisor_code, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
+
+            //List<string> AV = new List<string>();
+            //for(int i =0; i<db.AccountUser.Count();i++)
+            //{
+            //    var user = db.AccountUser.Find(i);
+            //    var advisor = db.Advisor.Find(user.user_code);
+            //    if (advisor !=null)
+            //    {
+            //        AV.Add(user.username);
+            //    }
+
+            //}
+            //ViewBag.Advisor = new SelectList(AV);
+            //ViewBag.Advisor = db.Advisor.ToList();
+            //ViewBag.nameUser = db.AccountUser.ToList();
+            //ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
         // http post edit class
         [HttpPost]
-        public ActionResult EditClass(VLClass cdeatilclass)
+        public ActionResult UpdateClass(VLClass cdeatilclass)
         {
-           
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
+
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
                 db.Entry(cdeatilclass).State = EntityState.Modified;
                 db.SaveChanges();
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
         }
+        //}
+        //else
+        //{
+        //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //}
+    
 
         [HttpPost]
         public ActionResult ImportClass(HttpPostedFileBase postedfile)
@@ -335,19 +359,19 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 using (ExcelPackage pck = new ExcelPackage())
                 {
                     var ws = pck.Workbook.Worksheets.Add("Danh sách lớp");
-             
+
                     ws.Cells["A1"].Value = "STT";
                     ws.Cells["B1"].Value = "Mã lớp";
                     ws.Cells["C1"].Value = "Tên cố vấn";
                     ws.Cells["D1"].Value = "Học kỳ";
- 
+
                     var i = 1;
                     int rowStart = 2;
                     foreach (var item in listStudent)
                     {
                         ws.Cells[string.Format("A{0}", rowStart)].Value = i;
                         ws.Cells[string.Format("B{0}", rowStart)].Value = item.class_code;
-                        if(item.advisor_code != null)
+                        if (item.advisor_code != null)
                         {
                             foreach (var itemUser in name)
                             {
@@ -359,7 +383,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                             }
                         }
                         ws.Cells[string.Format("D{0}", rowStart)].Value = item.semester_name;
-               
+
                         rowStart++;
                         i++;
                     }
