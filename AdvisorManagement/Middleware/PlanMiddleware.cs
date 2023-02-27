@@ -66,5 +66,27 @@ namespace AdvisorManagement.Middleware
             }
             return year;
         }
+
+        public string getDecribe(string decribe)
+        {
+            string chuoi = decribe;
+            var split = chuoi.Split('-');
+            var result = "";
+            if (split.Length > 1)
+            {
+                for (var i = 1; i < split.Length; i++)
+                {
+                    result += "\n" + "- " + split[i];
+                    result.Trim();
+                }
+                return "'" + result.Trim();
+            }
+            else
+            {
+                result = decribe;
+                return result;
+            }
+
+        }
     }
 }

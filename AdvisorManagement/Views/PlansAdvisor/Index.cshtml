@@ -27,13 +27,23 @@
                                 <a onclick="CreateTitle()" id="create" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Tạo đề mục<i style="margin-left:5px" class="fas fa-plus"></i>
                                 </a>
-                                @*<a onclick="CopyTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                        Copy Template<i class="fas fa-plus"></i>
-                                    </a>*@
                             </div>
                         </div>
                     </div>
                 }
+                else
+                {
+                    <div class="page-breadcrumb">
+                        <div class="row">
+                            <div class="col-12 d-flex no-block align-items-center">
+                                <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                    Export template <i class="fas fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
             </div>
 
             <div class="card">
@@ -51,8 +61,11 @@
                                     <option value="@item.year">@item.year</option>
                                 }
                             </select>
+                            <a onclick="ExportTemplate()" class="btn btn-success" style=" margin-left: 5px; width: 150px;">
+                                Export template <i class="fas fa-plus"></i>
+                            </a>
                             <button hidden id="copy" name="copy" class="btn btn-success" style="margin-left: 5px; width: 150px; height: 35px">
-                                Copy Template <i class="fas fa-copy"></i>
+                                Copy template <i class="fas fa-copy"></i>
                             </button>
                         </div>
                     }
@@ -243,7 +256,7 @@
                             <input id="up_Content" type="text" class="form-control" />
                         </div>
                     </div>
-                </div>             
+                </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                         <div class="col-md-4"><span>Mô tả:</span></div>
@@ -293,7 +306,7 @@
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 <script>
-         //Lấy data khi vừa vào web
+        //Lấy data khi vừa vào web
          var dataTable = $("#zero_config").DataTable({
          'ajax': {
                 'url': '@Url.Action("GetData", "PlansAdvisor")',
@@ -319,7 +332,6 @@
                  },
              ]
         });
-
         //filter data khi chọn năm-->-->-->-->
         function myFunction() {
             var input = document.getElementById("semester");
@@ -330,7 +342,6 @@
                 selectYearNow()
             }
         }
-
         function seleclYear() {
             $("#zero_config").dataTable().fnDestroy();
              $("#zero_config").DataTable({
@@ -352,16 +363,14 @@
                      { 'data': 'source', 'width': '25%' },
                      { 'data': 'note', 'width': '30%' },
                      {
-                         'data': 'id', 'visible': false, 'render': function (data) {
+                         'data': 'id', /*'visible': false,*/ 'render': function (data) {
                                  document.getElementById("copy").hidden = false;
-                                 document.getElementById("action").hidden = true;
-                                 return ''
+                                 return '<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>'
                          }
                      },
                      ],
              });
         }
-
         function selectYearNow() {
             $("#zero_config").dataTable().fnDestroy();
              $("#zero_config").DataTable({
@@ -558,5 +567,33 @@
             })
         }
         })
+
+        //Export template
+        function ExportTemplate() {
+            input = document.getElementById("semester");
+            let id = input.value.toUpperCase();
+            $.ajax({
+                url: '@Url.Action("ExportTemplate", "PlansAdvisor")',
+                type: 'POST',
+                data: {
+                    year: id
+                },
+                /*contentType: "application/json; charset=utf-8", */
+                success: function (data) {
+                    var bytes = new Uint8Array(data.FileContents);
+                    var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var downloadUrl = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = downloadUrl;
+                    a.download = data.FileDownloadName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+                error: function (err) {
+                    alert(err);
+                },
+            })
+        }
 </script>
 
