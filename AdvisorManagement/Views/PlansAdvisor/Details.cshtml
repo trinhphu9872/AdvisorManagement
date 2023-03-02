@@ -1,10 +1,11 @@
-﻿@model AdvisorManagement.Models.PlanAdvisor
+﻿@model AdvisorManagement.Models.PlanClass
 @using AdvisorManagement.Models;
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
     IEnumerable<Semester> listSemester = ViewBag.hocky as IEnumerable<Semester>;
+    var id_class = (int)ViewBag.id_class;
 }
 <div class="container-fluid">
     <!-- ============================================================== -->
@@ -99,7 +100,7 @@
         </div>
     </div>
     <p>
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Back to List", "DetailClass", new {id = id_class })
     </p>
 
     <div id="myModal" class="modal fade" role="dialog">

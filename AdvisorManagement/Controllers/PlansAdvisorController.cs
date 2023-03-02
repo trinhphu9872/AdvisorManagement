@@ -15,6 +15,7 @@ using OfficeOpenXml;
 using System.Web.UI.WebControls;
 using OfficeOpenXml.Style;
 using System.Drawing;
+using System.Text;
 
 namespace AdvisorManagement.Controllers
 {
@@ -39,33 +40,13 @@ namespace AdvisorManagement.Controllers
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             var year = servicePlan.getYear();
             ViewBag.listYear = db.PlanAdvisor.Where(x => x.year < year).DistinctBy(x=>x.year).ToList();
+            var listClass = db.VLClass.OrderBy(x=>x.semester_name).ToList();
+            ViewBag.listClass = listClass;
             Session["yearNow"] = year;
+            var listClassAdvisor = serviceStd.getClass(User.Identity.Name);
+            ViewBag.listClassAdvisor = listClassAdvisor;
             return View(db.PlanAdvisor.Where(x=>x.year == year).ToList().OrderBy(x=>x.number_title));
-        }
-
-        // GET: PlansAdvisor/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PlanAdvisor titlePlan = db.PlanAdvisor.Find(id);
-            if (titlePlan == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.role = Session["role"];
-            Session["id"] = id;
-            var listProof = servicePlan.getListProof(User.Identity.Name, (int)id);
-            ViewBag.plan = listProof;
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            ViewBag.hocky = db.Semester.DistinctBy(x=>x.semester_name).ToList();
-            return View(titlePlan);
-        }
+        }       
 
         // GET: PlansAdvisor/Create
         public ActionResult Create()
@@ -185,7 +166,6 @@ namespace AdvisorManagement.Controllers
                 plan.describe= describe;
                 plan.source= source;
                 plan.note = note;
-                var i = describe.Length;
                 db.PlanAdvisor.Add(plan);
                 db.SaveChanges();
                 return Json(new { success = true, message = "Thêm thành công" });
@@ -533,6 +513,414 @@ namespace AdvisorManagement.Controllers
             {
                 throw;
             }
+        }
+
+        [HttpPost]
+        public ActionResult AssignmentTemplate(int? id_class, int year)
+        {
+            var templateClass = db.PlanClass.Where(x => x.year == year).Where(y => y.id_class == id_class).ToList();
+            foreach (var item in templateClass)
+            {
+                var temp = db.PlanClass.Find(item.id);
+                db.PlanClass.Remove(temp);
+                db.SaveChanges();
+            }
+
+            var template = db.PlanAdvisor.Where(x=>x.year == year).OrderBy(x=>x.number_title).ToList();
+            PlanClass planClass = new PlanClass();
+            foreach ( var item in template)
+            {
+                planClass.year = item.year;
+                planClass.number_title = item.number_title;
+                planClass.content = item.content;
+                planClass.describe = item.describe;
+                planClass.source = item.source;
+                planClass.note = item.note;
+                planClass.id_class = id_class;
+                db.PlanClass.Add(planClass);
+                db.SaveChanges();
+            }        
+            return Json(new { success = true, message = "Phân quyền thành công" }, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: PlansAdvisor/Details/5
+        public ActionResult DetailClass(int? id)
+        {
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            var role = serviceStd.getRoles(User.Identity.Name);
+            ViewBag.role = role;
+            Session["role"] = role;
+            var id_account = serviceStd.getID(User.Identity.Name);
+            ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            var year = servicePlan.getYear();
+            Session["yearNow"] = year;
+            Session["id_class"] = id;
+            return View(db.PlanClass.Where(x =>x.id_class == id).Where(y=>y.year == year).ToList().OrderBy(x => x.number_title));
+        }
+
+        [HttpGet]
+        public ActionResult GetDataAdvisor(int year, int id_class)
+        {
+            var datos = db.PlanClass.Where(x => x.id_class == id_class).Where(y => y.year == year).ToList().OrderBy(x => x.number_title);
+            return Json(new { data = datos , success = false}, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult UpdateAdvisor(int id)
+        {
+            try
+            {
+                var title = db.PlanClass.Find(id);
+                return Json(new { success = true, T = title, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpdateTittleAdvisor(int id, int numTitle, string content, string hk1, string hk2, string hk3, string describe, string source, string note)
+        {
+            try
+            {
+                if (numTitle != null && content != "" && describe != "" && source != "" )
+                {
+                    var title = db.PlanClass.Find(id);
+                    title.number_title = numTitle;
+                    title.content = content;
+                    title.hk1 = hk1;
+                    title.hk2 = hk2;
+                    title.hk3 = hk3;
+                    title.describe = describe;
+                    title.source = source;
+                    title.note = note;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập đầy đủ các trường thông tin" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Cập nhật thất bại" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult CreateTitleAdvisor(int idtitle, string content, /*string HK1, string HK2, string HK3,*/ string describe, string source, string note, int year, int id_class)
+        {
+
+            try
+            {
+                if (content != "" && content != "" && describe != "" && source != "")
+                {
+                    PlanClass plan = new PlanClass();
+                    plan.number_title = idtitle;
+                    plan.content = content;
+                    plan.year = year;
+                    plan.describe = describe;
+                    plan.source = source;
+                    plan.note = note;
+                    plan.id_class = id_class;
+                    db.PlanClass.Add(plan);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Thêm thành công" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập đầy đủ trường dữ liệu" });
+                }
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Vui lòng chọn file excel hoặc word" });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteTitleAdvisor(int id)
+        {
+            try
+            {
+                var title = db.PlanClass.Find(id);
+                db.PlanClass.Remove(title);
+                db.SaveChanges();
+                return Json(new { success = true, message = "Xóa thành công" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Xóa thất bại" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ExportTemplateAdvisor(int year, int id_class)
+        {
+            var listPlan = db.PlanClass.Where(x => x.year == year).Where(y=>y.id_class == id_class).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
+            var class_code = db.VLClass.Find(id_class).class_code;
+            var advisor_code = db.VLClass.Find(id_class).advisor_code;
+            var user_name = db.AccountUser.FirstOrDefault(x => x.user_code == advisor_code).user_name;
+            var name_advisor = servicePlan.ConvertToUnsign(user_name);
+            List<PlanClass> template = (List<PlanClass>)listPlan;
+            try
+            {
+                using (ExcelPackage pck = new ExcelPackage())
+                {
+                    pck.Workbook.Properties.Title = class_code;
+                    var ws = pck.Workbook.Worksheets.Add(class_code);
+
+                    ws.Cells["A:AZ"].Style.Font.Name = "Times New Roman";
+                    ws.Cells["A:AZ"].Style.Font.Size = 13;
+                    ws.Column(1).Width = 8;
+                    ws.Column(2).Width = 45;
+                    ws.Column(3).Width = 13.67;
+                    ws.Column(4).Width = 13.67;
+                    ws.Column(5).Width = 13.67;
+                    ws.Column(6).Width = 38;
+                    ws.Column(7).Width = 35;
+                    ws.Column(8).Width = 10;
+                    ws.Row(5).Height = 22.80;
+                    ws.Row(6).Height = 22.80;
+                    ws.Column(2).Style.WrapText = true;
+                    ws.Column(3).Style.WrapText = true;
+                    ws.Column(4).Style.WrapText = true;
+                    ws.Column(5).Style.WrapText = true;
+                    ws.Column(6).Style.WrapText = true;
+                    ws.Column(7).Style.WrapText = true;
+                    ws.Column(8).Style.WrapText = true;
+                    ws.Column(1).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Column(2).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Column(3).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Column(4).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Column(5).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Column(6).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Column(7).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Column(8).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Row(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Row(6).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Cells[1, 1, 1, 2].Merge = true;
+                    ws.Cells[1, 1, 1, 2].Value = "TRƯỜNG ĐẠI HỌC VĂN LANG";
+                    ws.Cells[1, 1, 1, 2].Style.Font.Size = 12;
+                    ws.Cells[2, 1, 2, 2].Merge = true;
+                    ws.Cells[2, 1, 2, 2].Value = "KHOA: CÔNG NGHỆ THÔNG TIN";
+                    ws.Cells[2, 1, 2, 2].Style.Font.Size = 12;
+                    ws.Cells[2, 1, 2, 2].Style.Font.Bold = true;
+                    ws.Cells[3, 1, 3, 8].Merge = true;
+                    ws.Cells[3, 1, 3, 8].Value = "KẾ HOẠCH HOẠT ĐỘNG CỐ VẤN HỌC TẬP";
+                    ws.Cells[3, 1, 3, 8].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Cells[3, 1, 3, 8].Style.Font.Size = 14;
+                    ws.Cells[3, 1, 3, 8].Style.Font.Bold = true;
+                    ws.Cells[4, 1, 4, 8].Merge = true;
+                    ws.Cells[4, 1, 4, 8].Value = "NĂM HỌC " + (year - 1) + " - " + year;
+                    ws.Cells[4, 1, 4, 8].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Cells[4, 1, 4, 8].Style.Font.Size = 14;
+                    ws.Cells[4, 1, 4, 8].Style.Font.Bold = true;
+                    ws.Cells[5, 1, 6, 1].Merge = true;
+                    ws.Cells[5, 1, 6, 1].Value = "STT";
+                    ws.Cells[5, 1, 6, 1].Style.Font.Bold = true;
+                    ws.Cells[5, 2, 6, 2].Merge = true;
+                    ws.Cells[5, 2, 6, 2].Value = "NỘI DUNG";
+                    ws.Cells[5, 2, 6, 2].Style.Font.Bold = true;
+                    ws.Cells[5, 3, 5, 5].Merge = true;
+                    ws.Cells[5, 3, 5, 5].Value = "THỜI GIAN DỰ KIẾN";
+                    ws.Cells[5, 3, 5, 5].Style.Font.Bold = true;
+                    ws.Cells["C6"].Value = "Học kỳ 1";
+                    ws.Cells["C6"].Style.Font.Bold = true;
+                    ws.Cells["D6"].Value = "Học kỳ 2";
+                    ws.Cells["D6"].Style.Font.Bold = true;
+                    ws.Cells["E6"].Value = "Học kỳ 3";
+                    ws.Cells["E6"].Style.Font.Bold = true;
+                    ws.Cells[5, 6, 6, 6].Merge = true;
+                    ws.Cells[5, 6, 6, 6].Value = "MÔ TẢ CÔNG VIỆC";
+                    ws.Cells[5, 6, 6, 6].Style.Font.Bold = true;
+                    ws.Cells[5, 7, 6, 7].Merge = true;
+                    ws.Cells[5, 7, 6, 7].Value = "TÀI NGUYÊN CHUẨN BỊ";
+                    ws.Cells[5, 7, 6, 7].Style.Font.Bold = true;
+                    ws.Cells[5, 8, 6, 8].Merge = true;
+                    ws.Cells[5, 8, 6, 8].Value = "GHI CHÚ";
+                    ws.Cells[5, 8, 6, 8].Style.Font.Bold = true;
+                    int rowStart = 7;
+                    bool check = false;
+                    int stt = 0;
+                    string content = "";
+                    string source = "";
+                    int countSTT = 1;
+                    int countContent = 1;
+                    int countSource = 1;
+                    foreach (var item in template)
+                    {
+                        if (item.number_title == stt)
+                        {
+                            if (item.content == content)
+                            {
+                                if (item.source == source)
+                                {
+                                    ws.Cells[string.Format("C{0}", rowStart)].Value = item.hk1;
+                                    ws.Cells[string.Format("D{0}", rowStart)].Value = item.hk2;
+                                    ws.Cells[string.Format("E{0}", rowStart)].Value = item.hk3;
+                                    ws.Cells[string.Format("F{0}", rowStart)].Value = servicePlan.getDecribe(item.describe);
+                                    countSTT++;
+                                    countContent++;
+                                    countSource++;
+                                }
+                                else
+                                {
+                                    ws.Cells[string.Format("C{0}", rowStart)].Value = item.hk1;
+                                    ws.Cells[string.Format("D{0}", rowStart)].Value = item.hk2;
+                                    ws.Cells[string.Format("E{0}", rowStart)].Value = item.hk3;
+                                    ws.Cells[string.Format("F{0}", rowStart)].Value = servicePlan.getDecribe(item.describe);
+                                    ws.Cells[string.Format("G{0}", rowStart)].Value = item.source;
+                                    ws.Cells[string.Format("G{0}", rowStart)].Style.Font.Color.SetColor(0, 191, 143, 0);
+                                    countSTT++;
+                                    countContent++;
+                                }
+                            }
+                            else
+                            {
+                                ws.Cells[string.Format("C{0}", rowStart)].Value = item.hk1;
+                                ws.Cells[string.Format("D{0}", rowStart)].Value = item.hk2;
+                                ws.Cells[string.Format("E{0}", rowStart)].Value = item.hk3;
+                                ws.Cells[string.Format("B{0}", rowStart)].Value = item.content;
+                                ws.Cells[string.Format("F{0}", rowStart)].Value = servicePlan.getDecribe(item.describe);
+                                ws.Cells[string.Format("G{0}", rowStart)].Value = item.source;
+                                ws.Cells[string.Format("G{0}", rowStart)].Style.Font.Color.SetColor(0, 191, 143, 0);
+                                countSTT++;
+                            }
+                        }
+                        else
+                        {
+                            if (item.number_title == 3)
+                            {
+                                ws.InsertRow(rowStart - countSTT, 1);
+                                ws.Row(rowStart - countSTT).Height = 31.20;
+                                ws.Cells[rowStart - countSTT, 2].Value = "Tổ chức họp lớp SV theo định kỳ/đột xuất.";
+                                ws.Cells[rowStart - countSTT, 3, rowStart - countSTT, 8].Merge = true;
+
+                                ws.InsertRow(rowStart + countSTT - 1, 1);
+                                ws.Row(rowStart + countSTT - 1).Height = 31.20;
+                                ws.Cells[rowStart + countSTT - 1, 2].Value = "...";
+                                ws.Cells[rowStart + countSTT - 1, 6].Value = "...";
+                                rowStart = rowStart + 2;
+                            }
+                            if (countSTT > 1)
+                            {
+                                if (item.number_title == 3)
+                                {
+                                    ws.Cells[rowStart - countSTT - 2, 1, rowStart - 1, 1].Merge = true;
+                                    ws.Cells[rowStart - countSTT - 2, 1, rowStart - 1, 1].Value = ws.Cells[rowStart - countSTT - 1, 1].Value;
+                                    ws.Cells[rowStart - countSTT - 2, 1, rowStart - 1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                                    countSTT = 1;
+                                }
+                                else
+                                {
+                                    ws.Cells[rowStart - countSTT, 1, rowStart - 1, 1].Merge = true;
+                                    countSTT = 1;
+                                }
+                            }
+                            if (countContent > 1)
+                            {
+                                ws.Cells[rowStart - countContent, 2, rowStart - 1, 2].Merge = true;
+                                countContent = 1;
+                            }
+                            if (countSource > 1)
+                            {
+                                ws.Cells[rowStart - countSource, 7, rowStart - 1, 7].Merge = true;
+                                countSource = 1;
+                            }
+                            ws.Cells[string.Format("A{0}", rowStart)].Value = item.number_title;
+                            ws.Cells[string.Format("A{0}", rowStart)].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                            ws.Cells[string.Format("B{0}", rowStart)].Value = item.content;
+                            ws.Cells[string.Format("C{0}", rowStart)].Value = item.hk1;
+                            ws.Cells[string.Format("D{0}", rowStart)].Value = item.hk2;
+                            ws.Cells[string.Format("E{0}", rowStart)].Value = item.hk3;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = servicePlan.getDecribe(item.describe);
+                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.source;
+                            ws.Cells[string.Format("G{0}", rowStart)].Style.Font.Color.SetColor(0, 191, 143, 0);
+                        }
+                        rowStart++;
+                        stt = (int)item.number_title;
+                        content = item.content;
+                        source = item.source;
+
+                    }
+
+
+                    ws.Column(10).Style.Font.Size = 13;
+                    /* ws.Cells["A:AZ"].AutoFitColumns();*/
+                    ws.Cells[5, 1, rowStart - 1, 8].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[5, 1, rowStart - 1, 8].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[5, 1, rowStart - 1, 8].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[5, 1, rowStart - 1, 8].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[rowStart + 2, 2].Value = "Trưởng khoa";
+                    ws.Cells[rowStart + 2, 2].Style.Font.Bold = true;
+
+                    ws.Cells[rowStart + 1, 6, rowStart + 1, 8].Merge = true;
+                    ws.Cells[rowStart + 1, 6, rowStart + 1, 8].Value = "TP. Hồ Chí Minh, ngày   tháng   năm " + (year - 1);
+                    ws.Cells[rowStart + 1, 6, rowStart + 1, 8].Style.Font.Italic = true;
+                    ws.Cells[rowStart + 1, 6, rowStart + 1, 8].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    ws.Cells[rowStart + 2, 6, rowStart + 2, 8].Merge = true;
+                    ws.Cells[rowStart + 2, 6, rowStart + 2, 8].Value = "Cố vấn học tập";
+                    ws.Cells[rowStart + 2, 6, rowStart + 2, 8].Style.Font.Bold = true;
+                    ws.Cells[rowStart + 2, 6, rowStart + 2, 8].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    ws.Cells[rowStart + 8, 1, rowStart + 8, 8].Merge = true;
+                    ws.Cells[rowStart + 8, 1, rowStart + 8, 8].Value = "Lưu ý: CVHT cụ thể hóa các công việc trong phần mô tả theo đặc thù đơn vị và kế hoạch cụ thể của cá nhân, làm căn cứ thực hiện công tác này trong NH " + (year - 1) + " - " + year + ".";
+                    ws.Cells[rowStart + 8, 1, rowStart + 8, 8].Style.Font.Bold = true;
+                    ws.Cells[rowStart + 8, 1, rowStart + 8, 8].Style.Font.Italic = true;
+                    ws.Cells[rowStart + 8, 1, rowStart + 8, 8].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Cells[rowStart + 8, 1, rowStart + 8, 8].Style.WrapText = true;
+
+
+
+                    ws.Row(rowStart + 8).Height = 31.80;
+                    pck.Save();
+                    var fileOject = File(pck.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "KehoachCVHT_"+(year - 1)+"-"+year+"_"+name_advisor+"_"+class_code+".xlsx");
+                    return Json(fileOject, JsonRequestBehavior.AllowGet);
+                    /*  Response.Clear();
+                      Response.Clear();
+                      Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                      Response.AddHeader("content-disposition", "attachment; filename="+"KehoachCVHT_" + year + ".xlsx");
+                      Response.BinaryWrite(pck.GetAsByteArray());
+                      Response.End();*/
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        // GET: PlansAdvisor/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            PlanClass titlePlan = db.PlanClass.Find(id);
+            if (titlePlan == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            ViewBag.role = Session["role"];
+            ViewBag.id_class = db.PlanClass.FirstOrDefault(x=>x.id== id).id_class;
+            Session["id"] = id;
+            var listProof = servicePlan.getListProof(User.Identity.Name, (int)id);
+            ViewBag.plan = listProof;
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.hocky = db.Semester.DistinctBy(x => x.semester_name).ToList();
+            return View(titlePlan);
         }
     }
 }

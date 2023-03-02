@@ -239,6 +239,9 @@
     <Compile Include="Models\PlanAdvisor.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PlanClass.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProofPlan.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
@@ -1431,6 +1434,7 @@
     <Content Include="Views\PlansAdvisor\Details.cshtml" />
     <Content Include="Views\PlansAdvisor\Edit.cshtml" />
     <Content Include="Views\PlansAdvisor\Index.cshtml" />
+    <Content Include="Views\PlansAdvisor\DetailClass.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

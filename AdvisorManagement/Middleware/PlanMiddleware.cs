@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using System.IdentityModel.Protocols.WSTrust;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace AdvisorManagement.Middleware
 {
@@ -88,5 +90,18 @@ namespace AdvisorManagement.Middleware
             }
 
         }
+
+        static Regex ConvertToUnsign_rg = null;
+        public string ConvertToUnsign(string strInput)
+        {
+            if (ReferenceEquals(ConvertToUnsign_rg, null))
+            {
+                ConvertToUnsign_rg = new Regex("\\p{IsCombiningDiacriticalMarks}+");
+            }
+            var temp = strInput.Normalize(NormalizationForm.FormD);
+            return ConvertToUnsign_rg.Replace(temp, string.Empty).Replace("đ", "d").Replace("Đ", "D").Replace(" ","");
+        }
+
+
     }
 }

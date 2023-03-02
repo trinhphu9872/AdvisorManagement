@@ -23,6 +23,7 @@
         <AssociationConnector Association="CP25Team09Model.FK_Class_Advisor" ManuallyRouted="false" />
         <AssociationConnector Association="CP25Team09Model.FK_RoleMenu_Menu" ManuallyRouted="false" />
         <AssociationConnector Association="CP25Team09Model.FK_RoleMenu_Role" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CP25Team09Model.PlanClass" Width="1.5" PointX="10.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

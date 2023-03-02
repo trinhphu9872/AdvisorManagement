@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CP25Team09Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CP25Team09Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccountUser">
           <Key>
             <PropertyRef Name="id" />
@@ -60,6 +60,22 @@
           <Property Name="describe" Type="nvarchar" MaxLength="500" />
           <Property Name="source" Type="nvarchar" MaxLength="500" />
           <Property Name="note" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="PlanClass">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="year" Type="int" />
+          <Property Name="number_title" Type="int" />
+          <Property Name="content" Type="nvarchar" MaxLength="500" />
+          <Property Name="hk1" Type="nvarchar" MaxLength="100" />
+          <Property Name="hk2" Type="nvarchar" MaxLength="100" />
+          <Property Name="hk3" Type="nvarchar" MaxLength="100" />
+          <Property Name="describe" Type="nvarchar" MaxLength="500" />
+          <Property Name="source" Type="nvarchar" MaxLength="500" />
+          <Property Name="note" Type="nvarchar" MaxLength="100" />
+          <Property Name="id_class" Type="int" />
         </EntityType>
         <EntityType Name="ProofPlan">
           <Key>
@@ -203,6 +219,7 @@
           <EntitySet Name="ListStudents" EntityType="Self.ListStudents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlanAdvisor" EntityType="Self.PlanAdvisor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlanClass" EntityType="Self.PlanClass" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProofPlan" EntityType="Self.ProofPlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
@@ -232,8 +249,7 @@
             <End Role="RoleMenu" EntitySet="RoleMenu" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CP25Team09Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -473,7 +489,24 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="RoleMenu" EntitySet="RoleMenu" />
           </AssociationSet>
+          <EntitySet Name="PlanClass" EntityType="CP25Team09Model.PlanClass" />
         </EntityContainer>
+        <EntityType Name="PlanClass">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="year" Type="Int32" />
+          <Property Name="number_title" Type="Int32" />
+          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="hk1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="hk2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="hk3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="describe" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_class" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -622,6 +655,23 @@
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="update_time" ColumnName="update_time" />
                 <ScalarProperty Name="semester_name" ColumnName="semester_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlanClass">
+            <EntityTypeMapping TypeName="CP25Team09Model.PlanClass">
+              <MappingFragment StoreEntitySet="PlanClass">
+                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="note" ColumnName="note" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="describe" ColumnName="describe" />
+                <ScalarProperty Name="hk3" ColumnName="hk3" />
+                <ScalarProperty Name="hk2" ColumnName="hk2" />
+                <ScalarProperty Name="hk1" ColumnName="hk1" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="number_title" ColumnName="number_title" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
