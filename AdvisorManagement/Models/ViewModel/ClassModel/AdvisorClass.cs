@@ -13,7 +13,7 @@ namespace AdvisorManagement.Models.ViewModel
         public string name { get; set; }
         public string email { get; set; }
         public string phone { get; set; }
-        public string course { get; set; }
+        public int course { get; set; }
         public int amount { get; set; }
         public string semester { get; set; }
     }

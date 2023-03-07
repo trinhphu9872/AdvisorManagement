@@ -10,6 +10,8 @@ namespace AdvisorManagement.Models.ViewModel
         public int id { get; set; }
         public string content { get; set; }
         public string proof { get; set; }
+
+        public string title { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public string semester { get; set; }
         public string status { get; set; }

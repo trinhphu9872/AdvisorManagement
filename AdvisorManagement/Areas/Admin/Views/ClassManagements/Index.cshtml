@@ -71,12 +71,13 @@
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
-                                <tr>
-                                    <th>Stt</th>
-                                    <th width="250px">Lớp</th>
-                                    <th>CVHT</th>
-                                    <th>Học kỳ</th>
-                     
+                                <tr >
+                                    <th width="5%">Stt</th>
+                                    <th width="15%">Lớp</th>
+                                    <th width="20%">CVHT</th>
+                                    <th width="15%">Năm học</th>
+                                    <th width="16%">Ngày tạo</th>
+                                    <th>Khóa</th>
                                     <th>Hoạt động</th>
 
 
@@ -88,6 +89,7 @@
                                     var i = 1;
                                     foreach (var item in Model)
                                     {
+                                        var yearLast = int.Parse(item.semester_name) - 1;
                                         <tr>
                                             <td>@i</td>
                                             <td>@Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", id = item.id }, null)</td>
@@ -107,9 +109,9 @@
                                             {
                                                 <td style="text-align:center"></td>
                                             }
-
-                                            <td>@item.semester_name</td>
-                                    
+                                            <td>@yearLast-@item.semester_name</td>
+                                            <td>@item.create_time</td>
+                                            <td>@item.course</td>
                                             <td>
                                                 <a href="@Url.Action("Details", "ClassManagements",new {id = item.id})" id="btnDelete" class="btn btn-success"
                                                    style="margin-bottom: 5px; margin-left: 5px;">

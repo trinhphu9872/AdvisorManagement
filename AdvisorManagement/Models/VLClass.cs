@@ -20,6 +20,7 @@ namespace AdvisorManagement.Models
         public Nullable<System.DateTime> create_time { get; set; }
         public Nullable<System.DateTime> update_time { get; set; }
         public string semester_name { get; set; }
+        public Nullable<int> course { get; set; }
     
         public virtual Advisor Advisor { get; set; }
     }

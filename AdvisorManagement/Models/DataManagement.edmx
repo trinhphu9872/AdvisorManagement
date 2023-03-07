@@ -152,6 +152,7 @@
           <Property Name="create_time" Type="datetime" />
           <Property Name="update_time" Type="datetime" />
           <Property Name="semester_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="course" Type="int" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -394,6 +395,7 @@
           <Property Name="update_time" Type="DateTime" Precision="3" />
           <Property Name="semester_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="VLClass" ToRole="Advisor" />
+          <Property Name="course" Type="Int32" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -649,6 +651,7 @@
           <EntitySetMapping Name="VLClass">
             <EntityTypeMapping TypeName="CP25Team09Model.VLClass">
               <MappingFragment StoreEntitySet="VLClass">
+                <ScalarProperty Name="course" ColumnName="course" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="class_code" ColumnName="class_code" />
                 <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />

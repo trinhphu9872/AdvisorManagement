@@ -27,13 +27,14 @@ namespace AdvisorManagement.Controllers
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         private StudentsMiddleware serviceStudents = new StudentsMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
+        private PlanMiddleware servicePlan = new PlanMiddleware();
         // GET: Class
         public ActionResult Index()
         {
+            var year = servicePlan.getYear();
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            var listClass = serviceStudents.getClass(User.Identity.Name);
+            var listClass = serviceStudents.getClass(User.Identity.Name,year);
             var role = serviceStudents.getRoles(User.Identity.Name);
             ViewBag.role = role;
             var classCode = serviceStudents.getClassCode(User.Identity.Name);

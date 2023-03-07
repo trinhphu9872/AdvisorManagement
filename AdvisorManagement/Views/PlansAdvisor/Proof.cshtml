@@ -1,0 +1,148 @@
+﻿@using AdvisorManagement.Models;
+
+
+@{
+    ViewBag.Title = "Proof";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+    IEnumerable<Semester> listSemester = ViewBag.hocky as IEnumerable<Semester>;
+    var class_code = Session["class_code"].ToString();
+}
+
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-0">Danh sách file minh chứng @class_code</h5>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <div class="">
+                        <label for="cars">Học kỳ:</label>
+                        <select id="semester" onchange="filterFunction()">
+                            <option selected value="0">ALL</option>
+                            @foreach (var item in listSemester)
+                            {
+                                <option value="@item.semester_name">@item.semester_name</option>
+                            }
+                        </select>
+                    </div>
+                    @* <div class="searchbar">
+                            <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
+                        </div>*@
+                    <div class="table-responsive">
+                        <table width="100%" id="zero_config" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <td>STT</td>
+                                    <td>Nội dung</td>
+                                    <td>Tên file</td>
+                                    <td>Người tạo</td>
+                                    <td>Ngày tạo</td>
+                                    <td>Học kỳ</td>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <p>
+        @Html.ActionLink("Back to List", "ProofPlan")
+    </p>
+    <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
+    <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
+    <script>
+         var dataTable = $("#zero_config").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetListProof", "PlansAdvisor")',
+                'data': function (d) {
+                    var input = document.getElementById("semester");
+                    filter = input.value.toUpperCase();
+                    d.semester = filter;
+                         },
+                'type': 'get',
+                'datatype':'json',
+         },
+             'columns':
+                 [
+                     { 'data': 'id', 'width': '5%' },
+                     { 'data': 'title', 'width': '30%' },
+                     {
+                         'data': 'proof', 'width': '25%', 'render': function (data, type, row) {
+                             return '<a href="@Url.Action("Download", "PlansAdvisor")/' + row.id + '/" >' + data + '</a>';
+                         }
+                     },
+                     { 'data': 'creator', 'width': '15%' },
+                     {
+                         'data': 'create_time', 'width': '15%', 'render': function (data) {
+                             return moment(data).format("HH:mm DD-MM-YYYY");
+                         }
+                     },
+                     { 'data': 'semester', 'width': '15%' },
+                 ],
+             "order": [[4, "desc"]],   
+
+         });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+
+         function filterFunction() {
+             $("#zero_config").dataTable().fnDestroy();
+             var dataTable = $("#zero_config").DataTable({
+                 'ajax': {
+                'url': '@Url.Action("GetListProof", "PlansAdvisor")',
+                'data': function (d) {
+                    var input = document.getElementById("semester");
+                    filter = input.value.toUpperCase();
+                    d.semester = filter;
+                         },
+                'type': 'get',
+                'datatype':'json',
+         },
+             'columns':
+                 [
+                     { 'data': 'id', 'width': '5%' },
+                     { 'data': 'title', 'width': '30%' },
+                      {
+                         'data': 'proof', 'width': '25%', 'render': function (data, type, row) {
+                             return '<a href="@Url.Action("Download", "PlansAdvisor")/' + row.id + '/" >' + data + '</a>';
+                         }
+                     },
+                     { 'data': 'creator', 'width': '15%' },
+                     {
+                         'data': 'create_time', 'width': '15%', 'render': function (data) {
+                             return moment(data).format("HH:mm DD-MM-YYYY");
+                         }
+                     },
+                     { 'data': 'semester', 'width': '15%' },
+                     ],
+                 "order": [[4, "desc"]],   
+
+         });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+        }
+
+    </script>
+
+

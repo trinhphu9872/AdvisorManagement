@@ -8,6 +8,7 @@
     var yearNow = (int)Session["yearNow"];
     var id_class = (int)Session["id_class"];
     var roleABC = (string)Session["role"];
+    var list = Model;
 }
 
 <div class="container-fluid">
@@ -37,9 +38,9 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>                    
-                        @*<div style="margin-top:10px">
-                            <i class="fa fa-check" style="color:limegreen"></i>: Cố vấn đã thực hiện nộp minh chứng
-                        </div>*@
+                        <div style="margin-top:10px">
+                            <i class="fa fa-check" style="color:limegreen"></i> Cố vấn đã thực hiện nộp minh chứng
+                        </div>
         
                     <div class="table-responsive" style="margin-top:10px">
                         <table width="100%" id="zero_config" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
@@ -47,20 +48,83 @@
                                 <tr>
                                     <th style="text-align:center">STT</th>
                                     <th style="text-align:center">Nội dung</th>
-                                    @if (ViewBag.role == "Advisor")
-                                    {
-                                        <th style="text-align:center">HK1</th>
-                                        <th style="text-align:center">HK2</th>
-                                        <th style="text-align:center">HK3</th>
-                                    }
+                                    <th style="text-align:center">HK1</th>
+                                    <th style="text-align:center">HK2</th>
+                                    <th style="text-align:center">HK3</th>
                                     <th style="text-align:center">Mô tả công việc</th>
                                     <th style="text-align:center">Tài nguyên chuẩn bị</th>
                                     <th style="text-align:center">Ghi chú</th>
                                     <th hidden>year</th>
                                 </tr>
                             </thead>
-                                <tbody id="myTable">
-                                </tbody>
+                            <tbody id="myTable">
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.id">
+                                        <td width="5%">
+                                            @Html.DisplayFor(modelItem => item.number_title)
+                                        </td>
+                                        <td width="20%">
+                                            @Html.DisplayFor(modelItem => item.content)
+                                        </td>
+                                            @if (ViewBag.listProof != null)
+                                            {
+                                                List<ProofPlan> proofPlans = (List<ProofPlan>)ViewBag.listProof;
+
+                                                <td style="text-align:center" width="5%">
+                                                    @item.hk1
+                                                    @foreach (var i in proofPlans)
+                                                    {
+                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 1")
+                                                        {
+
+                                                            <i class="fa fa-check" style="color:limegreen"></i>
+                                                            break;
+                                                        }
+
+                                                    }
+                                                </td>
+                                                <td style="text-align:center" width="5%">
+                                                    @item.hk2
+                                                    @foreach (var i in proofPlans)
+                                                    {
+                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 2")
+                                                        {
+
+                                                            <i class="fa fa-check" style="color:limegreen"></i>
+                                                            break;
+                                                        }
+                                                    }
+                                                </td>
+                                                <td style="text-align:center" width="5%">
+                                                    @item.hk3
+                                                    @foreach (var i in proofPlans)
+                                                    {
+                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 3")
+                                                        {
+                                                            <i class="fa fa-check" style="color:limegreen"></i>
+                                                            break;
+                                                        }
+                                                    }
+                                                </td>
+                                            }
+                                        <td width="30%">
+                                            @Html.DisplayFor(modelItem => item.describe)
+                                        </td>
+                                        <td width="25%">
+                                            @Html.DisplayFor(modelItem => item.source)
+                                        </td>
+                                        <td width="10%">
+                                            @Html.DisplayFor(modelItem => item.note)
+                                        </td>
+                                        <td width="25%">
+                                            <button onclick="Update(@item.id)" class="btn btn-success">Sửa <i class="fas fa-tasks"></i></button> 
+                                            <button onclick="Delete(@item.id)" class="btn btn-danger">Xóa <i class="fas fa-trash-alt"></i></button>
+                                            <a id="proof" href="@Url.Action("Details", "PlansAdvisor", new {id = item.id})" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -223,35 +287,9 @@
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 <script>
-        //Lấy data khi vừa vào web
-         var dataTable = $("#zero_config").DataTable({
-         'ajax': {
-                'url': '@Url.Action("GetDataAdvisor", "PlansAdvisor")',
-                'data': function (d) {               
-                    d.year = @yearNow;
-                     d.id_class = @id_class;       
-                 },
-                'type': 'get',
-                'datatype':'json',
-         },
-         'columns':
-             [
-                 { 'data': 'number_title', 'width': '5%' },
-                 { 'data': 'content', 'width': '25%' },                 
-                 { 'data': 'hk1', 'width': '5%', 'defaultContent': ''},
-                 { 'data': 'hk2', 'width': '5%' },
-                 { 'data': 'hk3', 'width': '5%' },
-                 { 'data': 'describe', 'width': '30%' },
-                 { 'data': 'source', 'width': '35%' },
-                 { 'data': 'note', 'width': '10%' },
-                 {
-                     'data': 'id', 'width': '20%', 'render': function (data) {
-                         return '<button onclick="Update(' + data + ')" class="btn btn-success">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>'
-                     }
-                 },
-             ]
-        });       
 
+        var dataTable = $("#zero_config").DataTable();
+   
         function CreateTitle() {
             $("#modalCreate").modal("show");
         }
@@ -314,13 +352,13 @@
                         hk3: hk3,
                         describe: describe,
                         source: source,
-                        note: note,                       
+                        note: note,
                     },
                     success: function (data) {
                             if (data.success == true) {
                                 alert(data.message);
                                 $('#modalUpdate').modal('hide');
-                                dataTable.ajax.reload()
+                                location.reload();
                             } else {
                                 alert(data.message);
                             }
@@ -372,7 +410,7 @@
                         $("#txtNote").val("");
                         $("#modalCreate").modal("hide");
                         alert(data.message);
-                        dataTable.ajax.reload()
+                        location.reload()
                     }
                 }
              })
@@ -381,7 +419,7 @@
 
          //Sự kiện xóa
          function Delete(id) {
-             if (confirm("Bạn thực sự muốn xóa sinh viên này?")) {
+             if (confirm("Bạn thực sự muốn xóa đề mục này?")) {
                 $.ajax({
                     url: '@Url.Action("DeleteTitleAdvisor", "PlansAdvisor")',
                     type: 'POST',
@@ -391,7 +429,7 @@
                     success: function (data) {
                          if (data.success == true) {
                              alert(data.message);
-                             dataTable.ajax.reload()
+                             location.reload()
                          } else {
                              alert(data.message);
                          }
@@ -399,10 +437,10 @@
                 })
             }
          }
-        
+
 
         //Export template
-        function ExportTemplate() {           
+        function ExportTemplate() {
             $.ajax({
                 url: '@Url.Action("ExportTemplateAdvisor", "PlansAdvisor")',
                 type: 'POST',
@@ -426,6 +464,6 @@
                     alert(err);
                 },
             })
-        }    
+        }
 </script>
 

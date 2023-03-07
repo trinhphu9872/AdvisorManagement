@@ -17,82 +17,43 @@
                 <div class="card-body">
                     <h5 class="card-title mb-0">Danh sách file minh chứng</h5>
                 </div>
-                @if (ViewBag.role == "Advisor")
-                {
-                    <div class="page-breadcrumb">
-                        <div class="row">
-                            <div class="col-12 d-flex no-block align-items-center">
-                                <a onclick="Upload()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Upload<i class="fas fa-plus"></i>
-                                </a>
-                            </div>
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <a onclick="Upload()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                Upload<i class="fas fa-plus"></i>
+                            </a>
                         </div>
-
                     </div>
-                }
+
+                </div>
             </div>
 
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(model => model.content)</h5>
+                    <h5 class="card-title"> @Html.DisplayFor(model => model.content)</h5>
                     <div class="col-md-1">
                     </div>
-                    <div class="searchbar">
-                        <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
-                    </div>
+                    @*<div class="searchbar">
+                            <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
+                        </div>*@
                     <div class="table-responsive">
-                        @if (ViewBag.plan != null)
-                        {
-                            int i = 1;
-                            List<AdvisorManagement.Models.ViewModel.ListProofPlan> proofs = (List<AdvisorManagement.Models.ViewModel.ListProofPlan>)ViewBag.plan;
-                            if (proofs.Count() > 0)
-                            {
-                                <table id="zero_config" class="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <td>STT</td>
-                                            <td>Nội dung</td>
-                                            <td>Tên file</td>
-                                            <td>Người tạo</td>
-                                            <td>Ngày tạo</td>
-                                            <td>Học kỳ</td>
-                                            @if (ViewBag.role == "Advisor")
-                                            {
-                                                <td></td>
-                                            }
-                                            </tr>
-                                            
-                                    </thead>
-                                    <tbody id="myTable">
-                                        @foreach (var item in proofs)
-                                        {
-                                            <tr id="@item.id">
-                                                <td>@i</td>
-                                                <td>@item.content</td>
-                                                <td>@Html.ActionLink(@item.proof, "Download", "PlansAdvisor", new { nameProof = @item.proof }, null)</td>
-                                                <td>@item.creator</td>
-                                                <td>@item.create_time</td>
-                                                <td>@item.semester</td>
-                                                @if (ViewBag.role == "Advisor")
-                                                {
-                                                    <td>
-                                                        <button name="delete" class="btn btn-danger"
-                                                           style="margin-bottom: 5px; margin-left: 5px;">
-                                                            XÓA <i class="fas fa-trash-alt"></i>
-                                                        </button>
-                                                    </td>
-                                                }
-                                                </tr>
-                                            i++;
-                                        }
-                                    </tbody>
+                        <table width="100%" id="zero_config" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <td>STT</td>
+                                    <td>Mô tả</td>
+                                    <td>Tên file</td>
+                                    <td>Người tạo</td>
+                                    <td>Ngày tạo</td>
+                                    <td>Học kỳ</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            </tbody>
 
-                                </table>
-                            } else
-                {
-                    <p>Chưa có file minh chứng nào</p>
-                }
-                        }
+                        </table>
                     </div>
                 </div>
             </div>
@@ -100,7 +61,7 @@
         </div>
     </div>
     <p>
-        @Html.ActionLink("Back to List", "DetailClass", new {id = id_class })
+        @Html.ActionLink("Back to List", "DetailClass", new { id = id_class })
     </p>
 
     <div id="myModal" class="modal fade" role="dialog">
@@ -109,7 +70,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Upload file</h4>
+                    <h4 class="modal-title">Upload file minh chứng</h4>
                 </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px;padding-left:15px ">
@@ -144,14 +105,53 @@
 
                 <div class="modal-footer">
                     <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button id="btnUpload" class="btn btn-primary" type="submit">Import</button>
+                    <button id="btnUpload" class="btn btn-primary" type="submit">Upload</button>
                 </div>
 
             </div>
         </div>
     </div>
-
+    <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
+    <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
     <script>
+
+          var dataTable = $("#zero_config").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetDataDetails", "PlansAdvisor")',
+                'type': 'get',
+                'datatype':'json',
+         },
+             'columns':
+                 [
+                     { 'data': 'semester', 'width': '5%' },
+                     { 'data': 'content', 'width': '20%' },
+                     {
+                         'data': 'proof', 'width': '20%', 'render': function (data, type, row) {
+                             return '<a href="@Url.Action("Download", "PlansAdvisor")/' + row.id + '/" >' + data + '</a>';
+                         }
+                     },
+                     { 'data': 'creator', 'width': '15%' },
+                     {
+                         'data': 'create_time', 'width': '20%', 'render': function (data) {
+                             return moment(data).format("HH:mm DD-MM-YYYY");
+                         }
+                     },
+                     { 'data': 'semester', 'width': '15%' },
+                     {
+                         'data': 'id', 'width': '5%', 'render': function (data) {
+                             return ' <button onclick="Delete(' + data +')" class="btn btn-danger" style = "margin-bottom: 5px; margin-left: 5px;"> XÓA <i class="fas fa-trash-alt" ></i ></button>'
+                         }
+                     },
+                  ],
+              "order": [[4, "desc"]],           
+         });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+
         function myFunction() {
             var input, filter, table, tr, td, i;
             input = document.getElementById("semester");
@@ -210,32 +210,33 @@
                         alert(data.message);
                     } else {
                         $("#myModal").modal("hide");
+                        $("#motaPlan").val("");
+                        $("#fileExcel").val("");
                         alert(data.message);
-                        location.reload();
+                        dataTable.ajax.reload(null, false);
                     }
                 }
              })
         })
     })
-    //Sự kiện xóa
-    $(document).on('click', "button[name=delete]", function () {
-        let id_proof = $(this).closest('tr').attr('id');
-        if (confirm("Bạn thực sự muốn xóa minh chứng này?")) {
-            $.ajax({
-                url: '@Url.Action("DeleteProof", "PlansAdvisor")',
-                type: 'POST',
-                data: {
-                    id: id_proof
-                },
-                success: function (data) {
-                     if (data.success == true) {
-                         alert(data.message);
-                         location.reload();
-                     } else {
-                         alert(data.message);
-                     }
-                }
-            })
-        }
-    })
+   //Sự kiện xóa
+         function Delete(id) {
+             if (confirm("Bạn thực sự muốn xóa minh chứng này?")) {
+                $.ajax({
+                    url: '@Url.Action("DeleteProof", "PlansAdvisor")',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    },
+                    success: function (data) {
+                         if (data.success == true) {
+                             alert(data.message);
+                             dataTable.ajax.reload(null, false);
+                         } else {
+                             alert(data.message);
+                         }
+                    }
+                })
+            }
+         }
     </script>

@@ -1435,6 +1435,8 @@
     <Content Include="Views\PlansAdvisor\Edit.cshtml" />
     <Content Include="Views\PlansAdvisor\Index.cshtml" />
     <Content Include="Views\PlansAdvisor\DetailClass.cshtml" />
+    <Content Include="Views\PlansAdvisor\ProofPlan.cshtml" />
+    <Content Include="Views\PlansAdvisor\Proof.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

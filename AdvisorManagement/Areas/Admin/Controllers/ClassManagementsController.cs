@@ -25,6 +25,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
+        private PlanMiddleware servicePlan = new PlanMiddleware();
 
         private string routePermission = "Admin/ClassManagements";
         CP25Team09Entities db = new CP25Team09Entities();
@@ -37,7 +38,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                var listClass = db.VLClass.ToList();
+                var listClass = db.VLClass.OrderByDescending(x=>x.create_time).ToList();
                 ViewBag.listClass = listClass;
                 Session["listClass"] = listClass;
                 ViewBag.nameUser = db.AccountUser.ToList();
@@ -140,10 +141,16 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var year = servicePlan.getYear();
+                vLClass.course = int.Parse(vLClass.class_code.Substring(1, 2));
+                vLClass.semester_name = year.ToString();
+                vLClass.create_time = DateTime.Now;
                 db.VLClass.Add(vLClass);
                 db.SaveChanges();
+                servicePlan.AssignmentTemplate(vLClass.id, year);
                 return RedirectToAction("Index");
             }
+
 
             ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
             return View(vLClass);
@@ -172,8 +179,15 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
-            VLClass vLClass = db.VLClass.Find(id);
+            var year = servicePlan.getYear();
+            var templateClass = db.PlanClass.Where(x => x.year == year).Where(y => y.id_class == id).ToList();
+            foreach (var item in templateClass)
+            {
+                var temp = db.PlanClass.Find(item.id);
+                db.PlanClass.Remove(temp);
+                db.SaveChanges();
+            }
+            VLClass vLClass = db.VLClass.Find(id);           
             db.VLClass.Remove(vLClass);
             db.SaveChanges();
             return RedirectToAction("Index");

@@ -6,10 +6,10 @@
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
     List<PlanAdvisor> listYear = (List<PlanAdvisor>)ViewBag.listYear;
-    List<VLClass> listClass = (List<VLClass>)ViewBag.listClass;
-    List<AdvisorManagement.Models.ViewModel.AdvisorClass> listClassAdvisor = (List<AdvisorManagement.Models.ViewModel.AdvisorClass>)ViewBag.listClassAdvisor;
+    List<VLClass> listYearAdvisor = (List<VLClass>)ViewBag.listYearAdvisor;
     var yearNow = (int)Session["yearNow"];
     var roleABC = (string)Session["role"];
+    var yearLast = yearNow - 1;
 }
 <div class="container-fluid">
     <!-- ============================================================== -->
@@ -19,7 +19,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Quản lí kế hoạch đầu học kì</h5>
+                    <h5 class="card-title mb-0">Quản lí kế hoạch năm học</h5>
                 </div>
                 @if (ViewBag.role == "Admin")
                 {
@@ -29,13 +29,13 @@
                                 <a onclick="CreateTitle()" id="create" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Tạo đề mục<i style="margin-left:5px" class="fas fa-plus"></i>
                                 </a>
-                                <a onclick="popupAssignment()" id="create" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Phân quyền<i style="margin-left:5px" class="fas fa-plus"></i>
+                                <a href="@Url.Action("ProofPlan","PlansAdvisor")" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                        Xem minh chứng<i style="margin-left:5px" class="fas fa-plus"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
-                }                
+                }
 
             </div>
 
@@ -48,11 +48,15 @@
                             <label for="cars">Năm học:</label>
 
                             <select id="semester" name="semester" onchange="myFunction()">
-                                <option selected value="@yearNow">@yearNow - Hiện tại</option>
+                                <option selected value="@yearNow">@yearLast - @yearNow</option>
                                 @foreach (var item in listYear)
                                 {
-                                    <option value="@item.year">@item.year</option>
+                                    var i = item.year - 1;
+                                    <option value="@item.year">@i - @item.year</option>
                                 }
+
+
+
                             </select>
                             <a onclick="ExportTemplate()" class="btn btn-success" style=" margin-left: 5px; width: 150px;">
                                 Export template <i class="fas fa-plus"></i>
@@ -62,12 +66,27 @@
                             </button>
                         </div>
                     }
-
-                    <div class="table-responsive" style="margin-top:10px">
-                        <table width="100%" id="zero_config" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
-                            <thead>
-                                @if (ViewBag.role == "Admin")
+                    else
+                    {
+                        <div class="">
+                            <label for="cars">Năm học:</label>
+                            <select id="year" name="year" onchange="filterFunction()">
+                                <option selected value="@yearNow">@yearLast - @yearNow</option>
+                                @foreach (var item in listYearAdvisor)
                                 {
+                                    var i = int.Parse(item.semester_name) - 1;
+                                    <option value="@item.semester_name">@i - @item.semester_name</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    <div class="table-responsive" style="margin-top:10px">
+                        @if (ViewBag.role == "Admin")
+                        {
+
+
+                            <table width="100%" id="zero_config_admin" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                                <thead>
                                     <tr>
                                         <th style="text-align:center">STT</th>
                                         <th style="text-align:center">Nội dung</th>
@@ -77,40 +96,28 @@
                                         <th hidden>year</th>
                                         <th style="text-align:center" id="action">Hoạt động</th>
                                     </tr>
-                                }
-                                else
-                                {
+                                </thead>
+                                <tbody id="myTable">
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <table width="100%" id="zero_config_advisor" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                                <thead>
                                     <tr>
                                         <th width="10%" style="text-align:center">STT</th>
                                         <th width="25%" style="text-align:center">Mã lớp học</th>
                                         <th width="15%" style="text-align:center">Người cố vấn</th>
                                         <th width="15%" style="text-align:center">Khóa</th>
-                                        <th width="15%" style="text-align:center">Học kì</th>
+                                        @*<th width="15%" style="text-align:center">Ngày nhận</th>*@
                                     </tr>
-                                }
-                            </thead>
-                            @if (ViewBag.role == "Advisor")
-                            {
-                                int i = 1;
+                                </thead>
                                 <tbody id="myTable">
-                                    @foreach (var item in listClassAdvisor)
-                                    {
-                                        <tr>
-                                            <td style="text-align: center ;">@i</td>
-                                            <td style="text-align: center ;">
-                                                @Html.ActionLink(item.idClass, "DetailClass", new { id = item.ID }, new { @style = "color:#333;margin-left:3px" })
-                                            </td>
-                                            <td style="text-align: center ;">
-                                                @item.name
-                                            </td>
-                                            <td style="text-align:center">K25</td>
-                                            <td style="text-align:center">@item.semester</td>
-                                        </tr>
-                                        i++;
-                                    }
                                 </tbody>
-                            }
-                        </table>
+                            </table>
+                        }
+
                     </div>
                 </div>
             </div>
@@ -234,10 +241,10 @@
         </div>
     </div>
 
-    <div id="modalAssignment" class="modal fade" role="dialog">
+    @*<div id="modalAssignment" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
-            <!-- Modal content-->
+             Modal content
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Phân quyền template</h4>
@@ -248,7 +255,6 @@
                         <div class="col-md-4"><span>Lớp:</span></div>
                         <div class="col-md-8">
                             <select id="class" name="class" onchange="myFunction()">
-                                @* <option selected value="@yearNow">@yearNow - Hiện tại</option>*@
                                 @foreach (var item in listClass)
                                 {
                                     <option value="@item.id">@item.class_code - @item.semester_name</option>
@@ -265,7 +271,7 @@
 
             </div>
         </div>
-    </div>
+    </div>*@
     <!-- ============================================================== -->
     <!-- End PAge Content -->
     <!-- ============================================================== -->
@@ -280,8 +286,8 @@
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 <script>
-        //Lấy data khi vừa vào web
-         var dataTable = $("#zero_config").DataTable({
+        //Lấy data khi vừa vào web admin
+         var dataTable = $("#zero_config_admin").DataTable({
          'ajax': {
                 'url': '@Url.Action("GetData", "PlansAdvisor")',
                 'data': function (d) {
@@ -305,8 +311,45 @@
                      }
                  },
              ]
+         });
+
+        $(document).ready(function () {
+        if ("@roleABC" == "Advisor") {
+         $("#zero_config_admin").dataTable().fnDestroy();
+         var dataTable = $("#zero_config_advisor").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetDataAdvisor", "PlansAdvisor")',
+                'data': function (d) {
+                 /*var input = document.getElementById("semester");
+                 filter = input.value.toUpperCase();*/
+                 d.year = @yearNow ;
+                 },
+                'type': 'get',
+                'datatype':'json',
+         },
+         'columns':
+             [
+                 { 'data': 'ID', 'width': '5%', },
+                 {
+                     'data': 'idClass', 'width': '25%', 'render': function (data, type, row) {
+                             return '<a id="proof" href="@Url.Action("DetailClass", "PlansAdvisor")/' + row.ID + '/" >' + data + '</a>';
+                     }
+                 },
+                 { 'data': 'name', 'width': '25%' },
+                 { 'data': 'course', 'width': '30%' },
+                 ],
+
+         });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+        }
         });
-        //filter data khi chọn năm-->-->-->-->
+
+        //filter data khi Admin chọn năm-->-->-->-->
         function myFunction() {
             var input = document.getElementById("semester");
             filter = input.value.toUpperCase();
@@ -317,8 +360,8 @@
             }
         }
         function seleclYear() {
-            $("#zero_config").dataTable().fnDestroy();
-             $("#zero_config").DataTable({
+            $("#zero_config_admin").dataTable().fnDestroy();
+            $("#zero_config_admin").DataTable({
              'ajax': {
                     'url': '@Url.Action("GetData", "PlansAdvisor")',
                     'data': function (d) {
@@ -337,8 +380,9 @@
                      { 'data': 'source', 'width': '25%' },
                      { 'data': 'note', 'width': '30%' },
                      {
-                         'data': 'id', /*'visible': false,*/ 'render': function (data) {
-                                 document.getElementById("copy").hidden = false;
+                         'data': 'id', 'visible': false, 'render': function (data) {
+                             document.getElementById("copy").hidden = false;
+                             document.getElementById("action").hidden = true;
                                  return '<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>'
                          }
                      },
@@ -346,8 +390,8 @@
              });
         }
         function selectYearNow() {
-            $("#zero_config").dataTable().fnDestroy();
-             $("#zero_config").DataTable({
+            $("#zero_config_admin").dataTable().fnDestroy();
+            $("#zero_config_admin").DataTable({
              'ajax': {
                     'url': '@Url.Action("GetData", "PlansAdvisor")',
                     'data': function (d) {
@@ -369,11 +413,45 @@
                          'data': 'id', 'width': '30%', 'render': function (data) {
                              document.getElementById("action").hidden = false;
                              document.getElementById("copy").hidden = true;
-                             return '<button onclick="Update(' + data + ')" class="btn btn-success">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data +')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>'
+                             return '<button onclick="Update(' + data + ')" class="btn btn-success">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data +')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > @*<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
                          }
                      },
                  ]
             });
+    }
+
+        function filterFunction() {
+            $("#zero_config_advisor").dataTable().fnDestroy();
+            var dataTable = $("#zero_config_advisor").DataTable({
+                 'ajax': {
+                        'url': '@Url.Action("GetDataAdvisor", "PlansAdvisor")',
+                        'data': function (d) {
+                         var input = document.getElementById("year");
+                         filter = input.value.toUpperCase();
+                            d.year = filter ;
+                         },
+                        'type': 'get',
+                        'datatype':'json',
+                 },
+                 'columns':
+                     [
+                         { 'data': 'ID', 'width': '5%', },
+                         {
+                             'data': 'idClass', 'width': '25%', 'render': function (data, type, row) {
+                                     return '<a id="proof" href="@Url.Action("DetailClass", "PlansAdvisor")/' + row.ID + '/" >' + data + '</a>';
+                             }
+                         },
+                         { 'data': 'name', 'width': '25%' },
+                         { 'data': 'course', 'width': '30%' },
+                         ],
+
+                 });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
         }
 
         $(document).ready(function () {
@@ -444,7 +522,7 @@
                             if (data.success == true) {
                                 alert(data.message);
                                 $('#modalUpdate').modal('hide');
-                                dataTable.ajax.reload()
+                                dataTable.ajax.reload(null, false);
                             } else {
                                 alert(data.message);
                             }
@@ -492,7 +570,7 @@
                         $("#txtNote").val("");
                         $("#modalCreate").modal("hide");
                         alert(data.message);
-                        dataTable.ajax.reload()
+                        dataTable.ajax.reload(null, false);
                     }
                 }
              })
@@ -501,7 +579,7 @@
 
          //Sự kiện xóa
          function Delete(id) {
-             if (confirm("Bạn thực sự muốn xóa sinh viên này?")) {
+             if (confirm("Bạn thực sự muốn xóa đề mục này?")) {
                 $.ajax({
                     url: '@Url.Action("Delete", "PlansAdvisor")',
                     type: 'POST',
@@ -511,7 +589,7 @@
                     success: function (data) {
                          if (data.success == true) {
                              alert(data.message);
-                             dataTable.ajax.reload()
+                             dataTable.ajax.reload(null, false);
                          } else {
                              alert(data.message);
                          }
@@ -571,7 +649,7 @@
             })
         }
 
-    function popupAssignment() {
+@*    function popupAssignment() {
         $('#modalAssignment').modal("show");
     }
 
@@ -600,7 +678,7 @@
                     alert(err);
                 },
             })
-    })
+    })*@
 
 </script>
 
