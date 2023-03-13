@@ -16,5 +16,7 @@ namespace AdvisorManagement.Models.ViewModel
         public int course { get; set; }
         public int amount { get; set; }
         public string semester { get; set; }
+
+        public Nullable<System.DateTime> create_time { get; set; }
     }
 }

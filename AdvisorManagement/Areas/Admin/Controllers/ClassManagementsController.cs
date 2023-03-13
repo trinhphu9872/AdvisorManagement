@@ -17,6 +17,8 @@ using System.Data;
 
 using System.Drawing;
 using Spire.Xls.Core;
+using System.Web.UI.WebControls;
+using OfficeOpenXml.Style;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
@@ -26,6 +28,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         private PlanMiddleware servicePlan = new PlanMiddleware();
+        private StudentsMiddleware serviceStd = new StudentsMiddleware();
 
         private string routePermission = "Admin/ClassManagements";
         CP25Team09Entities db = new CP25Team09Entities();
@@ -41,11 +44,16 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 var listClass = db.VLClass.OrderByDescending(x=>x.create_time).ToList();
                 ViewBag.listClass = listClass;
                 Session["listClass"] = listClass;
+                ViewBag.Advisor = db.Advisor.ToList();
                 ViewBag.nameUser = db.AccountUser.ToList();
                 Session["nameUser"] = db.AccountUser.ToList();
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
-                Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
+                var year = servicePlan.getYear();
+                var yearNow = year.ToString();
+                var namhoc = db.VLClass.Where(x=>x.semester_name != yearNow).DistinctBy(x=>x.semester_name).OrderByDescending(x=>x.semester_name).ToList();
+                ViewBag.hocky = namhoc;
+                Session["hocky"] = namhoc;
+                Session["yearNow"] = year;
                 return View(listClass);
             }
             else
@@ -53,40 +61,61 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+
+        [HttpGet]
+        public ActionResult GetData(int year)
+        {
+            var listClast = serviceStd.getClassAdmin(year);          
+            return Json(new { data = listClast }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public ActionResult Details(int? id)
         {
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            try
             {
                 var detailClass = db.VLClass.Find(id);
 
-
-                //List<string> AV = new List<string>();
-                //for(int i =0; i<db.AccountUser.Count();i++)
-                //{
-                //    var user = db.AccountUser.Find(i);
-                //    var advisor = db.Advisor.Find(user.user_code);
-                //    if (advisor !=null)
-                //    {
-                //        AV.Add(user.username);
-                //    }
-
-                //}
-                //ViewBag.Advisor = new SelectList(AV);
-                ViewBag.Advisor = db.Advisor.ToList();
-                ViewBag.nameUser = db.AccountUser.ToList();
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-                return View(detailClass);
+                //ViewBag.role = roleMenu.id_role;
+                //ViewBag.menu = roleMenu.id_menu;
+                return Json(new { success = true, R = detailClass.id, R_semester = detailClass.semester_name, R_advisor = detailClass.advisor_code, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
+            //ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            //ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+            //ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            //ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
+            //    var detailClass = db.VLClass.Find(id);
+
+
+            //    //List<string> AV = new List<string>();
+            //    //for(int i =0; i<db.AccountUser.Count();i++)
+            //    //{
+            //    //    var user = db.AccountUser.Find(i);
+            //    //    var advisor = db.Advisor.Find(user.user_code);
+            //    //    if (advisor !=null)
+            //    //    {
+            //    //        AV.Add(user.username);
+            //    //    }
+
+            //    //}
+            //    //ViewBag.Advisor = new SelectList(AV);
+            //    ViewBag.Advisor = db.Advisor.ToList();
+            //    ViewBag.nameUser = db.AccountUser.ToList();
+            //    ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
+            //    return View(detailClass);
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
         //// get create class
         //public ActionResult Create()
@@ -116,52 +145,59 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         //}
 
         // GET: Admin/VLClasses/Create
-        public ActionResult Create()
-        {
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+        //public ActionResult Create()
+        //{
+        //    ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+        //    ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+        //    ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
-            ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
-            ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
-            Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
-            return View();
-        }
+        //    ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
+        //    ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
+        //    ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
+        //    Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
+        //    return View();
+        //}
 
         // POST: Admin/VLClasses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 
-        public ActionResult Create([Bind(Include = "id,class_code,advisor_code,create_time,update_time,semester_name")] VLClass vLClass)
+        public ActionResult Create(string class_code, string advisor_code, int year)
         {
-           
-
-            if (ModelState.IsValid)
+            if(class_code.Trim() != "")
             {
-                var year = servicePlan.getYear();
-                vLClass.course = int.Parse(vLClass.class_code.Substring(1, 2));
-                vLClass.semester_name = year.ToString();
-                vLClass.create_time = DateTime.Now;
-                db.VLClass.Add(vLClass);
-                db.SaveChanges();
-                servicePlan.AssignmentTemplate(vLClass.id, year);
-                return RedirectToAction("Index");
+                var stringYear = year.ToString();
+                if (db.VLClass.Where(x => x.class_code.ToUpper() == class_code.ToUpper() && x.semester_name == stringYear).Count() == 0)
+                {
+                    VLClass vLClass = new VLClass();
+                    vLClass.class_code = class_code;
+                    vLClass.advisor_code = advisor_code;
+                    vLClass.create_time = DateTime.Now;
+                    vLClass.semester_name = year.ToString();
+                    vLClass.course = serviceAccount.getCours(class_code);
+                    db.VLClass.Add(vLClass);
+                    db.SaveChanges();
+                    servicePlan.AssignmentTemplate(vLClass.id, year);
+                    return Json(new { success = true, message = "Thêm thành công" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Mã lớp học đã tồn tại" });
+                }
             }
+            else
+            {
+                return Json(new { success = false, message = "Vui lòng nhập mã lớp học" });
+            }      
 
-
-            ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
-            return View(vLClass);
         }
 
         // GET: Admin/VLClasses/Delete/5
+        [HttpPost]
         public ActionResult Delete(int id)
-        {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
+        {            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -171,83 +207,86 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            return View(vLClass);
-        }
-
-        // POST: Admin/VLClasses/Delete/5
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            var year = servicePlan.getYear();
-            var templateClass = db.PlanClass.Where(x => x.year == year).Where(y => y.id_class == id).ToList();
-            foreach (var item in templateClass)
-            {
-                var temp = db.PlanClass.Find(item.id);
-                db.PlanClass.Remove(temp);
-                db.SaveChanges();
+            var listPlan = db.PlanClass.Where(x => x.id_class == id).ToList();
+            foreach(var item in listPlan)
+            {               
+                db.PlanClass.Remove(item);
             }
-            VLClass vLClass = db.VLClass.Find(id);           
+            var listStd = db.ListStudents.Where(x => x.id_class == id).ToList();
+            foreach(var item in listStd)
+            {
+                db.ListStudents.Remove(item);
+            }
             db.VLClass.Remove(vLClass);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(new { success = true, message = "Xóa lớp học thành công" });
         }
-
+       
         // HTTP GET
-        public ActionResult EditClass(int id )
+        [HttpGet]
+        public ActionResult EditClass(int id)
         {
-            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
 
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            try
             {
                 var detailClass = db.VLClass.Find(id);
 
-
-                //List<string> AV = new List<string>();
-                //for(int i =0; i<db.AccountUser.Count();i++)
-                //{
-                //    var user = db.AccountUser.Find(i);
-                //    var advisor = db.Advisor.Find(user.user_code);
-                //    if (advisor !=null)
-                //    {
-                //        AV.Add(user.username);
-                //    }
-
-                //}
-                //ViewBag.Advisor = new SelectList(AV);
-                ViewBag.Advisor = db.Advisor.ToList();
-                ViewBag.nameUser = db.AccountUser.ToList();
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-                return View(detailClass);
+                //ViewBag.role = roleMenu.id_role;
+                //ViewBag.menu = roleMenu.id_menu;
+                return Json(new { success = true, R = detailClass.id, R_class_code = detailClass.class_code, R_advisor = detailClass.advisor_code, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
+
+            //List<string> AV = new List<string>();
+            //for(int i =0; i<db.AccountUser.Count();i++)
+            //{
+            //    var user = db.AccountUser.Find(i);
+            //    var advisor = db.Advisor.Find(user.user_code);
+            //    if (advisor !=null)
+            //    {
+            //        AV.Add(user.username);
+            //    }
+
+            //}
+            //ViewBag.Advisor = new SelectList(AV);
+            //ViewBag.Advisor = db.Advisor.ToList();
+            //ViewBag.nameUser = db.AccountUser.ToList();
+            //ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
         }
         // http post edit class
         [HttpPost]
-        public ActionResult EditClass(VLClass cdeatilclass)
+        public ActionResult UpdateClass(int id, string class_code, string advisor_code)
         {
-           
-
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            if(class_code.Trim() != "")
             {
-                db.Entry(cdeatilclass).State = EntityState.Modified;
+                VLClass vLClass = db.VLClass.Find(id);
+                vLClass.class_code = class_code;
+                vLClass.advisor_code = advisor_code;
+                vLClass.course = serviceAccount.getCours(class_code);
                 db.SaveChanges();
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new { success = false, message = "Vui lòng nhập mã lớp học" }, JsonRequestBehavior.AllowGet);
             }
+           
         }
+        //}
+        //else
+        //{
+        //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //}
+
 
         [HttpPost]
         public ActionResult ImportClass(HttpPostedFileBase postedfile)
@@ -281,6 +320,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                             workbook.SaveToFile(filePath, ExcelVersion.Version2013);
                         }
                         int count = 0;
+                        if (ImportData(out count, filePath))
                         ImportData(out count, filePath);
                         return Json(new { success = true, message = "Import thành công" });
                     }
@@ -314,15 +354,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 do
                 {
                     data = worksheet.Cells[startRow, startColumn].Value;
-                    Object stt = worksheet.Cells[startRow, startColumn].Value;
                     Object name_advisor = worksheet.Cells[startRow, startColumn + 1].Value;
                     Object email = worksheet.Cells[startRow, startColumn + 2].Value;
                     Object id_class = worksheet.Cells[startRow, startColumn + 3].Value;
-                    Object hk_year = worksheet.Cells[startRow, startColumn + 4].Value;
+                    var year = servicePlan.getYear();
                     var isSuccess = false;
-                    if (data != null && stt != null && name_advisor != null && email != null && id_class != null)
+                    if (data != null && name_advisor != null && email != null && id_class != null)
                     {
-                        serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), id_class.ToString(), hk_year.ToString());
+                        serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), id_class.ToString(), year.ToString());
                     }
                     startRow++;
                 }
@@ -338,7 +377,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public void ExcelExport()
         {
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
+            var year = servicePlan.getYear();
             var listClass = Session["listClass"];
             var nameUser = Session["nameUser"];
             IEnumerable<AccountUser> name = nameUser as IEnumerable<AccountUser>;
@@ -348,41 +387,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 using (ExcelPackage pck = new ExcelPackage())
                 {
-                    var ws = pck.Workbook.Worksheets.Add("Danh sách lớp");
-             
-                    ws.Cells["A1"].Value = "STT";
-                    ws.Cells["B1"].Value = "Mã lớp";
-                    ws.Cells["C1"].Value = "Tên cố vấn";
-                    ws.Cells["D1"].Value = "Học kỳ";
- 
-                    var i = 1;
-                    int rowStart = 2;
-                    foreach (var item in listStudent)
-                    {
-                        ws.Cells[string.Format("A{0}", rowStart)].Value = i;
-                        ws.Cells[string.Format("B{0}", rowStart)].Value = item.class_code;
-                        if(item.advisor_code != null)
-                        {
-                            foreach (var itemUser in name)
-                            {
-                                if (item.advisor_code.Equals(itemUser.user_code))
-                                {
-                                    ws.Cells[string.Format("C{0}", rowStart)].Value = itemUser.user_name;
-                                    break;
-                                }
-                            }
-                        }
-                        ws.Cells[string.Format("D{0}", rowStart)].Value = item.semester_name;
-               
-                        rowStart++;
-                        i++;
-                    }
-                    ws.Cells["A:AZ"].AutoFitColumns();
+                    var package = serviceAccount.getExcelPackage(pck, year, listStudent);
                     Response.Clear();
                     Response.Clear();
                     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                    Response.AddHeader("content-disposition", "attachment; filename=" + "Danhsachlop.xlsx");
-                    Response.BinaryWrite(pck.GetAsByteArray());
+                    Response.AddHeader("content-disposition", "attachment; filename=" + "CVHT_Phancong_"+ (year-1) +"-" + year +".xlsx");
+                    Response.BinaryWrite(package.GetAsByteArray());
                     Response.End();
                 }
             }

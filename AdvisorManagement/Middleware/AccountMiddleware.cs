@@ -1,11 +1,16 @@
 ﻿using AdvisorManagement.Models;
 using AdvisorManagement.Models.ViewModel;
+using Microsoft.Ajax.Utilities;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace AdvisorManagement.Middleware
 {
@@ -13,7 +18,7 @@ namespace AdvisorManagement.Middleware
     {
 
         private CP25Team09Entities db = new CP25Team09Entities();
-     
+        private PlanMiddleware servicePlan = new PlanMiddleware();
         
         // Get Role
         public string getRoles(string roles)
@@ -106,65 +111,75 @@ namespace AdvisorManagement.Middleware
             var flag = false;
             AccountInitModel itemAccount = new AccountInitModel();
             string[] mailGet = email.Trim().Split('@');
-            var user = db.AccountUser.Where(x => x.email == email).Count();
+            var user = db.AccountUser.Where(x => x.email == email).Count();            
             if (user == 0)
             {
                 itemAccount.role_id = 2;
                 itemAccount.user_name = name_advisor;
                 itemAccount.user_code = mailGet[0] + "_cntt";
                 writeRecordUser(itemAccount, email);
-                Advisor advisor = new Advisor();
-                advisor.advisor_code = itemAccount.user_code;
-                advisor.account_id = getID();
-                advisor.status_id = 1;
-                db.Advisor.Add(advisor);
-                db.SaveChanges();
+                var checkAdv = db.Advisor.Where(x => x.advisor_code == itemAccount.user_code).Count();
+                if(checkAdv == 0)
+                {
+                    Advisor advisor = new Advisor();
+                    advisor.advisor_code = itemAccount.user_code;
+                    advisor.account_id = getID();
+                    advisor.status_id = 1;
+                    db.Advisor.Add(advisor);
+                    db.SaveChanges();
+                }                
                 VLClass vlclass = new VLClass();
-                var checkClas = checkClass(id_class);
+                var checkClas = checkClass(id_class,hk_year);
                 if (checkClas)
                 {
+                    vlclass.course = getCours(id_class);
                     vlclass.class_code = id_class;
                     vlclass.advisor_code = itemAccount.user_code;
                     vlclass.semester_name = hk_year;
+                    vlclass.create_time = DateTime.Now;
                     db.VLClass.Add(vlclass);
                     db.SaveChanges();
-                }
-                flag = true;
+                    servicePlan.AssignmentTemplate(vlclass.id, int.Parse(hk_year));
+                    flag = true;
+                }               
             }
             else
             {
-                VLClass vlclass = new VLClass();
-                var checkClas = checkClass(id_class);
-                if (checkClas)
+                var user_code = db.AccountUser.FirstOrDefault(x => x.email == email).user_code;
+                var checkAdv = db.Advisor.Where(x => x.advisor_code == user_code).Count();
+                if (checkAdv == 0)
                 {
-                    var advisor_coe = db.AccountUser.FirstOrDefault(x => x.email == email).user_code;
-                    vlclass.class_code = id_class;
-                    vlclass.advisor_code = advisor_coe;
-                    vlclass.semester_name = hk_year;
-                    db.VLClass.Add(vlclass);
+                    var advisor_code = db.AccountUser.FirstOrDefault(x => x.email == email).user_code;
+                    Advisor advisor = new Advisor();
+                    advisor.advisor_code = advisor_code;
+                    advisor.account_id = getID();
+                    advisor.status_id = 1;
+                    db.Advisor.Add(advisor);
                     db.SaveChanges();
                 }
-                flag = false;
-            }
-            /* else
-             {
-                 itemAccount.role_id = 2;
-                 itemAccount.user_code = data[0].Trim();
-                 itemAccount.user_name = data[1].Trim();
-                 writeRecordUser(itemAccount, logData.Name);
-                 Student student = new Student();
-                 student.student_code = itemAccount.user_code;
-                 student.account_id = getID();
-                 student.status_id = 1;
-                 db.Student.Add(student);
-             }*/
+                VLClass vlclass = new VLClass();
+                var checkClas = checkClass(id_class, hk_year);
+                if (checkClas)
+                {
+                    var advisor_code = db.AccountUser.FirstOrDefault(x => x.email == email).user_code;
+                    vlclass.course = getCours(id_class);
+                    vlclass.class_code = id_class;
+                    vlclass.advisor_code = advisor_code;
+                    vlclass.semester_name = hk_year;
+                    vlclass.create_time = DateTime.Now;
+                    db.VLClass.Add(vlclass);
+                    db.SaveChanges();
+                    servicePlan.AssignmentTemplate(vlclass.id, int.Parse(hk_year));
+                    flag = true;
+                }                
+            }           
             return flag;
         }
 
-        public bool checkClass(object id_class)
+        public bool checkClass(object id_class, string year)
         {
             var flag = false;
-            var isClass = db.VLClass.Where(x => x.class_code == id_class).Count();
+            var isClass = db.VLClass.Where(x => x.class_code == id_class && x.semester_name == year).Count();
             if (isClass == 0)
             {
                 return true;
@@ -198,6 +213,205 @@ namespace AdvisorManagement.Middleware
             var sql = db.AccountUser.FirstOrDefault(x => x.email == user_mail);
 
             return sql.id_role + "";
+        }
+
+        public ExcelPackage getExcelPackage(ExcelPackage pck, int year, List<VLClass> listStudent)
+        {
+            var ws = pck.Workbook.Worksheets.Add("CVHT " + (year - 1) + "-" + year);
+            ws.Cells["A:AZ"].Style.Font.Name = "Times New Roman";
+            ws.Cells["A:AZ"].Style.Font.Size = 13;
+            ws.Cells["A:AZ"].Style.WrapText = true;
+            ws.Cells["A:AZ"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            ws.Column(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Column(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Column(6).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Row(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Column(1).Width = 6.56;
+            ws.Column(2).Width = 15.56;
+            ws.Column(3).Width = 28.78;
+            ws.Column(4).Width = 26.22;
+            ws.Column(5).Width = 25.78;
+            ws.Column(6).Width = 19.11;
+            ws.Column(7).Width = 15.67;
+            ws.Row(3).Height = 22.80;
+            ws.Row(4).Height = 22.80;
+            ws.Row(5).Height = 22.80;
+            ws.Cells[1, 1, 1, 3].Merge = true;
+            ws.Cells[1, 1, 1, 3].Value = "TRƯỜNG ĐẠI HỌC VĂN LANG";
+            ws.Cells[1, 1, 1, 3].Style.Font.Size = 11;
+            ws.Cells[1, 1, 1, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            ws.Cells[2, 1, 2, 3].Merge = true;
+            ws.Cells[2, 1, 2, 3].Value = "KHOA: CÔNG NGHỆ THÔNG TIN";
+            ws.Cells[2, 1, 2, 3].Style.Font.Size = 11;
+            ws.Cells[2, 1, 2, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            ws.Cells[2, 1, 2, 3].Style.Font.Bold = true;
+            ws.Cells[3, 1, 3, 7].Merge = true;
+            ws.Cells[3, 1, 3, 7].Value = "DANH SÁCH CỐ VẤN HỌC TẬP";
+            ws.Cells[3, 1, 3, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Cells[3, 1, 3, 7].Style.Font.Size = 18;
+            ws.Cells[3, 1, 3, 7].Style.Font.Bold = true;
+            ws.Cells[4, 1, 4, 7].Merge = true;
+            ws.Cells[4, 1, 4, 7].Value = "NĂM HỌC " + (year - 1) + " - " + year;
+            ws.Cells[4, 1, 4, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Cells[4, 1, 4, 7].Style.Font.Size = 18;
+            ws.Cells[4, 1, 4, 7].Style.Font.Bold = true;
+
+            ws.Cells[5, 1].Value = "STT";
+            ws.Cells[5, 1].Style.Font.Bold = true;
+            ws.Cells[5, 2].Value = "MGV";
+            ws.Cells[5, 2].Style.Font.Bold = true;
+            ws.Cells[5, 3].Value = "CVHT";
+            ws.Cells[5, 3].Style.Font.Bold = true;
+            ws.Cells[5, 4].Value = "EMAIL";
+            ws.Cells[5, 4].Style.Font.Bold = true;
+            ws.Cells[5, 5].Value = "MÃ LỚP";
+            ws.Cells[5, 5].Style.Font.Bold = true;
+            ws.Cells[5, 6].Value = "SLSV";
+            ws.Cells[5, 6].Style.Font.Bold = true;
+            ws.Cells[5, 7].Value = "GHI CHÚ";
+            ws.Cells[5, 7].Style.Font.Bold = true;
+            var i = 1;
+            int rowStart = 6;
+            var advisor_code = listStudent.DistinctBy(x => x.advisor_code).ToList();
+            foreach (var item in advisor_code)
+            {
+                var MGV = item.advisor_code;
+                var advisor_name = db.AccountUser.FirstOrDefault(x => x.user_code == item.advisor_code).user_name;
+                var advisor_email = db.AccountUser.FirstOrDefault(x => x.user_code == item.advisor_code).email;
+                var class_code = getClassCodeExportListClass(listStudent, item.advisor_code);
+                var count_student = getCountStudent(listStudent, item.advisor_code);
+                ws.Cells[string.Format("A{0}", rowStart)].Value = i;
+                ws.Cells[string.Format("B{0}", rowStart)].Value = MGV;
+                ws.Cells[string.Format("C{0}", rowStart)].Value = advisor_name;
+                ws.Cells[string.Format("D{0}", rowStart)].Value = advisor_email;
+                ws.Cells[string.Format("E{0}", rowStart)].Value = class_code;
+                ws.Cells[string.Format("F{0}", rowStart)].Value = count_student;
+                ws.Cells[string.Format("G{0}", rowStart)].Value = "";
+
+                rowStart++;
+                i++;
+            }
+            ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            ws.Row(rowStart).Height = 25.80;
+            ws.Cells[rowStart, 5, rowStart, 7].Merge = true;
+            ws.Cells[rowStart, 5, rowStart, 7].Value = "TP.HCM, ngày   tháng   năm " + year;
+            ws.Cells[rowStart, 5, rowStart, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Cells[rowStart, 5, rowStart, 7].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Bottom;
+            ws.Cells[rowStart + 1, 2, rowStart + 1, 3].Merge = true;
+            ws.Cells[rowStart + 1, 2, rowStart + 1, 3].Value = "Ban chủ nhiệm khoa";
+            ws.Cells[rowStart + 1, 2, rowStart + 1, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Cells[rowStart + 1, 5, rowStart + 1, 7].Merge = true;
+            ws.Cells[rowStart + 1, 5, rowStart + 1, 7].Value = "Trợ lý CTSV";
+            ws.Cells[rowStart + 1, 5, rowStart + 1, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            pck.Save();
+            return pck;
+        }        
+        
+        public string getClassCodeExportListClass(List<VLClass> listStudent, string advisor_code)
+        {
+            string class_code = "";
+            string data5 = "";
+            string data7 = "";
+            foreach (var item in listStudent)
+            {
+                if (item.advisor_code == advisor_code)
+                {
+                    if (data5 == "")
+                    {
+                        data5 = data5 + item.class_code;
+                    }
+                    else
+                    {
+                        var check = class_code.Contains(item.class_code.Remove(item.class_code.Length - 2));
+                        if (check == true)
+                        {
+                            var split = class_code.Split('\n');
+                            if (split.Count() > 1)
+                            {
+                                for (var i = 0; i < split.Length; i++)
+                                {
+                                    var checkk = split[i].Contains(item.class_code.Remove(item.class_code.Length - 2));
+                                    if (checkk == true)
+                                    {
+                                        var number = item.class_code.Substring(item.class_code.Length - 2);
+                                        foreach (Char c in number)
+                                        {
+                                            if (!Char.IsDigit(c))
+                                            {
+                                                data5 = class_code.Replace(split[i], split[i] + "," + item.class_code.Substring(item.class_code.Length - 1));
+                                                class_code = "";
+                                                data7 = "";
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                data5 = class_code.Replace(split[i], split[i] + "," + item.class_code.Substring(item.class_code.Length - 2));
+                                                class_code = "";
+                                                data7 = "";
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                var number = item.class_code.Substring(item.class_code.Length - 2);
+                                foreach (Char c in number)
+                                {
+                                    if (!Char.IsDigit(c))
+                                    {
+                                        data5 = data5 + "," + item.class_code.Substring(item.class_code.Length - 1);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        data5 = data5 + "," + item.class_code.Substring(item.class_code.Length - 2);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            data7 = data7 + item.class_code + "\n";
+                        }
+                    }
+                    if (data7 != "")
+                    {
+                        class_code = data7 + data5;                       
+                    }
+                    else
+                    {
+                        class_code = data5;
+                    }
+                }
+            }
+            return class_code;
+        }
+
+        public int getCountStudent(List<VLClass> listStudent, string advisor_code)
+        {
+            int count = 0;
+            foreach (var item in listStudent)
+            {
+                if (item.advisor_code == advisor_code)
+                {
+                    count += db.ListStudents.Where(x => x.id_class == item.id).Count();
+                }
+            }
+
+            return count;
+        }
+
+        public int getCours(string mssv)
+        {
+            var index = mssv.IndexOf("K");
+            var cours = mssv.Substring(index + 1, 2);
+            return int.Parse(cours);
         }
     }
 }

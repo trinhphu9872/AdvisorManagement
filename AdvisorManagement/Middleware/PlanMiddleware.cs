@@ -136,7 +136,7 @@ namespace AdvisorManagement.Middleware
 
         public void AssignmentTemplate(int id_class, int year)
         {
-            var templateClass = db.PlanClass.Where(x => x.year == year).Where(y => y.id_class == id_class).ToList();
+            var templateClass = db.PlanClass.Where(x => x.year == year && x.id_class == id_class).ToList();
             foreach (var item in templateClass)
             {
                 var temp = db.PlanClass.Find(item.id);

@@ -50,7 +50,7 @@
   }
   function r(e) {
     var n = o(e);
-    null !== n &&
+        null !== n &&
       (c.show(e, n),
       "ontouchstart" in t &&
         (n.addEventListener("touchend", c.hide, !1),

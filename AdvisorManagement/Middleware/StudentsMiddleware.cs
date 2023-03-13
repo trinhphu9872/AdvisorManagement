@@ -79,7 +79,8 @@ namespace AdvisorManagement.Middleware
                                      idAdvisor = ad.advisor_code,
                                      name = pq.user_name,
                                      course = (int)cl.course,
-                                     semester = cl.semester_name
+                                     semester = cl.semester_name,
+                                     create_time = cl.create_time,
                                  }).OrderBy(x => x.idClass).ToList();
                 return classList;
             }
@@ -117,7 +118,6 @@ namespace AdvisorManagement.Middleware
                                     name = acc.user_name,
                                     email = acc.email,
                                     phone = acc.phone,
-                                    course = 25,
                                     status = st.status_name
                                 }).OrderBy(x => x.name).ToList();
             return classStudent;

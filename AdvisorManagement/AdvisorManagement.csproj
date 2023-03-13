@@ -1429,10 +1429,7 @@
     <Content Include="Views\Students\Index.cshtml" />
     <Content Include="Views\Students\DetailClass.cshtml" />
     <Content Include="Views\Students\UpdateStudent.cshtml" />
-    <Content Include="Views\PlansAdvisor\Create.cshtml" />
-    <Content Include="Views\PlansAdvisor\Delete.cshtml" />
     <Content Include="Views\PlansAdvisor\Details.cshtml" />
-    <Content Include="Views\PlansAdvisor\Edit.cshtml" />
     <Content Include="Views\PlansAdvisor\Index.cshtml" />
     <Content Include="Views\PlansAdvisor\DetailClass.cshtml" />
     <Content Include="Views\PlansAdvisor\ProofPlan.cshtml" />
