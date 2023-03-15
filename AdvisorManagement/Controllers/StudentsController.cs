@@ -18,6 +18,8 @@ using System.Web.Services.Description;
 using System.Runtime.CompilerServices;
 using System.Data.Common;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using System.Web.UI.WebControls;
+using OfficeOpenXml.Style;
 
 namespace AdvisorManagement.Controllers
 {
@@ -69,43 +71,55 @@ namespace AdvisorManagement.Controllers
                 ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 var role = serviceStudents.getRoles(User.Identity.Name);
                 ViewBag.role = role;
+                var listStdStatus = db.StudentStatus.ToList();
+                ViewBag.listStdStatus = listStdStatus;
                 return View();
             } else
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+
+        [HttpGet]
         public ActionResult UpdateStudent(int id)
-        {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
-            int roleUser = serviceStudents.getRolesUser(id);
-            if (roleUser == 2 || roleUser == 1)
+        {                                
+            try
             {
-                return HttpNotFound();
+                AccountUser user = db.AccountUser.Find(id);
+                Student std = db.Student.Find(user.user_code);     
+                return Json(new { success = true, id_std = user.id, mssv = user.user_code, name = user.user_name, email = user.email, phone = user.phone, status = std.status_id, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            AccountUser user = db.AccountUser.Find(id);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-
-            return View(user);
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
-        public ActionResult UpdateStudent([Bind(Include = "id,user_name,phone")] AccountUser accountUser)
+        public ActionResult UpdateStudent(int id, string name, string phone, int status)
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
-            if (ModelState.IsValid)
+            try
             {
-                var tempUser = db.AccountUser.FirstOrDefault(x => x.id == accountUser.id);
-                tempUser.user_name = accountUser.user_name;
-                tempUser.phone = accountUser.phone;
-                db.Entry(tempUser).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("DetailClass", new { id = Session["id_class"] });
+                if(name.Trim() != "" && phone.Trim() != "")
+                {
+                    AccountUser user = db.AccountUser.Find(id);
+                    user.user_name = name;
+                    user.phone = phone;
+                    Student std = db.Student.Find(user.user_code);
+                    std.status_id = status;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập đầy đủ thông tin" }, JsonRequestBehavior.AllowGet);
+                }
+                
             }
-            return View(accountUser);
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Cập nhật thất bại" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
@@ -275,49 +289,47 @@ namespace AdvisorManagement.Controllers
                 {
                     pck.Workbook.Properties.Title = classCode;
                     var ws = pck.Workbook.Worksheets.Add(classCode);
-
+                    ws.Cells["A:AZ"].Style.Font.Name = "Times New Roman";
+                    ws.Cells["A:AZ"].Style.Font.Size = 13;
+                    ws.Cells["A:AZ"].Style.WrapText = true;
+                    ws.Cells["A:AZ"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Column(1).Width = 6.56;
+                    ws.Column(2).Width = 15.56;
+                    ws.Column(3).Width = 28.78;
+                    ws.Column(4).Width = 38;
+                    ws.Column(5).Width = 25.78;
+                    ws.Column(6).Width = 19.11;
+                    ws.Column(7).Width = 15.67;
+                    ws.Row(4).Height = 22.80;
+                    ws.Row(5).Height = 22.80;
+                    ws.Row(5).Style.Font.Bold = true;
+                    ws.Row(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Row(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     foreach (var item in info)
                     {
-                        ws.Cells["A1"].Value = "Lớp";
-                        ws.Cells["A1"].Style.Font.Size = 12;
-                        ws.Cells["A1"].Style.Font.Bold = true;
-                        ws.Cells["B1"].Value = item.idClass;
-                        ws.Cells["B1"].Style.Font.Size = 12;
-                        ws.Cells["B1"].Style.Font.Bold = true;
-                        ws.Cells["A2"].Value = "Cố vấn";
-                        ws.Cells["A2"].Style.Font.Size = 12;
-                        ws.Cells["A2"].Style.Font.Bold = true;
-                        ws.Cells["B2"].Value = item.name;
-                        ws.Cells["B2"].Style.Font.Size = 12;
-                        ws.Cells["B2"].Style.Font.Bold = true;
-                        ws.Cells["A3"].Value = "Học kì";
-                        ws.Cells["A3"].Style.Font.Size = 12;
-                        ws.Cells["A3"].Style.Font.Bold = true;
-                        ws.Cells["B3"].Value = item.semester;
-                        ws.Cells["B3"].Style.Font.Size = 12;
-                        ws.Cells["B3"].Style.Font.Bold = true;
+                        ws.Cells[1, 1, 1, 3].Merge = true;                       
+                        ws.Cells[1, 1, 1, 3].Value = "Lớp: " + item.idClass;
+                        ws.Cells[1, 1, 1, 3].Style.Font.Bold = true;
+                        ws.Cells[2, 1, 2, 3].Merge = true;                    
+                        ws.Cells[2, 1, 2, 3].Value = "Cố vấn: " + item.name;
+                        ws.Cells[2, 1, 2, 3].Style.Font.Bold = true;
+                        ws.Cells[3, 1, 3, 3].Merge = true; 
+                        ws.Cells[3, 1, 3, 3].Value = "Năm học: " + (int.Parse(item.semester)-1) + "-"  +item.semester;
+                        ws.Cells[3, 1, 3, 3].Style.Font.Bold = true;                        
                     }
-                    ws.Cells[5, 1, 5, 6].Merge = true;
-                    ws.Cells[5, 1, 5, 6].Value = "Danh sách sinh viên";
-                    ws.Cells[5, 1, 5, 6].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells[5, 1, 5, 6].Style.Font.Size = 14;
-                    ws.Cells[5, 1, 5, 6].Style.Font.Bold = true;
-                    ws.Cells["A6"].Value = "STT";
-                    ws.Cells["A6"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells["B6"].Value = "MSSV";
-                    ws.Cells["B6"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells["C6"].Value = "Họ và tên";
-                    ws.Cells["C6"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells["D6"].Value = "Email";
-                    ws.Cells["D6"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells["E6"].Value = "Số điện thoại";
-                    ws.Cells["E6"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells["F6"].Value = "Khóa";
-                    ws.Cells["F6"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells["G6"].Value = "Trạng thái";
-                    ws.Cells["G6"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Cells[4, 1, 4, 6].Merge = true;
+                    ws.Cells[4, 1, 4, 6].Value = "Danh sách sinh viên";
+                    ws.Cells[4, 1, 4, 6].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Cells[4, 1, 4, 6].Style.Font.Size = 18;
+                    ws.Cells[4, 1, 4, 6].Style.Font.Bold = true;
+                    ws.Cells["A5"].Value = "STT";
+                    ws.Cells["B5"].Value = "MSSV";
+                    ws.Cells["C5"].Value = "Họ và tên";
+                    ws.Cells["D5"].Value = "Email";
+                    ws.Cells["E5"].Value = "Số điện thoại";
+                    ws.Cells["F5"].Value = "Trạng thái";
 
-                    int rowStart = 7;
+                    int rowStart = 6;
                     int stt = 1;
                     foreach (var item in listStudent)
                     {
@@ -326,13 +338,16 @@ namespace AdvisorManagement.Controllers
                         ws.Cells[string.Format("B{0}", rowStart)].Value = item.idStudent;
                         ws.Cells[string.Format("C{0}", rowStart)].Value = item.name;
                         ws.Cells[string.Format("D{0}", rowStart)].Value = item.email;
-                        ws.Cells[string.Format("E{0}", rowStart)].Value = item.phone;
-                        ws.Cells[string.Format("F{0}", rowStart)].Value = item.course;
-                        ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                        ws.Cells[string.Format("E{0}", rowStart)].Value = item.phone;                      
+                        ws.Cells[string.Format("F{0}", rowStart)].Value = item.status;
                         rowStart++;
                         stt++;
                     }
-                    ws.Cells["A:AZ"].AutoFitColumns();
+                    ws.Cells[5, 1, rowStart - 1, 6].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[5, 1, rowStart - 1, 6].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[5, 1, rowStart - 1, 6].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[5, 1, rowStart - 1, 6].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+
                     Response.Clear();
                     Response.Clear();
                     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
