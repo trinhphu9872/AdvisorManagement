@@ -12,6 +12,7 @@ using AdvisorManagement.Models;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
+    // auth
     [Authorize]
     public class AccountUsersController : Controller
     {
