@@ -77,6 +77,14 @@
           <Property Name="note" Type="nvarchar" MaxLength="100" />
           <Property Name="id_class" Type="int" />
         </EntityType>
+        <EntityType Name="PlanStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_class" Type="int" />
+          <Property Name="id_status" Type="int" />
+        </EntityType>
         <EntityType Name="ProofPlan">
           <Key>
             <PropertyRef Name="id" />
@@ -113,6 +121,13 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="semester_name" Type="nvarchar" MaxLength="100" />
           <Property Name="scholastic" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="StatusPlan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="status_name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -221,10 +236,12 @@
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlanAdvisor" EntityType="Self.PlanAdvisor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlanClass" EntityType="Self.PlanClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlanStatus" EntityType="Self.PlanStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProofPlan" EntityType="Self.ProofPlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semester" EntityType="Self.Semester" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatusPlan" EntityType="Self.StatusPlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -492,6 +509,8 @@
             <End Role="RoleMenu" EntitySet="RoleMenu" />
           </AssociationSet>
           <EntitySet Name="PlanClass" EntityType="CP25Team09Model.PlanClass" />
+          <EntitySet Name="PlanStatus" EntityType="CP25Team09Model.PlanStatus" />
+          <EntitySet Name="StatusPlan" EntityType="CP25Team09Model.StatusPlan" />
         </EntityContainer>
         <EntityType Name="PlanClass">
           <Key>
@@ -508,6 +527,21 @@
           <Property Name="source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="id_class" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PlanStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_class" Type="Int32" />
+          <Property Name="id_status" Type="Int32" />
+        </EntityType>
+        <EntityType Name="StatusPlan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -674,6 +708,23 @@
                 <ScalarProperty Name="content" ColumnName="content" />
                 <ScalarProperty Name="number_title" ColumnName="number_title" />
                 <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlanStatus">
+            <EntityTypeMapping TypeName="CP25Team09Model.PlanStatus">
+              <MappingFragment StoreEntitySet="PlanStatus">
+                <ScalarProperty Name="id_status" ColumnName="id_status" />
+                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatusPlan">
+            <EntityTypeMapping TypeName="CP25Team09Model.StatusPlan">
+              <MappingFragment StoreEntitySet="StatusPlan">
+                <ScalarProperty Name="status_name" ColumnName="status_name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

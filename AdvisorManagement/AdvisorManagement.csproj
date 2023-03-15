@@ -242,6 +242,9 @@
     <Compile Include="Models\PlanClass.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PlanStatus.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProofPlan.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
@@ -252,6 +255,9 @@
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Semester.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StatusPlan.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Student.cs">

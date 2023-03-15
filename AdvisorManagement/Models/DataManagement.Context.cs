@@ -39,5 +39,7 @@ namespace AdvisorManagement.Models
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<VLClass> VLClass { get; set; }
         public virtual DbSet<PlanClass> PlanClass { get; set; }
+        public virtual DbSet<PlanStatus> PlanStatus { get; set; }
+        public virtual DbSet<StatusPlan> StatusPlan { get; set; }
     }
 }

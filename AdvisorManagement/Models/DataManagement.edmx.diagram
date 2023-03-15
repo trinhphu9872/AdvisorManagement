@@ -24,6 +24,8 @@
         <AssociationConnector Association="CP25Team09Model.FK_RoleMenu_Menu" ManuallyRouted="false" />
         <AssociationConnector Association="CP25Team09Model.FK_RoleMenu_Role" ManuallyRouted="false" />
         <EntityTypeShape EntityType="CP25Team09Model.PlanClass" Width="1.5" PointX="10.375" PointY="6.75" />
+        <EntityTypeShape EntityType="CP25Team09Model.PlanStatus" Width="1.5" PointX="7.75" PointY="10.75" />
+        <EntityTypeShape EntityType="CP25Team09Model.StatusPlan" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
