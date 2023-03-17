@@ -1,0 +1,319 @@
+﻿
+@model IEnumerable<AdvisorManagement.Models.PlanAdvisor>
+@using AdvisorManagement.Models;
+
+@{
+    ViewBag.Title = "PlanSubmited";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+    List<VLClass> listYearAdvisor = (List<VLClass>)ViewBag.listYearAdvisor;
+    var yearNow = (int)Session["yearNow"];
+    var roleABC = (string)Session["role"];
+    var yearLast = yearNow - 1;
+}
+
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-0">Kế hoạch năm học của cố vấn</h5>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <div class="">
+                        <label for="cars">Năm học:</label>
+                        <select id="year" name="year" onchange="filterFunction()">
+                            <option selected value="0">ALL</option>
+                            @foreach (var item in listYearAdvisor)
+                            {
+                                var i = int.Parse(item.semester_name) - 1;
+                                <option value="@item.semester_name">@i - @item.semester_name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="table-responsive" style="margin-top:10px">
+                        <table width="100%" id="zero_config" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                            <thead>
+                                <tr>
+                                    <th width="5%" style="text-align:center">STT</th>
+                                    <th width="20%" style="text-align:center">Mã lớp học</th>
+                                    <th width="20%" style="text-align:center">Người cố vấn</th>
+                                    <th width="20%" style="text-align:center">Trạng thái</th>
+                                    <th width="25%" style="text-align:center">Hoạt động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            </tbody>
+                        </table>
+                        <a href="javascript:history.back()">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalCheck" class="modal fade" role="document">
+        <div class="modal-dialog" style="max-width: 90%;" role="document">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+@*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
+                <div class="modal-header">
+                    <input hidden id="id_class" value="" />
+                    <h4 class="modal-title">Kế hoạch cố vấn</h4>
+                </div>
+                <div class="table-responsive" style="margin-top:10px">
+                    <table width="100%" id="zero_config_plan" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">STT</th>
+                                <th style="text-align:center">Nội dung</th>
+                                <th style="text-align:center">HK1</th>
+                                <th style="text-align:center">HK2</th>
+                                <th style="text-align:center">HK3</th>
+                                <th style="text-align:center">Mô tả công việc</th>
+                                <th style="text-align:center">Tài nguyên chuẩn bị</th>
+                                <th style="text-align:center">Ghi chú</th>
+                                <th hidden>year</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="modal-footer" class="modal-footer">                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right sidebar -->
+    <!-- ============================================================== -->
+    <!-- .right-sidebar -->
+    <!-- ============================================================== -->
+    <!-- End Right sidebar -->
+    <!-- ============================================================== -->
+</div>
+<script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
+<script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
+<script>
+        //Lấy data khi vừa vào web admin
+         var dataTable = $("#zero_config").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetListPlanSubmited", "PlansAdvisor")',
+                'data': function (d) {
+                 var input = document.getElementById("year");
+                         filter = input.value.toUpperCase();
+                    d.year = filter;
+                         },
+                'type': 'get',
+                 'datatype': 'json',
+         },
+         'columns':
+             [
+                 { 'data': 'id', 'width': '5%', },
+                 { 'data': 'class_code', 'width': '20%'},
+                 { 'data': 'user_name', 'width': '20%' },
+                 { 'data': 'status', 'width': '20%' },
+                 {
+                     'data': 'id_class', 'width': '25%', 'render': function (data, type, row) {
+                         return '<button onclick="Check(' + data + ')" class="btn btn-success">Kiểm tra <i class="fas fa-trash-alt"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success">Export excel<i class="fas fa-trash-alt"></i></button>';
+                     }
+                 },
+                 ],
+             "order": [[3, "asc"]], 
+
+         });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+
+
+        function filterFunction() {
+            $("#zero_config").dataTable().fnDestroy();
+            var dataTable = $("#zero_config").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetListPlanSubmited", "PlansAdvisor")',
+                'data': function (d) {
+                 var input = document.getElementById("year");
+                         filter = input.value.toUpperCase();
+                            d.year = filter ;
+                         },
+                'type': 'get',
+                'datatype':'json',
+         },
+         'columns':
+             [
+                 { 'data': 'id', 'width': '5%', },
+                 { 'data': 'class_code', 'width': '20%'},
+                 { 'data': 'user_name', 'width': '20%' },
+                 { 'data': 'status', 'width': '20%' },
+                 {
+                     'data': 'id_class', 'width': '25%', 'render': function (data, type, row) {
+                         return '<button onclick="Check(' + data + ')" class="btn btn-success">Kiểm tra <i class="fas fa-trash-alt"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success">Export excel<i class="fas fa-trash-alt"></i></button>';
+                     }
+                 },
+                    ],
+                "order": [[3, "desc"]],  
+         });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+
+        }
+
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+    function Check(id_class) {
+        jQuery('.modal-footer').empty();
+        $('#id_class').val(id_class);
+        $("#zero_config_plan").dataTable().fnDestroy();
+        $.ajax({
+                url: '@Url.Action("GetListPlanSubmitedClass", "PlansAdvisor")',
+                type: 'GET',
+                data: {
+                    id_class: id_class
+                },
+                /*contentType: "application/json; charset=utf-8", */
+                success: function (data) {
+                    if (data.success == true) {
+                        GeneraTable(id_class)
+                        $('.modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button>`);
+                    } else {
+                        GeneraTable(id_class);
+                        $('.modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button><button onclick = "ReturnPlan()" type = "button" class= "btn btn-default" data - dismiss="modal" > Trả về</button ><button onclick = "BrowsePlan()" class="btn btn-primary" type="submit">Duyệt</button>`);
+                    }
+                }
+            })
+            /*dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();*/
+        $("#modalCheck").modal('show');
+    }
+
+    function GeneraTable(id_class) {
+        $("#zero_config_plan").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetListPlanSubmitedClass", "PlansAdvisor")',
+                'data': function (d) {
+                    d.id_class = id_class;
+                 },
+                'type': 'get',
+                'datatype': 'json',
+         },
+         'columns':
+             [
+                 { 'data': 'number_title', 'width': '1%', },
+                 { 'data': 'content', 'width': '25%'},
+                 { 'data': 'hk1', 'width': '3%' },
+                 { 'data': 'hk2', 'width': '3%' },
+                 { 'data': 'hk3', 'width': '3%' },  
+                 { 'data': 'describe', 'width': '30%' },
+                 { 'data': 'source', 'width': '25%' },
+                 { 'data': 'note', 'width': '10%' },
+                ],
+            "autoWidth": false,
+            "aLengthMenu": [[-1], ["All"]],
+            "bLengthChange": false,
+            "bPaginate": false,
+            "bInfo": false,
+         });
+    }
+
+    function HideModal() {
+        $("#modalCheck").modal('hide');
+    }
+
+    function ReturnPlan() {
+        let id_class = $('#id_class').val();
+        $.ajax({
+                url: '@Url.Action("ReturnPlan", "PlansAdvisor")',
+                type: 'POST',
+                data: {
+                    id_class: id_class
+                },
+                /*contentType: "application/json; charset=utf-8", */
+                success: function (data) {
+                    if (data.success == true) {
+                        $("#modalCheck").modal('hide');
+                        alert(data.message);
+                        dataTable.ajax.reload(null, false);
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+    }
+
+    function BrowsePlan() {
+        let id_class = $('#id_class').val();
+        $.ajax({
+                url: '@Url.Action("BrowsePlan", "PlansAdvisor")',
+                type: 'POST',
+                data: {
+                    id_class: id_class
+                },
+                /*contentType: "application/json; charset=utf-8", */
+                success: function (data) {
+                    if (data.success == true) {
+                        $("#modalCheck").modal('hide');
+                        alert(data.message);
+                        dataTable.ajax.reload(null, false);
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+    }
+
+    function ExportExcel(id_class) {
+         $.ajax({
+                url: '@Url.Action("ExportTemplateAdvisor", "PlansAdvisor")',
+                type: 'POST',
+                data: {
+                    id_class: id_class
+                },
+                /*contentType: "application/json; charset=utf-8", */
+                success: function (data) {
+                    var bytes = new Uint8Array(data.FileContents);
+                    var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var downloadUrl = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = downloadUrl;
+                    a.download = data.FileDownloadName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+                error: function (err) {
+                    alert(err);
+                },
+            })
+    }
+</script>

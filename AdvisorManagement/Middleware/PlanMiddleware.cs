@@ -11,6 +11,8 @@ using System.Web.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.IO;
+using Microsoft.Ajax.Utilities;
+using Spire.Pdf.Fields;
 
 namespace AdvisorManagement.Middleware
 {
@@ -86,6 +88,49 @@ namespace AdvisorManagement.Middleware
             return null;
         }
 
+        public object getListPlanSatus(string year)
+        {
+
+            if (year == "0")
+            {
+                var listPlan = (from pq in db.AccountUser
+                                 join vl in db.VLClass on pq.user_code equals vl.advisor_code
+                                 join ps in db.PlanStatus on vl.id equals ps.id_class
+                                 join sp in db.StatusPlan on ps.id_status equals sp.id
+                                 where vl.id == ps.id_class && sp.status_name != "Đang làm"
+                                 select new Models.ViewModel.ListPlanSubmited
+                                 {
+                                     id = ps.id,
+                                     id_class = vl.id,
+                                     user_code = pq.user_code,
+                                     user_name = pq.user_name,
+                                     class_code = vl.class_code,
+                                     semester = vl.semester_name,
+                                     status = sp.status_name
+                                 }).OrderByDescending(x=>x.status).ToList();
+                return listPlan;
+            }
+            else
+            {
+                var listPlan = (from pq in db.AccountUser
+                                join vl in db.VLClass on pq.user_code equals vl.advisor_code
+                                join ps in db.PlanStatus on vl.id equals ps.id_class
+                                join sp in db.StatusPlan on ps.id_status equals sp.id
+                                where vl.id == ps.id_class && vl.semester_name == year && sp.status_name != "Đang làm"
+                                select new Models.ViewModel.ListPlanSubmited
+                                {
+                                    id = ps.id,
+                                    user_code = pq.user_code,
+                                    id_class = vl.id,
+                                    user_name = pq.user_name,
+                                    class_code = vl.class_code,
+                                    semester = vl.semester_name,
+                                    status = sp.status_name
+                                }).OrderByDescending(x => x.status).ToList();
+                return listPlan;
+            }
+        }
+
         public int getYear()
         {
             int year;
@@ -159,6 +204,20 @@ namespace AdvisorManagement.Middleware
                 db.SaveChanges();
             }
         }
+
+        public void PlanStatus(int id_class)
+        {
+            if (db.PlanStatus.Where(x => x.id_class == id_class).Count() == 0)
+            {
+                PlanStatus planStatus = new PlanStatus();
+                planStatus.id_class = id_class;
+                planStatus.id_status = 1;
+                db.PlanStatus.Add(planStatus);
+                db.SaveChanges();
+            }
+
+        }
+
 
         public ExcelPackage ExportTemplateAdmin(ExcelPackage pck, List<PlanAdvisor> template,int? year)
         {
@@ -570,6 +629,13 @@ namespace AdvisorManagement.Middleware
             ws.Row(rowStart + 8).Height = 31.80;
             pck.Save();
             return pck;
+        }
+
+        public string getClassCode(int id)
+        {
+            var id_class = db.PlanClass.Find(id).id_class;
+            var class_code = db.VLClass.Find(id_class).class_code;
+            return class_code;
         }
     }
 }

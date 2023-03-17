@@ -180,6 +180,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     db.VLClass.Add(vLClass);
                     db.SaveChanges();
                     servicePlan.AssignmentTemplate(vLClass.id, year);
+                    servicePlan.PlanStatus(vLClass.id);
                     return Json(new { success = true, message = "Thêm thành công" });
                 }
                 else
@@ -207,16 +208,38 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
+           
             var listPlan = db.PlanClass.Where(x => x.id_class == id).ToList();
             foreach(var item in listPlan)
-            {               
-                db.PlanClass.Remove(item);
+            {
+               var listProof = db.ProofPlan.Where(x=>x.id_titleplan == item.id).ToList();
+               if(listProof.Count() > 0)
+               {
+                  foreach(var pr in listProof)
+                    {                        
+                        var year = item.year;
+                        var class_code = servicePlan.getClassCode((int)item.id);
+                        var filePath = Server.MapPath("~/Proof/" + year.ToString() + "/" + class_code);
+                        if (Directory.Exists(filePath))
+                        {
+                            Directory.Delete(filePath, true);
+                        }
+                        db.ProofPlan.Remove(pr);
+                    }
+               }
+               db.PlanClass.Remove(item);
             }
             var listStd = db.ListStudents.Where(x => x.id_class == id).ToList();
             foreach(var item in listStd)
             {
                 db.ListStudents.Remove(item);
             }
+            var listPlanStatus = db.PlanStatus.Where(x=>x.id_class ==id).ToList();
+            foreach(var item in listPlanStatus)
+            {
+                db.PlanStatus.Remove(item);
+            }
+            
             db.VLClass.Remove(vLClass);
             db.SaveChanges();
             return Json(new { success = true, message = "Xóa lớp học thành công" });
@@ -378,7 +401,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             var year = servicePlan.getYear();
-            var listClass = Session["listClass"];
+            var listClass = db.VLClass.OrderByDescending(x => x.create_time).ToList();
             var nameUser = Session["nameUser"];
             IEnumerable<AccountUser> name = nameUser as IEnumerable<AccountUser>;
             var hocky = Session["hocky"];

@@ -43,7 +43,7 @@ namespace AdvisorManagement.Controllers
             var user_code = db.AccountUser.Find(id_account).user_code;
             ViewBag.listYearAdvisor = db.VLClass.Where(x => x.semester_name != year.ToString()).Where(y=>y.advisor_code == user_code).DistinctBy(x => x.semester_name).OrderByDescending(x=>x.semester_name).ToList();
             Session["yearNow"] = year;            
-            return View(db.PlanAdvisor.Where(x=>x.year == year).ToList().OrderBy(x=>x.number_title));
+            return View();
         }       
 
         // GET: PlansAdvisor/Create
@@ -101,21 +101,32 @@ namespace AdvisorManagement.Controllers
                     if (postedfile.FileName.EndsWith(".xls") || postedfile.FileName.EndsWith(".xlsx") || postedfile.FileName.EndsWith(".docx") || postedfile.FileName.EndsWith(".doc") || 
                         postedfile.FileName.EndsWith(".pdf") || postedfile.FileName.EndsWith(".png") || postedfile.FileName.EndsWith(".jpg"))
                     {
-                        string path = Server.MapPath("~/Proof/"+ Session["yearNow"].ToString() + "/");
+                        var id = Session["id"];
+                        var class_code = servicePlan.getClassCode((int)id);
+                        var year = db.PlanClass.Find(id).year;
+                        string path = Server.MapPath("~/Proof/"+ year + "/" + class_code + "/");
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);
                         }
                         filePath = path + Path.GetFileName(postedfile.FileName);
                         string extension = Path.GetExtension(postedfile.FileName);
-                        postedfile.SaveAs(filePath);
+                        /*FileInfo fi = new FileInfo(filePath)*/
+                        if (!System.IO.File.Exists(filePath))
+                        {
+                            postedfile.SaveAs(filePath);
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Tên file đã tồn tại" });
+                        }
+                        
                         if (Path.GetExtension(postedfile.FileName) == ".xls")
                         {
                             Workbook workbook = new Workbook();
                             workbook.LoadFromFile(filePath);
                             workbook.SaveToFile(filePath, ExcelVersion.Version2013);
-                        }
-                        var id = Session["id"];
+                        }                    
                         var id_account = db.AccountUser.FirstOrDefault(x=>x.email == User.Identity.Name).id;
                         ProofPlan proof = new ProofPlan();
                         proof.content = mota;
@@ -147,7 +158,8 @@ namespace AdvisorManagement.Controllers
             var nameProof = prooffile.file_proof;
             var id_title = prooffile.id_titleplan;
             var year = db.PlanClass.Find(id_title).year;
-            var filePath = Server.MapPath("~/Proof/" + year.ToString() + "/") +nameProof;
+            var class_code = servicePlan.getClassCode((int)id_title);
+            var filePath = Server.MapPath("~/Proof/" + year.ToString() + "/" + class_code + "/") +nameProof;
             return File(filePath, "application/force- download", Path.GetFileName(filePath));
         }
 
@@ -226,8 +238,18 @@ namespace AdvisorManagement.Controllers
         {
             try
             {
+                var prooffile = db.ProofPlan.Find(id);
+                var nameProof = prooffile.file_proof;
+                var id_title = prooffile.id_titleplan;
+                var year = db.PlanClass.Find(id_title).year;
+                var class_code = servicePlan.getClassCode((int)id_title);
+                var filePath = Server.MapPath("~/Proof/" + year.ToString() + "/" + class_code + "/") + nameProof;
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
                 var proof = db.ProofPlan.SingleOrDefault(x => x.id == id);
-                db.ProofPlan.Remove(proof);
+                db.ProofPlan.Remove(prooffile);
                 db.SaveChanges();
                 return Json(new { success = true, message = "Xóa thành công" }, JsonRequestBehavior.AllowGet);
             }
@@ -324,6 +346,10 @@ namespace AdvisorManagement.Controllers
         // GET: PlansAdvisor/Details/5
         public ActionResult DetailClass(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
@@ -334,8 +360,11 @@ namespace AdvisorManagement.Controllers
             ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             var year = servicePlan.getYear();
+            var id_status = db.PlanStatus.FirstOrDefault(x => x.id_class == id).id_status;
+            var nameStatus = db.StatusPlan.FirstOrDefault(x => x.id == id_status).status_name;
             Session["yearNow"] = year;
             Session["id_class"] = id;
+            Session["name_status"] = nameStatus;
             return View(db.PlanClass.Where(x => x.id_class == id).Where(y => y.year == year).ToList().OrderBy(x => x.number_title));
         }
 
@@ -439,9 +468,10 @@ namespace AdvisorManagement.Controllers
         }
 
         [HttpPost]
-        public JsonResult ExportTemplateAdvisor(int year, int id_class)
+        public JsonResult ExportTemplateAdvisor(int id_class)
         {
-            var listPlan = db.PlanClass.Where(x => x.year == year).Where(y=>y.id_class == id_class).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
+            var listPlan = db.PlanClass.Where(y=>y.id_class == id_class).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
+            var year = (int)db.PlanClass.FirstOrDefault(x => x.id_class == id_class).year;
             var class_code = db.VLClass.Find(id_class).class_code;
             var advisor_code = db.VLClass.Find(id_class).advisor_code;
             var user_name = db.AccountUser.FirstOrDefault(x => x.user_code == advisor_code).user_name;
@@ -478,8 +508,10 @@ namespace AdvisorManagement.Controllers
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.role = Session["role"];
-            ViewBag.id_class = db.PlanClass.FirstOrDefault(x=>x.id== id).id_class;
+            var id_class = db.PlanClass.FirstOrDefault(x => x.id == id).id_class;
+            ViewBag.id_class = id_class;
             Session["id"] = id;
+            Session["class_code"] = db.VLClass.Find(id_class).class_code;
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             ViewBag.hocky = db.Semester.DistinctBy(x => x.semester_name).ToList();
             return View(titlePlan);
@@ -554,33 +586,79 @@ namespace AdvisorManagement.Controllers
             var listProof = servicePlan.getListProofAdmin(semester, id_class);
             return Json(new { data = listProof, success = false }, JsonRequestBehavior.AllowGet);
         }
-
-        /*[HttpPost]
-        public ActionResult AssignmentTemplate(int? id_class, int year)
+        
+        public ActionResult SubmitPlan(int id_class)
         {
-            var templateClass = db.PlanClass.Where(x => x.year == year).Where(y => y.id_class == id_class).ToList();
-            foreach (var item in templateClass)
-            {
-                var temp = db.PlanClass.Find(item.id);
-                db.PlanClass.Remove(temp);
-                db.SaveChanges();
-            }
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
+            PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x=>x.id_class == id_class);
+            planStatus.id_status = id_status;
+            db.SaveChanges();
 
-            var template = db.PlanAdvisor.Where(x => x.year == year).OrderBy(x => x.number_title).ToList();
-            PlanClass planClass = new PlanClass();
-            foreach (var item in template)
+            return Json(new {  success = true, message = "Nộp kế hoạch thành công" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UndoPlan(int id_class)
+        {
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đang làm").id;
+            PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
+            planStatus.id_status = id_status;
+            db.SaveChanges();
+            return Json(new { success = true, message = "Hoàn tác thành công" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ReturnPlan(int id_class)
+        {
+            var checkStatus = db.PlanStatus.FirstOrDefault(x => x.id_class == id_class).id_status;
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đang làm").id;
+            PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
+            planStatus.id_status = id_status;
+            db.SaveChanges();
+            return Json(new { success = true, message = "Trả về thành công" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult BrowsePlan(int id_class)
+        {
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đã duyệt").id;
+            PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
+            planStatus.id_status = id_status;
+            db.SaveChanges();
+            return Json(new { success = true, message = "Duyệt kế hoạch thành công" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PlanSubmited()
+        {
+            ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            var role = serviceStd.getRoles(User.Identity.Name);
+            ViewBag.role = role;
+            Session["role"] = role;           
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.listYearAdvisor = db.VLClass.DistinctBy(x => x.semester_name).OrderByDescending(x => x.semester_name).ToList();
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult GetListPlanSubmited(string year)
+        {
+            var listPlanSubmited = servicePlan.getListPlanSatus(year);
+            return Json(new { data = listPlanSubmited, success = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetListPlanSubmitedClass(int id_class)
+        {
+            var listPlanSubmited = db.PlanClass.Where(x => x.id_class == id_class).ToList().OrderBy(x => x.number_title);
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đã duyệt").id;
+            if(db.PlanStatus.FirstOrDefault(x=>x.id_class == id_class).id_status == id_status)
             {
-                planClass.year = item.year;
-                planClass.number_title = item.number_title;
-                planClass.content = item.content;
-                planClass.describe = item.describe;
-                planClass.source = item.source;
-                planClass.note = item.note;
-                planClass.id_class = id_class;
-                db.PlanClass.Add(planClass);
-                db.SaveChanges();
+                return Json(new { data = listPlanSubmited, success = true }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { success = true, message = "Phân quyền thành công" }, JsonRequestBehavior.AllowGet);
-        }*/
+            else
+            {
+                return Json(new { data = listPlanSubmited, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

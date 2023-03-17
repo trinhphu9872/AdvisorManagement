@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <IISExpressSSLPort>44323</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -273,6 +273,7 @@
     <Compile Include="Models\ViewModel\AccountUserModel.cs" />
     <Compile Include="Models\ViewModel\ClassModel\AdvisorClass.cs" />
     <Compile Include="Models\ViewModel\ClassModel\ListStudent.cs" />
+    <Compile Include="Models\ViewModel\ListPlanSubmited.cs" />
     <Compile Include="Models\ViewModel\ListProofPlan.cs" />
     <Compile Include="Models\ViewModel\MenuItem.cs" />
     <Compile Include="Models\ViewModel\MenuRole.cs" />
@@ -1440,6 +1441,7 @@
     <Content Include="Views\PlansAdvisor\DetailClass.cshtml" />
     <Content Include="Views\PlansAdvisor\ProofPlan.cshtml" />
     <Content Include="Views\PlansAdvisor\Proof.cshtml" />
+    <Content Include="Views\PlansAdvisor\PlanSubmited.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

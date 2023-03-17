@@ -1,6 +1,7 @@
 ﻿using AdvisorManagement.Models;
 using AdvisorManagement.Models.ViewModel;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -8,7 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 
@@ -140,6 +143,7 @@ namespace AdvisorManagement.Middleware
                     db.VLClass.Add(vlclass);
                     db.SaveChanges();
                     servicePlan.AssignmentTemplate(vlclass.id, int.Parse(hk_year));
+                    servicePlan.PlanStatus(vlclass.id);
                     flag = true;
                 }               
             }
@@ -170,6 +174,7 @@ namespace AdvisorManagement.Middleware
                     db.VLClass.Add(vlclass);
                     db.SaveChanges();
                     servicePlan.AssignmentTemplate(vlclass.id, int.Parse(hk_year));
+                    servicePlan.PlanStatus(vlclass.id);
                     flag = true;
                 }                
             }           
