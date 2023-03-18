@@ -84,6 +84,8 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_class" Type="int" />
           <Property Name="id_status" Type="int" />
+          <Property Name="modify_time" Type="datetime" />
+          <Property Name="message" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="ProofPlan">
           <Key>
@@ -535,6 +537,8 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="id_class" Type="Int32" />
           <Property Name="id_status" Type="Int32" />
+          <Property Name="modify_time" Type="DateTime" Precision="3" />
+          <Property Name="message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="StatusPlan">
           <Key>
@@ -715,6 +719,8 @@
           <EntitySetMapping Name="PlanStatus">
             <EntityTypeMapping TypeName="CP25Team09Model.PlanStatus">
               <MappingFragment StoreEntitySet="PlanStatus">
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="modify_time" ColumnName="modify_time" />
                 <ScalarProperty Name="id_status" ColumnName="id_status" />
                 <ScalarProperty Name="id_class" ColumnName="id_class" />
                 <ScalarProperty Name="id" ColumnName="id" />
