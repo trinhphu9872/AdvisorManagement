@@ -13,6 +13,7 @@ using OfficeOpenXml.Style;
 using System.IO;
 using Microsoft.Ajax.Utilities;
 using Spire.Pdf.Fields;
+using AdvisorManagement.Models.ViewModel;
 
 namespace AdvisorManagement.Middleware
 {
@@ -90,7 +91,6 @@ namespace AdvisorManagement.Middleware
 
         public object getListPlanSatus(string year)
         {
-
             if (year == "0")
             {
                 var listPlan = (from pq in db.AccountUser
@@ -131,6 +131,47 @@ namespace AdvisorManagement.Middleware
             }
         }
 
+        public object getListAdvisorUnfinished()
+        {
+            var listPlan = (from pq in db.AccountUser
+                            join vl in db.VLClass on pq.user_code equals vl.advisor_code
+                            join ps in db.PlanStatus on vl.id equals ps.id_class
+                            join sp in db.StatusPlan on ps.id_status equals sp.id
+                            where vl.id == ps.id_class && sp.status_name == "Đang làm"
+                            select new Models.ViewModel.ListAdvisorUnfinished
+                            {
+                                id = ps.id,
+                                id_class = vl.id,
+                                user_code = pq.user_code,
+                                user_name = pq.user_name,
+                                class_code = vl.class_code,
+                                email = pq.email,
+                            }).ToList();
+
+            List<ListAdvisorUnfinished> advisor1 = new List<ListAdvisorUnfinished>();         
+                var user = "";
+                var class_code = "";
+                foreach (var item in listPlan)
+                {                
+                    if (user == item.user_code)
+                    {
+                        class_code += ", "+ item.class_code;                        
+                        var b = advisor1.FirstOrDefault(x=>x.user_code == item.user_code);
+                        advisor1.Remove(b);
+                        item.class_code = class_code;
+                     }                   
+                    else
+                    {
+                        item.class_code = item.class_code;
+                    }
+                    advisor1.Add(item);
+                    class_code = item.class_code;
+                    user = item.user_code;
+                }
+            return advisor1;
+        }
+
+        
         public int getYear()
         {
             int year;

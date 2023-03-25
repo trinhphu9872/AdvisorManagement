@@ -17,7 +17,8 @@ namespace AdvisorManagement.Middleware
     public class MailServicesMiddleware 
     {
 
-        public string MailSend(MailRequest request) {
+        public string MailSend(MailRequest request) 
+        {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(WebConfigurationManager.AppSettings["EmailSystem"]));
             email.To.Add(MailboxAddress.Parse(request.To));

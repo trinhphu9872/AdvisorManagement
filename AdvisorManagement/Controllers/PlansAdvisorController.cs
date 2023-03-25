@@ -16,6 +16,8 @@ using System.Web.UI.WebControls;
 using OfficeOpenXml.Style;
 using System.Drawing;
 using System.Text;
+using System.Web.Services.Description;
+using AdvisorManagement.Models.ViewModel;
 
 namespace AdvisorManagement.Controllers
 {
@@ -26,6 +28,7 @@ namespace AdvisorManagement.Controllers
         private StudentsMiddleware serviceStd = new StudentsMiddleware();
         private PlanMiddleware servicePlan = new PlanMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
+        private MailServicesMiddleware servicesMail = new MailServicesMiddleware();
         // GET: PlansAdvisor
         public ActionResult Index()
         {
@@ -361,10 +364,20 @@ namespace AdvisorManagement.Controllers
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             var year = servicePlan.getYear();
             var id_status = db.PlanStatus.FirstOrDefault(x => x.id_class == id).id_status;
-            var nameStatus = db.StatusPlan.FirstOrDefault(x => x.id == id_status).status_name;
+            var nameStatus = db.StatusPlan.FirstOrDefault(x => x.id == id_status).status_name;            
             Session["yearNow"] = year;
             Session["id_class"] = id;
             Session["name_status"] = nameStatus;
+            var message = db.PlanStatus.FirstOrDefault(x => x.id_class == id).message;
+            var modify_time = db.PlanStatus.FirstOrDefault(x => x.id_class == id).modify_time;
+            if(message != null && modify_time != null)
+            {
+                Session["message"] = modify_time + ": " + message;
+            }
+            else
+            {
+                Session["message"] = null;
+            }
             return View(db.PlanClass.Where(x => x.id_class == id).Where(y => y.year == year).ToList().OrderBy(x => x.number_title));
         }
 
@@ -592,6 +605,8 @@ namespace AdvisorManagement.Controllers
             var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x=>x.id_class == id_class);
             planStatus.id_status = id_status;
+            planStatus.message = null;
+            planStatus.modify_time = DateTime.Now;
             db.SaveChanges();
 
             return Json(new {  success = true, message = "Nộp kế hoạch thành công" }, JsonRequestBehavior.AllowGet);
@@ -606,12 +621,14 @@ namespace AdvisorManagement.Controllers
             return Json(new { success = true, message = "Hoàn tác thành công" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ReturnPlan(int id_class)
+        public ActionResult ReturnPlan(int id_class, string message)
         {
             var checkStatus = db.PlanStatus.FirstOrDefault(x => x.id_class == id_class).id_status;
             var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đang làm").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
             planStatus.id_status = id_status;
+            planStatus.message = message;
+            planStatus.modify_time = DateTime.Now;
             db.SaveChanges();
             return Json(new { success = true, message = "Trả về thành công" }, JsonRequestBehavior.AllowGet);
         }
@@ -621,12 +638,15 @@ namespace AdvisorManagement.Controllers
             var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đã duyệt").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
             planStatus.id_status = id_status;
+            planStatus.modify_time = DateTime.Now;
             db.SaveChanges();
             return Json(new { success = true, message = "Duyệt kế hoạch thành công" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PlanSubmited()
         {
+            var year = servicePlan.getYear();
+            Session["yearNow"] = year;
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
@@ -660,5 +680,53 @@ namespace AdvisorManagement.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult GetListAdvisor()
+        {                        
+            var listAdvisor = servicePlan.getListAdvisorUnfinished();
+            return Json(new { data = listAdvisor, success = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetRemind()
+        {
+
+            string emailUser = User.Identity.Name;
+            var listAdvisor = servicePlan.getListAdvisorUnfinished();
+            List<ListAdvisorUnfinished> advisor = (List<ListAdvisorUnfinished>)listAdvisor;
+            string email = "";
+            foreach (var item in advisor)
+            {
+                if(email != "")
+                {
+                    email += ", " + item.email;
+                }
+                else
+                {
+                    email += item.email;
+                }
+
+            }
+            return Json(new { data = email, emailUser = emailUser, success = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult SendMailRemind(string to, string subject, string message)
+        {
+            string[] mail = to.ToString().Trim().Split(',');
+            //List<string> strings= new List<string>();
+            foreach (var item in mail)
+            {
+                //strings.Add(item);
+                servicesMail.MailSend(new MailRequest()
+                {
+                    To = item,
+                    Subject = subject,
+                    Message = message,
+                });
+            }
+            //var b = strings; 
+            return Json(new { message = "Nhắc nhở thành công", success = true }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

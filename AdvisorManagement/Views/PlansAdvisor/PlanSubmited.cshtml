@@ -21,6 +21,15 @@
                 <div class="card-body">
                     <h5 class="card-title mb-0">Kế hoạch năm học của cố vấn</h5>
                 </div>
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <a onclick="ListAdvisor()" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 250px;">
+                                Danh sách cố vấn chưa nộp<i style="margin-left:5px" class="fas fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card">
@@ -63,7 +72,7 @@
 
             <!-- Modal content-->
             <div class="modal-content">
-@*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
+                @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
                 <div class="modal-header">
                     <input hidden id="id_class" value="" />
                     <h4 class="modal-title">Kế hoạch cố vấn</h4>
@@ -87,12 +96,40 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="modal-footer" class="modal-footer">                   
+                <div id="modal-footer" class="modal-footer">
                 </div>
             </div>
         </div>
     </div>
 
+    <div id="modalListAdvisor" class="modal fade" role="document">
+        <div class="modal-dialog" style="max-width: 60%;" role="document">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
+                <div class="modal-header">
+                    <input hidden id="id_class" value="" />
+                    <h4 class="modal-title">Danh sách cố vấn chưa nộp kế hoạch năm học</h4>
+                </div>
+                <div class="table-responsive" style="margin-top:10px">
+                    <table width="100%" id="zero_config_listadvisor" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">STT</th>
+                                <th style="text-align:center">Tên cố vấn</th>
+                                <th style="text-align:center">Lớp chưa nộp</th>                           
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="remind" class="modal-footer">                    
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- ============================================================== -->
     <!-- End PAge Content -->
     <!-- ============================================================== -->
@@ -131,7 +168,7 @@
                      }
                  },
                  ],
-             "order": [[3, "asc"]], 
+             "order": [[3, "asc"]],
 
          });
             dataTable.on('order.dt search.dt', function () {
@@ -167,7 +204,7 @@
                      }
                  },
                     ],
-                "order": [[3, "desc"]],  
+                "order": [[3, "desc"]],
          });
             dataTable.on('order.dt search.dt', function () {
                 let i = 1;
@@ -188,7 +225,7 @@
         });
 
     function Check(id_class) {
-        jQuery('.modal-footer').empty();
+        jQuery('#modal-footer').empty();
         $('#id_class').val(id_class);
         $("#zero_config_plan").dataTable().fnDestroy();
         $.ajax({
@@ -201,10 +238,10 @@
                 success: function (data) {
                     if (data.success == true) {
                         GeneraTable(id_class)
-                        $('.modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button>`);
+                        $('#modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button>`);
                     } else {
                         GeneraTable(id_class);
-                        $('.modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button><button onclick = "ReturnPlan()" type = "button" class= "btn btn-default" data - dismiss="modal" > Trả về</button ><button onclick = "BrowsePlan()" class="btn btn-primary" type="submit">Duyệt</button>`);
+                        $('#modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button><button onclick = "ReturnPlan()" type = "button" class= "btn btn-default" data - dismiss="modal" > Trả về</button ><button onclick = "BrowsePlan()" class="btn btn-primary" type="submit">Duyệt</button>`);
                     }
                 }
             })
@@ -233,7 +270,7 @@
                  { 'data': 'content', 'width': '25%'},
                  { 'data': 'hk1', 'width': '3%' },
                  { 'data': 'hk2', 'width': '3%' },
-                 { 'data': 'hk3', 'width': '3%' },  
+                 { 'data': 'hk3', 'width': '3%' },
                  { 'data': 'describe', 'width': '30%' },
                  { 'data': 'source', 'width': '25%' },
                  { 'data': 'note', 'width': '10%' },
@@ -251,12 +288,20 @@
     }
 
     function ReturnPlan() {
+        jQuery('#modal-footer').empty();
+        $('#modal-footer').append(`<textarea maxlength="200" placeholder="Giới hạn 200 từ" id="message_return" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 16px;resize: none;" type="text"></textarea>
+        <button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button> <button onclick = "SendReturnPlan()" type = "button" class= "btn btn-default" data - dismiss="modal" > Trả về</button >`);
+    }
+
+    function SendReturnPlan() {
+        let message = $('#message_return').val();
         let id_class = $('#id_class').val();
         $.ajax({
                 url: '@Url.Action("ReturnPlan", "PlansAdvisor")',
                 type: 'POST',
                 data: {
-                    id_class: id_class
+                    id_class: id_class,
+                    message: message,
                 },
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {
@@ -316,4 +361,89 @@
                 },
             })
     }
+
+    function ListAdvisor() {
+        jQuery('#remind').empty();
+        $("#zero_config_listadvisor").dataTable().fnDestroy();
+        dataTable = $("#zero_config_listadvisor").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetListAdvisor", "PlansAdvisor")',
+                'type': 'get',
+                'datatype': 'json',
+         },
+         'columns':
+             [
+                 { 'data': 'id', 'width': '5%', },
+                 { 'data': 'user_name', 'width': '40%'},
+                 { 'data': 'class_code', 'width': '40%' },
+                ],
+            "autoWidth": false,
+            "aLengthMenu": [[-1], ["All"]],
+            "bLengthChange": false,
+            "bPaginate": false,
+            "bInfo": false,
+       });
+        dataTable.on('order.dt search.dt', function () {
+               let i = 1;
+               dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                   this.data(i++);
+               });
+        }).draw();
+        $('#remind').append(`
+                    <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
+                    <button onclick="Remind()" type="button" class= "btn btn-default" data-dismiss="modal">Nhắc nhở</button>`);
+        $("#modalListAdvisor").modal('show');
+    }
+
+    function HideListAdvisor() {
+        $("#modalListAdvisor").modal('hide');
+    }
+
+    function Remind() {
+        jQuery('#remind').empty();
+         $.ajax({
+                url: '@Url.Action("GetRemind", "PlansAdvisor")',
+                type: 'GET',
+                /*contentType: "application/json; charset=utf-8", */
+             success: function (data) {
+                 $('#remind').append(`
+                    <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class=""><span>Đến:</span><input id="txt_to" type="text" class="form-control" value="${data.data}" disabled/></div>
+                    </div>
+                     <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class=""><span>Tiêu đề:</span><input id="txt_subject" type="text" class="form-control" value=""/></div>
+                    </div>
+                    <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class=""><span>Nội dung:</span><textarea maxlength="200" placeholder="Giới hạn 200 từ" id="txt_message" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 11px;resize: none;" type="text"></textarea></div>
+                    </div>
+                    <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button> <button onclick ="SendRemind()" type = "button" class= "btn btn-default" data - dismiss="modal" >Gửi</button >`);
+             }
+            })
+    }
+
+    function SendRemind() {
+        var to = $('#txt_to').val();
+        var subject = $('#txt_subject').val();
+        var message = $('#txt_message').val();
+        if ($('#txt_to').prop("disabled") == true) {
+             $.ajax({
+            url: '@Url.Action("SendMailRemind", "PlansAdvisor")',
+            type: 'POST',
+            data: {
+                to: to,
+                subject: subject,
+                message: message
+            },
+            success: function (data) {
+                if (data.success == true) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            }
+            })
+        }
+    }
+
 </script>
