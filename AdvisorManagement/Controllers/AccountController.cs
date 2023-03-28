@@ -20,6 +20,7 @@ namespace AdvisorManagement.Controllers
         private CP25Team09Entities dbApp = new CP25Team09Entities();
         private RoleMiddleware roleChange = new RoleMiddleware();
         private AccountMiddleware accountService = new AccountMiddleware();
+        private MenuMiddleware serviceMenu = new MenuMiddleware();
         public ActionResult Login()
         {
             if (Request.IsAuthenticated)
@@ -60,6 +61,8 @@ namespace AdvisorManagement.Controllers
         {
             string email = User.Identity.Name;
             Session["EmailVLU"] = email;
+            Session["Name"] = accountService.getTextName(User.Identity.Name);
+            Session["RoleName"] = accountService.getRoleTextName(User.Identity.Name);
             var query = dbApp.AccountUser.Where(x => x.email == email);
             if (query == null)
             {

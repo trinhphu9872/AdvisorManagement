@@ -22,6 +22,7 @@ using OfficeOpenXml.Style;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
+    [LoginFilter]
     public class ClassManagementsController : Controller
     {
 
@@ -32,13 +33,17 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         private string routePermission = "Admin/ClassManagements";
         CP25Team09Entities db = new CP25Team09Entities();
+        public void init()
+        {
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        }
         // GET: Admin/ClassManagements
         public ActionResult Index()
         {
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
+            this.init();
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 var listClass = db.VLClass.OrderByDescending(x=>x.create_time).ToList();
@@ -47,7 +52,6 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 ViewBag.Advisor = db.Advisor.ToList();
                 ViewBag.nameUser = db.AccountUser.ToList();
                 Session["nameUser"] = db.AccountUser.ToList();
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 var year = servicePlan.getYear();
                 var yearNow = year.ToString();
                 var namhoc = db.VLClass.Where(x=>x.semester_name != yearNow).DistinctBy(x=>x.semester_name).OrderByDescending(x=>x.semester_name).ToList();
@@ -399,7 +403,6 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public void ExcelExport()
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             var year = servicePlan.getYear();
             var listClass = db.VLClass.OrderByDescending(x => x.create_time).ToList();
             var nameUser = Session["nameUser"];

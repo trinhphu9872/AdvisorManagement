@@ -19,6 +19,7 @@ using System.Text;
 
 namespace AdvisorManagement.Controllers
 {
+    [LoginFilter]
     public class PlansAdvisorController : Controller
     {
         private CP25Team09Entities db = new CP25Team09Entities();
@@ -26,18 +27,22 @@ namespace AdvisorManagement.Controllers
         private StudentsMiddleware serviceStd = new StudentsMiddleware();
         private PlanMiddleware servicePlan = new PlanMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
+        public void init()
+        {
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        }
         // GET: PlansAdvisor
         public ActionResult Index()
         {
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            this.init();
             var role = serviceStd.getRoles(User.Identity.Name);
             ViewBag.role = role;
             Session["role"] = role;
             var id_account = serviceStd.getID(User.Identity.Name);
             ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             var year = servicePlan.getYear();
             ViewBag.listYear = db.PlanAdvisor.Where(x => x.year < year).DistinctBy(x=>x.year).ToList();
             var user_code = db.AccountUser.Find(id_account).user_code;
@@ -49,8 +54,7 @@ namespace AdvisorManagement.Controllers
         // GET: PlansAdvisor/Create
         public ActionResult Create()
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            this.init();
             return View();
         }
 
@@ -352,13 +356,12 @@ namespace AdvisorManagement.Controllers
             }
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            this.init();
             var role = serviceStd.getRoles(User.Identity.Name);
             ViewBag.role = role;
             Session["role"] = role;
             var id_account = serviceStd.getID(User.Identity.Name);
             ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             var year = servicePlan.getYear();
             var id_status = db.PlanStatus.FirstOrDefault(x => x.id_class == id).id_status;
             var nameStatus = db.StatusPlan.FirstOrDefault(x => x.id == id_status).status_name;
@@ -506,13 +509,12 @@ namespace AdvisorManagement.Controllers
             }
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            this.init();
             ViewBag.role = Session["role"];
             var id_class = db.PlanClass.FirstOrDefault(x => x.id == id).id_class;
             ViewBag.id_class = id_class;
             Session["id"] = id;
             Session["class_code"] = db.VLClass.Find(id_class).class_code;
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             ViewBag.hocky = db.Semester.DistinctBy(x => x.semester_name).ToList();
             return View(titlePlan);
         }
@@ -530,13 +532,12 @@ namespace AdvisorManagement.Controllers
         {
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            this.init();
             var role = serviceStd.getRoles(User.Identity.Name);
             ViewBag.role = role;
             Session["role"] = role;
             var id_account = serviceStd.getID(User.Identity.Name);
             ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             var year = servicePlan.getYear();
             ViewBag.listYear = db.PlanAdvisor.Where(x => x.year < year).DistinctBy(x => x.year).ToList();
             var user_code = db.AccountUser.Find(id_account).user_code;
@@ -566,13 +567,12 @@ namespace AdvisorManagement.Controllers
             {
                 return HttpNotFound();
             }
+            this.init();
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             ViewBag.role = Session["role"];           
             Session["id"] = id;
             Session["class_code"] = db.VLClass.Find(id).class_code;
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             ViewBag.hocky = db.Semester.DistinctBy(x => x.semester_name).ToList();
 
             return View();
@@ -629,11 +629,10 @@ namespace AdvisorManagement.Controllers
         {
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+            this.init();
             var role = serviceStd.getRoles(User.Identity.Name);
             ViewBag.role = role;
             Session["role"] = role;           
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             ViewBag.listYearAdvisor = db.VLClass.DistinctBy(x => x.semester_name).OrderByDescending(x => x.semester_name).ToList();
             return View();
         }

@@ -10,19 +10,24 @@ using System.Web.Mvc;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
+    [LoginFilter]
     public class DashboardController : Controller
     {
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
 
         private string routePermission = "Admin/Dashboard";
-        CP25Team09Entities db = new CP25Team09Entities();
         string connect = @"Data Source=tuleap.vanlanguni.edu.vn,18082;Initial Catalog=CP25Team09;Persist Security Info=True;User ID=CP25Team09;Password='CP25Team09'";
+        CP25Team09Entities db = new CP25Team09Entities();
+        public void init()
+        {
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        }
         // GET: Admin/Dashboard
         public ActionResult Index()
         {
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            this.init();
             return View();
         }
 

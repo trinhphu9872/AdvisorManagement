@@ -22,16 +22,20 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         private string routePermission = "Admin/AccountUsers";
         private string picture;
+        public void init()
+        {
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        } 
         //GET: Admin/AccountUsers
         public ActionResult Index()
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                 var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1).OrderBy(y => y.id_role);
+                this.init();
+                var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1).OrderBy(y => y.id_role);
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                 ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 return View(accountUser.ToList());
             }
             else
@@ -46,8 +50,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                this.init();
 
                 if (id == null)
                 {
@@ -71,8 +74,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                this.init();
 
                 ViewBag.id_Role = new SelectList(db.Role, "id", "role_name");
                 AccountUser user = new AccountUser();
@@ -93,7 +95,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                this.init();
 
                 if (ModelState.IsValid)
                 {
@@ -176,8 +178,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                this.init();
 
                 if (id == null)
                 {
@@ -209,7 +210,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                this.init();
                 if (ModelState.IsValid)
                 {
                     var edituser = db.AccountUser.Find(accountUser.id);
@@ -248,9 +249,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-
+                this.init();
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
@@ -275,7 +274,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                this.init();
                 var accountUser = db.AccountUser.Find(id);
                 var advisor= db.Advisor.Find(accountUser.user_code);
                 var student = db.Student.Find(accountUser.user_code);
