@@ -18,8 +18,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress>
-    </Use64BitIISExpress>
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <IISExpressSSLPort>44323</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -232,9 +231,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Middleware\AccountMiddleware.cs" />
+    <Compile Include="Middleware\LoginFilter.cs" />
     <Compile Include="Middleware\MailServicesMiddleware.cs" />
     <Compile Include="Middleware\MenuMiddleware.cs" />
     <Compile Include="Middleware\PlanMiddleware.cs" />
+    <Compile Include="Middleware\RoleMiddleware.cs" />
     <Compile Include="Middleware\StudentsMiddleware.cs" />
     <Compile Include="Models\AccountUser.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
@@ -1041,6 +1042,55 @@
     <Content Include="Assets\libs\toastr\build\toastr.min.js" />
     <Content Include="Assets\libs\toastr\toastr-icon.png" />
     <Content Include="Assets\libs\toastr\toastr.js" />
+    <Content Include="Assets\User\assets\css\animation.css" />
+    <Content Include="Assets\User\assets\css\custom.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\all.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\all.min.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\brands.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\brands.min.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\fontawesome.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\fontawesome.min.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\regular.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\regular.min.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\solid.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\solid.min.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\svg-with-js.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\svg-with-js.min.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\v4-font-face.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\v4-font-face.min.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\v4-shims.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\v4-shims.min.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\v5-font-face.css" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\css\v5-font-face.min.css" />
+    <Content Include="Assets\User\assets\css\form.css" />
+    <Content Include="Assets\User\assets\css\reset.css" />
+    <Content Include="Assets\User\assets\css\spectre\spectre-exp.min.css" />
+    <Content Include="Assets\User\assets\css\spectre\spectre-icons.min.css" />
+    <Content Include="Assets\User\assets\css\spectre\spectre.min.css" />
+    <Content Include="Assets\User\assets\css\style.css" />
+    <Content Include="Assets\User\assets\css\style2.css" />
+    <Content Include="Assets\User\assets\images\banner1.jpg" />
+    <Content Include="Assets\User\assets\images\bg.jpg" />
+    <Content Include="Assets\User\assets\images\exp.png" />
+    <Content Include="Assets\User\assets\images\files.png" />
+    <Content Include="Assets\User\assets\images\HR.gif" />
+    <Content Include="Assets\User\assets\images\image-job.png" />
+    <Content Include="Assets\User\assets\images\logo.png" />
+    <Content Include="Assets\User\assets\images\logoOld.png" />
+    <Content Include="Assets\User\assets\images\medal.png" />
+    <Content Include="Assets\User\assets\images\money.png" />
+    <Content Include="Assets\User\assets\images\mou1.jpg" />
+    <Content Include="Assets\User\assets\images\people.png" />
+    <Content Include="Assets\User\assets\images\profile.png" />
+    <Content Include="Assets\User\assets\images\sex.png" />
+    <Content Include="Assets\User\assets\images\slider.jpg" />
+    <Content Include="Assets\User\assets\images\slider2.jpg" />
+    <Content Include="Assets\User\assets\images\star.png" />
+    <Content Include="Assets\User\assets\images\td1.jpg" />
+    <Content Include="Assets\User\assets\images\td2.jpg" />
+    <Content Include="Assets\User\assets\images\td3.jpg" />
+    <Content Include="Assets\User\assets\images\user.png" />
+    <Content Include="Assets\User\assets\images\vali.png" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -1094,6 +1144,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="Dist\chart\FileManager.js" />
     <Content Include="Dist\chart\SumClass.js" />
     <Content Include="Dist\chart\SumUser.js" />
@@ -1420,6 +1471,15 @@
       <DependentUpon>DataManagement.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
+    <Content Include="Assets\User\assets\images\bg-bread.webp" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-brands-400.ttf" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-brands-400.woff2" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-regular-400.ttf" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-regular-400.woff2" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-solid-900.ttf" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-solid-900.woff2" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-v4compatibility.ttf" />
+    <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-v4compatibility.woff2" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\function.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1438,6 +1498,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Validation\AccountUsers\Validation_AccountUsers.js" />
     <Content Include="Validation\ClassManagement\Validation_ClassManagement.js" />
     <Content Include="Validation\UserProfile\Validation_UserProfile.js" />
@@ -1470,7 +1531,7 @@
     <Content Include="Views\PlansAdvisor\ProofPlan.cshtml" />
     <Content Include="Views\PlansAdvisor\Proof.cshtml" />
     <Content Include="Views\PlansAdvisor\PlanSubmited.cshtml" />
-    <Content Include="Views\Shared\Login.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,68 @@
+/* //////////////////////////////////////////// */
+/* /23/2/2022  */
+body main {
+    animation: transitionY ease  1.5s;
+}
+.zoom, .zoom-small {overflow: hidden;}
+/* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+.zoom img:hover {transform: scale(1.3); }
+.zoom img {transition: transform .5s ease;}
+/* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+.zoom-small img:hover {transform: scale(1.1); }
+.zoom-small img {transition: transform .5s ease;}
+/* ------------------- Nuxt default transition (page) --------------------- */
+.page-enter-active,.page-leave-active {transition: opacity 0.5s;}
+.page-enter,.page-leave-to {opacity: 0;}
+@keyframes fadeIn{
+    from{opacity: 0;}
+    to{opacity: 1;}
+}
+/* Transition:  */
+/* Scale: thu phóng  Mặc định là 1    */
+/* Rotate: Xoay theo độ */
+/* Skew: Nghiêng theo độ */
+@keyframes transitionIn{
+    from{opacity: 0;transform: translateX(-50%);}
+    to{opacity: 0;transform: scaleX(0);}
+}
+/* Chuyển theo trục Y */
+@keyframes transitionY{
+    from{opacity: 0;transform: transitionY(-100%);}
+    to{opacity: 1;transform: transitionY(0);}
+}
+
+/* Chữ nhấp nháy  */
+@-webkit-keyframes my {
+    0% {color: red;}
+    50% {color: #fff;}
+    100% {color: var(--primary);}
+}
+@-moz-keyframes my {
+    0% {color: red;}
+    50% {color: #fff;}
+    100% {color: var(--primary);}
+}
+@-o-keyframes my {
+    0% {color: red;}
+    50% {color: #fff;}
+    100% {color: var(--primary);}
+}
+@keyframes my {
+    0% {color: red;}
+    50% {color: #fff;}
+    100% {color: var(--primary);}
+}
+/* Rung lắc */
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    /* 10% { transform: translate(-1px, -2px) rotate(-1deg); } */
+    /* 20% { transform: translate(-3px, 0px) rotate(1deg); } */
+    /* 30% { transform: translate(3px, 2px) rotate(0deg); } */
+    /* 40% { transform: translate(1px, -1px) rotate(1deg); } */
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    /* 60% { transform: translate(-3px, 1px) rotate(0deg); } */
+    /* 70% { transform: translate(3px, 1px) rotate(-1deg); } */
+    /* 80% { transform: translate(-1px, -1px) rotate(1deg); } */
+    /* 90% { transform: translate(1px, 2px) rotate(0deg); } */
+    100% { transform: translate(1px, -2px) rotate(-0deg); }
+}

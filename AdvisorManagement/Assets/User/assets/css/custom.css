@@ -1,0 +1,595 @@
+/* //////////////////////////////////////////////////////
+/    Header    /
+////////////////////////////////////////////////////// */
+#header-desktop .logo img {
+    width: 200px;
+}
+
+#header-mobile .logo img {
+    width: 150px;
+}
+
+#main-menu .item {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 15px;
+}
+
+#main-menu .item a {
+    color: white !important;
+}
+
+
+header .user img {
+    width: 30px;
+    height: 30px;
+}
+
+/* //////////////////////////////////////////////////////
+/    main    /
+////////////////////////////////////////////////////// */
+
+#intro-home .item {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 18px 36px 0 rgb(0 87 195 / 12%);
+}
+
+#intro-home .item .s-circle {
+    width: 50px;
+    height: 50px;
+}
+
+#intro-home .item .s-circle i {
+    line-height: 50px;
+}
+
+
+.title-line {
+    position: relative;
+}
+
+.title-line::before {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 2px;
+    background-color: var(--primary);
+    top: 50%;
+    z-index: 0;
+}
+
+.title-line h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: var(--primary);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    margin-bottom: 0;
+    z-index: 1;
+    letter-spacing: 3px;
+}
+
+.chip {
+    padding: 0 10px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 10px;
+}
+
+#job .content {
+    flex: 1;
+}
+
+#job .item {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: -7px 7px 18px 1px rgb(0 0 0 / 40%);
+    margin-bottom: 30px;
+}
+
+#job .item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-bottom: 0 !important;
+    margin-right: 20px;
+}
+
+#job .item .desc {
+    flex-wrap: wrap;
+}
+
+#mou {
+    background-color: rgb(255 111 95 / 64%);
+}
+
+#mou .item {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 3px 7px 0 rgb(0 0 0 / 18%);
+    padding: 15px;
+}
+
+#mou .item .name {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+#employer .item {
+    height: 200px;
+    text-align: center;
+    border: 1px solid #dddddd;
+}
+
+#employer .item img {
+    width: 200px;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 0 !important;
+}
+
+#news .item {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 3px 7px 0 rgb(0 0 0 / 18%);
+    padding: 15px;
+}
+
+#news .item .name {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.title-ft {
+    font-size: 1.3rem;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.title-ft::before {
+    position: absolute;
+    content: "";
+    width: 50px;
+    height: 3px;
+    background-color: white;
+    left: 0;
+    bottom: 0;
+}
+
+footer li strong {
+    width: 100px;
+}
+
+footer a {
+    color: white !important;
+}
+
+
+
+
+.wrapper-banner {
+    position: relative;
+}
+
+.wrapper-banner:hover .line-hover:before {
+    transform: scale(1, 1)
+}
+
+.wrapper-banner:hover .line-hover:after {
+    transform: scale(1, 1)
+}
+
+.wrapper-banner .line-hover {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+}
+
+.wrapper-banner .line-hover::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    box-sizing: border-box;
+    transition: 0.5s;
+    transform: scale(0, 1)
+}
+
+.wrapper-banner .line-hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    box-sizing: border-box;
+    transition: 0.5s;
+    transform: scale(1, 0)
+}
+
+
+
+/* //////////////////////////////////////////////////////
+/    Trang tìm việc    /
+////////////////////////////////////////////////////// */
+
+#bg-form {
+    position: relative;
+    height: 70vh;
+}
+
+#bg-form img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#bg-form .form {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+#bg-form .form .form-select,
+#bg-form .form .form-input {
+    height: 3rem;
+    font-size: 1.1rem;
+}
+
+/* //////////////////////////////////////////////////////
+/    Trang Liên hệ    /
+////////////////////////////////////////////////////// */
+#contact .form-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+#contact .form-input {
+    height: 2.8rem;
+    font-size: 1.1rem;
+}
+
+#contact textarea {
+    row-gap: 8;
+}
+
+#contact .form-input,
+#contact textarea {
+    border-radius: 4px;
+}
+
+
+#bg-bread {
+    background-image: url(../images/bg-bread.webp);
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    position: relative;
+    color: white;
+    z-index:1;
+}
+
+#bg-bread .overlay-bread {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.519);
+    left: 0;
+    top: 0;
+}
+
+#bg-bread .container {
+    height: 300px;
+    position: relative;
+}
+
+#bg-bread .left .avt {
+    width: 75px;
+    height: 75px;
+}
+
+#bg-bread .left {
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+}
+
+#bg-bread .right {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+}
+
+.table-featured {
+    border: 1px dashed rgb(255 61 78 / 41%);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.border-dash {
+    border: 1px dashed rgb(255 61 78 / 41%);
+}
+
+.table-featured .title {
+    background-color: rgb(255 61 78 / 41%);
+    border-bottom: 1px dashed rgb(255 61 78 / 41%);
+    padding: 15px;
+}
+
+.table-featured .title img {
+    width: 60px;
+    height: 60px;
+}
+
+.table-featured ul {
+    padding: 15px;
+}
+
+.table-featured ul li {
+    border-bottom: 1px solid #d6d5d5;
+    margin-top: 0;
+    padding: 8px 0;
+}
+
+.table-featured ul li:last-child {
+    border: none;
+}
+
+
+/* ///////////////////// */
+/* Chi tiết công việc  */
+/* ///////////////////// */
+#detail-job .summary-job {
+    background-color: rgba(168, 253, 204, 0.589);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+#detail-job .summary-job .item {
+    padding: 10px;
+}
+
+#detail-job .summary-job .item img {
+    width: 35px;
+    margin-bottom: 0;
+    margin-right: 15px;
+    background-color: rgba(168, 253, 186, 0.897);
+    padding: 5px;
+    border-radius: 50%;
+}
+
+#detail-job .main-job .title {
+    background-color: rgba(51, 51, 51, 0.767);
+    color: white;
+    padding: 10px 20px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+#detail-job .main-job .title img {
+    width: 25px;
+    padding: 4px;
+    background-color: white;
+    border-radius: 50%;
+    margin-bottom: 0;
+    margin-right: 10px;
+}
+
+
+#profile {
+    padding: 50px 0;
+    position: relative;
+}
+
+#profile .body {
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 3px 9px #0003 !important;
+    margin: auto;
+    width: 500px;
+    border-radius: 15px;
+    padding: 20px 10px;
+}
+
+#profile .body .avatar-profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+@media only screen and (max-width: 480px) {
+
+    #profile .body {
+        width: 95vw;
+    }
+
+    .title-line {
+        position: relative;
+    }
+
+    .title-line::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary);
+        top: 50%;
+        z-index: 0;
+    }
+
+    .title-line h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        background-color: var(--primary);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        margin-bottom: 0;
+        z-index: 1;
+        letter-spacing: 0;
+    }
+
+    #job .item {
+        margin-bottom: 10px;
+    }
+
+    #job .item img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-bottom: 0 !important;
+        margin-right: 10px;
+    }
+
+    #bg-bread .left {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+    }
+
+    #bg-bread .right {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 912px) {
+    #profile .body {
+        width: 400px;
+    }
+
+    #job .item {
+        margin-bottom: 15px;
+    }
+
+    #bg-bread .left {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+    }
+
+    #bg-bread .right {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+}
+
+@media only screen and (min-width: 912px) and (max-width: 1200px) {
+    #job .item {
+        margin-bottom: 20px;
+    }
+
+    #bg-bread .left {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+    }
+
+    #bg-bread .right {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+}
+
+#user .submenu {
+    display: none;
+}
+
+/* Show submenu when user hovers over the user element */
+#user:hover .submenu {
+    display: block;
+    position: absolute;
+    top: 150%;
+    right: -100px;
+    z-index: 999;
+    width: 240px;
+    background-color: #fff;
+}
+
+/* Style the submenu */
+#user .submenu li {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.submenu::after {
+    cursor: pointer;
+    content: "";
+    position: absolute;
+    left: 115px;
+    top: -15px;
+    border-width: 16px 20px;
+    border-style: solid;
+    border-color: transparent transparent transparent transparent;
+}
+
+    #user .submenu li a {
+        display: block;
+        padding: 10px;
+        color: #000;
+        background-color: #fff;
+        text-decoration: none;
+    }
+
+        #user .submenu li a:hover {
+            background-color: #f2f2f2;
+        }
+
+.btn-login {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 15px;
+    color: var(--primary-inverse) !important;
+}
+#user {
+    margin-top: 4px;
+    position:relative;
+}
+
+#header-desktop {
+    padding: 12px 0;
+}
+
+.action-wrapper{
+    width:330px;
+    justify-content:space-around;
+}
+
+.btn-update {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn.btn-update:hover,
+btn-update:focus{
+    background-color: #116bf0;
+    border-color: #116bf0;
+}
+
