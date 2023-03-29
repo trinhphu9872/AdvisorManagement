@@ -10,6 +10,7 @@ using AdvisorManagement.Models;
 using AdvisorManagement.Middleware;
 using Spire.Xls;
 using System.IO;
+using System.IO.Compression;
 using Microsoft.Ajax.Utilities;
 using OfficeOpenXml;
 using System.Web.UI.WebControls;
@@ -18,6 +19,9 @@ using System.Drawing;
 using System.Text;
 using System.Web.Services.Description;
 using AdvisorManagement.Models.ViewModel;
+using System.Web.UI;
+using Ionic.Zip;
+using OfficeOpenXml.DataValidation;
 
 namespace AdvisorManagement.Controllers
 {
@@ -505,6 +509,44 @@ namespace AdvisorManagement.Controllers
             }
         }
 
+        public FileResult ExportAllTemplateAdvisor()
+        {                 
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    using (ZipFile zip = new ZipFile())
+                    {         
+                        var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
+                        var listClass = db.PlanStatus.Where(x=>x.id_status == id_status).DistinctBy(x=>x.id_class).Select(x=>x.id_class).ToList();
+                        foreach (int id_class in listClass)
+                        {
+                            var listPlan = db.PlanClass.Where(y => y.id_class == id_class).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
+                            var year = (int)db.PlanClass.FirstOrDefault(x => x.id_class == id_class).year;
+                            var class_code = db.VLClass.Find(id_class).class_code;
+                            var advisor_code = db.VLClass.Find(id_class).advisor_code;
+                            var user_name = db.AccountUser.FirstOrDefault(x => x.user_code == advisor_code).user_name;
+                            var name_advisor = servicePlan.ConvertToUnsign(user_name);
+                            List<PlanClass> template = (List<PlanClass>)listPlan;
+                            using (ExcelPackage pck = new ExcelPackage())
+                            {
+                                var package = servicePlan.ExportTemplateAdvisor(pck, template, year, class_code);
+                                var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "KehoachCVHT_" + (year - 1) + "-" + year + "_" + name_advisor + "_" + class_code + ".xlsx");
+                                zip.AddEntry(fileOject.FileDownloadName, fileOject.FileContents);
+                            }
+                        }                        
+                        zip.Save(stream);
+                        return File(stream.ToArray(), System.Net.Mime.MediaTypeNames.Application.Zip, "KehoachCVHT.zip");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }           
+        }
+
+
         // GET: PlansAdvisor/Details/5
         public ActionResult Details(int? id)
         {
@@ -599,10 +641,52 @@ namespace AdvisorManagement.Controllers
             var listProof = servicePlan.getListProofAdmin(semester, id_class);
             return Json(new { data = listProof, success = false }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        public JsonResult ExportAllProof()
+        {
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    using (ZipFile zip = new ZipFile())
+                    {
+                        var id_class = (int)Session["id"];
+                        var year = db.VLClass.Find(id_class).semester_name;
+                        var class_code = db.VLClass.Find(id_class).class_code;                                                                          
+                        var filePath = Server.MapPath("~/Proof/" + year.ToString() + "/" + class_code + "/");
+                        if (Directory.Exists(filePath))
+                        {
+                            var files = Directory.GetFiles(filePath);
+                            if(files.Count() > 0)
+                            {
+                                zip.AddFiles(files, false, "");
+                                zip.Save(stream);
+                                var fileOject = File(stream.ToArray(), System.Net.Mime.MediaTypeNames.Application.Zip, "Minhchung_kehoachCVHT_" + (int.Parse(year) - 1) + "-" + year + "_" + class_code + ".zip");
+                                return Json(new { success = true, file = fileOject }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                return Json(new { success = false, message = "Kế hoạch chưa có minh chứng nào" }, JsonRequestBehavior.AllowGet);
+                            }
+                            
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Kế hoạch chưa có minh chứng nào" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
         public ActionResult SubmitPlan(int id_class)
         {
-            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Chờ duyệt").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x=>x.id_class == id_class);
             planStatus.id_status = id_status;
             planStatus.message = null;
@@ -635,7 +719,7 @@ namespace AdvisorManagement.Controllers
 
         public ActionResult BrowsePlan(int id_class)
         {
-            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đã duyệt").id;
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
             planStatus.id_status = id_status;
             planStatus.modify_time = DateTime.Now;
@@ -669,7 +753,7 @@ namespace AdvisorManagement.Controllers
         public ActionResult GetListPlanSubmitedClass(int id_class)
         {
             var listPlanSubmited = db.PlanClass.Where(x => x.id_class == id_class).ToList().OrderBy(x => x.number_title);
-            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đã duyệt").id;
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
             if(db.PlanStatus.FirstOrDefault(x=>x.id_class == id_class).id_status == id_status)
             {
                 return Json(new { data = listPlanSubmited, success = true }, JsonRequestBehavior.AllowGet);

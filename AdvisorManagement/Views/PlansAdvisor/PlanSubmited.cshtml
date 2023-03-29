@@ -27,6 +27,9 @@
                             <a onclick="ListAdvisor()" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 250px;">
                                 Danh sách cố vấn chưa nộp<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
+                            <a href="@Url.Action("ExportAllTemplateAdvisor","PlansAdvisor")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 250px;">
+                                Export tất cả<i style="margin-left:5px" class="fas fa-plus"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -406,6 +409,7 @@
                 type: 'GET',
                 /*contentType: "application/json; charset=utf-8", */
              success: function (data) {
+                 let email = data.data;
                  $('#remind').append(`
                     <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                         <div class=""><span>Đến:</span><input id="txt_to" type="text" class="form-control" value="${data.data}" disabled/></div>
@@ -416,33 +420,35 @@
                     <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                         <div class=""><span>Nội dung:</span><textarea maxlength="200" placeholder="Giới hạn 200 từ" id="txt_message" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 11px;resize: none;" type="text"></textarea></div>
                     </div>
-                    <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button> <button onclick ="SendRemind()" type = "button" class= "btn btn-default" data - dismiss="modal" >Gửi</button >`);
+                    <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button> <button onclick ="SendRemind('${data.data}')" type = "button" class= "btn btn-default" data - dismiss="modal" >Gửi</button >`);
              }
-            })
+         })      
     }
 
-    function SendRemind() {
-        var to = $('#txt_to').val();
+    function SendRemind(email) {
+        var to = email;        
         var subject = $('#txt_subject').val();
         var message = $('#txt_message').val();
-        if ($('#txt_to').prop("disabled") == true) {
-             $.ajax({
-            url: '@Url.Action("SendMailRemind", "PlansAdvisor")',
-            type: 'POST',
-            data: {
-                to: to,
-                subject: subject,
-                message: message
-            },
-            success: function (data) {
-                if (data.success == true) {
-                    alert(data.message);
-                    location.reload();
-                } else {
-                    alert(data.message);
+        if ($('#txt_to').prop("disabled") == true){
+            $.ajax({
+                url: '@Url.Action("SendMailRemind", "PlansAdvisor")',
+                type: 'POST',
+                data: {
+                    to: to,
+                    subject: subject,
+                    message: message
+                },
+                success: function (data) {
+                    if (data.success == true) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
                 }
-            }
             })
+        } else {
+            alert("Nhắc nhở thất bại do có sự thay đổi");
         }
     }
 
