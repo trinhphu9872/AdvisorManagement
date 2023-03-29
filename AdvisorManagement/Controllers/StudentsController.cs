@@ -23,6 +23,7 @@ using OfficeOpenXml.Style;
 
 namespace AdvisorManagement.Controllers
 {
+    [LoginFilter]
     public class StudentsController : Controller
     {
         private CP25Team09Entities db = new CP25Team09Entities();
@@ -30,12 +31,17 @@ namespace AdvisorManagement.Controllers
         private StudentsMiddleware serviceStudents = new StudentsMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         private PlanMiddleware servicePlan = new PlanMiddleware();
+        public void init()
+        {
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        }
         // GET: Class
+
         public ActionResult Index()
         {
             var year = servicePlan.getYear();
-            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            this.init();
             var listClass = serviceStudents.getClass(User.Identity.Name,year);
             var role = serviceStudents.getRoles(User.Identity.Name);
             ViewBag.role = role;
@@ -59,7 +65,7 @@ namespace AdvisorManagement.Controllers
         {
             if (serviceStudents.getPermission(id,User.Identity.Name))
             {
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+                this.init();
                 var detailClass = serviceStudents.getStudentList(id);
                 if (detailClass == null)
                 {
@@ -68,7 +74,6 @@ namespace AdvisorManagement.Controllers
                 ViewBag.detailClass = detailClass;
                 ViewBag.classInfo = serviceStudents.getInfoClass(id);
                 Session["id_class"] = id;
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 var role = serviceStudents.getRoles(User.Identity.Name);
                 ViewBag.role = role;
                 var listStdStatus = db.StudentStatus.ToList();

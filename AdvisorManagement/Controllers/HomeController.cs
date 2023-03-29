@@ -13,65 +13,34 @@ using System.IO;
 
 namespace AdvisorManagement.Controllers
 {
-
+    [LoginFilter]
     public class HomeController : Controller
     {
         // Service and Database
         private CP25Team09Entities dbApp = new CP25Team09Entities();
         private AccountMiddleware accountService = new AccountMiddleware();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
-        
 
+        public void init()
+        {
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
+        }
         public ActionResult Index()
         {
-            string user_mail = User.Identity.Name;
-            if (user_mail != null && user_mail != "")
-            {
-                var sql = dbApp.AccountUser.FirstOrDefault(x => x.email == user_mail);
-                if (sql == null)
-                {
-                    accountService.UserProfile((ClaimsIdentity) User.Identity);
-                }
-                ViewBag.Name = accountService.getTextName(User.Identity.Name);
-                ViewBag.RoleName = accountService.getRoleTextName(User.Identity.Name);
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-                ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
-            }
-            return View();
-        }
-        [Authorize]
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-            return View();
-        }
-        [Authorize]
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
+            this.init();
             return View();
         }
         public ActionResult UserProfile(string email)
         {
+            this.init();
             AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(email));
-            ViewBag.Name = accountService.getTextName(User.Identity.Name);
-            ViewBag.RoleName = accountService.getRoleTextName(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
-
             return View(user);
         }
         public ActionResult EditUserProfile(int id)
         {
+            this.init();
             AccountUser user = dbApp.AccountUser.Find(id);
-            ViewBag.Name = accountService.getTextName(User.Identity.Name);
-            ViewBag.RoleName = accountService.getRoleTextName(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            ViewBag.avatar = accountService.getAvatar(User.Identity.Name);
             return View(user);
         }
         [HttpPost]
@@ -89,11 +58,9 @@ namespace AdvisorManagement.Controllers
                 edituser.img_profile = "~/Images/imageProfile/" + filename;
                 user.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
             }
+            this.init();
             dbApp.Entry(edituser).State = EntityState.Modified;
             dbApp.SaveChanges();
-            ViewBag.Name = accountService.getTextName(User.Identity.Name);
-            ViewBag.RoleName = accountService.getRoleTextName(User.Identity.Name);
-            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             return RedirectToAction("UserProfile", "Home", edituser);
         }
     }

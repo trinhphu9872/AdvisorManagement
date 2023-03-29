@@ -1,6 +1,4 @@
 ﻿
-
-
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
@@ -139,17 +137,17 @@
                         }*@
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
-                            @if (ViewBag.RoleName == null)
+                            @if (Session["RoleName"].ToString() == null)
                             {
 
                             }
-                            else if (int.Parse(ViewBag.RoleName) == 1 || int.Parse(ViewBag.RoleName) == 2)
+                            else if (int.Parse(Session["RoleName"].ToString()) == 1 || int.Parse(Session["RoleName"].ToString()) == 2)
                             {
-                                <a style="color:white">  Giáo viên: @ViewBag.Name </a>
+                                <a style="color:white">  Giáo viên: @Session["Name"] </a>
                             }
-                            else if (int.Parse(ViewBag.RoleName) == 3)
+                            else if (int.Parse(Session["RoleName"].ToString()) == 3)
                             {
-                                <a style="color:white">  Sinh viên: @ViewBag.Name </a>
+                                <a style="color:white">  Sinh viên: @Session["Name"] </a>
                             }
 
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
@@ -186,7 +184,7 @@
                                 else
                                 {
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="@Url.Action("SignIn", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
+                                    <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
 
                                 }
                             </ul>

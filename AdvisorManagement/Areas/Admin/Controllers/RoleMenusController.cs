@@ -12,6 +12,7 @@ using System.Data.Entity.Migrations;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
+    [LoginFilter]
     [Authorize]
     public class RoleMenusController : Controller
     {
@@ -19,6 +20,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         private string routePermission = "Admin/RoleMenus";
+        public void init()
+        {
+            ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+            ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
+        }
         // GET: Admin/RoleMenus
         public ActionResult Index()
         {
@@ -28,11 +34,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 ViewBag.id_menu = db.Menu.ToList();
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
                 ViewBag.Message = "Role Menu";
                 var roleMenu = serviceMenu.getRoleMenu();
                 ViewBag.roleMenu = roleMenu;
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
+                this.init();
                 return View(roleMenu);
             }
             else
@@ -91,7 +96,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             //    ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             //    if (ModelState.IsValid)
             //    {
-            if (roleMenu.id_role == 1)
+            if (roleMenu.id_role != 1)
             {
                 ViewBag.Error = "Sai phan quyen";
                 return Json(new { success = false, message = "Sai phan quyen" });
@@ -195,10 +200,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                this.init();
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-                ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
                 ViewBag.ListMenu = serviceMenu.MenuItem();
                 return View();
             }

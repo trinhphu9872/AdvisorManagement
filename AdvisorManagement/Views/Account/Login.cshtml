@@ -1,34 +1,40 @@
 ﻿
-
+@{
+    Layout = null;
+}
 
 <!DOCTYPE html>
+<html lang="en">
 
-<html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lí công tác cố vấn học tập | Đăng nhập</title>
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&amp;display=swap"
+          rel="stylesheet"
+    <link href="~/Assets/User/assets/css/reset.css" rel="stylesheet" />
+    <link href="~/Assets/User/assets/css/style2.css" rel="stylesheet" />
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
-    <div>
-        @if (Request.IsAuthenticated)
-        {<ul class="dropdown-menu stylecolor">
-                <li>
-
-                    @Html.ActionLink("Hello " + User.Identity.Name + "!", "Index", "UserProfile", htmlAttributes: null)
-                </li>
-                <li>
-
-                    @Html.ActionLink("Sign out", "SignOut", "Account")
-
-                </li>
-            </ul>
-        }
-        else
-        {
-            <ul class="nav navbar-nav navbar-right">
-                @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-            </ul>
-        }
+    <div class="wrap">
+        <div class="login">
+            <h2 class="login-heading">Quản lí công tác cố vấn học tập</h2>
+            <div class="login-image"></div>
+            <p class="login-content">Đăng nhập bằng email Văn Lang để bắt đầu</p>
+            <a href="@Url.Action("SignIn", "Account", new { area = "" })"><button class="login-button">Đăng nhập</button></a>
+        </div>
     </div>
 </body>
+
 </html>

@@ -17,12 +17,15 @@ using System.Web.UI.WebControls;
 
 namespace AdvisorManagement.Middleware
 {
-    public class AccountMiddleware
+    public class AccountMiddleware 
     {
 
         private CP25Team09Entities db = new CP25Team09Entities();
         private PlanMiddleware servicePlan = new PlanMiddleware();
-        
+        private MenuMiddleware serviceMenu = new MenuMiddleware();
+
+
+
         // Get Role
         public string getRoles(string roles)
         {
@@ -418,5 +421,6 @@ namespace AdvisorManagement.Middleware
             var cours = mssv.Substring(index + 1, 2);
             return int.Parse(cours);
         }
+
     }
 }

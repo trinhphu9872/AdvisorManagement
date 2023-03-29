@@ -1,0 +1,230 @@
+﻿/* Form */
+.form {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: none;
+    animation: fadeIn 0.2s linear 0s 1 alternate forwards;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.form-heading {
+    font-size: 2rem !important;
+    margin-top: 1rem;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 80rem;
+    border-radius: 1rem;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.form-container--small {
+    width: 40rem;
+    border-radius: 1rem;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+}
+
+.form-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.output {
+    width: 10rem;
+    height: 10rem;
+    margin-top: 1rem;
+    object-fit: cover;
+    float: right;
+    display: none;
+}
+
+.form-icon {
+    color: #ce1b28;
+    position: absolute;
+    cursor: pointer;
+    right: 0;
+    top: 0;
+    font-size: 2rem;
+}
+
+.form-group {
+    margin-top: 2rem;
+    /*display: flex;
+    align-items: center;*/
+}
+
+    .form-group:last-child {
+        justify-content: center;
+    }
+
+.form-label {
+    display: inline-block;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+    font-size: 1.3rem;
+    width: 100%;
+    line-height: 1.4;
+}
+
+.form-column:last-child .form-label {
+    margin-left: 5rem;
+}
+
+.form-input {
+    padding: 1.072rem;
+    width:100% !important;
+    font-size: 10pt;
+    font-weight: 700;
+    border: 1px solid #000;
+    border-radius: 0.2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    resize: none;
+    flex: 1;
+}
+
+    .form-input:focus {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+.form-group--status {
+    justify-content: center;
+}
+
+    .form-group--status .form-label {
+        padding-left: 2rem;
+        margin-left: 1rem;
+        text-align: center;
+    }
+
+.form-label--large {
+    width: 12rem;
+}
+
+
+.form-label--active {
+    width: 12rem;
+}
+
+.form-label--block {
+    width: 8rem;
+}
+
+.form-input:not([type="radio"]) {
+    width: 22rem;
+}
+
+.form-input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+}
+
+.form-radio {
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    border-radius: 50%;
+}
+
+    .form-radio::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70%;
+        height: 70%;
+        border-radius: 50%;
+        display: none;
+    }
+
+.form-input[type="radio"]:checked ~ .form-radio::after {
+    display: block;
+}
+
+.form-radio--active {
+    border: 1px solid green;
+}
+
+    .form-radio--active::after {
+        background-color: green;
+    }
+
+.form-radio--block {
+    border: 1px solid #ce1b28;
+}
+
+    .form-radio--block::after {
+        background-color: #ce1b28;
+    }
+
+.form-button:active {
+    opacity: 0.8;
+}
+
+.is-appear {
+    display: block;
+}
+
+.custom-file-input{
+    width:100%;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.custom-file-input::before {
+    content: 'Chọn CV của bạn';
+    display: inline-block;
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+}
+
+.custom-file-input:hover::before {
+    border-color: black;
+}
+
+.custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.form-label
