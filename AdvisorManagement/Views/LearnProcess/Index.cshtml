@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<div class="col-md-15">
+    <div class="divmain">
+        <div>
+            <div>
+                <table width="100%" class="table table-bordered table-striped table-responsive">
+                    <div class="card-body p-3">
+                        <div class="card-text content mt-3">
+                            <p>Chat</p>
+                            <div class="container">
+                                <input type="text" id="txt_message" />
+                                <button class="btn btn-success" id="btn_sending">send</button>
+                            </div>
+                            <div class="container">
+                                <ul  id="content_msg">
+
+                                </ul>
+                     
+                            </div>
+
+                        </div>
+                    </div>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(function () {
+            var chat = $.connection.chat;
+            console.log(chat);
+            loadClient(chat);
+            $.connection.hub.start().done(function () {
+                $('#btn_sending').click(function () {
+                    var msg = $('#txt_message').val();
+                    chat.server.message(msg);
+                    $('#txt_message').val('').focus();
+                });
+
+            });
+            function loadClient(chat) {
+                chat.client.message = function (msg) {
+                    $('#content_msg').append(`<li>${msg}</li>`);
+                }
+
+            }
+        })
+
+    </script>
+}
+

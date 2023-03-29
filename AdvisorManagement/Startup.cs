@@ -17,6 +17,7 @@ namespace AdvisorManagement
      
             ConfigureAuth(app);
             app.UseKentorOwinCookieSaver(PipelineStage.Authenticate);
+            app.MapSignalR();
         }
     }
 }
