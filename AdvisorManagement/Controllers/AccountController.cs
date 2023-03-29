@@ -21,6 +21,12 @@ namespace AdvisorManagement.Controllers
         private RoleMiddleware roleChange = new RoleMiddleware();
         private AccountMiddleware accountService = new AccountMiddleware();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
+
+        public void init()
+        {
+            Session["Name"] = accountService.getTextName(User.Identity.Name);
+            Session["RoleName"] = accountService.getRoleTextName(User.Identity.Name);
+        }
         public ActionResult Login()
         {
             if (Request.IsAuthenticated)
@@ -59,20 +65,20 @@ namespace AdvisorManagement.Controllers
 
         public ActionResult SignInCallback()
         {
-            string email = User.Identity.Name;
-            Session["EmailVLU"] = email;
-            Session["Name"] = accountService.getTextName(User.Identity.Name);
-            Session["RoleName"] = accountService.getRoleTextName(User.Identity.Name);
-            var query = dbApp.AccountUser.Where(x => x.email == email);
-            if (query == null)
+            Session["EmailVLU"] = User.Identity.Name;
+ 
+            var query = dbApp.AccountUser.Where(x => x.email == User.Identity.Name).ToList();
+            if (query.Count() == 0)
             {
                 accountService.UserProfile((ClaimsIdentity)User.Identity);
+                this.init();
                 return RedirectToAction("Index", "Home", new { area = "" });
             }
             else
             {
                 if (query.Count() > 0)
                 {
+                    this.init();
                     return RedirectToAction("Index", "Home", new { area = "" });
                 }
                 else
