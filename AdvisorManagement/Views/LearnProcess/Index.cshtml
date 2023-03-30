@@ -41,15 +41,16 @@
             console.log(chat);
             loadClient(chat);
             $.connection.hub.start().done(function () {
-                $('#btn_sending').click(function () {
+             
                     var msg = $('#txt_message').val();
                     chat.server.message(msg);
                     $('#txt_message').val('').focus();
-                });
+           
 
             });
             function loadClient(chat) {
                 chat.client.message = function (msg) {
+                    console.log(msg);
                     $('#content_msg').append(`<li>${msg}</li>`);
                 }
 
