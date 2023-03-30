@@ -10,12 +10,18 @@ using AdvisorManagement.Models;
 using AdvisorManagement.Middleware;
 using Spire.Xls;
 using System.IO;
+using System.IO.Compression;
 using Microsoft.Ajax.Utilities;
 using OfficeOpenXml;
 using System.Web.UI.WebControls;
 using OfficeOpenXml.Style;
 using System.Drawing;
 using System.Text;
+using System.Web.Services.Description;
+using AdvisorManagement.Models.ViewModel;
+using System.Web.UI;
+using Ionic.Zip;
+using OfficeOpenXml.DataValidation;
 
 namespace AdvisorManagement.Controllers
 {
@@ -32,6 +38,7 @@ namespace AdvisorManagement.Controllers
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
         }
+        private MailServicesMiddleware servicesMail = new MailServicesMiddleware();
         // GET: PlansAdvisor
         public ActionResult Index()
         {
@@ -364,10 +371,20 @@ namespace AdvisorManagement.Controllers
             ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
             var year = servicePlan.getYear();
             var id_status = db.PlanStatus.FirstOrDefault(x => x.id_class == id).id_status;
-            var nameStatus = db.StatusPlan.FirstOrDefault(x => x.id == id_status).status_name;
+            var nameStatus = db.StatusPlan.FirstOrDefault(x => x.id == id_status).status_name;            
             Session["yearNow"] = year;
             Session["id_class"] = id;
             Session["name_status"] = nameStatus;
+            var message = db.PlanStatus.FirstOrDefault(x => x.id_class == id).message;
+            var modify_time = db.PlanStatus.FirstOrDefault(x => x.id_class == id).modify_time;
+            if(message != null && modify_time != null)
+            {
+                Session["message"] = modify_time + ": " + message;
+            }
+            else
+            {
+                Session["message"] = null;
+            }
             return View(db.PlanClass.Where(x => x.id_class == id).Where(y => y.year == year).ToList().OrderBy(x => x.number_title));
         }
 
@@ -495,6 +512,44 @@ namespace AdvisorManagement.Controllers
             }
         }
 
+        public FileResult ExportAllTemplateAdvisor()
+        {                 
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    using (ZipFile zip = new ZipFile())
+                    {         
+                        var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
+                        var listClass = db.PlanStatus.Where(x=>x.id_status == id_status).DistinctBy(x=>x.id_class).Select(x=>x.id_class).ToList();
+                        foreach (int id_class in listClass)
+                        {
+                            var listPlan = db.PlanClass.Where(y => y.id_class == id_class).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
+                            var year = (int)db.PlanClass.FirstOrDefault(x => x.id_class == id_class).year;
+                            var class_code = db.VLClass.Find(id_class).class_code;
+                            var advisor_code = db.VLClass.Find(id_class).advisor_code;
+                            var user_name = db.AccountUser.FirstOrDefault(x => x.user_code == advisor_code).user_name;
+                            var name_advisor = servicePlan.ConvertToUnsign(user_name);
+                            List<PlanClass> template = (List<PlanClass>)listPlan;
+                            using (ExcelPackage pck = new ExcelPackage())
+                            {
+                                var package = servicePlan.ExportTemplateAdvisor(pck, template, year, class_code);
+                                var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "KehoachCVHT_" + (year - 1) + "-" + year + "_" + name_advisor + "_" + class_code + ".xlsx");
+                                zip.AddEntry(fileOject.FileDownloadName, fileOject.FileContents);
+                            }
+                        }                        
+                        zip.Save(stream);
+                        return File(stream.ToArray(), System.Net.Mime.MediaTypeNames.Application.Zip, "KehoachCVHT.zip");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }           
+        }
+
+
         // GET: PlansAdvisor/Details/5
         public ActionResult Details(int? id)
         {
@@ -586,12 +641,56 @@ namespace AdvisorManagement.Controllers
             var listProof = servicePlan.getListProofAdmin(semester, id_class);
             return Json(new { data = listProof, success = false }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        public JsonResult ExportAllProof()
+        {
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    using (ZipFile zip = new ZipFile())
+                    {
+                        var id_class = (int)Session["id"];
+                        var year = db.VLClass.Find(id_class).semester_name;
+                        var class_code = db.VLClass.Find(id_class).class_code;                                                                          
+                        var filePath = Server.MapPath("~/Proof/" + year.ToString() + "/" + class_code + "/");
+                        if (Directory.Exists(filePath))
+                        {
+                            var files = Directory.GetFiles(filePath);
+                            if(files.Count() > 0)
+                            {
+                                zip.AddFiles(files, false, "");
+                                zip.Save(stream);
+                                var fileOject = File(stream.ToArray(), System.Net.Mime.MediaTypeNames.Application.Zip, "Minhchung_kehoachCVHT_" + (int.Parse(year) - 1) + "-" + year + "_" + class_code + ".zip");
+                                return Json(new { success = true, file = fileOject }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                return Json(new { success = false, message = "Kế hoạch chưa có minh chứng nào" }, JsonRequestBehavior.AllowGet);
+                            }
+                            
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Kế hoạch chưa có minh chứng nào" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
         public ActionResult SubmitPlan(int id_class)
         {
-            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Chờ duyệt").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x=>x.id_class == id_class);
             planStatus.id_status = id_status;
+            planStatus.message = null;
+            planStatus.modify_time = DateTime.Now;
             db.SaveChanges();
 
             return Json(new {  success = true, message = "Nộp kế hoạch thành công" }, JsonRequestBehavior.AllowGet);
@@ -606,27 +705,32 @@ namespace AdvisorManagement.Controllers
             return Json(new { success = true, message = "Hoàn tác thành công" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ReturnPlan(int id_class)
+        public ActionResult ReturnPlan(int id_class, string message)
         {
             var checkStatus = db.PlanStatus.FirstOrDefault(x => x.id_class == id_class).id_status;
             var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đang làm").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
             planStatus.id_status = id_status;
+            planStatus.message = message;
+            planStatus.modify_time = DateTime.Now;
             db.SaveChanges();
             return Json(new { success = true, message = "Trả về thành công" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult BrowsePlan(int id_class)
         {
-            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đã duyệt").id;
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
             planStatus.id_status = id_status;
+            planStatus.modify_time = DateTime.Now;
             db.SaveChanges();
             return Json(new { success = true, message = "Duyệt kế hoạch thành công" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PlanSubmited()
         {
+            var year = servicePlan.getYear();
+            Session["yearNow"] = year;
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             this.init();
@@ -648,7 +752,7 @@ namespace AdvisorManagement.Controllers
         public ActionResult GetListPlanSubmitedClass(int id_class)
         {
             var listPlanSubmited = db.PlanClass.Where(x => x.id_class == id_class).ToList().OrderBy(x => x.number_title);
-            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đã duyệt").id;
+            var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
             if(db.PlanStatus.FirstOrDefault(x=>x.id_class == id_class).id_status == id_status)
             {
                 return Json(new { data = listPlanSubmited, success = true }, JsonRequestBehavior.AllowGet);
@@ -659,5 +763,53 @@ namespace AdvisorManagement.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult GetListAdvisor()
+        {                        
+            var listAdvisor = servicePlan.getListAdvisorUnfinished();
+            return Json(new { data = listAdvisor, success = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetRemind()
+        {
+
+            string emailUser = User.Identity.Name;
+            var listAdvisor = servicePlan.getListAdvisorUnfinished();
+            List<ListAdvisorUnfinished> advisor = (List<ListAdvisorUnfinished>)listAdvisor;
+            string email = "";
+            foreach (var item in advisor)
+            {
+                if(email != "")
+                {
+                    email += ", " + item.email;
+                }
+                else
+                {
+                    email += item.email;
+                }
+
+            }
+            return Json(new { data = email, emailUser = emailUser, success = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult SendMailRemind(string to, string subject, string message)
+        {
+            string[] mail = to.ToString().Trim().Split(',');
+            //List<string> strings= new List<string>();
+            foreach (var item in mail)
+            {
+                //strings.Add(item);
+                servicesMail.MailSend(new MailRequest()
+                {
+                    To = item,
+                    Subject = subject,
+                    Message = message,
+                });
+            }
+            //var b = strings; 
+            return Json(new { message = "Nhắc nhở thành công", success = true }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

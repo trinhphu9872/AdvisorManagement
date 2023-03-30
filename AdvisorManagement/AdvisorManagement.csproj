@@ -49,6 +49,9 @@
     <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetZip, Version=1.16.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.16.0\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -408,6 +411,7 @@
     <Compile Include="Models\ViewModel\AccountUserModel.cs" />
     <Compile Include="Models\ViewModel\ClassModel\AdvisorClass.cs" />
     <Compile Include="Models\ViewModel\ClassModel\ListStudent.cs" />
+    <Compile Include="Models\ViewModel\ListAdvisorUnfinished.cs" />
     <Compile Include="Models\ViewModel\ListPlanSubmited.cs" />
     <Compile Include="Models\ViewModel\ListProofPlan.cs" />
     <Compile Include="Models\ViewModel\MailRequest.cs" />

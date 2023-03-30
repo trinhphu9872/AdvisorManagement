@@ -313,8 +313,8 @@
                          return '<button onclick="Update(' + data + ')" class="btn btn-success">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button >@* <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
                      }
                  },
-             ]
-         });
+                 ],
+         });      
 
         $(document).ready(function () {
         if ("@roleABC" == "Advisor") {
@@ -505,7 +505,8 @@
          //Cập nhật thông tin người dùng
         $('#btnEdit').click(function () {
                 let id = $('#id_title').val();
-                let numTitle = $('#up_Title').val();
+            let numTitle = $('#up_Title').val();
+            if (numTitle != "") {
                 let content = $('#up_Content').val();
                 let describe = $('#up_Describe').val();
                 let source = $('#up_Source').val();
@@ -522,15 +523,18 @@
                         note: note
                     },
                     success: function (data) {
-                            if (data.success == true) {
-                                alert(data.message);
-                                $('#modalUpdate').modal('hide');
-                                dataTable.ajax.reload(null, false);
-                            } else {
-                                alert(data.message);
-                            }
+                        if (data.success == true) {
+                            alert(data.message);
+                            $('#modalUpdate').modal('hide');
+                            dataTable.ajax.reload(null, false);
+                        } else {
+                            alert(data.message);
                         }
-                     })
+                    }
+                })
+            } else {
+                alert("Vui lòng nhập đầy đủ trường dữ liệu");
+            }
             })
 
         function HideModalUp() {
@@ -551,12 +555,13 @@
             var describe = $("#txtDescribe").val();
             var source = $("#txtSource").val();
             var note = $("#txtNote").val();
-            formData.append("idtitle", idtitle);
-            formData.append("content", content);
-            formData.append("describe", describe);
-            formData.append("source", source);
-            formData.append("note", note);
-            $.ajax({
+            if (idtitle != "") {
+                formData.append("idtitle", idtitle);
+                formData.append("content", content);
+                formData.append("describe", describe);
+                formData.append("source", source);
+                formData.append("note", note);
+                $.ajax({
                 type: 'POST',
                 url: '@Url.Action("CreateTitle", "PlansAdvisor")',
                 contentType: false,
@@ -577,6 +582,9 @@
                     }
                 }
              })
+            } else {
+                alert("Vui lòng nhập đầy đủ trường dữ liệu");
+            }
         })
          })
 

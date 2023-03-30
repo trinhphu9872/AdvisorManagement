@@ -18,6 +18,15 @@
                 <div class="card-body">
                     <h5 class="card-title mb-0">Danh sách file minh chứng @class_code</h5>
                 </div>
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <a onclick="ExportAllProof()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 200px;">
+                                Export minh chứng<i class="fas fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card">
@@ -92,7 +101,7 @@
                      },
                      { 'data': 'semester', 'width': '15%' },
                  ],
-             "order": [[4, "desc"]],   
+             "order": [[4, "desc"]],
 
          });
             dataTable.on('order.dt search.dt', function () {
@@ -132,7 +141,7 @@
                      },
                      { 'data': 'semester', 'width': '15%' },
                      ],
-                 "order": [[4, "desc"]],   
+                 "order": [[4, "desc"]],
 
          });
             dataTable.on('order.dt search.dt', function () {
@@ -141,6 +150,33 @@
                     this.data(i++);
                 });
             }).draw();
+        }
+
+        function ExportAllProof() {
+             $.ajax({
+                url: '@Url.Action("ExportAllProof", "PlansAdvisor")',                               
+                /*contentType: "application/json; charset=utf-8", */
+                 success: function (data) {
+                     console.log(data);
+                     if (data.success == true) {
+                         var bytes = new Uint8Array(data.file.FileContents);
+                         var blob = new Blob([bytes], { type: 'application/zip' });
+                         var downloadUrl = URL.createObjectURL(blob);
+                         var a = document.createElement("a");
+                         a.href = downloadUrl;
+                         a.download = data.file.FileDownloadName;
+                         document.body.appendChild(a);
+                         a.click();
+                         document.body.removeChild(a);
+                     } else {
+                         alert(data.message);
+                     }
+                   
+                },
+                error: function (err) {
+                    alert(err);
+                },
+            })
         }
 
     </script>
