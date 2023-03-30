@@ -18,6 +18,8 @@ namespace AdvisorManagement.Hubs
         {
             Clients.All.hello();
         }
+
+
             
         public void Message(string mess)
         {
