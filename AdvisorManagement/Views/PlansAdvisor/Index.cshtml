@@ -288,6 +288,7 @@
 </div>
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
 <script>
         //Lấy data khi vừa vào web admin
          var dataTable = $("#zero_config_admin").DataTable({
@@ -314,6 +315,32 @@
                      }
                  },
                  ],
+             'responsive': false,
+             'rowsGroup': [0],
+             "order": [[0, "desc"]],
+             'columnDefs': [{
+                 'targer': 0,
+                 'className': 'text-align'
+             }],
+             'language': {
+                 "decimal": "",
+                 "emptyTable": "Không có dữ liệu",
+                 "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                 "infoEmpty": "Showing 0 to 0 of 0 entries",
+                 "infoFiltered": "(filtered from _MAX_ total entries)",
+                 "infoPostFix": "",
+                 "thousands": ",",
+                 "lengthMenu": "Hiển thị _MENU_ mục",
+                 "loadingRecords": "Đang tải...",
+                 "search": "Tìm kiếm:",
+                 "zeroRecords": "No matching records found",
+                 "paginate": {
+                     "first": "First",
+                     "last": "Last",
+                     "next": "Sau",
+                     "previous": "Trước"
+                 },                 
+             }
          });      
 
         $(document).ready(function () {
