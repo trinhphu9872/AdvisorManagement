@@ -25,5 +25,6 @@ namespace AdvisorManagement.Models
         public string source { get; set; }
         public string note { get; set; }
         public Nullable<int> id_class { get; set; }
+        public string evaluate { get; set; }
     }
 }

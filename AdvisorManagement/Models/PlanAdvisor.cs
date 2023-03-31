@@ -24,5 +24,6 @@ namespace AdvisorManagement.Models
         public string describe { get; set; }
         public string source { get; set; }
         public string note { get; set; }
+        public string evaluate { get; set; }
     }
 }
