@@ -46,8 +46,8 @@ namespace AdvisorManagement.Middleware
             {
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse(WebConfigurationManager.AppSettings["EmailSystem"]));
-                //email.To.Add(MailboxAddress.Parse(m.Trim()));
-                email.To.Add(MailboxAddress.Parse("phu.197pm09495@vanlanguni.vn"));
+                email.To.Add(MailboxAddress.Parse(m.Trim()));
+                //email.To.Add(MailboxAddress.Parse("phu.197pm09495@vanlanguni.vn"));
 
                 email.Subject = request.Subject;
                 // get name
