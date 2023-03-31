@@ -22,6 +22,7 @@ using AdvisorManagement.Models.ViewModel;
 using System.Web.UI;
 using Ionic.Zip;
 using OfficeOpenXml.DataValidation;
+using MimeKit;
 
 namespace AdvisorManagement.Controllers
 {
@@ -796,20 +797,9 @@ namespace AdvisorManagement.Controllers
         [HttpPost]
         public ActionResult SendMailRemind(string to, string subject, string message)
         {
-            string[] mail = to.ToString().Trim().Split(',');
-            //List<string> strings= new List<string>();
-            foreach (var item in mail)
-            {
-                //strings.Add(item);
-                servicesMail.MailSend(new MailRequest()
-                {
-                    To = item,
-                    Subject = subject,
-                    Message = message,
-                });
-            }
-            //var b = strings; 
-            return Json(new { message = "Nhắc nhở thành công", success = true }, JsonRequestBehavior.AllowGet);
+            List<string> mail = to.Split(',').AsEnumerable().ToList();
+            var status = servicesMail.MailSendMuiltiRequest(new MailRequest { Message = message, Subject = subject, To = ""},mail);
+            return Json(new { message = status, success = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }

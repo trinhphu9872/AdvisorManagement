@@ -1615,6 +1615,7 @@
     <Content Include="Validation\AccountUsers\Validation_AccountUsers.js" />
     <Content Include="Validation\ClassManagement\Validation_ClassManagement.js" />
     <Content Include="Validation\UserProfile\Validation_UserProfile.js" />
+    <Content Include="Views\Shared\MailTemplate.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
