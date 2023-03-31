@@ -95,6 +95,7 @@
                                         <th style="text-align:center">Nội dung</th>
                                         <th style="text-align:center">Mô tả công việc</th>
                                         <th style="text-align:center">Tài nguyên chuẩn bị</th>
+                                        <th style="text-align:center">Tiêu chí đánh giá</th>
                                         <th style="text-align:center">Ghi chú</th>
                                         <th hidden>year</th>
                                         <th style="text-align:center" id="action">Hoạt động</th>
@@ -168,6 +169,14 @@
                 </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Tiêu chí đánh giá:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtEvaluate" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                         <div class="col-md-4"><span>Ghi chú:</span></div>
                         <div class="col-md-8">
                             <input id="txtNote" type="text" class="form-control" />
@@ -221,6 +230,14 @@
                         <div class="col-md-4"><span>Tài nguyên:</span></div>
                         <div class="col-md-8">
                             <input id="up_Source" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Tiêu chí đánh giá:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Evaluate" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -304,24 +321,23 @@
          },
          'columns':
              [
-                 { 'data': 'number_title', 'width': '5%' },
-                 { 'data': 'content', 'width': '25%' },
-                 { 'data': 'describe', 'width': '30%' },
-                 { 'data': 'source', 'width': '30%' },
-                 { 'data': 'note', 'width': '20%' },
+                 { 'data': 'number_title', 'width': '0%' },
+                 { 'data': 'content', 'width': '20%' },
+                 { 'data': 'describe', 'width': '25%' },
+                 { 'data': 'source', 'width': '25%' },
+                 { 'data': 'evaluate', 'width': '20%' },
+                 { 'data': 'note', 'width': '5%' },                
                  {
-                     'data': 'id', 'width': '15%', 'render': function (data) {
+                     'data': 'id', 'width': '20%', 'render': function (data) {
                          return '<button onclick="Update(' + data + ')" class="btn btn-success">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button >@* <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
                      }
                  },
                  ],
+             'bAutoWidth': false, 
              'responsive': false,
-             'rowsGroup': [0],
-             "order": [[0, "desc"]],
-             'columnDefs': [{
-                 'targer': 0,
-                 'className': 'text-align'
-             }],
+             "order": [[0, "asc"]],
+             'ordering': false,
+             'rowsGroup': [0],           
              'language': {
                  "decimal": "",
                  "emptyTable": "Không có dữ liệu",
@@ -520,6 +536,7 @@
                             $('#up_Describe').val(data.T.describe);
                             $('#up_Source').val(data.T.source);
                             $('#up_Note').val(data.T.note);
+                            $('#up_Evaluate').val(data.T.evaluate);                            
                             $('#id_title').val(data.T.id);
                             $('#modalUpdate').modal("show");
                         } else {
@@ -538,6 +555,7 @@
                 let describe = $('#up_Describe').val();
                 let source = $('#up_Source').val();
                 let note = $('#up_Note').val();
+                let evaluate = $('#up_Evaluate').val();   
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("UpdateTittle", "PlansAdvisor")',
@@ -547,7 +565,8 @@
                         content: content,
                         describe: describe,
                         source: source,
-                        note: note
+                        note: note,
+                        evaluate: evaluate
                     },
                     success: function (data) {
                         if (data.success == true) {
@@ -582,12 +601,14 @@
             var describe = $("#txtDescribe").val();
             var source = $("#txtSource").val();
             var note = $("#txtNote").val();
+            var evaluate = $("#txtEvaluate").val();
             if (idtitle != "") {
                 formData.append("idtitle", idtitle);
                 formData.append("content", content);
                 formData.append("describe", describe);
                 formData.append("source", source);
                 formData.append("note", note);
+                formData.append("evaluate", evaluate);
                 $.ajax({
                 type: 'POST',
                 url: '@Url.Action("CreateTitle", "PlansAdvisor")',
@@ -603,6 +624,7 @@
                         $("#txtDescribe").val("");
                         $("#txtSource").val("");
                         $("#txtNote").val("");
+                        $("#txtEvaluate").val("");   
                         $("#modalCreate").modal("hide");
                         alert(data.message);
                         dataTable.ajax.reload(null, false);

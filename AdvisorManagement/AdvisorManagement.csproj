@@ -330,6 +330,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountUsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\ClassManagementsController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Admin\Controllers\EReportTermController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleMenusController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1591,6 +1592,8 @@
     <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-solid-900.woff2" />
     <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-v4compatibility.ttf" />
     <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-v4compatibility.woff2" />
+    <Content Include="Areas\Admin\Views\EReportTerm\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\EReportTerm\ReportClass.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\function.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

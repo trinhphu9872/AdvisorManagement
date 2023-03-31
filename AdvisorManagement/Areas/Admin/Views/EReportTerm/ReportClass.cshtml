@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "ReportClass";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+    var id_class = (int)Session["id_class"];
+}
+
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-0">Báo cáo cuối học kì</h5>
+                </div>
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <div style="margin-top:10px">
+                       
+                    </div>
+
+                    <div class="table-responsive" style="margin-top:10px">
+                        <table width="100%" id="zero_config" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">STT</th>
+                                    <th style="text-align:center">Tiêu chí đánh giá</th>
+                                    <th style="text-align:center">Mô tả công việc cụ thể</th>
+                                    <th style="text-align:center">Hồ sơ, minh chứng</th>                                  
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right sidebar -->
+    <!-- ============================================================== -->
+    <!-- .right-sidebar -->
+    <!-- ============================================================== -->
+    <!-- End Right sidebar -->
+    <!-- ============================================================== -->
+</div>
+<script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
+<script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
+<script>
+
+        //Lấy data khi vừa vào web admin
+         var dataTable = $("#zero_config").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetReportClass", "EReportTerm")',
+                 'data': function (d) {
+                     d.id_class = @id_class ;
+                 },
+                'type': 'get',
+                'datatype':'json',
+         },
+         'columns':
+             [
+                 { 'data': 'number_title', 'width': '0%' },
+                 { 'data': 'evaluate', 'width': '20%' },
+                 { 'data': 'describe', 'width': '25%' },
+                 { 'data': 'source', 'width': '25%' },                
+             ],
+         });
+</script>

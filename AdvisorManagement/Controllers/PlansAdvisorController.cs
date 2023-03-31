@@ -175,12 +175,12 @@ namespace AdvisorManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateTitle(int idtitle, string content, /*string HK1, string HK2, string HK3,*/ string describe, string source, string note )
+        public ActionResult CreateTitle(int idtitle, string content, /*string HK1, string HK2, string HK3,*/ string describe, string source, string note, string evaluate)
         {
 
             try
             {
-                if(content != "" && content != "" && describe != "" && source !="") { 
+                if(content != "" && describe != "" && source !="" && evaluate != "") { 
                 var year = servicePlan.getYear();
                 PlanAdvisor plan = new PlanAdvisor();
                 plan.number_title = idtitle;
@@ -189,6 +189,7 @@ namespace AdvisorManagement.Controllers
                 plan.describe= describe;
                 plan.source= source;
                 plan.note = note;
+                plan.evaluate = evaluate;
                 db.PlanAdvisor.Add(plan);
                 db.SaveChanges();
                 return Json(new { success = true, message = "Thêm thành công" });
@@ -218,11 +219,11 @@ namespace AdvisorManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateTittle(int id, int numTitle, string content, string describe, string source, string note)
+        public ActionResult UpdateTittle(int id, int numTitle, string content, string describe, string source, string note, string evaluate)
         {
             try
             {
-                if (numTitle != null && content != "" && describe != "" && source!= "")
+                if (numTitle != null && content != "" && describe != "" && source!= "" && evaluate !="")
                 {
                     var title = db.PlanAdvisor.SingleOrDefault(x => x.id == id);
                     title.number_title = numTitle;
@@ -230,6 +231,7 @@ namespace AdvisorManagement.Controllers
                     title.describe = describe;
                     title.source = source;
                     title.note = note;
+                    title.evaluate = evaluate;
                     db.SaveChanges();
                     return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
                 }
@@ -467,7 +469,7 @@ namespace AdvisorManagement.Controllers
             }
             catch
             {
-                return Json(new { success = false, message = "Vui lòng chọn file excel hoặc word" });
+                return Json(new { success = false, message = "Dữ liệu nhập quá độ dài" });
             }
         }
 

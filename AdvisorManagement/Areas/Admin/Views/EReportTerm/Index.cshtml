@@ -1,0 +1,299 @@
+﻿@model IEnumerable<AdvisorManagement.Models.PlanAdvisor>
+@using AdvisorManagement.Models;
+
+@{
+    ViewBag.Title = "ProofPlan";
+    Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+
+    List<VLClass> listYearAdvisor = (List<VLClass>)ViewBag.listYear;
+    var yearNow = (int)Session["yearNow"];
+    var yearLast = yearNow - 1;
+}
+
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-0">Báo cáo cuối học kì</h5>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <div class="">
+                        <label for="cars">Năm học:</label>
+                        <select id="year" name="year" onchange="filterFunction()">
+                            <option selected value="0">ALL</option>
+                            @foreach (var item in listYearAdvisor)
+                            {
+                                var i = int.Parse(item.semester_name) - 1;
+                                <option value="@item.semester_name">@i - @item.semester_name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="table-responsive" style="margin-top:10px">
+                        <table width="100%" id="zero_config_advisor" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                            <thead>
+                                <tr>
+                                    <th width="10%" style="text-align:center">STT</th>
+                                    <th width="25%" style="text-align:center">Mã lớp học</th>
+                                    <th width="15%" style="text-align:center">Người cố vấn</th>
+                                    <th width="15%" style="text-align:center">Khóa</th>
+                                    @*<th width="15%" style="text-align:center">Ngày nhận</th>*@
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            </tbody>
+                        </table>
+                        <a href="javascript:history.back()">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalCreate" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm đề mục</h4>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class="col-md-4"><span>Số đề mục:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtIDTitle" type="number" class="form-control" min="1" value="1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Nội dung:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtContent" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Mô tả:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtDescribe" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Tài nguyên:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtSource" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Ghi chú:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtNote" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnUpload" class="btn btn-primary" type="submit">Thêm</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="modalUpdate" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Chỉnh sửa đề mục</h4>
+                </div>
+                <input hidden id="id_title" value="" />
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class="col-md-4"><span>Số đề mục:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Title" type="number" class="form-control" min="1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Nội dung:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Content" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Mô tả:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Describe" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Tài nguyên:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Source" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Ghi chú:</span></div>
+                        <div class="col-md-8">
+                            <input id="up_Note" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnEdit" class="btn btn-primary" type="submit">Sửa</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @*<div id="modalAssignment" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                 Modal content
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Phân quyền template</h4>
+                    </div>
+                    <input hidden id="id_title" value="" />
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>Lớp:</span></div>
+                            <div class="col-md-8">
+                                <select id="class" name="class" onchange="myFunction()">
+                                    @foreach (var item in listClass)
+                                    {
+                                        <option value="@item.id">@item.class_code - @item.semester_name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        <button id="btnAssingment" class="btn btn-primary">Phân quyền</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>*@
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right sidebar -->
+    <!-- ============================================================== -->
+    <!-- .right-sidebar -->
+    <!-- ============================================================== -->
+    <!-- End Right sidebar -->
+    <!-- ============================================================== -->
+</div>
+<script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
+<script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
+<script>
+        //Lấy data khi vừa vào web admin
+         var dataTable = $("#zero_config_advisor").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetListClass", "EReportTerm")',
+                'data': function (d) {
+                 var input = document.getElementById("year");
+                         filter = input.value.toUpperCase();
+                            d.year = filter ;
+                         },
+                'type': 'get',
+                'datatype':'json',
+         },
+         'columns':
+             [
+                 { 'data': 'ID', 'width': '5%', },
+                 {
+                     'data': 'idClass', 'width': '25%', 'render': function (data, type, row) {
+                             return '<a id="proof" href="@Url.Action("ReportClass", "EReportTerm")/' + row.ID + '/" >' + data + '</a>';
+                     }
+                 },
+                 { 'data': 'name', 'width': '25%' },
+                 { 'data': 'course', 'width': '30%' },
+                 ],
+
+         });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+
+
+        function filterFunction() {
+            $("#zero_config_advisor").dataTable().fnDestroy();
+            var dataTable = $("#zero_config_advisor").DataTable({
+                 'ajax': {
+                        'url': '@Url.Action("GetListClass", "EReportTerm")',
+                        'data': function (d) {
+                         var input = document.getElementById("year");
+                         filter = input.value.toUpperCase();
+                            d.year = filter ;
+                         },
+                        'type': 'get',
+                        'datatype':'json',
+                 },
+                 'columns':
+                     [
+                         { 'data': 'ID', 'width': '5%', },
+                         {
+                             'data': 'idClass', 'width': '25%', 'render': function (data, type, row) {
+                                     return '<a id="proof" href="@Url.Action("ReportClass", "EReportTerm")/' + row.ID + '/" >' + data + '</a>';
+                             }
+                         },
+                         { 'data': 'name', 'width': '25%' },
+                         { 'data': 'course', 'width': '30%' },
+                         ],
+                 });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+        }
+
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+
+</script>
