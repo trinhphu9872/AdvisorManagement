@@ -241,6 +241,7 @@ namespace AdvisorManagement.Middleware
                 planClass.source = item.source;
                 planClass.note = item.note;
                 planClass.id_class = id_class;
+                planClass.evaluate = item.evaluate;
                 db.PlanClass.Add(planClass);
                 db.SaveChanges();
             }
