@@ -494,6 +494,11 @@
     <Content Include="Assets\images\logon.png" />
     <Content Include="Assets\images\Logonew.png" />
     <Content Include="Assets\images\LogoVL.png" />
+    <Content Include="Assets\images\Mail\Chulogo2022.png" />
+    <Content Include="Assets\images\Mail\Logo2022.png" />
+    <Content Include="Assets\images\Mail\logon.png" />
+    <Content Include="Assets\images\Mail\Logonew.png" />
+    <Content Include="Assets\images\Mail\thumbnail.png" />
     <Content Include="Assets\images\s.jpg" />
     <Content Include="Assets\images\search.png" />
     <Content Include="Assets\images\tt.jpeg" />

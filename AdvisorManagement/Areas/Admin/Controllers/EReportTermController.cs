@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
+    [LoginFilter]
     public class EReportTermController : Controller
     {
         private CP25Team09Entities db = new CP25Team09Entities();
@@ -67,7 +68,45 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public ActionResult GetReportClass(int id_class)
         {
             var reportClass = db.PlanClass.Where(x => x.id_class == id_class).ToList().OrderBy(x => x.number_title);
+            foreach (var item in reportClass)
+            {
+                var z = db.ProofPlan.Where(x => x.id_titleplan == item.id).Select(y => y.file_proof).ToList();
+                item.evaluate =z.Count > 0 ?  z.FirstOrDefault().ToString(): null ;
+            }
+
             return Json(new { data = reportClass, success = false }, JsonRequestBehavior.AllowGet);
         }
+
+        //private string getProof(int id, int id_class)
+        //{
+
+        //    string temp = "";
+        //    var listProof = (from pq in db.AccountUser
+        //                     join pr in db.ProofPlan on pq.id equals pr.id_creator
+        //                     join pl in db.PlanClass on pr.id_titleplan equals pl.id
+        //                     where pr.id_titleplan == pl.id && pl.id_class == id_class
+        //                     select new Models.ViewModel.ListProofPlan
+        //                     {
+        //                         id = pr.id,
+        //                         content = pr.content,
+        //                         title = pl.content,
+        //                         proof = pr.file_proof,
+        //                         create_time = pr.create_time,
+        //                         semester = pr.semester,
+        //                         status = pr.status,
+        //                         creator = pq.user_name
+        //                     }).OrderByDescending(x => x.create_time).ToList();
+        //    if (listProof.Count != 0)
+        //    {
+        //        foreach (var item in listProof)
+        //        {
+        //            if (item.id == id)
+        //            {
+        //                temp += item.proof + "-";
+        //            }
+        //        }
+        //    }
+        //    return temp;
+        //}
     }
 }
