@@ -63,10 +63,10 @@
 </div>
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
-
+<script type="text/javascript" src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
 <script>
   
-            //Lấy data khi vừa vào web admin
+     //Lấy data khi vừa vào web admin
     var dataTable = $("#zero_config_admin").DataTable({
          'ajax': {
                 'url': '@Url.Action("GetReportClass", "EReportTerm")',
@@ -85,9 +85,8 @@
                  ],
              'bAutoWidth': false,
              'responsive': false,
-             "order": [[0, "asc"]],
              'ordering': false,
-             'rowGroups': [0],
+             'rowsGroup': [0],
              'language': {
                  "decimal": "",
                  "emptyTable": "Không có dữ liệu",
