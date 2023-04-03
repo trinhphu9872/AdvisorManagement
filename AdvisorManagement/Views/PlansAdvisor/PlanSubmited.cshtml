@@ -231,6 +231,16 @@
     function Check(id_class) {
         jQuery('#modal-footer').empty();
         $('#id_class').val(id_class);
+        $(document).on('destroy.dt', function (e, settings) {
+            var api = new $.fn.dataTable.Api(settings);
+            api.off('order.dt');
+            api.off('preDraw.dt');
+            api.off('column-visibility.dt');
+            api.off('search.dt');
+            api.off('page.dt');
+            api.off('length.dt ');
+            api.off('xhr.dt');            
+        });       
         $("#zero_config_plan").dataTable().fnDestroy();
         $.ajax({
                 url: '@Url.Action("GetListPlanSubmitedClass", "PlansAdvisor")',
@@ -284,7 +294,8 @@
             "bLengthChange": false,
             "bPaginate": false,
             "bInfo": false,
-            /*"rowsGroup": [0, 1],*/
+            responsive: true,
+            "rowsGroup": [0, 1],
          });
     }
 
