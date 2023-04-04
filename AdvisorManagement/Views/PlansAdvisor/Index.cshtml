@@ -29,10 +29,10 @@
                                 <a onclick="CreateTitle()" id="create" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Tạo đề mục<i style="margin-left:5px" class="fas fa-plus"></i>
                                 </a>
-                                <a href="@Url.Action("PlanSubmited","PlansAdvisor")" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 200px;">
+                                <a href="@Url.Action("PlanSubmited","PlansAdvisor")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 200px;">
                                     Kế hoạch của cố vấn<i style="margin-left:5px" class="fas fa-plus"></i>
                                 </a>
-                                <a href="@Url.Action("ProofPlan","PlansAdvisor")" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                <a href="@Url.Action("ProofPlan","PlansAdvisor")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Xem minh chứng<i style="margin-left:5px" class="fas fa-plus"></i>
                                 </a>
                             </div>
@@ -329,7 +329,7 @@
                  { 'data': 'note', 'width': '5%' },                
                  {
                      'data': 'id', 'width': '20%', 'render': function (data) {
-                         return '<button onclick="Update(' + data + ')" class="btn btn-success">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button >@* <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
+                         return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button >@* <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
                      }
                  },
                  ],
@@ -459,7 +459,7 @@
                          'data': 'id', 'width': '30%', 'render': function (data) {
                              document.getElementById("action").hidden = false;
                              document.getElementById("copy").hidden = true;
-                             return '<button onclick="Update(' + data + ')" class="btn btn-success">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data +')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > @*<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
+                             return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data +')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > @*<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
                          }
                      },
                  ]

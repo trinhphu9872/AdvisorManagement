@@ -78,7 +78,7 @@
                             <img src="~/Assets/images/logon.png"
                                  alt="homepage"
                                  class="light-logo"
-                                 width="90"
+                                 width="98"
                                  style="margin-top: 10px" />
                         </span>
                         <!-- Logo icon -->
@@ -119,81 +119,101 @@
                         </li>
                     </ul>
                     @*@if (Request.IsAuthenticated)
+        {
+            <ul class="dropdown-menu stylecolor">
+                <li>
+                    @Html.ActionLink("Hello " + User.Identity.Name + "!", "UserProfile", "Home", new { id = "", email = User.Identity.Name }, null)
+                </li>
+                <li>
+                    <a href=@Url.Action("SignOut", "Account",new {area = ""})> Đăng xuất</a>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <ul class="nav navbar-nav navbar-right">
+                @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            </ul>
+        }*@
+                   
+                <ul class="navbar-nav float-end">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="navbarDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="mdi mdi-bell font-24"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        @if (Session["RoleName"].ToString() == null)
                         {
-                            <ul class="dropdown-menu stylecolor">
-                                <li>
-                                    @Html.ActionLink("Hello " + User.Identity.Name + "!", "UserProfile", "Home", new { id = "", email = User.Identity.Name }, null)
-                                </li>
-                                <li>
-                                    <a href=@Url.Action("SignOut", "Account",new {area = ""})> Đăng xuất</a>
-                                </li>
-                            </ul>
+
                         }
-                        else
+                        else if (int.Parse(Session["RoleName"].ToString()) == 1 || int.Parse(Session["RoleName"].ToString()) == 2)
                         {
-                            <ul class="nav navbar-nav navbar-right">
-                                @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-                            </ul>
-                        }*@
-                    <ul class="navbar-nav float-end">
-                        <li class="nav-item dropdown">
-                            @if (Session["RoleName"].ToString() == null)
+                            <a style="color:white">  Giáo viên: @Session["Name"] </a>
+                        }
+                        else if (int.Parse(Session["RoleName"].ToString()) == 3)
+                        {
+                            <a style="color:white">  Sinh viên: @Session["Name"] </a>
+                        }
+
+                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
+                           href="#"
+                           id="navbarDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            @if (Request.IsAuthenticated)
+                            {<img src="~/Images/imageProfile/@ViewBag.avatar"
+                                  alt="user"
+                                  class="rounded-circle"
+                                  width="31" />
+                            }
+                            else
+                            {
+                                <img src="~/Assets/images/users/1.jpg"
+                                     alt="user"
+                                     class="rounded-circle"
+                                     width="31" />
+                            }
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                            @if (Request.IsAuthenticated)
                             {
 
+                                <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
+                                    <i class="mdi mdi-account me-1 ms-1"></i>
+                                    Tài Khoản
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
+                                <div class="dropdown-divider"></div>
                             }
-                            else if (int.Parse(Session["RoleName"].ToString()) == 1 || int.Parse(Session["RoleName"].ToString()) == 2)
+                            else
                             {
-                                <a style="color:white">  Giáo viên: @Session["Name"] </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
+
                             }
-                            else if (int.Parse(Session["RoleName"].ToString()) == 3)
-                            {
-                                <a style="color:white">  Sinh viên: @Session["Name"] </a>
-                            }
+                        </ul>
+                    </li>
+                    <!-- ============================================================== -->
+                    <!-- User profile and search -->
+                    <!-- ============================================================== -->
 
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
-                               href="#"
-                               id="navbarDropdown"
-                               role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                @if (Request.IsAuthenticated)
-                                {<img src="~/Images/imageProfile/@ViewBag.avatar"
-                                      alt="user"
-                                      class="rounded-circle"
-                                      width="31" />
-                                }
-                                else
-                                {
-                                    <img src="~/Assets/images/users/1.jpg"
-                                         alt="user"
-                                         class="rounded-circle"
-                                         width="31" />
-                                }
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                                @if (Request.IsAuthenticated)
-                                {
-                                    <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
-                                        <i class="mdi mdi-account me-1 ms-1"></i>
-                                        Tài Khoản
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
-                                    <div class="dropdown-divider"></div>
-                                }
-                                else
-                                {
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
-
-                                }
-                            </ul>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-
-                    </ul>
+                </ul>
                 </div>
             </nav>
         </header>
@@ -355,7 +375,7 @@
                             }
                         }
                         @* Merge *@
-
+                            
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
