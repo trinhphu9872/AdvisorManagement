@@ -29,6 +29,14 @@
           <Property Name="status_id" Type="int" />
           <Property Name="account_id" Type="int" />
         </EntityType>
+        <EntityType Name="Annoucement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="message" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="ListStudents">
           <Key>
             <PropertyRef Name="id" />
@@ -45,6 +53,16 @@
           <Property Name="menu_name" Type="nvarchar" MaxLength="100" />
           <Property Name="action_link" Type="nvarchar" MaxLength="100" />
           <Property Name="order_id" Type="int" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_notification" Type="int" />
+          <Property Name="send_to" Type="varchar" MaxLength="100" />
+          <Property Name="create_time" Type="datetime" />
+          <Property Name="is_read" Type="bit" />
         </EntityType>
         <EntityType Name="PlanAdvisor">
           <Key>
@@ -236,8 +254,10 @@
         <EntityContainer Name="CP25Team09ModelStoreContainer">
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Annoucement" EntityType="Self.Annoucement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ListStudents" EntityType="Self.ListStudents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlanAdvisor" EntityType="Self.PlanAdvisor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlanClass" EntityType="Self.PlanClass" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlanStatus" EntityType="Self.PlanStatus" Schema="dbo" store:Type="Tables" />
@@ -337,6 +357,33 @@
           <Property Name="note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="evaluate" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="PlanClass">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="year" Type="Int32" />
+          <Property Name="number_title" Type="Int32" />
+          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="hk1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="hk2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="hk3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="describe" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_class" Type="Int32" />
+          <Property Name="evaluate" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PlanStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_class" Type="Int32" />
+          <Property Name="id_status" Type="Int32" />
+          <Property Name="modify_time" Type="DateTime" Precision="3" />
+          <Property Name="message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="ProofPlan">
           <Key>
             <PropertyRef Name="id" />
@@ -378,6 +425,13 @@
           <Property Name="semester_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="scholastic" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="StatusPlan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Student">
           <Key>
             <PropertyRef Name="student_code" />
@@ -416,8 +470,8 @@
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="update_time" Type="DateTime" Precision="3" />
           <Property Name="semester_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="VLClass" ToRole="Advisor" />
           <Property Name="course" Type="Int32" />
+          <NavigationProperty Name="Advisor" Relationship="Self.FK_Class_Advisor" FromRole="VLClass" ToRole="Advisor" />
         </EntityType>
         <Association Name="FK_AccountUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -485,10 +539,13 @@
           <EntitySet Name="ListStudents" EntityType="Self.ListStudents" />
           <EntitySet Name="Menu" EntityType="Self.Menu" />
           <EntitySet Name="PlanAdvisor" EntityType="Self.PlanAdvisor" />
+          <EntitySet Name="PlanClass" EntityType="Self.PlanClass" />
+          <EntitySet Name="PlanStatus" EntityType="Self.PlanStatus" />
           <EntitySet Name="ProofPlan" EntityType="Self.ProofPlan" />
           <EntitySet Name="Role" EntityType="Self.Role" />
           <EntitySet Name="RoleMenu" EntityType="Self.RoleMenu" />
           <EntitySet Name="Semester" EntityType="Self.Semester" />
+          <EntitySet Name="StatusPlan" EntityType="Self.StatusPlan" />
           <EntitySet Name="Student" EntityType="Self.Student" />
           <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
@@ -513,43 +570,26 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="RoleMenu" EntitySet="RoleMenu" />
           </AssociationSet>
-          <EntitySet Name="PlanClass" EntityType="CP25Team09Model.PlanClass" />
-          <EntitySet Name="PlanStatus" EntityType="CP25Team09Model.PlanStatus" />
-          <EntitySet Name="StatusPlan" EntityType="CP25Team09Model.StatusPlan" />
+          <EntitySet Name="Annoucement" EntityType="CP25Team09Model.Annoucement" />
+          <EntitySet Name="Notification" EntityType="CP25Team09Model.Notification" />
         </EntityContainer>
-        <EntityType Name="PlanClass">
+        <EntityType Name="Annoucement">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="year" Type="Int32" />
-          <Property Name="number_title" Type="Int32" />
-          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="hk1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="hk2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="hk3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="describe" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="id_class" Type="Int32" />
-          <Property Name="evaluate" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="PlanStatus">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_class" Type="Int32" />
-          <Property Name="id_status" Type="Int32" />
-          <Property Name="modify_time" Type="DateTime" Precision="3" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="StatusPlan">
+        <EntityType Name="Notification">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="status_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_notification" Type="Int32" />
+          <Property Name="send_to" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="is_read" Type="Boolean" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -605,7 +645,6 @@
           <EntitySetMapping Name="PlanAdvisor">
             <EntityTypeMapping TypeName="CP25Team09Model.PlanAdvisor">
               <MappingFragment StoreEntitySet="PlanAdvisor">
-                <ScalarProperty Name="evaluate" ColumnName="evaluate" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="year" ColumnName="year" />
                 <ScalarProperty Name="number_title" ColumnName="number_title" />
@@ -616,6 +655,36 @@
                 <ScalarProperty Name="describe" ColumnName="describe" />
                 <ScalarProperty Name="source" ColumnName="source" />
                 <ScalarProperty Name="note" ColumnName="note" />
+                <ScalarProperty Name="evaluate" ColumnName="evaluate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlanClass">
+            <EntityTypeMapping TypeName="CP25Team09Model.PlanClass">
+              <MappingFragment StoreEntitySet="PlanClass">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="number_title" ColumnName="number_title" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="hk1" ColumnName="hk1" />
+                <ScalarProperty Name="hk2" ColumnName="hk2" />
+                <ScalarProperty Name="hk3" ColumnName="hk3" />
+                <ScalarProperty Name="describe" ColumnName="describe" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="note" ColumnName="note" />
+                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="evaluate" ColumnName="evaluate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlanStatus">
+            <EntityTypeMapping TypeName="CP25Team09Model.PlanStatus">
+              <MappingFragment StoreEntitySet="PlanStatus">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="id_status" ColumnName="id_status" />
+                <ScalarProperty Name="modify_time" ColumnName="modify_time" />
+                <ScalarProperty Name="message" ColumnName="message" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -660,6 +729,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="StatusPlan">
+            <EntityTypeMapping TypeName="CP25Team09Model.StatusPlan">
+              <MappingFragment StoreEntitySet="StatusPlan">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="status_name" ColumnName="status_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Student">
             <EntityTypeMapping TypeName="CP25Team09Model.Student">
               <MappingFragment StoreEntitySet="Student">
@@ -694,49 +771,32 @@
           <EntitySetMapping Name="VLClass">
             <EntityTypeMapping TypeName="CP25Team09Model.VLClass">
               <MappingFragment StoreEntitySet="VLClass">
-                <ScalarProperty Name="course" ColumnName="course" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="class_code" ColumnName="class_code" />
                 <ScalarProperty Name="advisor_code" ColumnName="advisor_code" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="update_time" ColumnName="update_time" />
                 <ScalarProperty Name="semester_name" ColumnName="semester_name" />
+                <ScalarProperty Name="course" ColumnName="course" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PlanClass">
-            <EntityTypeMapping TypeName="CP25Team09Model.PlanClass">
-              <MappingFragment StoreEntitySet="PlanClass">
-                <ScalarProperty Name="evaluate" ColumnName="evaluate" />
-                <ScalarProperty Name="id_class" ColumnName="id_class" />
-                <ScalarProperty Name="note" ColumnName="note" />
-                <ScalarProperty Name="source" ColumnName="source" />
-                <ScalarProperty Name="describe" ColumnName="describe" />
-                <ScalarProperty Name="hk3" ColumnName="hk3" />
-                <ScalarProperty Name="hk2" ColumnName="hk2" />
-                <ScalarProperty Name="hk1" ColumnName="hk1" />
-                <ScalarProperty Name="content" ColumnName="content" />
-                <ScalarProperty Name="number_title" ColumnName="number_title" />
-                <ScalarProperty Name="year" ColumnName="year" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PlanStatus">
-            <EntityTypeMapping TypeName="CP25Team09Model.PlanStatus">
-              <MappingFragment StoreEntitySet="PlanStatus">
+          <EntitySetMapping Name="Annoucement">
+            <EntityTypeMapping TypeName="CP25Team09Model.Annoucement">
+              <MappingFragment StoreEntitySet="Annoucement">
                 <ScalarProperty Name="message" ColumnName="message" />
-                <ScalarProperty Name="modify_time" ColumnName="modify_time" />
-                <ScalarProperty Name="id_status" ColumnName="id_status" />
-                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="StatusPlan">
-            <EntityTypeMapping TypeName="CP25Team09Model.StatusPlan">
-              <MappingFragment StoreEntitySet="StatusPlan">
-                <ScalarProperty Name="status_name" ColumnName="status_name" />
+          <EntitySetMapping Name="Notification">
+            <EntityTypeMapping TypeName="CP25Team09Model.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="is_read" ColumnName="is_read" />
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="send_to" ColumnName="send_to" />
+                <ScalarProperty Name="id_notification" ColumnName="id_notification" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

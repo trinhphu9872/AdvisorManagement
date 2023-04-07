@@ -108,7 +108,7 @@
                      data-navbarbg="skin5">
                     <!-- ============================================================== -->
                     <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->                    
                     <ul class="navbar-nav float-start me-auto">
                         <li class="nav-item d-none d-lg-block">
                             <a class="nav-link sidebartoggler waves-effect waves-light"
@@ -135,65 +135,85 @@
                                 @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
                             </ul>
                         }*@
-                    <ul class="navbar-nav float-end">
-                        <li class="nav-item dropdown">
-                            @if (Session["RoleName"].ToString() == null)
+                <ul class="navbar-nav float-end">
+                    <li class="nav-item dropdown">                       
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="navbarDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="mdi mdi-bell font-24"></i>
+                            <span class="count"></span>
+                        </a>
+                        <ul id="notiContent" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li style="background: #b3d0b6;" class="dropdown-item">Action</li>
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        @if (Session["RoleName"].ToString() == null)
+                        {
+
+                        }
+                        else if (int.Parse(Session["RoleName"].ToString()) == 1 || int.Parse(Session["RoleName"].ToString()) == 2)
+                        {
+                            <a style="color:white">  Giáo viên: @Session["Name"] </a>
+                        }
+                        else if (int.Parse(Session["RoleName"].ToString()) == 3)
+                        {
+                            <a style="color:white">  Sinh viên: @Session["Name"] </a>
+                        }
+
+                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
+                           href="#"
+                           id="navbarDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            @if (Request.IsAuthenticated)
+                            {<img src="~/Images/imageProfile/@ViewBag.avatar"
+                                  alt="user"
+                                  class="rounded-circle"
+                                  width="31" />
+                            }
+                            else
                             {
+                                <img src="~/Assets/images/users/1.jpg"
+                                     alt="user"
+                                     class="rounded-circle"
+                                     width="31" />
+                            }
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                            @if (Request.IsAuthenticated)
+                            {
+                                <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
+                                    <i class="mdi mdi-account me-1 ms-1"></i>
+                                    Tài Khoản
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
+                                <div class="dropdown-divider"></div>
+                            }
+                            else
+                            {
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
 
                             }
-                            else if (int.Parse(Session["RoleName"].ToString()) == 1 || int.Parse(Session["RoleName"].ToString()) == 2)
-                            {
-                                <a style="color:white">  Giáo viên: @Session["Name"] </a>
-                            }
-                            else if (int.Parse(Session["RoleName"].ToString()) == 3)
-                            {
-                                <a style="color:white">  Sinh viên: @Session["Name"] </a>
-                            }
+                        </ul>
+                    </li>
+                    <!-- ============================================================== -->
+                    <!-- User profile and search -->
+                    <!-- ============================================================== -->
 
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
-                               href="#"
-                               id="navbarDropdown"
-                               role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                @if (Request.IsAuthenticated)
-                                {<img src="~/Images/imageProfile/@ViewBag.avatar"
-                                      alt="user"
-                                      class="rounded-circle"
-                                      width="31" />
-                                }
-                                else
-                                {
-                                    <img src="~/Assets/images/users/1.jpg"
-                                         alt="user"
-                                         class="rounded-circle"
-                                         width="31" />
-                                }
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                                @if (Request.IsAuthenticated)
-                                {
-                                    <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
-                                        <i class="mdi mdi-account me-1 ms-1"></i>
-                                        Tài Khoản
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
-                                    <div class="dropdown-divider"></div>
-                                }
-                                else
-                                {
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
-
-                                }
-                            </ul>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-
-                    </ul>
+                </ul>
                 </div>
             </nav>
         </header>
@@ -456,9 +476,85 @@
     <script src="~/Assets/libs/moment/min/moment.min.js"></script>
     <script src="~/Assets/libs/fullcalendar/dist/fullcalendar.min.js"></script>
     <script src="~/Dist/js/pages/calendar/cal-init.js"></script>
-    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js" type="text/javascript"></script>
     <script src="~/signalr/hubs"></script>
-    @RenderSection("Scripts", required: false)
+   @* <link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+    <style type="text/css">
+        /*Added css for design notification area, you can design by your self*/
+        /* COPY css content from youtube video description*/
+    </style>
+    @* Add jquery code for Get Notification & setup signalr *@
+    <script type="text/javascript">
+        $(function () {
+            function setTotalNotification(totalNotif) {
+                console.log(totalNotif);
+                $('span.count').html(totalNotif);
+            }
+
+            var hub = $.connection.notificationHub;
+
+            //Client Call
+            hub.client.broadcaastNotif = function (totalNotif) {
+                setTotalNotification(totalNotif)
+            };
+
+            hub.client.notify = function (message) {
+                jQuery('#notiContent').empty();
+                if (message.length > 0) {                   
+                    if ($('#notiContent').css('display') == 'block') {
+                        hub.client.broadcaastNotif = function (totalNotif) {
+                            $('span.count').html(totalNotif);
+                        };
+                        updateNotification();
+                    }
+                    for (let i = 0; i < message.length; i++) {
+                        if (message[i].isRead == true) {
+                            $('#notiContent').append($('<li class="dropdown-item">' + moment(message[i].date).format("DD-MM-YYYY HH:mm") + ' This is title: ' + message[i].title + '\r\n This is message: ' + message[i].message + '</li>'));
+                        } else {
+                            $('#notiContent').append($('<li style="background: #b3d0b6;" class="dropdown-item">' + moment(message[i].date).format("DD-MM-YYYY HH:mm") + ' This is title: ' + message[i].title + '\r\n This is message: ' + message[i].message + '</li > '));
+                        }
+                    }
+                } else {
+                    $('#notiContent').append($('<li>Bạn chưa có thông báo nào </li > '));
+                }                   
+            };
+
+            //$.connection.hub.start().done(function () { });
+
+            $.connection.hub.start()
+                .done(function () {
+                    console.log("Hub Connected!");
+                    //Server Call
+                    hub.server.getNotification();
+
+                })
+                .fail(function () {
+                    console.log("Could not Connect!");
+                });
+            // Click on notification icon for show notification
+            $('#navbarDropdown').click(function (e) {
+                if ($('#notiContent').css('display') == 'block') {   
+                    $('span.count').html(0);                    
+                } else {
+                    e.stopPropagation();                  
+                    hub.server.getNotification();
+                    updateNotification();       
+                }                
+            }) 
+            // hide notifications
+            $('html').click(function () {
+                if ($('#notiContent').css('display') == 'block') {
+                    $('span.count').html(0);
+                }
+            })
+            // update notification
+            function updateNotification() {             
+                $.ajax({                   
+                    url: '/Announcement/UpdateNotification',                                        
+                })
+            }         
+        })
+    </script>
 
 </body>
 </html>

@@ -8,6 +8,8 @@ using Microsoft.Owin;
 using Owin;
 using System.Linq;
 
+[assembly: OwinStartup(typeof(AdvisorManagement.Startup))]
+
 namespace AdvisorManagement
 {
     public partial class Startup
