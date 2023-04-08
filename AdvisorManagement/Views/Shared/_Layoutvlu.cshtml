@@ -136,7 +136,7 @@
                             </ul>
                         }*@
                 <ul class="navbar-nav float-end">
-                    <li class="nav-item dropdown">                       
+                    <li class="nav-item dropdown" id="noti-content">                       
                         <a class="nav-link dropdown-toggle"
                            href="#"
                            id="navbarDropdown"
@@ -478,13 +478,10 @@
     <script src="~/Dist/js/pages/calendar/cal-init.js"></script>
     <script src="~/Scripts/jquery.signalR-2.4.3.min.js" type="text/javascript"></script>
     <script src="~/signalr/hubs"></script>
-   @* <link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
     <style type="text/css">
-        /*Added css for design notification area, you can design by your self*/
-        /* COPY css content from youtube video description*/
     </style>
     @* Add jquery code for Get Notification & setup signalr *@
-    <script type="text/javascript">
+    <script type="text/javascript">    
         $(function () {
             function setTotalNotification(totalNotif) {
                 console.log(totalNotif);
@@ -531,22 +528,13 @@
                 .fail(function () {
                     console.log("Could not Connect!");
                 });
-            // Click on notification icon for show notification
-            $('#navbarDropdown').click(function (e) {
-                if ($('#notiContent').css('display') == 'block') {   
-                    $('span.count').html(0);                    
-                } else {
-                    e.stopPropagation();                  
-                    hub.server.getNotification();
-                    updateNotification();       
-                }                
-            }) 
-            // hide notifications
-            $('html').click(function () {
-                if ($('#notiContent').css('display') == 'block') {
-                    $('span.count').html(0);
-                }
-            })
+            $('#noti-content').on('shown.bs.dropdown', function () {              
+                hub.server.getNotification();
+                updateNotification();
+            });
+            $('#noti-content').on('hide.bs.dropdown', function () {
+                $('span.count').html(0);
+            });                       
             // update notification
             function updateNotification() {             
                 $.ajax({                   
