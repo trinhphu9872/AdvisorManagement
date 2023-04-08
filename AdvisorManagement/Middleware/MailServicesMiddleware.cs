@@ -53,7 +53,7 @@ namespace AdvisorManagement.Middleware
                 // get name
                 string nameUser = serviceAccount.getTextName(m.Trim());
                 // Create the message body
-                string finalHtml = htmlTemplate.Replace("[[Name]]", nameUser).Replace("[[Subject]]", request.Subject).Replace("[[Message]]", request.Message);
+                string finalHtml = htmlTemplate.Replace("[[Name]]", nameUser).Replace("[[Subject]]", request.Subject).Replace("[[message]]", request.Message);
                 var builder = new BodyBuilder();
                 builder.HtmlBody = finalHtml;
                 email.Body = builder.ToMessageBody();
