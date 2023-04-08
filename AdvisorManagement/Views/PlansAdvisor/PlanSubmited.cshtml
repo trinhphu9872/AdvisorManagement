@@ -146,6 +146,7 @@
 </div>
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
 <script>
         //Lấy data khi vừa vào web admin
          var dataTable = $("#zero_config").DataTable({
@@ -230,6 +231,16 @@
     function Check(id_class) {
         jQuery('#modal-footer').empty();
         $('#id_class').val(id_class);
+        $(document).on('destroy.dt', function (e, settings) {
+            var api = new $.fn.dataTable.Api(settings);
+            api.off('order.dt');
+            api.off('preDraw.dt');
+            api.off('column-visibility.dt');
+            api.off('search.dt');
+            api.off('page.dt');
+            api.off('length.dt ');
+            api.off('xhr.dt');            
+        });       
         $("#zero_config_plan").dataTable().fnDestroy();
         $.ajax({
                 url: '@Url.Action("GetListPlanSubmitedClass", "PlansAdvisor")',
@@ -277,12 +288,14 @@
                  { 'data': 'describe', 'width': '30%' },
                  { 'data': 'source', 'width': '25%' },
                  { 'data': 'note', 'width': '10%' },
-                ],
+                ],           
             "autoWidth": false,
             "aLengthMenu": [[-1], ["All"]],
             "bLengthChange": false,
             "bPaginate": false,
             "bInfo": false,
+            responsive: true,
+            "rowsGroup": [0, 1],
          });
     }
 

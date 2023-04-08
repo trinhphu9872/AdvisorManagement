@@ -108,7 +108,7 @@
                      data-navbarbg="skin5">
                     <!-- ============================================================== -->
                     <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->                    
                     <ul class="navbar-nav float-start me-auto">
                         <li class="nav-item d-none d-lg-block">
                             <a class="nav-link sidebartoggler waves-effect waves-light"
@@ -119,25 +119,24 @@
                         </li>
                     </ul>
                     @*@if (Request.IsAuthenticated)
-        {
-            <ul class="dropdown-menu stylecolor">
-                <li>
-                    @Html.ActionLink("Hello " + User.Identity.Name + "!", "UserProfile", "Home", new { id = "", email = User.Identity.Name }, null)
-                </li>
-                <li>
-                    <a href=@Url.Action("SignOut", "Account",new {area = ""})> Đăng xuất</a>
-                </li>
-            </ul>
-        }
-        else
-        {
-            <ul class="nav navbar-nav navbar-right">
-                @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-            </ul>
-        }*@
-                   
+                        {
+                            <ul class="dropdown-menu stylecolor">
+                                <li>
+                                    @Html.ActionLink("Hello " + User.Identity.Name + "!", "UserProfile", "Home", new { id = "", email = User.Identity.Name }, null)
+                                </li>
+                                <li>
+                                    <a href=@Url.Action("SignOut", "Account",new {area = ""})> Đăng xuất</a>
+                                </li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <ul class="nav navbar-nav navbar-right">
+                                @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+                            </ul>
+                        }*@
                 <ul class="navbar-nav float-end">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" id="noti-content">                       
                         <a class="nav-link dropdown-toggle"
                            href="#"
                            id="navbarDropdown"
@@ -145,8 +144,10 @@
                            data-bs-toggle="dropdown"
                            aria-expanded="false">
                             <i class="mdi mdi-bell font-24"></i>
+                            <span class="count"></span>
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <ul id="notiContent" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li style="background: #b3d0b6;" class="dropdown-item">Action</li>
                             <li><a class="dropdown-item" href="#">Action</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li>
                             <li><hr class="dropdown-divider" /></li>
@@ -192,7 +193,6 @@
                         <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
                             @if (Request.IsAuthenticated)
                             {
-
                                 <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
                                     <i class="mdi mdi-account me-1 ms-1"></i>
                                     Tài Khoản
@@ -476,9 +476,73 @@
     <script src="~/Assets/libs/moment/min/moment.min.js"></script>
     <script src="~/Assets/libs/fullcalendar/dist/fullcalendar.min.js"></script>
     <script src="~/Dist/js/pages/calendar/cal-init.js"></script>
-    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js" type="text/javascript"></script>
     <script src="~/signalr/hubs"></script>
-    @RenderSection("Scripts", required: false)
+    <style type="text/css">
+    </style>
+    @* Add jquery code for Get Notification & setup signalr *@
+    <script type="text/javascript">    
+        $(function () {
+            function setTotalNotification(totalNotif) {
+                console.log(totalNotif);
+                $('span.count').html(totalNotif);
+            }
+
+            var hub = $.connection.notificationHub;
+
+            //Client Call
+            hub.client.broadcaastNotif = function (totalNotif) {
+                setTotalNotification(totalNotif)
+            };
+
+            hub.client.notify = function (message) {
+                jQuery('#notiContent').empty();
+                if (message.length > 0) {                   
+                    if ($('#notiContent').css('display') == 'block') {
+                        hub.client.broadcaastNotif = function (totalNotif) {
+                            $('span.count').html(totalNotif);
+                        };
+                        updateNotification();
+                    }
+                    for (let i = 0; i < message.length; i++) {
+                        if (message[i].isRead == true) {
+                            $('#notiContent').append($('<li class="dropdown-item">' + moment(message[i].date).format("DD-MM-YYYY HH:mm") + ' This is title: ' + message[i].title + '\r\n This is message: ' + message[i].message + '</li>'));
+                        } else {
+                            $('#notiContent').append($('<li style="background: #b3d0b6;" class="dropdown-item">' + moment(message[i].date).format("DD-MM-YYYY HH:mm") + ' This is title: ' + message[i].title + '\r\n This is message: ' + message[i].message + '</li > '));
+                        }
+                    }
+                } else {
+                    $('#notiContent').append($('<li>Bạn chưa có thông báo nào </li > '));
+                }                   
+            };
+
+            //$.connection.hub.start().done(function () { });
+
+            $.connection.hub.start()
+                .done(function () {
+                    console.log("Hub Connected!");
+                    //Server Call
+                    hub.server.getNotification();
+
+                })
+                .fail(function () {
+                    console.log("Could not Connect!");
+                });
+            $('#noti-content').on('shown.bs.dropdown', function () {              
+                hub.server.getNotification();
+                updateNotification();
+            });
+            $('#noti-content').on('hide.bs.dropdown', function () {
+                $('span.count').html(0);
+            });                       
+            // update notification
+            function updateNotification() {             
+                $.ajax({                   
+                    url: '/Announcement/UpdateNotification',                                        
+                })
+            }         
+        })
+    </script>
 
 </body>
 </html>
