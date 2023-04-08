@@ -36,6 +36,7 @@ namespace AdvisorManagement.Middleware
             smtp.Disconnect(true);
             return "Ok";
         }
+        // mail all
 
         public string MailSendMuiltiRequest(MailRequest request, List<string> MultiMail, string content)
         {
