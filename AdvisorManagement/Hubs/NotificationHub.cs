@@ -17,18 +17,18 @@ namespace AdvisorManagement.Hubs
         private static readonly ConcurrentDictionary<string, UserHubModels> Users =
             new ConcurrentDictionary<string, UserHubModels>(StringComparer.InvariantCultureIgnoreCase);
         private CP25Team09Entities db = new CP25Team09Entities();
-      /*  public void Send(string message)
-        {
-            Clients.All.notify(message);
-        }
-     *//*   
-        public void SendNotifications(string message)
-        {
-            string connectionId = Context.ConnectionId;
-            Clients.All.receiveNotification(message);
-        }*/
+        /*  public void Send(string message)
+          {
+              Clients.All.notify(message);
+          }
+       *//*   
+          public void SendNotifications(string message)
+          {
+              string connectionId = Context.ConnectionId;
+              Clients.All.receiveNotification(message);
+          }*/
 
-        //Logged Use Call
+        //Lấy số lượng thông báo chưa đọc, danh sách thông báo khi vừa vào web
         public void GetNotification()
         {
             try
@@ -37,6 +37,7 @@ namespace AdvisorManagement.Hubs
 
                 //Get TotalNotification
                 string totalNotif = LoadCountNotify(loggedUser);
+                //Get ListNotification
                 var dataNotif = LoadNotifyData(loggedUser);
                 //Send To
                 UserHubModels receiver;
@@ -57,15 +58,16 @@ namespace AdvisorManagement.Hubs
             }
         }
 
-        //Logged Use Call
+        //Lấy số lượng thông báo chưa đọc, danh sách thông báo khi admin gửi thông báo
         public void GetNotification(string loggedUser)
         {
             try
-            {           
+            {
                 //Get TotalNotification
                 string totalNotif = LoadCountNotify(loggedUser);
+                //Get ListNotification
                 var dataNotif = LoadNotifyData(loggedUser);
-                //Send To
+                //User
                 UserHubModels receiver;
                 if (Users.TryGetValue(loggedUser, out receiver))
                 {
@@ -84,25 +86,26 @@ namespace AdvisorManagement.Hubs
             }
         }
 
-        //Specific User Call
+        //Admin gửi thông báo đến người dùng
         public void SendNotification(string SentTo)
         {
             try
             {
                 //Get TotalNotification
                 string totalNotif = LoadCountNotify(SentTo);
+                //Get ListNotification
                 var dataNotif = LoadNotifyData(SentTo);
                 //Send To
                 UserHubModels receiver;
                 if (Users.TryGetValue(SentTo, out receiver))
                 {
                     var cid = receiver.ConnectionIds;
-                    foreach(var item in cid)
+                    foreach (var item in cid)
                     {
                         var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                         context.Clients.Client(item).broadcaastNotif(totalNotif);
                         context.Clients.Client(item).notify(dataNotif);
-                    }                   
+                    }
                 }
             }
             catch (Exception ex)
@@ -111,19 +114,21 @@ namespace AdvisorManagement.Hubs
             }
         }
 
+        //Số thông báo chưa đọc
         private string LoadCountNotify(string userId)
         {
-            
+
             int total = 0;
             var query = (from n in db.Notification
                          join a in db.Annoucement on n.id_notification equals a.id
-                         where n.id_notification == a.id && n.send_to== userId && n.is_read != true
+                         where n.id_notification == a.id && n.send_to == userId && n.is_read != true
                          select n)
                         .ToList();
             total = query.Count;
             return total.ToString();
         }
 
+        //Danh sách thông báo
         private object LoadNotifyData(string userId)
         {
             var query = (from n in db.Notification
@@ -131,16 +136,17 @@ namespace AdvisorManagement.Hubs
                          where n.id_notification == a.id && n.send_to == userId
                          select new UserNotification
                          {
-                             userID=  n.send_to,
+                             userID = n.send_to,
                              message = a.message,
-                             title= a.title,
+                             title = a.title,
                              date = n.create_time,
                              isRead = n.is_read
-                         }).OrderByDescending(x=>x.date)
+                         }).OrderByDescending(x => x.date)
                        .ToList();
             return query;
         }
 
+        //Khi người dùng vào web
         public override Task OnConnected()
         {
             string userName = Context.User.Identity.Name;
@@ -164,6 +170,7 @@ namespace AdvisorManagement.Hubs
             return base.OnConnected();
         }
 
+        //Khi người dùng rời khỏi web
         public override Task OnDisconnected(bool stopCalled)
         {
             string userName = Context.User.Identity.Name;
@@ -189,4 +196,5 @@ namespace AdvisorManagement.Hubs
             return base.OnDisconnected(stopCalled);
         }
     }
+
 }

@@ -63,7 +63,6 @@ namespace AdvisorManagement.Controllers
                 db.SaveChanges();
             }           
 
-
         }
     }
 }

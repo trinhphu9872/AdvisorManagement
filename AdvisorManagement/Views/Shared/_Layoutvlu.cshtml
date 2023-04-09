@@ -497,41 +497,45 @@
     @* Add jquery code for Get Notification & setup signalr *@
     <script type="text/javascript">    
         $(function () {
+            //Get số thông báo mới, số thông báo chưa xem
             function setTotalNotification(totalNotif) {
-                console.log(totalNotif);
-                $('span.count').html(totalNotif);
+                if (totalNotif > 0) {
+                    $('span.count').html(totalNotif);
+                } else {
+                    $('span.count').html("");
+                }
             }
 
             var hub = $.connection.notificationHub;
 
-            //Client Call
+            //Client call
             hub.client.broadcaastNotif = function (totalNotif) {
                 setTotalNotification(totalNotif)
             };
 
+            //Client call, 
             hub.client.notify = function (message) {
                 jQuery('#notiContent').empty();
-                if (message.length > 0) {                   
+                if (message.length > 0) {
+                    //Nếu dropdown đang được bât, cật nhật số lượng, danh sách thông báo đến
                     if ($('#notiContent').css('display') == 'block') {
                         hub.client.broadcaastNotif = function (totalNotif) {
                             $('span.count').html(totalNotif);
-                        };
-                        updateNotification();
+                        };                        
                     }
                     for (let i = 0; i < message.length; i++) {
                         if (message[i].isRead == true) {
                             $('#notiContent').append($('<li class="dropdown-item">' + moment(message[i].date).format("DD-MM-YYYY HH:mm") + ' This is title: ' + message[i].title + '\r\n This is message: ' + message[i].message + '</li>'));
                         } else {
-                            $('#notiContent').append($('<li style="background: #b3d0b6;" class="dropdown-item">' + moment(message[i].date).format("DD-MM-YYYY HH:mm") + ' This is title: ' + message[i].title + '\r\n This is message: ' + message[i].message + '</li > '));
+                            $('#notiContent').append($('<li style="background: #b3d0b6;" style="font-weight: bold" class="dropdown-item">' + moment(message[i].date).format("DD-MM-YYYY HH:mm") + ' This is title: ' + message[i].title + '\r\n This is message: ' + message[i].message + '</li > '));
                         }
                     }
                 } else {
-                    $('#notiContent').append($('<li>Bạn chưa có thông báo nào </li > '));
-                }                   
+                    $('#notiContent').append($('<li  class="dropdown-item">Bạn chưa có thông báo nào </li > '));
+                }
             };
 
-            //$.connection.hub.start().done(function () { });
-
+            //Kết nói hub, thực hiện lấy danh sách thông báo
             $.connection.hub.start()
                 .done(function () {
                     console.log("Hub Connected!");
@@ -542,19 +546,24 @@
                 .fail(function () {
                     console.log("Could not Connect!");
                 });
-            $('#noti-content').on('shown.bs.dropdown', function () {              
-                hub.server.getNotification();
+
+            //Click chuông, Khi dropdown thông báo hiển thị, lấy danh sách thông báo, cập nhật trạng thái thông báo thành đã xem
+            $('#noti-content').on('shown.bs.dropdown', function () {                      
+                hub.server.getNotification();                         
+            });
+
+            //Click chuông, Khi dropdown thông báo ẩn đi, cập nhật số thông báo
+            $('#noti-content').on('hide.bs.dropdown', function () {
+                $('span.count').html("");
                 updateNotification();
             });
-            $('#noti-content').on('hide.bs.dropdown', function () {
-                $('span.count').html(0);
-            });                       
-            // update notification
-            function updateNotification() {             
-                $.ajax({                   
-                    url: '/Announcement/UpdateNotification',                                        
+
+            // update notification, cập nhật trạng thái thông báo thành đã xem
+            function updateNotification() {
+                $.ajax({
+                    url: '/Announcement/UpdateNotification',
                 })
-            }         
+            }
         })
     </script>
 
