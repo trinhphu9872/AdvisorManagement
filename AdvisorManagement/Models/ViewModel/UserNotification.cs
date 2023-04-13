@@ -7,6 +7,7 @@ namespace AdvisorManagement.Models.ViewModel
 {
     public class UserNotification
     {
+        public int id { get; set; }
         public string userID { get; set; }
         public string title { get; set; }
         public string message { get; set; }

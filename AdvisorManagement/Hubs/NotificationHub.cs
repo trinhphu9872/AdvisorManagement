@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using AdvisorManagement.Models.ViewModel;
 using System.Threading.Tasks;
+using AdvisorManagement.Middleware;
 
 namespace AdvisorManagement.Hubs
 {
@@ -17,6 +18,7 @@ namespace AdvisorManagement.Hubs
         private static readonly ConcurrentDictionary<string, UserHubModels> Users =
             new ConcurrentDictionary<string, UserHubModels>(StringComparer.InvariantCultureIgnoreCase);
         private CP25Team09Entities db = new CP25Team09Entities();
+        private AnnouncementMiddleware serviceAnnoun = new AnnouncementMiddleware();
         /*  public void Send(string message)
           {
               Clients.All.notify(message);
@@ -38,7 +40,7 @@ namespace AdvisorManagement.Hubs
                 //Get TotalNotification
                 string totalNotif = LoadCountNotify(loggedUser);
                 //Get ListNotification
-                var dataNotif = LoadNotifyData(loggedUser);
+                var dataNotif = serviceAnnoun.LoadNotifyData(loggedUser);
                 //Send To
                 UserHubModels receiver;
                 if (Users.TryGetValue(loggedUser, out receiver))
@@ -66,7 +68,7 @@ namespace AdvisorManagement.Hubs
                 //Get TotalNotification
                 string totalNotif = LoadCountNotify(loggedUser);
                 //Get ListNotification
-                var dataNotif = LoadNotifyData(loggedUser);
+                var dataNotif = serviceAnnoun.LoadNotifyData(loggedUser);
                 //User
                 UserHubModels receiver;
                 if (Users.TryGetValue(loggedUser, out receiver))
@@ -94,7 +96,7 @@ namespace AdvisorManagement.Hubs
                 //Get TotalNotification
                 string totalNotif = LoadCountNotify(SentTo);
                 //Get ListNotification
-                var dataNotif = LoadNotifyData(SentTo);
+                var dataNotif = serviceAnnoun.LoadNotifyData(SentTo);
                 //Send To
                 UserHubModels receiver;
                 if (Users.TryGetValue(SentTo, out receiver))
@@ -127,25 +129,7 @@ namespace AdvisorManagement.Hubs
             total = query.Count;
             return total.ToString();
         }
-
-        //Danh sách thông báo
-        private object LoadNotifyData(string userId)
-        {
-            var query = (from n in db.Notification
-                         join a in db.Annoucement on n.id_notification equals a.id
-                         where n.id_notification == a.id && n.send_to == userId
-                         select new UserNotification
-                         {
-                             userID = n.send_to,
-                             message = a.message,
-                             title = a.title,
-                             date = n.create_time,
-                             isRead = n.is_read
-                         }).OrderByDescending(x => x.date)
-                       .ToList();
-            return query;
-        }
-
+        
         //Khi người dùng vào web
         public override Task OnConnected()
         {

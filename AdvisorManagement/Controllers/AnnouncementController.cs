@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AdvisorManagement.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace AdvisorManagement.Controllers
 {
@@ -17,6 +18,7 @@ namespace AdvisorManagement.Controllers
         private AccountMiddleware accountService = new AccountMiddleware();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         private CP25Team09Entities db = new CP25Team09Entities();
+        private AnnouncementMiddleware serviceAnnoun = new AnnouncementMiddleware();
         // GET: LearnProcess
         public void init()
         {
@@ -53,16 +55,23 @@ namespace AdvisorManagement.Controllers
 
             return Json(new {message = "Gửi thành công"}, JsonRequestBehavior.AllowGet);
         }
-        
-        public void UpdateNotification()
-        {            
-            var listNotification = db.Notification.Where(x => x.send_to == User.Identity.Name && x.is_read == false).ToList();
-            foreach (var item in listNotification)
-            {
-                item.is_read = true;
-                db.SaveChanges();
-            }           
 
+        [HttpPost]        
+        public JsonResult UpdateNotification(int? id_notify)
+        {            
+            var notify = db.Notification.Find(id_notify);
+            notify.is_read = true;            
+            db.SaveChanges();
+            return Json(new { redirectToUrl = Url.Action("AllNotification", "Announcement", new { area = "" }) });
         }
+
+        public ActionResult AllNotification()
+        {
+            var listNotify = serviceAnnoun.LoadNotifyData(User.Identity.Name);
+            Session["listNotify"] = listNotify;
+            this.init();
+            return View();
+        }
+
     }
 }
