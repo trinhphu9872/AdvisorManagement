@@ -484,7 +484,7 @@
     <Content Include="Assets\images\background\img6.jpg" />
     <Content Include="Assets\images\banner.jpg" />
     <Content Include="Assets\images\bell.png" />
-    <Content Include="Assets\images\bglogin.jpg" />
+    <Content Include="Assets\images\TuyenLogin.jpg" />
     <Content Include="Assets\images\big\img1.jpg" />
     <Content Include="Assets\images\big\img2.jpg" />
     <Content Include="Assets\images\big\img3.jpg" />
@@ -525,6 +525,7 @@
     <Content Include="Assets\images\users\8.jpg" />
     <Content Include="Assets\images\users\agent.jpg" />
     <Content Include="Assets\images\users\agent2.jpg" />
+    <Content Include="Assets\images\users\bglogin.jpg" />
     <Content Include="Assets\images\users\d1.jpg" />
     <Content Include="Assets\images\users\d2.jpg" />
     <Content Include="Assets\images\users\d3.jpg" />
