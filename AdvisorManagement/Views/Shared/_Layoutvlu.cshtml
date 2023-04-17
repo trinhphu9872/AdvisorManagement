@@ -28,6 +28,7 @@
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="~/Assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="~/Assets/extra-libs/ImageUpload/showImage.js"></script>
+    <script src="~/Assets/libs/moment/min/moment.min.js"></script>
 </head>
 
 <body>
@@ -163,8 +164,8 @@
                                 </div>
                             </div>
                             <!-- All-->
-                            <a href="@Url.Action("AllNotification", "Announcement",new {area = ""})" id="viewAll" class="dropdown-item text-center text-primary">
-                                View all <i class="fi-arrow-right"></i>
+                            <a href="@Url.Action("AllNotification", "Announcement",new {area = "",id_notify = 0})" id="viewAll" class="dropdown-item text-center text-primary">
+                                Xem tất cả <i class="fi-arrow-right"></i>
                             </a>
                         </div>
                     </li>
@@ -517,9 +518,7 @@
     <!--Menu sidebar -->
     <script src="~/Dist/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
-    <script src="~/Dist/js/custom.min.js"></script>
-
-    <script src="~/Assets/libs/moment/min/moment.min.js"></script>
+    <script src="~/Dist/js/custom.min.js"></script> 
     <script src="~/Assets/libs/fullcalendar/dist/fullcalendar.min.js"></script>
     <script src="~/Dist/js/pages/calendar/cal-init.js"></script>
     <script src="~/Scripts/jquery.signalR-2.4.3.min.js" type="text/javascript"></script>
@@ -570,13 +569,13 @@
             }
         };
 
+
         //Kết nói hub, thực hiện lấy danh sách thông báo
         $.connection.hub.start()
             .done(function () {
                 console.log("Hub Connected!");
                 //Server Call
-                hub.server.getNotification();
-
+                hub.server.getNotification();         
             })
             .fail(function () {
                 console.log("Could not Connect!");
@@ -593,15 +592,15 @@
             updateNotification();
         });*/
 
-        // update notification, cập nhật trạng thái thông báo thành đã xem        
+        // update notification, cập nhật trạng thái thông báo thành đã xem
     })
 
-    function updateNotification(id_notify) {       
+    function updateNotification(id_notify) {
         $.ajax({
             url: '/Announcement/UpdateNotification',
             type: 'post',
             data: { id_notify: id_notify },
-            success: function (response) {                          
+            success: function (response) {
                 window.location.href = response.redirectToUrl;
             }
         })

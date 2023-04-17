@@ -29,5 +29,23 @@ namespace AdvisorManagement.Middleware
                        .ToList();
             return query;
         }
+
+        public object LoadDetailNotify(string userId, int id_notify)
+        {
+            var query = (from n in db.Notification
+                         join a in db.Annoucement on n.id_notification equals a.id
+                         where n.id_notification == a.id && n.send_to == userId && n.id_notification == id_notify
+                         select new UserNotification
+                         {
+                             id = n.id,
+                             userID = n.send_to,
+                             message = a.message,
+                             title = a.title,
+                             date = n.create_time,
+                             isRead = n.is_read
+                         }).OrderByDescending(x => x.date)
+                       .ToList();
+            return query;
+        }
     }
 }

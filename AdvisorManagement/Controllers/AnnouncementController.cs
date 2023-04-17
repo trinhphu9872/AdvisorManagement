@@ -62,11 +62,24 @@ namespace AdvisorManagement.Controllers
             var notify = db.Notification.Find(id_notify);
             notify.is_read = true;            
             db.SaveChanges();
-            return Json(new { redirectToUrl = Url.Action("AllNotification", "Announcement", new { area = "" }) });
+            return Json(new { redirectToUrl = Url.Action("AllNotification", "Announcement", new { area = "", id_notify = (int)id_notify }) });
         }
 
-        public ActionResult AllNotification()
+        [HttpGet]
+        public JsonResult DetailNotification(int? id_notify)
         {
+            NotificationHub objNotifHub = new NotificationHub();
+            var notify = db.Notification.Find(id_notify);
+            notify.is_read = true;
+            db.SaveChanges();
+            var detailNoti = serviceAnnoun.LoadDetailNotify(User.Identity.Name,(int)id_notify);
+            objNotifHub.GetNotification(User.Identity.Name);         
+            return Json(new { notify = detailNoti, message = "Lấy thành công"}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AllNotification(int id_notify)
+        {
+            Session["id_notify"] = id_notify;            
             var listNotify = serviceAnnoun.LoadNotifyData(User.Identity.Name);
             Session["listNotify"] = listNotify;
             this.init();

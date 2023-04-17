@@ -51,6 +51,7 @@ namespace AdvisorManagement.Hubs
                         var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                         context.Clients.Client(item).broadcaastNotif(totalNotif);
                         context.Clients.Client(item).notify(dataNotif);
+                        context.Clients.Client(item).detail(dataNotif);
                     }
                 }
             }
@@ -79,6 +80,7 @@ namespace AdvisorManagement.Hubs
                         var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                         context.Clients.Client(item).broadcaastNotif(totalNotif);
                         context.Clients.Client(item).notify(dataNotif);
+                        context.Clients.Client(item).detail(dataNotif);
                     }
                 }
             }
@@ -107,6 +109,7 @@ namespace AdvisorManagement.Hubs
                         var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                         context.Clients.Client(item).broadcaastNotif(totalNotif);
                         context.Clients.Client(item).notify(dataNotif);
+                        context.Clients.Client(item).detail(dataNotif);
                     }
                 }
             }
