@@ -323,10 +323,36 @@
                 success: function (data) {
                     if (data.success == true) {
                         $("#modalCheck").modal('hide');
-                        alert(data.message);
-                        dataTable.ajax.reload(null, false);
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                dataTable.ajax.reload(null, false);
+
+                            }
+                        })
+
                     } else {
-                        alert(data.message);
+                        Swal.fire({
+                            icon: "error",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                            }
+                        })
                     }
                 }
             })
@@ -344,10 +370,36 @@
                 success: function (data) {
                     if (data.success == true) {
                         $("#modalCheck").modal('hide');
-                        alert(data.message);
-                        dataTable.ajax.reload(null, false);
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                dataTable.ajax.reload(null, false);
+
+                            }
+                        })
                     } else {
-                        alert(data.message);
+                        Swal.fire({
+                            icon: "error",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                            }
+                        })
+                       
                     }
                 }
             })
