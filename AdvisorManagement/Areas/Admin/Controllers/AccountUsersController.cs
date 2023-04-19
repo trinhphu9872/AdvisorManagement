@@ -234,7 +234,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-
+                
                 ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
                  return View(accountUser);
             }

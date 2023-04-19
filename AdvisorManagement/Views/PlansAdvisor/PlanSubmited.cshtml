@@ -453,15 +453,43 @@
                 },
                 success: function (data) {
                     if (data.success == true) {
-                        alert(data.message);
-                        location.reload();
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
                     } else {
-                        alert(data.message);
+                        Swal.fire(
+                            'Thông báo',
+                            data.message
+                        );
                     }
                 }
             })
         } else {
-            alert("Nhắc nhở thất bại do có sự thay đổi");
+            Swal.fire({
+                icon: "error",
+                title: "Nhắc nhở thất bại do có sự thay đổi",
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    location.reload();
+                }
+            })
         }
     }
 

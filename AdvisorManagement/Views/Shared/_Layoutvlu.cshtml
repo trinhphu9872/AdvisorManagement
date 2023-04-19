@@ -29,6 +29,7 @@
     <script src="~/Assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="~/Assets/extra-libs/ImageUpload/showImage.js"></script>
     <script src="~/Assets/libs/moment/min/moment.min.js"></script>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'></link>
 </head>
 
 <body>
@@ -135,118 +136,118 @@
                                 @Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
                             </ul>
                         }*@
-                <ul class="navbar-nav float-end">
-                    <li class="nav-item dropdown notification-list" id="dropdown-noti">
-                        <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell align-self-center topbar-icon">
-                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                            </svg>
-                            <span class="badge bg-danger rounded-pill noti-icon-badge"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(-376px, 54px); width: 400px; max-height: 400px" data-popper-placement="bottom-end">
-                            <h6 class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
-                                Thông báo <span class="badge bg-primary rounded-pill"></span>
-                            </h6>
-                            <div class="notification-menu" data-simplebar="init">
-                                <div class="simplebar-wrapper" style="margin: 0px;">
-                                    <div class="simplebar-height-auto-observer-wrapper">
-                                        <div class="simplebar-height-auto-observer"></div>
-                                    </div>
-                                    <div class="simplebar-mask">
-                                        <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                            <div class="simplebar-content-wrapper" style="height: auto;">
-                                                <div id="notiContent" class="simplebar-content" style="padding: 0px; max-height: 300px; overflow-y: auto">
+                    <ul class="navbar-nav float-end">
+                        <li class="nav-item dropdown notification-list" id="dropdown-noti">
+                            <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell align-self-center topbar-icon">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg>
+                                <span class="badge bg-danger rounded-pill noti-icon-badge"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(-376px, 54px); width: 400px; max-height: 400px" data-popper-placement="bottom-end">
+                                <h6 class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
+                                    Thông báo <span class="badge bg-primary rounded-pill"></span>
+                                </h6>
+                                <div class="notification-menu" data-simplebar="init">
+                                    <div class="simplebar-wrapper" style="margin: 0px;">
+                                        <div class="simplebar-height-auto-observer-wrapper">
+                                            <div class="simplebar-height-auto-observer"></div>
+                                        </div>
+                                        <div class="simplebar-mask">
+                                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                <div class="simplebar-content-wrapper" style="height: auto;">
+                                                    <div id="notiContent" class="simplebar-content" style="padding: 0px; max-height: 300px; overflow-y: auto">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- All-->
+                                <a href="@Url.Action("AllNotification", "Announcement",new {area = "",id_notify = 0})" id="viewAll" class="dropdown-item text-center text-primary">
+                                    Xem tất cả <i class="fi-arrow-right"></i>
+                                </a>
                             </div>
-                            <!-- All-->
-                            <a href="@Url.Action("AllNotification", "Announcement",new {area = "",id_notify = 0})" id="viewAll" class="dropdown-item text-center text-primary">
-                                Xem tất cả <i class="fi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </li>
-                    @*<li class="nav-item dropdown" id="noti-content">
-            <a class="nav-link dropdown-toggle"
-               href="#"
-               id="navbarDropdown"
-               role="button"
-               data-bs-toggle="dropdown"
-               aria-expanded="false">
-                <i class="mdi mdi-bell font-24"></i>
-                <span class="count"></span>
-            </a>
-            <ul id="notiContent" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li style="background: #b3d0b6;" class="dropdown-item">Action</li>
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </li>
-            </ul>
-        </li>*@
-                    <li class="nav-item dropdown">
-                        @if (Session["RoleName"].ToString() == null)
-                        {
-
-                        }
-                        else if (int.Parse(Session["RoleName"].ToString()) == 1 || int.Parse(Session["RoleName"].ToString()) == 2)
-                        {
-                            <a style="color:white">  Giáo viên: @Session["Name"] </a>
-                        }
-                        else if (int.Parse(Session["RoleName"].ToString()) == 3)
-                        {
-                            <a style="color:white">  Sinh viên: @Session["Name"] </a>
-                        }
-
-                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
-                           href="#"
-                           id="navbarDropdown"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            @if (Request.IsAuthenticated)
-                            {<img src="~/Images/imageProfile/@ViewBag.avatar"
-                                  alt="user"
-                                  class="rounded-circle"
-                                  width="31" />
-                            }
-                            else
+                        </li>
+                        @*<li class="nav-item dropdown" id="noti-content">
+                                <a class="nav-link dropdown-toggle"
+                                   href="#"
+                                   id="navbarDropdown"
+                                   role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    <i class="mdi mdi-bell font-24"></i>
+                                    <span class="count"></span>
+                                </a>
+                                <ul id="notiContent" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li style="background: #b3d0b6;" class="dropdown-item">Action</li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </li>
+                                </ul>
+                            </li>*@
+                        <li class="nav-item dropdown">
+                            @if (Session["RoleName"].ToString() == null)
                             {
-                                <img src="~/Assets/images/users/1.jpg"
-                                     alt="user"
-                                     class="rounded-circle"
-                                     width="31" />
+
                             }
-                        </a>
-                        @*<ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                @if (Request.IsAuthenticated)
-                {
-                    <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
-                        <i class="mdi mdi-account me-1 ms-1"></i>
-                        Tài Khoản
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
-                    <div class="dropdown-divider"></div>
-                }
-                else
-                {
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
+                            else if (int.Parse(Session["RoleName"].ToString()) == 1 || int.Parse(Session["RoleName"].ToString()) == 2)
+                            {
+                                <a style="color:white">  Giáo viên: @Session["Name"] </a>
+                            }
+                            else if (int.Parse(Session["RoleName"].ToString()) == 3)
+                            {
+                                <a style="color:white">  Sinh viên: @Session["Name"] </a>
+                            }
 
-                }
-            </ul>*@
-                    </li>
-                    <!-- ============================================================== -->
-                    <!-- User profile and search -->
-                    <!-- ============================================================== -->
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
+                               href="#"
+                               id="navbarDropdown"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                @if (Request.IsAuthenticated)
+                                {<img src="~/Images/imageProfile/@ViewBag.avatar"
+                                      alt="user"
+                                      class="rounded-circle"
+                                      width="31" />
+                                }
+                                else
+                                {
+                                    <img src="~/Assets/images/users/1.jpg"
+                                         alt="user"
+                                         class="rounded-circle"
+                                         width="31" />
+                                }
+                            </a>
+                            @*<ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                                    @if (Request.IsAuthenticated)
+                                    {
+                                        <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
+                                            <i class="mdi mdi-account me-1 ms-1"></i>
+                                            Tài Khoản
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
 
-                </ul>
+                                    }
+                                </ul>*@
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+
+                    </ul>
                 </div>
             </nav>
         </header>
@@ -319,7 +320,7 @@
                                             </a>
                                         </li>
                                         break;
-                                    case "kế hoạch công tác CVHT":
+                                    case "Kế hoạch công tác CVHT":
                                         //flag
                                         <li class="sidebar-item">
                                             <a class="sidebar-link waves-effect waves-dark sidebar-link"
@@ -505,7 +506,8 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/Dist/js/jquery.ui.touch-punch-improved.js"></script>
     <script src="~/Dist/js/jquery-ui.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
@@ -518,94 +520,94 @@
     <!--Menu sidebar -->
     <script src="~/Dist/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
-    <script src="~/Dist/js/custom.min.js"></script> 
+    <script src="~/Dist/js/custom.min.js"></script>
     <script src="~/Assets/libs/fullcalendar/dist/fullcalendar.min.js"></script>
     <script src="~/Dist/js/pages/calendar/cal-init.js"></script>
     <script src="~/Scripts/jquery.signalR-2.4.3.min.js" type="text/javascript"></script>
     <script src="~/signalr/hubs"></script>
     <style type="text/css">
-    </style>   
+    </style>
     @* Add jquery code for Get Notification & setup signalr *@
-<script type="text/javascript">
-    $(function () {
-        //Get số thông báo mới, số thông báo chưa xem
-        function setTotalNotification(totalNotif) {
-            if (totalNotif > 0) {
-                $('span.badge.bg-primary.rounded-pill').html(totalNotif);
-                $('span.badge.bg-danger.rounded-pill.noti-icon-badge').html(totalNotif);
-            } else {
-                $('span.badge.bg-primary.rounded-pill').html("");
-                $('span.badge.bg-danger.rounded-pill.noti-icon-badge').html("");
-            }
-        }
-
-        var hub = $.connection.notificationHub;
-
-        //Client call
-        hub.client.broadcaastNotif = function (totalNotif) {
-            setTotalNotification(totalNotif)
-        };
-
-        //Client call,
-        hub.client.notify = function (message) {
-            jQuery('#notiContent').empty();
-            if (message.length > 0) {
-                //Nếu dropdown đang được bât, cật nhật số lượng, danh sách thông báo đến
-                if ($('#notiContent').css('display') == 'block') {
-                    hub.client.broadcaastNotif = function (totalNotif) {
-                        $('span.badge.bg-primary.rounded-pill').html(totalNotif);
-                        $('span.badge.bg-danger.rounded-pill.noti-icon-badge').html(totalNotif);
-                    };
+    <script type="text/javascript">
+        $(function () {
+            //Get số thông báo mới, số thông báo chưa xem
+            function setTotalNotification(totalNotif) {
+                if (totalNotif > 0) {
+                    $('span.badge.bg-primary.rounded-pill').html(totalNotif);
+                    $('span.badge.bg-danger.rounded-pill.noti-icon-badge').html(totalNotif);
+                } else {
+                    $('span.badge.bg-primary.rounded-pill').html("");
+                    $('span.badge.bg-danger.rounded-pill.noti-icon-badge').html("");
                 }
-                for (let i = 0; i < message.length; i++) {
-                    if (message[i].isRead == true) {
-                        $('#notiContent').append($('<a onclick="updateNotification(' + message[i].id + ')" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm")+ '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
-                    } else {
-                        $('#notiContent').append($('<a onclick="updateNotification(' + message[i].id + ')" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+            }
+
+            var hub = $.connection.notificationHub;
+
+            //Client call
+            hub.client.broadcaastNotif = function (totalNotif) {
+                setTotalNotification(totalNotif)
+            };
+
+            //Client call,
+            hub.client.notify = function (message) {
+                jQuery('#notiContent').empty();
+                if (message.length > 0) {
+                    //Nếu dropdown đang được bât, cật nhật số lượng, danh sách thông báo đến
+                    if ($('#notiContent').css('display') == 'block') {
+                        hub.client.broadcaastNotif = function (totalNotif) {
+                            $('span.badge.bg-primary.rounded-pill').html(totalNotif);
+                            $('span.badge.bg-danger.rounded-pill.noti-icon-badge').html(totalNotif);
+                        };
                     }
+                    for (let i = 0; i < message.length; i++) {
+                        if (message[i].isRead == true) {
+                            $('#notiContent').append($('<a onclick="updateNotification(' + message[i].id + ')" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                        } else {
+                            $('#notiContent').append($('<a onclick="updateNotification(' + message[i].id + ')" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                        }
+                    }
+                } else {
+                    $('#notiContent').append($('<a href="#" class="dropdown-item py-3" style="text-align: center;"><div class= "media" ><div class="media-body align-self-center ms-2 text-truncate"><text class="my-0 text-dark" >Bạn đang không có thông báo nào</text></div></div></a>'));
                 }
-            } else {
-                $('#notiContent').append($('<a href="#" class="dropdown-item py-3" style="text-align: center;"><div class= "media" ><div class="media-body align-self-center ms-2 text-truncate"><text class="my-0 text-dark" >Bạn đang không có thông báo nào</text></div></div></a>'));
-            }
-        };
+            };
 
 
-        //Kết nói hub, thực hiện lấy danh sách thông báo
-        $.connection.hub.start()
-            .done(function () {
-                console.log("Hub Connected!");
-                //Server Call
-                hub.server.getNotification();         
-            })
-            .fail(function () {
-                console.log("Could not Connect!");
+            //Kết nói hub, thực hiện lấy danh sách thông báo
+            $.connection.hub.start()
+                .done(function () {
+                    console.log("Hub Connected!");
+                    //Server Call
+                    hub.server.getNotification();
+                })
+                .fail(function () {
+                    console.log("Could not Connect!");
+                });
+
+            //Click chuông, Khi dropdown thông báo hiển thị, lấy danh sách thông báo, cập nhật trạng thái thông báo thành đã xem
+            $('#dropdown-noti').on('shown.bs.dropdown', function () {
+                hub.server.getNotification();
             });
 
-        //Click chuông, Khi dropdown thông báo hiển thị, lấy danh sách thông báo, cập nhật trạng thái thông báo thành đã xem
-        $('#dropdown-noti').on('shown.bs.dropdown', function () {
-            hub.server.getNotification();
-        });
+            /*//Click chuông, Khi dropdown thông báo ẩn đi, cập nhật số thông báo
+            $('#dropdown-noti').on('hide.bs.dropdown', function () {
+                $('span.count').html("");
+                updateNotification();
+            });*/
 
-        /*//Click chuông, Khi dropdown thông báo ẩn đi, cập nhật số thông báo
-        $('#dropdown-noti').on('hide.bs.dropdown', function () {
-            $('span.count').html("");
-            updateNotification();
-        });*/
-
-        // update notification, cập nhật trạng thái thông báo thành đã xem
-    })
-
-    function updateNotification(id_notify) {
-        $.ajax({
-            url: '/Announcement/UpdateNotification',
-            type: 'post',
-            data: { id_notify: id_notify },
-            success: function (response) {
-                window.location.href = response.redirectToUrl;
-            }
+            // update notification, cập nhật trạng thái thông báo thành đã xem
         })
-    }
-</script>
+
+        function updateNotification(id_notify) {
+            $.ajax({
+                url: '/Announcement/UpdateNotification',
+                type: 'post',
+                data: { id_notify: id_notify },
+                success: function (response) {
+                    window.location.href = response.redirectToUrl;
+                }
+            })
+        }
+    </script>
 
 </body>
 </html>
