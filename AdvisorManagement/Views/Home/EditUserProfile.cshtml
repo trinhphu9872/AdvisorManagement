@@ -4,9 +4,7 @@
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 }
 
-<div class="bgtitle">
-    VLU - Profile
-</div>
+
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
     </script>
@@ -25,12 +23,7 @@
                     <div class="col-12 d-flex no-block align-items-center">
                         <div class="ms-auto text-end">
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        Library
-                                    </li>
-                                </ol>
+                                
                             </nav>
                         </div>
                     </div>
@@ -130,13 +123,13 @@
                                 <div class="border-top">
                                     <div class="card-body">
 
-                                        <button id="submitbtn" type="submit" class="btn btn-success text-white" style="margin-left: 30%;width: 100px;">
-                                            Lưu
+                                        <button id="submitbtn" type="submit" class="btn btn-info text-white" style="margin-left: 30%;width: 100px;">
+                                            Quay lại
                                         </button>
 
 
-                                        <a href="@Url.Action("UserProfile", "Home",Model)" class="btn btn-danger text-white" style="margin-left: 30%;width: 100px;">
-                                            Hủy
+                                        <a href="@Url.Action("UserProfile", "Home",Model)" class="btn btn-primary text-white" style="margin-left: 30%;width: 100px;">
+                                            Lưu
                                         </a>
                                     </div>
                                 </div>
