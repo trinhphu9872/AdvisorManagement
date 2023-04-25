@@ -62,7 +62,7 @@ body {
 .login-image {
   width: 35rem;
   height: 30rem;
-  background: url('../images/HR.gif') no-repeat center / contain;
+  background: url('../images/test.gif') no-repeat center / contain;
   border-radius: 1rem;
   margin: auto;
 }

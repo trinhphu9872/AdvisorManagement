@@ -1,6 +1,8 @@
 ﻿using AdvisorManagement.Middleware;
 using AdvisorManagement.Models;
+using AdvisorManagement.Models.ViewModel;
 using Microsoft.Ajax.Utilities;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         private StudentsMiddleware serviceStd = new StudentsMiddleware();
         private PlanMiddleware servicePlan = new PlanMiddleware();
+        private EreportMiddleware serviceEReport = new EreportMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
         public void init()
         {
@@ -42,7 +45,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult GetListClass(int year)
         {
-            var listClass = serviceStd.getClassAdmin(year);
+     
+            var listClass = db.AccountUser.FirstOrDefault(x => x.email == User.Identity.Name).id_role == 1 ?  serviceStd.getClassAdmin(year) : serviceStd.getClassAdvisor(year,User.Identity.Name.ToString());
+           
             return Json(new { data = listClass, success = false }, JsonRequestBehavior.AllowGet);
         }
 
@@ -67,46 +72,47 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult GetReportClass(int id_class)
         {
+            return Json(new { data = this.getData(id_class), success = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<ReportCustom> getData(int id_class)
+        {
             var reportClass = db.PlanClass.Where(x => x.id_class == id_class).ToList().OrderBy(x => x.number_title);
+            List<ReportCustom> lsR = new List<ReportCustom>();
             foreach (var item in reportClass)
             {
                 var z = db.ProofPlan.Where(x => x.id_titleplan == item.id).Select(y => y.file_proof).ToList();
-                item.evaluate =z.Count > 0 ?  z.FirstOrDefault().ToString(): null ;
-            }
+                string temp = "";
+                foreach (var pro in z)
+                {
+                    temp += "\n" + pro.ToString() + "\n";
+                }
+                ReportCustom re = new ReportCustom(item, z.Count, z.Count > 0 ? temp : null, z.Count >= int.Parse(item.evaluate) ? "Hoàn thành" : "Chưa hoàn thành");
+                lsR.Add(re);
 
-            return Json(new { data = reportClass, success = false }, JsonRequestBehavior.AllowGet);
+            }
+            return lsR;
+
         }
 
-        //private string getProof(int id, int id_class)
-        //{
-
-        //    string temp = "";
-        //    var listProof = (from pq in db.AccountUser
-        //                     join pr in db.ProofPlan on pq.id equals pr.id_creator
-        //                     join pl in db.PlanClass on pr.id_titleplan equals pl.id
-        //                     where pr.id_titleplan == pl.id && pl.id_class == id_class
-        //                     select new Models.ViewModel.ListProofPlan
-        //                     {
-        //                         id = pr.id,
-        //                         content = pr.content,
-        //                         title = pl.content,
-        //                         proof = pr.file_proof,
-        //                         create_time = pr.create_time,
-        //                         semester = pr.semester,
-        //                         status = pr.status,
-        //                         creator = pq.user_name
-        //                     }).OrderByDescending(x => x.create_time).ToList();
-        //    if (listProof.Count != 0)
-        //    {
-        //        foreach (var item in listProof)
-        //        {
-        //            if (item.id == id)
-        //            {
-        //                temp += item.proof + "-";
-        //            }
-        //        }
-        //    }
-        //    return temp;
-        //}
+        [HttpPost]
+        public JsonResult ExportTemplateCode(int? year, int id_class)
+        {
+            var listPlan = db.PlanAdvisor.Where(x => x.year == year).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
+            List<PlanAdvisor> template = (List<PlanAdvisor>)listPlan;
+            try
+            {
+                using (ExcelPackage pck = new ExcelPackage())
+                {
+                    var package = serviceEReport.ExportTemplate(pck,this.getData(id_class),"K25-Test", User.Identity.Name.ToString(),year);
+                    var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BaoCaoKehoachCVHT-" + db.VLClass.FirstOrDefault(x => x.id == id_class ).class_code.ToString() +"-" +(year - 1) + "-" + year + ".xlsx");
+                    return Json(fileOject, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
