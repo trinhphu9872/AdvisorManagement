@@ -81,7 +81,7 @@ namespace AdvisorManagement.Middleware
                                      course = (int)cl.course,
                                      semester = cl.semester_name,
                                      create_time = cl.create_time,
-                                 }).OrderBy(x => x.idClass).ToList();
+                                 }).OrderByDescending(x => x.create_time).ToList();
                 return classList;
             }
             else

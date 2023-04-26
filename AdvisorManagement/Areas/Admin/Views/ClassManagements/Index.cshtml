@@ -286,7 +286,10 @@
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 
+
 <script>
+
+
 
     //Lấy data khi vừa vào web admin
        //Lấy data khi vừa vào web admin
@@ -313,7 +316,7 @@
                  { 'data': 'name', 'width': '15%' },
                  {
                      'data': 'create_time', 'width': '15%', 'render': function (data) {
-                         return moment(data).format("DD-MM-YYYY HH:mm");
+                         return moment(data).format("MM-DD-YYYY HH:mm");
                      }
 },
                  { 'data': 'course', 'width': '5%' },
@@ -331,8 +334,7 @@
                 dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
                     this.data(i++);
                 });
-            }).draw();
-
+            }).draw();  
 
     function myFunction() {
         var input, filter, table, tr, td, i;
@@ -352,7 +354,7 @@
         }
     }
 
-    $(document).ready(function () {
+    $(document).ready(function () {       
         $("#myInput").on("keyup", function () {
             var value = $(this).val().toLowerCase();
             $("#myTable tr").filter(function () {
