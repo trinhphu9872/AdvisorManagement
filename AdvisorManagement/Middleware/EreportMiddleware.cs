@@ -240,8 +240,8 @@ namespace AdvisorManagement.Middleware
             ws.Column(4).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
             ws.Column(5).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
             ws.Column(6).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-            ws.Column(7).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-          
+            ws.Column(7).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;          
+
             ws.Row(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
             ws.Row(6).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
             //header
@@ -310,18 +310,89 @@ namespace AdvisorManagement.Middleware
             int countSource = 1;
             foreach (var item in reports)
             {
-         
-
-                ws.Cells[string.Format("A{0}", rowStart)].Value = item.number_title;
-                ws.Cells[string.Format("B{0}", rowStart)].Value = item.content;
-                ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
-                ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
-                ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
-                ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
-                ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                if (item.number_title == stt)
+                {
+                    if(item.content == content)
+                    {
+                        if (item.source == source)
+                        {
+                            ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
+                            ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
+                            ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
+                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                            countSTT++;
+                            countContent++;
+                            countSource++;
+                        }
+                        else
+                        {
+                            ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
+                            ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
+                            ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
+                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                            countSTT++;
+                            countContent++;
+                        }
+                    }
+                    else
+                    {
+                        if (item.source == source)
+                        {
+                            ws.Cells[string.Format("B{0}", rowStart)].Value = item.content;
+                            ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
+                            ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
+                            ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
+                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                            countSTT++;
+                            countContent++;
+                            countSource++;
+                        }
+                        else
+                        {
+                            ws.Cells[string.Format("B{0}", rowStart)].Value = item.content;
+                            ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
+                            ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
+                            ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
+                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                            countSTT++;
+                            countContent++;
+                        }                                               
+                    }
+                }
+                else
+                {
+                    if(countSTT > 1)
+                    {
+                        ws.Cells[rowStart - countSTT, 1, rowStart - 1, 1].Merge = true;
+                        countSTT = 1;
+                    }
+                    if (countContent > 1)
+                    {
+                        ws.Cells[rowStart - countContent, 2, rowStart - 1, 2].Merge = true;
+                        countContent = 1;
+                    }
+                    if (countSource > 1)
+                    {
+                        ws.Cells[rowStart - countSource, 4, rowStart - 1, 4].Merge = true;
+                        countSource = 1;
+                    }
+                    ws.Cells[string.Format("A{0}", rowStart)].Value = item.number_title;
+                    ws.Cells[string.Format("A{0}", rowStart)].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Cells[string.Format("B{0}", rowStart)].Value = item.content;
+                    ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
+                    ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
+                    ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
+                    ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
+                    ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                }              
                 rowStart++;
                 stt = (int)item.number_title;
-
+                content = item.content;
+                source = item.source;
             }
 
 
