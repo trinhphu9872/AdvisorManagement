@@ -11,6 +11,13 @@
     var yearLast = yearNow - 1;
 }
 
+<script src="/path/or/uri/to/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#mytextarea'
+    });
+</script>
+
 <div class="container-fluid">
     <!-- ============================================================== -->
     <!-- Start Page Content -->
@@ -121,14 +128,14 @@
                             <tr>
                                 <th style="text-align:center">STT</th>
                                 <th style="text-align:center">Tên cố vấn</th>
-                                <th style="text-align:center">Lớp chưa nộp</th>                           
+                                <th style="text-align:center">Lớp chưa nộp</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
                         </tbody>
                     </table>
                 </div>
-                <div id="remind" class="modal-footer">                    
+                <div id="remind" class="modal-footer">
                 </div>
             </div>
         </div>
@@ -239,8 +246,8 @@
             api.off('search.dt');
             api.off('page.dt');
             api.off('length.dt ');
-            api.off('xhr.dt');            
-        });       
+            api.off('xhr.dt');
+        });
         $("#zero_config_plan").dataTable().fnDestroy();
         $.ajax({
                 url: '@Url.Action("GetListPlanSubmitedClass", "PlansAdvisor")',
@@ -288,7 +295,7 @@
                  { 'data': 'describe', 'width': '30%' },
                  { 'data': 'source', 'width': '25%' },
                  { 'data': 'note', 'width': '10%' },
-                ],           
+                ],
             "autoWidth": false,
             "aLengthMenu": [[-1], ["All"]],
             "bLengthChange": false,
@@ -435,11 +442,11 @@
                     </div>
                     <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button> <button onclick ="SendRemind('${data.data}')" type = "button" class= "btn btn-default" data - dismiss="modal" >Gửi</button >`);
              }
-         })      
+         })
     }
 
     function SendRemind(email) {
-        var to = email;        
+        var to = email;
         var subject = $('#txt_subject').val();
         var message = $('#txt_message').val();
         if ($('#txt_to').prop("disabled") == true){
