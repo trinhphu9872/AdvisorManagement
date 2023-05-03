@@ -285,7 +285,7 @@
 </div>
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
-
+<script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js" type="text/javascript"></script>
 
 <script>
 
@@ -316,7 +316,7 @@
                  { 'data': 'name', 'width': '15%' },
                  {
                      'data': 'create_time', 'width': '15%', 'render': function (data) {
-                         return moment(data).format("MM-DD-YYYY HH:mm");
+                         return moment(data).format("DD-MM-YYYY HH:mm");
                      }
 },
                  { 'data': 'course', 'width': '5%' },
@@ -328,6 +328,7 @@
                  }
             ],
         "order": [[3, "desc"]],
+        "columnDefs": [{ "targets": 3, "type": "date-eu" }],
          });
             dataTable.on('order.dt search.dt', function () {
                 let i = 1;
@@ -382,11 +383,12 @@
                 processData: false,
                 data: formData,
                 success: function (data) {
-                    if (data.success == false) {
+                    if (data.success == false) {                        
                         alert(data.message);
                     } else {
                         $("#myModal").modal("hide");
                         alert(data.message);
+                        $('#fileExcel').val(null);
                         dataTable.ajax.reload(null, false);
                     }
                 }

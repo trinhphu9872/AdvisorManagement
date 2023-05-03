@@ -347,11 +347,32 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                             workbook.SaveToFile(filePath, ExcelVersion.Version2013);
                         }
                         int count = 0;
+                        int countEmpty = 0;
+                        int countExist = 0;
                         string msgError = "";
-                        ImportData(out count, filePath, out msgError);
-                        if(msgError != "")
+                        string msg = "";
+                        ImportData(out count, filePath, out msgError, out countEmpty, out countExist);
+                        if (count > 0 || countEmpty > 0 || countExist > 0) {
+                            if(count > 0)
+                            {
+                                msg += "Thêm thành công " + count + " lớp" + "\n";
+                            }
+                            if(countEmpty> 0)
+                            {
+                                msg += "Có " + countEmpty + " lớp chứa dữ liệu trống, không thực hiện thay đổi" + "\n";
+                            }
+                            if(countExist > 0)
+                            {
+                                msg += "Có " + countExist + " lớp đã tồn tại, không thực hiện thay đổi";
+                            }
+                            return Json(new { success = true, message = msg});
+                        }
+                        else if(msgError != "")
                         {
                             return Json(new { success = false, message = msgError });
+                        }else if (count == 0)
+                        {
+                            return Json(new { success = true, message = "Không có sự thay đổi nào" });
                         }                       
                         return Json(new { success = true, message = "Import thành công" });
                     }
@@ -366,12 +387,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Please upload excel file" });
             }
         }
-        private bool ImportData(out int count, string filePath, out string msgError)
+        private bool ImportData(out int count, string filePath, out string msgError, out int countEmpty, out int countExist)
         {
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
             var result = false;
             count = 0;
+            countEmpty = 0;
+            countExist = 0;
             msgError = "";
             try
             {
@@ -386,32 +409,41 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 do
                 {
                     data = worksheet.Cells[startRow, startColumn].Value;
-                    Object name_advisor = worksheet.Cells[startRow, startColumn + 1].Value;
-                    Object email = worksheet.Cells[startRow, startColumn + 2].Value;
-                    Object id_class = worksheet.Cells[startRow, startColumn + 3].Value;
-                    Object duthua = worksheet.Cells[startRow, startColumn + 4].Value;
+                    Object advisor_code = worksheet.Cells[startRow, startColumn + 1].Value;
+                    Object name_advisor = worksheet.Cells[startRow, startColumn + 2].Value;
+                    Object email = worksheet.Cells[startRow, startColumn + 3].Value;
+                    Object id_class = worksheet.Cells[startRow, startColumn + 4].Value;
+                    Object duthua = worksheet.Cells[startRow, startColumn + 5].Value;
                     var year = servicePlan.getYear();
-                    var isSuccess = false;                   
-                    if (id_class == null)
+                    var isSuccess = false;  
+                    if (data == null && advisor_code == null && name_advisor == null && email == null && id_class == null)
+                    {                      
+                        break;
+                    }else if(id_class == null && duthua == null)
                     {
                         msgError = "File import thiếu cột dữ liệu, import thất bại";
                         break;
-                    }
-                    if(duthua != null)
+                    }else if(duthua != null)
                     {
                         msgError = "File import chứa cột dữ liệu thừa, import thất bại";
                         break;
-                    }
-                    if(data == null || name_advisor == null || email == null || id_class == null ||
+                    }else if(data == null || advisor_code == null || name_advisor == null || email == null || id_class == null ||
                         data.ToString().Trim() == "" || name_advisor.ToString().Trim() == "" || email.ToString().Trim() == "" || id_class.ToString().Trim() == "")
                     {
-                        msgError = "File import có dữ liệu bị trống, import thất bại";
-                        break;
-                    }                    
-                    if (data != null && name_advisor != null && email != null && id_class != null)
-                    {
-                        serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), id_class.ToString(), year.ToString());
+                        countEmpty++;                      
                     }
+                    else
+                    {
+                        var check = serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), id_class.ToString(), year.ToString());
+                        if (check)
+                        {
+                            count++;
+                        }
+                        else
+                        {
+                            countExist++;
+                        }
+                    }                    
                     startRow++;
                 }
                 while (data != null);
