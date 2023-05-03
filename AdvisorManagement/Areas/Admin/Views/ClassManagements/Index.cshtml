@@ -381,11 +381,36 @@
                 data: formData,
                 success: function (data) {
                     if (data.success == false) {
-                        alert(data.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                dataTable.ajax.reload(null, false);
+                            }
+                        })
                     } else {
                         $("#myModal").modal("hide");
-                        alert(data.message);
-                        dataTable.ajax.reload(null, false);
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                dataTable.ajax.reload(null, false);
+                            }
+                        })
                     }
                 }
             })
@@ -420,11 +445,36 @@
                 data: formData,
                 success: function (data) {
                     if (data.success == false) {
-                        alert(data.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                dataTable.ajax.reload(null, false);
+                            }
+                         })
                     } else {
                         $("#modalCreate").modal("hide");
-                        alert(data.message);
-                        dataTable.ajax.reload(null, false);
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                dataTable.ajax.reload(null, false);
+                            }
+                        })
                     }
                 }
              })
@@ -467,7 +517,7 @@
         $("#modalUpdate").modal("hide");
     }
 
-    $(document).ready(function () {     //Cập nhật thông tin người dùng
+    $(document).ready(function () {     //Cập nhật thông tin lớp
         $('#btnEdit').click(function () {
             var class_code = $("#edit_class_code").val();
             var advisor_code = $("#edit_advisor_code").val();
@@ -488,11 +538,36 @@
                     },
                     success: function (data) {
                             if (data.success == true) {
-                                alert(data.message);
                                 $('#modalUpdate').modal('hide');
-                                dataTable.ajax.reload(null, false);
+                                Swal.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        dataTable.ajax.reload(null, false);
+                                    }
+                                })
                             } else {
-                                alert(data.message);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                    }
+                                })
+
                             }
                      }
                 })
@@ -530,7 +605,59 @@
     //xem chi tiet
     function Detele(id) {
         let id_delete = id;
-        if (confirm("Bạn thực sự muốn xóa đề mục này?")) {
+         Swal.fire({
+            title: "Bạn thực sự muốn xóa lớp học?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                  $.ajax({
+                        url: '@Url.Action("Delete", "ClassManagements")',
+                        type: 'post',
+                        data: {
+                            id: id_delete
+                        },
+                        success: function (data) {
+                            if (data.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        dataTable.ajax.reload(null, false);
+                                    }
+                                 })
+
+
+                             } else {
+                                 Swal.fire(
+                                     'Thông báo',
+                                     data.message
+                                 );
+                             }
+                        }
+                  })
+                //Swal.fire(
+                //    "Deleted!",
+                //    "Your file has been deleted.",
+                //    "success",
+                //)
+                // result.dismiss can be "cancel", "overlay",
+                // "close", and "timer"
+            } else if (result.dismiss === "cancel") {
+
+            }
+        });
+        @*if (confirm("Bạn thực sự muốn xóa đề mục này?")) {
             $.ajax({
                 url: '@Url.Action("Delete", "ClassManagements")',
                 type: 'post',
@@ -547,7 +674,7 @@
                 }
 
             })
-        }
+        }*@
     }
 
 </script>

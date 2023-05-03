@@ -343,6 +343,7 @@
     <Compile Include="Hubs\NotificationHub.cs" />
     <Compile Include="Middleware\AccountMiddleware.cs" />
     <Compile Include="Middleware\AnnouncementMiddleware.cs" />
+    <Compile Include="Middleware\EreportMiddleware.cs" />
     <Compile Include="Middleware\LoginFilter.cs" />
     <Compile Include="Middleware\MailServicesMiddleware.cs" />
     <Compile Include="Middleware\MenuMiddleware.cs" />
@@ -425,6 +426,7 @@
     <Compile Include="Models\ViewModel\MailRequest.cs" />
     <Compile Include="Models\ViewModel\MenuItem.cs" />
     <Compile Include="Models\ViewModel\MenuRole.cs" />
+    <Compile Include="Models\ViewModel\ReportCustom.cs" />
     <Compile Include="Models\ViewModel\StudentClass.cs" />
     <Compile Include="Models\ViewModel\UserHubModels.cs" />
     <Compile Include="Models\ViewModel\UserNotification.cs" />
@@ -1196,6 +1198,7 @@
     <Content Include="Assets\User\assets\css\spectre\spectre.min.css" />
     <Content Include="Assets\User\assets\css\style.css" />
     <Content Include="Assets\User\assets\css\style2.css" />
+    <Content Include="Assets\User\assets\images\Advisor.gif" />
     <Content Include="Assets\User\assets\images\banner1.jpg" />
     <Content Include="Assets\User\assets\images\bg.jpg" />
     <Content Include="Assets\User\assets\images\exp.png" />
@@ -1216,6 +1219,7 @@
     <Content Include="Assets\User\assets\images\td1.jpg" />
     <Content Include="Assets\User\assets\images\td2.jpg" />
     <Content Include="Assets\User\assets\images\td3.jpg" />
+    <Content Include="Assets\User\assets\images\test.gif" />
     <Content Include="Assets\User\assets\images\user.png" />
     <Content Include="Assets\User\assets\images\vali.png" />
     <Content Include="Content\bootstrap-datetimepicker.css" />

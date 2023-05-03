@@ -141,21 +141,24 @@
 
         var Notification = { userID: sendtouser, title: title, message: message };
 
-        $.ajax({
-            type: "POST",
-            url: "/Announcement/SendNotification",
-            data: JSON.stringify(Notification),
-            contentType: 'application/json; charset=utf-8',
-            success: function (data) {
-                alert(data.message);
-                $("#toUser").val("");
-                $("#myTitle").val("");
-                $("#myMessage").val("");
-            },
-            error: function () {
-                alert("Error occured!!")
-            }
-        });
+            $.ajax({
+                type: "POST",
+                url: "/Announcement/SendNotification",
+                data: JSON.stringify(Notification),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    Swal.fire(
+                        'Thông báo',
+                        data.message
+                    )
+                    $("#toUser").val("");
+                    $("#myTitle").val("");
+                    $("#myMessage").val("");
+                },
+                error: function () {
+                    alert("Error occured!!")
+                }
+            });
 
     });
 </script>

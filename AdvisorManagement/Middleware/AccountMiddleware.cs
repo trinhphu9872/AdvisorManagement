@@ -216,6 +216,12 @@ namespace AdvisorManagement.Middleware
             string text = sql.user_name;
             return text;
         }
+        public string getCode(string user_mail)
+        {
+            var sql = db.AccountUser.FirstOrDefault(x => x.email == user_mail);
+            string text = sql.user_code;
+            return text;
+        }
         public string getRoleTextName(string user_mail)
         {
             var sql = db.AccountUser.FirstOrDefault(x => x.email == user_mail);
