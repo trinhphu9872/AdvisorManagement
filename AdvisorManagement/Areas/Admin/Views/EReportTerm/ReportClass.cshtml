@@ -18,7 +18,9 @@
                 <div class="page-breadcrumb">
                     <div class="row">
                         <div class="col-12 d-flex no-block align-items-center">
-
+                            <a onclick="ExportTemplate()" class="btn btn-success" style=" margin-left: 5px; width: 150px; color: white">
+                                Export template <i class="fas fa-plus"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -26,7 +28,9 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"></h5>
+                    <h5 class="card-title">
+                 
+                    </h5>
                     <div style="margin-top:10px">
 
                     </div>
@@ -36,9 +40,11 @@
                             <thead>
                                 <tr>
                                     <th style="text-align:center">STT</th>
-                                    <th style="text-align:center">Tiêu chí đánh giá</th>
                                     <th style="text-align:center">Mô tả công việc cụ thể</th>
+                                    <th style="text-align:center">Tài nguyên chuẩn bị yêu cầu</th>
                                     <th style="text-align:center">Hồ sơ, minh chứng</th>
+                                    <th style="text-align:center">Tiêu chí đánh giá</th>
+                                    <th style="text-align:center">Trang thái</th>
                                 </tr>
                             </thead>
                             <tbody id="myTable">
@@ -65,7 +71,7 @@
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
 <script>
-  
+
      //Lấy data khi vừa vào web admin
     var dataTable = $("#zero_config_admin").DataTable({
          'ajax': {
@@ -81,12 +87,15 @@
                  { 'data': 'number_title', 'width': '0%' },
                  { 'data': 'describe', 'width': '25%' },
                  { 'data': 'source', 'width': '25%' },
-                 { 'data': 'evaluate', 'width': '20%' },
+                 { 'data': 'group_file', 'width': '20%' },
+                 { 'data': 'note', 'width': '10%' },
+                 { 'data': 'status', 'width': '10%' },
+
                  ],
              'bAutoWidth': false,
              'responsive': false,
              'ordering': false,
-             'rowsGroup': [0],
+             'rowsGroup': [0,2],
              'language': {
                  "decimal": "",
                  "emptyTable": "Không có dữ liệu",
@@ -108,5 +117,38 @@
              },
 
     });
+            function ExportTemplate() {
+            input = document.getElementById("semester");
+            let id = 2023;
+            $.ajax({
+                url: '@Url.Action("ExportTemplateCode", "EReportTerm")',
+                type: 'POST',
+                data: {
+                    year: id,
+                    id_class : @id_class
+
+                },
+                /*contentType: "application/json; charset=utf-8", */
+                success: function (data) {
+                    var bytes = new Uint8Array(data.FileContents);
+                    var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var downloadUrl = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = downloadUrl;
+                    a.download = data.FileDownloadName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+                error: function (err) {
+                    alert(err);
+                },
+            })
+        }
+    //$(document).ready(function () {
+
+
+    //});
+            //Export template
     console.log(dataTable);
 </script>

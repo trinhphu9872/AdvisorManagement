@@ -434,15 +434,23 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     }
                     else
                     {
-                        var check = serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), id_class.ToString(), year.ToString());
-                        if (check)
+                        var idClass = id_class.ToString().Split('\n');
+                        foreach (var item in idClass)
                         {
-                            count++;
-                        }
-                        else
-                        {
-                            countExist++;
-                        }
+                            var child = item.Trim().Split(',');
+                            foreach (var item2 in child)
+                            {
+                                var check = serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), item2.ToString(), year.ToString());
+                                if (check)
+                                {
+                                    count++;
+                                }
+                                else
+                                {
+                                    countExist++;
+                                }
+                            }                            
+                        }                                               
                     }                    
                     startRow++;
                 }
