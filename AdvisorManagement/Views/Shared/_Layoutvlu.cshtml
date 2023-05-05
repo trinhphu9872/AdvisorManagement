@@ -529,7 +529,7 @@
     <style type="text/css">
     </style>
     @* Add jquery code for Get Notification & setup signalr *@
-    <script type="text/javascript">
+<script type="text/javascript">
         $(function () {
             //Get số thông báo mới, số thông báo chưa xem
             function setTotalNotification(totalNotif) {
@@ -600,7 +600,7 @@
 
         function updateNotification(id_notify) {
             $.ajax({
-                url: '/Announcement/UpdateNotification',
+                url: "@Url.Action("UpdateNotification", "Announcement")",
                 type: 'post',
                 data: { id_notify: id_notify },
                 success: function (response) {
@@ -608,7 +608,7 @@
                 }
             })
         }
-    </script>
+</script>
 
 </body>
 </html>
