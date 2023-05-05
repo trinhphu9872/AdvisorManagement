@@ -384,6 +384,8 @@
                 data: formData,
                 success: function (data) {
                     if (data.success == false) {
+                        $('#fileExcel').val(null);
+                        $("#myModal").modal("hide");
                         Swal.fire({
                             icon: 'error',
                             title: data.message,
@@ -394,13 +396,12 @@
                                 popup: 'animate__animated animate__fadeOutUp'
                             }
                         }).then(function (result) {
-                            if (result.value) {
+                            if (result.value) {                                
                                 dataTable.ajax.reload(null, false);
                             }
                         })
-                    if (data.success == false) {                        
-                        alert(data.message);
                     } else {
+                        $('#fileExcel').val(null);
                         $("#myModal").modal("hide");
                         Swal.fire({
                             icon: "success",
@@ -412,16 +413,11 @@
                                 popup: 'animate__animated animate__fadeOutUp'
                             }
                         }).then(function (result) {
-                            if (result.value) {
+                            if (result.value) {                                
                                 dataTable.ajax.reload(null, false);
                             }
                         })
-                    }
-                }
-                        alert(data.message);
-                        $('#fileExcel').val(null);
-                        dataTable.ajax.reload(null, false);
-                    }
+                    }                 
                 }
             })
         })
