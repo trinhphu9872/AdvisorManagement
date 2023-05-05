@@ -64,6 +64,48 @@ namespace AdvisorManagement.Middleware
             return null;
         }
 
+
+        public object getClassAdvisor(int year, string name)
+        {
+            string code = serviceAccount.getCode(name).ToString();
+            if (year != 0)
+            {
+                var classList = (from pq in db.AccountUser
+                                 join ad in db.Advisor on pq.user_code equals ad.advisor_code
+                                 join cl in db.VLClass on ad.advisor_code equals cl.advisor_code
+                                 where ad.advisor_code == cl.advisor_code && cl.semester_name == year.ToString() && ad.advisor_code == code && cl.advisor_code == code
+                                 select new Models.ViewModel.AdvisorClass
+                                 {
+                                     ID = cl.id,
+                                     idClass = cl.class_code,
+                                     idAdvisor = ad.advisor_code,
+                                     name = pq.user_name,
+                                     course = (int)cl.course,
+                                     semester = cl.semester_name,
+                                     create_time = cl.create_time,
+                                 }).OrderBy(x => x.idClass).ToList();
+                return classList;
+            }
+            else
+            {
+
+                var classList = (from pq in db.AccountUser
+                                 join ad in db.Advisor on pq.user_code equals ad.advisor_code
+                                 join cl in db.VLClass on ad.advisor_code equals cl.advisor_code
+                                 where ad.advisor_code == cl.advisor_code && ad.advisor_code == code && cl.advisor_code == code
+                                 select new Models.ViewModel.AdvisorClass
+                                 {
+                                     ID = cl.id,
+                                     idClass = cl.class_code,
+                                     idAdvisor = ad.advisor_code,
+                                     name = pq.user_name,
+                                     course = (int)cl.course,
+                                     semester = cl.semester_name
+                                 }).OrderBy(x => x.idClass);
+                return classList;
+            }
+        }
+
         public object getClassAdmin( int year)
         {            
             if(year != 0)

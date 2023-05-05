@@ -96,7 +96,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             //    ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
             //    if (ModelState.IsValid)
             //    {
-            if (roleMenu.id_role != 1)
+            if (db.AccountUser.FirstOrDefault(x => x.email == User.Identity.Name).id_role != 1)
             {
                 ViewBag.Error = "Sai phan quyen";
                 return Json(new { success = false, message = "Sai phan quyen" });

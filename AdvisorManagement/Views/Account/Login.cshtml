@@ -9,8 +9,9 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="~/Assets/images/Logo2022.png" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lí công tác cố vấn học tập | Đăng nhập</title>
+    <title>CTCV Học Tập | Đăng nhập</title>
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v5.15.4/css/all.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&amp;display=swap"
           rel="stylesheet"
@@ -23,15 +24,19 @@
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/toastr.min.js"></script>
-    <link rel="shortcut icon" href="~/assets/images/favicon.ico" type="image/x-icon">
+    <!-- Favicon icon -->
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="~/Assets/images/logo" />
 </head>
 
 <body>
     <div class="wrap" style=" background-size: 100% 100%; background-repeat: no-repeat; height: 100%; font-family: 'Numans', sans-serif;">
         <div class="login">
-            <h2 class="login-heading">Quản lí công tác cố vấn học tập</h2>
+            <h2 class="login-heading">Quản lý công tác <p>    </p> cố vấn học tập</h2>
             <div class="login-image"></div>
-            <p class="login-content">Đăng nhập bằng email Văn Lang để bắt đầu</p>
+            <p class="login-content"><b>Đăng nhập bằng Email Văn Lang để bắt đầu</b></p>
             <a href="@Url.Action("SignIn", "Account", new { area = "" })"><button class="login-button">Đăng nhập</button></a>
         </div>
     </div>

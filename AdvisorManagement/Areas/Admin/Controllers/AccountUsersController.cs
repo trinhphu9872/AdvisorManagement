@@ -13,7 +13,7 @@ using AdvisorManagement.Models;
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
     // auth
-    [Authorize]
+    [LoginFilter]
     public class AccountUsersController : Controller
     {
         // check
@@ -33,7 +33,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 this.init();
-                var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1).OrderBy(y => y.id_role);
+                var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1 && x.id_role != 3).OrderBy(y => y.id_role);
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 return View(accountUser.ToList());
@@ -43,30 +43,58 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
         }
+
+        // API
         // GET: Admin/AccountUsers/Details/5
+        [HttpGet]
         public ActionResult Details(int? id)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            try
             {
-                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                this.init();
-
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
-                AccountUser accountUser = db.AccountUser.Find(id);
-                if (accountUser == null)
+                AccountUser user = db.AccountUser.Find(id);
+                if (user == null)
                 {
                     return HttpNotFound();
                 }
-                return View(accountUser);
+
+                return Json(new { success = true,
+                    detail_code = user.user_code,
+                    detail_name = user.user_name,
+                    detail_street = user.address,
+                    detail_mail = user.email,
+                    detail_phone = user.phone,
+                    detail_img = user.img_profile != null ?  user.img_profile.ToString() : "./Images/imageProfile/avata.png",
+                    id_detailUser = user.id, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
+            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            //{
+            //    ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
+            //    ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+            //    this.init();
+
+            //    if (id == null)
+            //    {
+            //        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            //    }
+            //    AccountUser accountUser = db.AccountUser.Find(id);
+            //    if (accountUser == null)
+            //    {
+            //        return HttpNotFound();
+            //    }
+            //    return View(accountUser);
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+            //}
         }
 
         // GET: Admin/AccountUsers/Create
@@ -234,7 +262,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-
+                
                 ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
                  return View(accountUser);
             }

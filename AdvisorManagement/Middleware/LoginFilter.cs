@@ -12,7 +12,7 @@ namespace AdvisorManagement.Middleware
         {
             if (filterContext.HttpContext.Session["EmailVLU"] == null)
             {
-                filterContext.Result = new RedirectResult("~/Account/Login");
+                filterContext.Result = new RedirectResult("~/dang-nhap-vlu");
                 return;
             }
         }

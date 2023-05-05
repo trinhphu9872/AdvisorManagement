@@ -95,7 +95,7 @@
                                                 </a>
                                                 <a name="delete" id="btnDelete" class="btn btn-danger"
                                                    style="margin-bottom: 5px; margin-left: 5px;">
-                                                    XÓA <i class="fas fa-trash-alt"></i>
+                                                    Xoá <i class="fas fa-trash-alt"></i>
                                                 </a>
 
                                             </td>
@@ -345,9 +345,9 @@
         function HideModal() {
             $("#modalCreate").modal("hide");
         }
-    function HideModalDtail() {
-        $("#modalDetail").modal("hide");
-    }
+        function HideModalDtail() {
+            $("#modalDetail").modal("hide");
+        }
          //Lấy thông tin người dùng để cập nhật
         $(document).on('click', "a[name=update]", function () {
             let id_title = $(this).closest('tr').attr('id');
@@ -399,11 +399,36 @@
                     },
                     success: function (data) {
                             if (data.success == true) {
-                                alert(data.message);
                                 $('#modalUpdate').modal('hide');
-                                location.reload();
+                                Swal.fire({
+                                    icon: "success",
+                                    title: 'Menu đã cập nhập thành công',
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                })
                             } else {
-                                alert(data.message);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Menu đã thêm thành công',
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                })
                             }
                      }
                 })
@@ -438,11 +463,26 @@
                 data: formData,
                 success: function (data) {
                     if (data.success == false) {
-                        alert(data.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                        })
                     } else {
                         $("#modalCreate").modal("hide");
-                        alert(data.message);
-                        location.reload();
+                        Swal.fire({
+                            icon: "success",
+                            title: 'Menu đã thêm thành công',
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
                     }
                 }
              })
@@ -464,7 +504,10 @@
                         $('#id_detailrolemenu').val(data.R_id);
                         $('#modalDetail').modal("show");
                     } else {
-                        alert(data.message);
+                        Swal.fire(
+                            'Thông báo',
+                            data.message
+                        );
                     }
                 }
 
@@ -474,7 +517,59 @@
          //Sự kiện xóa
     $(document).on('click', "a[name=delete]", function () {
         let id_std = $(this).closest('tr').attr('id');
-        if (confirm("Bạn thực sự muốn xóa menu này?")) {
+        Swal.fire({
+            title: "Bạn thực sự muốn xóa menu này?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                 $.ajax({
+                        url: '@Url.Action("Delete", "RoleMenus")',
+                        type: 'POST',
+                        data: {
+                            id: id_std
+                        },
+                        success: function (data) {
+                            if (data.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: 'Menu đã xóa thành công',
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }               
+                                 })
+                            
+                             
+                             } else {
+                                 Swal.fire(
+                                     'Thông báo',
+                                     data.message
+                                 );
+                             }
+                        }
+                  })
+                //Swal.fire(
+                //    "Deleted!",
+                //    "Your file has been deleted.",
+                //    "success",
+                //)
+                // result.dismiss can be "cancel", "overlay",
+                // "close", and "timer"
+            } else if (result.dismiss === "cancel") {
+
+            }
+        });
+        @*if (confirm("Bạn thực sự muốn xóa menu này?")) {
             $.ajax({
                 url: '@Url.Action("Delete", "RoleMenus")',
                 type: 'POST',
@@ -483,13 +578,20 @@
                 },
                 success: function (data) {
                      if (data.success == true) {
-                         alert(data.message);
+                         swalWithBootstrapButtons.fire(
+                             'Thông báo',
+                             'Your file has been deleted.',
+                             'success'
+                         )
                          location.reload();
                      } else {
-                         alert(data.message);
+                         Swal.fire(
+                             'Thông báo',
+                             data.message
+                         );
                      }
                 }
             })
-        }
+        }*@
         })
 </script>

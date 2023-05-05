@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Microsoft.Owin;
 using Owin;
 using System.Linq;
+using Microsoft.AspNetCore.Builder;
 
 [assembly: OwinStartup(typeof(AdvisorManagement.Startup))]
 
@@ -20,6 +21,9 @@ namespace AdvisorManagement
             ConfigureAuth(app);
             app.UseKentorOwinCookieSaver(PipelineStage.Authenticate);
             app.MapSignalR();
+
+
+
         }
     }
 }

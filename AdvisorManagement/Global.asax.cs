@@ -16,6 +16,10 @@ namespace AdvisorManagement
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //// Clear the authentication cookie
+            //HttpCookie authCookie = new HttpCookie(".AspNet.Cookies");
+            //authCookie.Expires = DateTime.Now.AddDays(-1);
+            //Response.Cookies.Add(authCookie);
         }
     }
 }
