@@ -27,8 +27,20 @@ namespace AdvisorManagement.Controllers
             Session["Name"] = accountService.getTextName(User.Identity.Name);
             Session["RoleName"] = accountService.getRoleTextName(User.Identity.Name);
         }
+        [AllowAnonymous]
         public ActionResult Login()
         {
+            if (Request.Cookies[".AspNet.Cookies"] != null)
+            {
+                //Fetch the Cookie using its Key.
+                HttpCookie nameCookie = Request.Cookies[".AspNet.Cookies"];
+
+                //Set the Expiry date to past date.
+                nameCookie.Expires = DateTime.Now.AddDays(-1);
+
+                //Update the Cookie in Browser.
+                Response.Cookies.Add(nameCookie);
+            }
             if (Request.IsAuthenticated)
             {
                 return roleChange.AutoRedirect(User.Identity.Name);
@@ -65,6 +77,7 @@ namespace AdvisorManagement.Controllers
 
         public ActionResult SignInCallback()
         {
+
             Session["EmailVLU"] = User.Identity.Name;
  
             var query = dbApp.AccountUser.Where(x => x.email == User.Identity.Name).ToList();

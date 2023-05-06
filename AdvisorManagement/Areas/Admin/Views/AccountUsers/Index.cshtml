@@ -16,6 +16,9 @@
                 <div class="row">
 
                     <div class="col-12 d-flex no-block align-items-center">
+                        <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 200px;color:white">
+                            Thêm cố vấn học tập<i style="margin-left:5px" class="fas fa-plus"></i>
+                        </a>
                         <div class="ms-auto text-end">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -33,7 +36,7 @@
             <div class="card-body">
                 <h5 class="card-title"></h5>
                 <div class="table-responsive">
-                    <table id="zero_config" class="table table-hover table-danger table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                    <table id="zero_config" class="table table-hover table-info table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
                         <thead>
                             <tr>
                                 <th>Stt</th>
@@ -90,82 +93,43 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Thêm menu</h4>
+                <h4 class="modal-title">Thêm cố vấn học tập</h4>
             </div>
             <div class="">
-                <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                    <div class="col-md-4"><span>Vai trò</span></div>
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Email văn lang:</span></div>
                     <div class="col-md-8">
-                        @if (ViewBag.error != null)
-                        {
-                            var Error = (string)ViewBag.error;
-
-                            @Html.Raw(Error)
-                        }
-                        <select id="id_role" name="id_role" style=" width: 155px;
-                                                                height: 35px; text-align: center; font-size: 15px;">
-
-                            @*@foreach (var item in rolelist)
-                            {
-
-                                <option value="@item.id">@item.role_name</option>
-
-
-                            }*@
-
-
-                        </select>
-
+                        <input id="txtEmail" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                    <div class="col-md-4"><span>Tên menu có trong hệ thống</span></div>
+                    <div class="col-md-4"><span>Họ và tên giảng viên:</span></div>
                     <div class="col-md-8">
-                        <select id="id_menu" name="id_menu" style=" width: 155px;
-                                                                height: 35px; text-align: center; font-size: 15px;">
-
-                            @*@foreach (var item in menulist)
-                            {
-
-                                <option value="@item.id">@item.menu_name</option>
-
-
-                            }*@
-
-
-                        </select>
+                        <input id="txtName" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
-            @* <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>HK1:</span></div>
-                        <div class="col-md-8">
-                            <input id="txtHk1" type="text" class="form-control" />
-                        </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Số điện thoại giảng viên:</span></div>
+                    <div class="col-md-8">
+                        <input id="txtPhone" type="text" class="form-control" />
                     </div>
                 </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>HK2:</span></div>
-                        <div class="col-md-8">
-                            <input id="txtHk2" type="text" class="form-control" />
-                        </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Địa chỉ giảng viên:</span></div>
+                    <div class="col-md-8">
+                        <input id="textAddress" type="text" class="form-control" />
                     </div>
                 </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>HK3:</span></div>
-                        <div class="col-md-8">
-                            <input id="txtHk3" type="text" class="form-control" />
-                        </div>
-                    </div>
-                </div>*@
+            </div>
             <div class="modal-footer">
                 <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button id="btnUpload" class="btn btn-primary" type="submit">Thêm</button>
+                <button id="btnCreate" class="btn btn-success" type="submit">Thêm</button>
             </div>
         </div>
     </div>
@@ -176,52 +140,42 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Chỉnh sửa menu vào phân quyền</h4>
+                <h4 class="modal-title">Chỉnh sửa cố vấn </h4>
             </div>
-            <input hidden id="id_rolemenu" value="" />
+            <input hidden id="id_edit" value="" />
             <div class="">
-                <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                    <div class="col-md-4"><span>Vai trò:</span></div>
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Email văn lang:</span></div>
                     <div class="col-md-8">
-                        <select id="edit_id_role" name="edit_id_role" style=" width: 155px;
-                                                                height: 35px; text-align: center; font-size: 15px;">
-
-                            @*@foreach (var item in rolelist)
-                            {
-
-
-                                <option value="@item.id">@item.role_name</option>
-
-
-
-                            }*@
-
-
-                        </select>
+                        <input id="txtEmailEdit" type="text" class="form-control" disabled />
                     </div>
                 </div>
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                    <div class="col-md-4"><span>Tên menu có trong hệ thống:</span></div>
+                    <div class="col-md-4"><span>Họ và tên giảng viên:</span></div>
                     <div class="col-md-8">
-                        <select id="edit_id_menu" name="edit_id_menu" style=" width: 155px;
-                                                                    height: 35px; text-align: center; font-size: 15px;">
-
-                            @*@foreach (var item in menulist)
-                            {
-
-                                <option value="@item.id">@item.menu_name</option>
-
-
-                            }*@
-
-
-                        </select>
-
+                        <input id="txtNameEdit" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Số điện thoại giảng viên:</span></div>
+                    <div class="col-md-8">
+                        <input id="txtPhoneEdit" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Địa chỉ giảng viên:</span></div>
+                    <div class="col-md-8">
+                        <input id="textAddressEdit" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
             <div class="modal-footer">
                 <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 <button id="btnEdit" class="btn btn-primary" type="submit">Sửa</button>
@@ -232,28 +186,24 @@
 </div>
 <div id="modalDetail" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Chi tiết cố vấn học tập</h4>
             </div>
             <input hidden id="id_detailUser" value="" />
-            <div class="mx-auto" style="width: 140px;">
-                <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
+            <div class="mx-auto " style="width: 150px;">
+                <div class="my-2 d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
                     <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">
-
-                            <img src="" id="detail_img" alt="avatar"
-                                 class="rounded-circle img-fluid" style="width: 150px;">
-                        
-                   
+                        <img src="" id="detail_img" alt="avatar"
+                             class="rounded-circle img-fluid" style="width: 150px;">
                     </span>
                 </div>
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>Mã cố vấn:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="detail_code" type="text" class="form-control" disabled="disabled" />
                     </div>
                 </div>
@@ -261,7 +211,7 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>Họ và tên:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="detail_name" type="text" class="form-control" disabled="disabled" />
                     </div>
                 </div>
@@ -269,7 +219,7 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>Địa chỉ:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="detail_street" type="text" class="form-control" disabled="disabled" />
                     </div>
                 </div>
@@ -277,7 +227,7 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>Email Văn Lang:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="detail_mail" type="text" class="form-control" disabled="disabled" />
                     </div>
                 </div>
@@ -285,16 +235,16 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>Số điện thoại:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="detail_phone" type="text" class="form-control" disabled="disabled" />
                     </div>
                 </div>
             </div>
 
 
-            @*<div class="modal-footer">
-            <button onclick="HideModalDtail()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-        </div>*@
+            <div class="modal-footer">
+                <button onclick="HideModalDtail()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
 
         </div>
     </div>
@@ -310,9 +260,8 @@
         });
     });
 </script>
+@* CRUD *@
 <script>
-
-
     function myFunction() {
         var input, filter, table, tr, td, i;
         input = document.getElementById("semester");
@@ -330,7 +279,6 @@
             }
         }
     }
-
     $(document).ready(function () {
         $("#myInput").on("keyup", function () {
             var value = $(this).val().toLowerCase();
@@ -341,9 +289,10 @@
     });
     $("#zero_config").DataTable();
     // get thong tin nguoi dung
-     $(document).on('click', "a[name=detail]", function () {
+    $(document).on('click', "a[name=detail]", function () {
+         let host = window.location.origin;
          let id_iddetail = $(this).closest('tr').attr('id');
-         //console.log(id_iddetail);
+
          $.ajax({
              url:'@Url.Action("Details", "AccountUsers")' ,
              type: 'get',
@@ -351,16 +300,13 @@
                  id: id_iddetail
              },
              success: function (data) {
-                console.log(data);
-
                  if (data.success == true) {
                      $('#detail_code').val(data.detail_code);
                      $('#detail_name').val(data.detail_name);
                      $('#detail_street').val(data.detail_street);
                      $('#detail_mail').val(data.detail_mail);
                      $('#detail_phone').val(data.detail_phone);
-                     $('#detail_img').attr('src',data.detail_img);
-
+                     $('#detail_img').attr('src',`${host}${data.detail_img}`);
                      $('#id_detailUser').val(data.id_detailUser);
                      $('#modalDetail').modal("show");
                  } else {
@@ -373,5 +319,199 @@
 
          })
      })
+    function HideModalDtail() {
+        $("#modalDetail").modal("hide");
+    }
+    // Thoong tin tao tai khoan
+    function CreateTitle() {
+        $("#modalCreate").modal("show");
+    }
+    function HideModal() {
+        $("#modalCreate").modal("hide");
+    }
+    $(document).ready(function () {
+        $('#btnCreate').click(function () {
+            let formData = new FormData();
+            let jsonData = {
+                email    : $("#txtEmail").val(),
+                user_name: $("#txtName").val(),
+                phone    : $("#txtPhone").val(),
+                address  : $("#txtAddress").val()
+            };
+            for (const [key, value] of Object.entries(jsonData)) {
+                formData.append(key, value);
+            }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateApi", "AccountUsers")',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success == false) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                        })
+                    } else {
+                        $("#modalCreate").modal("hide");
+                        Swal.fire({
+                            icon: "success",
+                            title: 'Menu đã thêm thành công',
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
+                    }
+                }
+             })
+        })
+     })
+    // xoá thông tin người dùng
+    $(document).on('click', "a[name=delete]", function () {
+        let id_std = $(this).closest('tr').attr('id');
+        console.log(id_std);
+        Swal.fire({
+            title: "Bạn thực sự muốn xóa cố vấn này?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                 $.ajax({
+                        url: '@Url.Action("DeleteApi", "AccountUsers")',
+                        type: 'POST',
+                        data: {
+                            id: id_std
+                        },
+                        success: function (data) {
+                            if (data.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: 'Cố vấn học tập đã xóa thành công',
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                 })
+                             } else {
+                                 Swal.fire(
+                                     'Thông báo',
+                                     data.message
+                                 );
+                             }
+                        }
+                  })
+                //Swal.fire(
+                //    "Deleted!",
+                //    "Your file has been deleted.",
+                //    "success",
+                //)
+                // result.dismiss can be "cancel", "overlay",
+                // "close", and "timer"
+            } else if (result.dismiss === "cancel") {
 
+            }
+        });
+    })
+    // cập nhật thông tin người dùng
+    $(document).on('click', "a[name=update]", function () {
+        let id_title = $(this).closest('tr').attr('id');
+        $.ajax({
+            url:'@Url.Action("Details", "AccountUsers")' ,
+            type: 'get',
+            data: {
+                id: id_title
+            },
+            success: function (data) {
+                if (data.success == true) {
+                    console.log(data);
+                    $('#modalUpdate').modal("show");
+                    $('#id_edit').val(id_title);
+                    $("#txtEmailEdit").val(data.detail_mail);
+                    $("#txtNameEdit").val(data.detail_name);
+                    $("#txtPhoneEdit").val(data.detail_phone);
+                    $("#textAddressEdit").val(data.detail_street);
+                } else {
+                    alert(data.message);
+                }
+            }
+
+        })
+    })
+    $(document).ready(function () {     //Cập nhật thông tin người dùng
+        $('#btnEdit').click(function () {
+            let formDataEdt = new FormData();
+            let jsonDataEdt = {
+                id: $("#id_edit").val(),
+                email: $("#txtEmailEdit").val(),
+                user_name: $("#txtNameEdit").val(),
+                phone: $("#txtPhoneEdit").val(),
+                address: $("#txtAddressEdit").val()
+            };
+            for (const [key, value] of Object.entries(jsonDataEdt)) {
+                formDataEdt.append(key, value);
+            }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("EditApi", "AccountUsers")',
+                contentType: false,
+                processData: false,
+                data: formDataEdt,
+                success: function (data) {
+                        if (data.success == true) {
+                            $('#modalUpdate').modal('hide');
+                            Swal.fire({
+                                icon: "success",
+                                title: 'Menu đã cập nhập thành công',
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (result.value) {
+                                    location.reload();
+                                }
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Menu đã thêm thành công',
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (result.value) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                 }
+            })
+
+        })
+    })
+    function HideModalUp() {
+        $("#modalUpdate").modal("hide");
+    }
 </script>
