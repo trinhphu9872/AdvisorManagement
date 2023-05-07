@@ -43,5 +43,6 @@ namespace AdvisorManagement.Models
         public virtual DbSet<VLClass> VLClass { get; set; }
         public virtual DbSet<Annoucement> Annoucement { get; set; }
         public virtual DbSet<Notification> Notification { get; set; }
+        public virtual DbSet<EvaluationAdvisor> EvaluationAdvisor { get; set; }
     }
 }

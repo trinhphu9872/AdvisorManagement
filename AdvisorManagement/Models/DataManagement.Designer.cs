@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\CAP_Team09\AdvisorManagement\AdvisorManagement\Models\DataManagement.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\EMOP2\Ad_Dev\Develop\AdvisorManagement\AdvisorManagement\Models\DataManagement.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

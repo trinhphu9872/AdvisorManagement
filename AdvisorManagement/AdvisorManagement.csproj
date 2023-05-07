@@ -374,6 +374,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataManagement.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\EvaluationAdvisor.cs">
+      <DependentUpon>DataManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ListStudents.cs">
       <DependentUpon>DataManagement.tt</DependentUpon>
     </Compile>
