@@ -28,6 +28,7 @@
         <AssociationConnector Association="CP25Team09Model.FK_RoleMenu_Role" ManuallyRouted="false" />
         <EntityTypeShape EntityType="CP25Team09Model.Annoucement" Width="1.5" PointX="12.375" PointY="4.75" />
         <EntityTypeShape EntityType="CP25Team09Model.Notification" Width="1.5" PointX="5.375" PointY="12.75" />
+        <EntityTypeShape EntityType="CP25Team09Model.EvaluationAdvisor" Width="1.5" PointX="12.375" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
