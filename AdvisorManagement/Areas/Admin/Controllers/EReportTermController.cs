@@ -59,6 +59,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+            
             this.init();          
             var id_account = serviceStd.getID(User.Identity.Name);           
             var year = servicePlan.getYear();
@@ -89,11 +90,17 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 }
                 ReportCustom re = new ReportCustom(item, z.Count, z.Count > 0 ? temp : null, z.Count >= int.Parse(item.evaluate) ? "Hoàn thành" : "Chưa hoàn thành");
                 lsR.Add(re);
-
             }
             return lsR;
 
         }
+
+        //private EvaluationAdvisor getDes(int id_class)
+        //{
+        //    int stack = 0;
+        //    List<ReportCustom> DataFind = this.getData(id_class);
+
+        //}
 
         [HttpPost]
         public JsonResult ExportTemplateCode(int? year, int id_class)
