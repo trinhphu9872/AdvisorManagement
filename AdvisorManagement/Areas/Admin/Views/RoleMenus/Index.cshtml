@@ -95,7 +95,7 @@
                                                 </a>
                                                 <a name="delete" id="btnDelete" class="btn btn-danger"
                                                    style="margin-bottom: 5px; margin-left: 5px;">
-                                                    XÓA <i class="fas fa-trash-alt"></i>
+                                                    Xoá <i class="fas fa-trash-alt"></i>
                                                 </a>
 
                                             </td>
@@ -345,9 +345,9 @@
         function HideModal() {
             $("#modalCreate").modal("hide");
         }
-    function HideModalDtail() {
-        $("#modalDetail").modal("hide");
-    }
+        function HideModalDtail() {
+            $("#modalDetail").modal("hide");
+        }
          //Lấy thông tin người dùng để cập nhật
         $(document).on('click', "a[name=update]", function () {
             let id_title = $(this).closest('tr').attr('id');

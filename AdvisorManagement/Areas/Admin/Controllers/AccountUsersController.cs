@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using AdvisorManagement.Middleware;
@@ -13,13 +15,14 @@ using AdvisorManagement.Models;
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
     // auth
-    [Authorize]
+    [LoginFilter]
     public class AccountUsersController : Controller
     {
         // check
         private CP25Team09Entities db = new CP25Team09Entities();
         private MenuMiddleware serviceMenu = new MenuMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
+        private MailServicesMiddleware serviceMail = new MailServicesMiddleware();
         private string routePermission = "Admin/AccountUsers";
         private string picture;
         public void init()
@@ -33,7 +36,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 this.init();
-                var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1).OrderBy(y => y.id_role);
+                var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1 && x.id_role != 3).OrderBy(y => y.id_role);
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 return View(accountUser.ToList());
@@ -43,259 +46,161 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
             }
         }
+        // API
         // GET: Admin/AccountUsers/Details/5
-        public ActionResult Details(int? id)
+        [HttpGet]
+        public ActionResult Details(int? id)    
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            try
             {
-                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                this.init();
-
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotFound);
                 }
-                AccountUser accountUser = db.AccountUser.Find(id);
-                if (accountUser == null)
+                AccountUser user = db.AccountUser.Find(id);
+                if (user == null)
                 {
                     return HttpNotFound();
                 }
-                return View(accountUser);
+
+                return Json(new { success = true,
+                    detail_code = user.user_code,
+                    detail_name = user.user_name,
+                    detail_street = user.address,
+                    detail_mail = user.email,
+                    detail_phone = user.phone,
+                    detail_img = user.img_profile != null ?  user.img_profile.ToString() : "/Images/imageProfile/avata.png",
+                    id_detailUser = user.id, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+                return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
         }
-
-        // GET: Admin/AccountUsers/Create
-        public ActionResult Create()
-        {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
-                this.init();
-
-                ViewBag.id_Role = new SelectList(db.Role, "id", "role_name");
-                AccountUser user = new AccountUser();
-                return View(user);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
-            }
-        }
-
-        // POST: Admin/AccountUsers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create(AccountUser accountUser, HttpPostedFileBase ImageUpload)
+        public ActionResult CreateApi([Bind(Include = " email,user_name,phone,address ")]AccountUser account)
         {
-
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission)  )
             {
-                this.init();
-
-                if (ModelState.IsValid)
+                if (account.email == null)
                 {
-                    if (accountUser.id_role == 2) {
-                        
-                        
-                        if (accountUser.ImageUpload != null)
-                        {
-                            string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
-                            string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
-                            filename = filename + extension;
-                            accountUser.img_profile = "~/Images/imageProfile/" + filename;
-                            accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
-                        }
-                        accountUser.id = db.AccountUser.ToList().Count() + 1;
-                        accountUser.create_time = DateTime.Now;
-
-                        db.AccountUser.Add(accountUser);
-                        var addAdvisor = new Advisor();
-
-                        addAdvisor.advisor_code = accountUser.user_code;
-                        addAdvisor.account_id = accountUser.id;
-                        db.Advisor.Add(addAdvisor);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }else if (accountUser.id_role == 3)
-                    {
-
-                    if (accountUser.ImageUpload != null)
-                    {
-                        string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
-                        string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
-                        filename = filename + extension;
-                        accountUser.img_profile = "~/Images/imageProfile/" + filename;
-                        accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
-                    }
-                    accountUser.id = db.AccountUser.ToList().Count() + 1;
-                    accountUser.create_time = DateTime.Now;
-
-                    db.AccountUser.Add(accountUser);
-                    var addstudent = new Student ();
-
-                    addstudent.student_code = accountUser.user_code;
-                    addstudent.account_id = accountUser.id;
-                    db.Student.Add(addstudent);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                    }
-                    else { 
-                    //accountUser.ID = Guid.NewGuid();
-                        if (accountUser.ImageUpload != null)
-                        {
-                            string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
-                            string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
-                            filename = filename + extension;
-                            accountUser.img_profile = "~/Images/imageProfile/" + filename;
-                            accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
-                        }
-                        accountUser.id= db.AccountUser.ToList().Count() + 1;
-                        accountUser.create_time = DateTime.Now;
-                    
-                        db.AccountUser.Add(accountUser);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
+                    return Json(new { success = false, message = "Vui lòng điền mail" });
                 }
+                if (account.user_name == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng điền tên cố vấn" });
+                }
+                if (account.phone == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng điền số điện thoại" });
+                }
+                if (account.address == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng điền địa chỉ" });
+                }
+                if (!serviceAccount.IsValidEmail(account.email))
+                {
+                    return Json(new { success = false, message = "Email không đúng định dạng" });
+                }
+                if (!serviceAccount.IsPhoneNumberValid(account.phone))
+                {
+                    return Json(new { success = false, message = "Số điện thoại không đúng định dạng" });
+                }
+                var userCheck = db.AccountUser.Where(x => x.email == account.email).ToList().Count();
+                if (userCheck > 0)
+                {
+                    return Json(new { success = false, message = "Email tồn tại trong hệ thông" });
+                }
+                string mess =  serviceAccount.AdvisorProfile(account.email, account);
+                return Json(new { success = true, message = mess });
 
-                ViewBag.id_Role = new SelectList(db.Role, "id", "role_name", accountUser.id_role);
-                return View(accountUser);
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
-            }
-        }
-        // GET: Admin/AccountUsers/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
-                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                this.init();
-
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-                }
-                AccountUser accountUser = db.AccountUser.Find(id);
-                if (accountUser == null)
-                {
-                    return HttpNotFound();
-                }
-                picture = accountUser.img_profile;
-                ViewBag.id_Role = db.Role.ToList();
-                return View(accountUser);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+                return Json(new { success = false, message = "Sai phân quyền" });
             }
         }
 
-        // POST: Admin/AccountUsers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // DELETE API
         [HttpPost]
-
-        public ActionResult Edit(AccountUser accountUser)
+        public ActionResult DeleteApi(int id)
         {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission)) {
-
-                ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-                ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                this.init();
-                if (ModelState.IsValid)
+            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
+            {
+                var userCheck = db.AccountUser.FirstOrDefault(x => x.id == id);
+                if (userCheck.id == null)
                 {
-                    var edituser = db.AccountUser.Find(accountUser.id);
-                    if (accountUser.ImageUpload != null)
-                    {
-                        string filename = Path.GetFileNameWithoutExtension(accountUser.ImageUpload.FileName).ToString();
-                        string extension = Path.GetExtension(accountUser.ImageUpload.FileName);
-                        filename = filename + extension;
-                        edituser.img_profile = "~/Images/imageProfile/" + filename;
-                        accountUser.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
-                    }
-                    edituser.address = accountUser.address;
-                    edituser.user_name = accountUser.user_name;
-                    edituser.user_code = edituser.user_code;
-                    //edituser.dateofbirth = accountUser.dateofbirth;
-                    edituser.phone = accountUser.phone;
-                    edituser.gender = accountUser.gender;
-                    edituser.id_role = accountUser.id_role;
-
-                    db.Entry(edituser).State = EntityState.Modified;
+                    return Json(new { success = false, message = "Cố vấn không tồn tại trong hệ thông" });
+                }
+                var classCheck = db.VLClass.Where(y => y.advisor_code == userCheck.user_code).ToList().Count();
+                var adCheck = db.Advisor.FirstOrDefault(x => x.advisor_code == userCheck.user_code);
+                if (classCheck > 0)
+                {
+                    adCheck.status_id = 0;
+                    db.Entry(adCheck).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return Json(new { success = true, message = "Tài khoản tạm khoá do giảng viên có chủ nhiệm lớp" });
                 }
-                
-                ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", accountUser.id_role);
-                 return View(accountUser);
+                else
+                {
+                    if (adCheck != null)
+                    {
+                        db.Advisor.Remove(adCheck);
+                        db.SaveChanges();
+                    }
+                    db.AccountUser.Remove(userCheck);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Tài khoản cố vấn đã xoá khỏi hệ thống"});
+                }
+
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+                return Json(new { success = false, message = "Sai phân quyền" });
             }
         }
-
-        // GET: Admin/AccountUsers/Delete/5
-        public ActionResult Delete(int? id)
+        // EDIT API 
+        [HttpPost]
+        public ActionResult EditApi([Bind(Include = " id,email,user_name,phone,address ")] AccountUser account)
         {
+
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
-                this.init();
-                if (id == null)
+                var edtUser = db.AccountUser.FirstOrDefault(x => x.id == account.id);
+                if (account.user_name == null)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                    return Json(new { success = false, message = "Vui lòng điền tên cố vấn" });
                 }
-                AccountUser accountUser = db.AccountUser.Find(id);
-                if (accountUser == null)
+                if (account.phone == null)
                 {
-                    return HttpNotFound();
+                    return Json(new { success = false, message = "Vui lòng điền số điện thoại" });
                 }
-                return View(accountUser);
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
-            }
-        }
-
-        // POST: Admin/AccountUsers/Delete/5
-        [HttpPost, ActionName("Delete")]
-
-        public ActionResult DeleteConfirmed(int id)
-        {
-            if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            {
-                this.init();
-                var accountUser = db.AccountUser.Find(id);
-                var advisor= db.Advisor.Find(accountUser.user_code);
-                var student = db.Student.Find(accountUser.user_code);
-                if (advisor != null)
+                if (account.address == null)
                 {
-                    db.Advisor.Remove(advisor);
+                    return Json(new { success = false, message = "Vui lòng điền địa chỉ" });
                 }
-                if (student != null)
+                if (!serviceAccount.IsPhoneNumberValid(account.phone))
                 {
-                    db.Student.Remove(student);
+                    return Json(new { success = false, message = "Số điện thoại không đúng định dạng" });
                 }
-                db.AccountUser.Remove(accountUser);
+              
+                if (edtUser == null)
+                {
+                    return Json(new { success = false, message = "Email không tồn tại trong hệ thông" });
+                }
+                edtUser.user_name = account.user_name;
+                edtUser.phone = account.phone;
+                edtUser.address = account.address;
+                db.Entry(edtUser).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Cập nhật thành công tài khoản của cố vấn" });
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
+                return Json(new { success = false, message = "Sai phân quyền" });
             }
         }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

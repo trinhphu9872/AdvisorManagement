@@ -14,6 +14,7 @@ using System.Web.Configuration;
 using System.IO;
 using System.Net;
 using Microsoft.AspNetCore.Hosting.Server;
+using System.Text.RegularExpressions;
 
 namespace AdvisorManagement.Middleware
 {
@@ -72,6 +73,18 @@ namespace AdvisorManagement.Middleware
             return "Nhắc nhở thành công";
         }
 
-  
+        public  bool IsValidEmail(string email)
+        {
+
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            string advisorMailPattems = @"^[^@\s]+@vlu\.edu\.vn$";
+            string studnetPattems = @"^[^@\s]+@(vanlanguni\.vn|vlu\.edu\.vn)$";
+
+            return Regex.IsMatch(email, advisorMailPattems) || Regex.IsMatch(email, studnetPattems) ? true : false;
+        }
+
+
     }
 }

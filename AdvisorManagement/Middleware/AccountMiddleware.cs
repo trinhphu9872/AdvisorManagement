@@ -4,11 +4,13 @@ using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Spire.Pdf.OPC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
@@ -35,6 +37,37 @@ namespace AdvisorManagement.Middleware
                 return db.Role.SingleOrDefault(x => x.id == sql.id).role_name;
             }
             return db.Role.SingleOrDefault(x => x.id == 4).role_name;
+        }
+
+        // Register Advisor Profile
+        public string AdvisorProfile(string mail, AccountUser account)
+        {
+            try
+            {
+                AccountInitModel itemAccount = new AccountInitModel();
+                itemAccount.role_id = 2;
+                itemAccount.user_name = account.user_name;
+                if (this.adMailValid(mail))
+                {
+                    itemAccount.user_code = mail.Split('@')[0] + "_cntt"; 
+                }
+                else
+                {
+                    itemAccount.user_code = mail.Split('@')[0];
+                }
+                writeRecordUser(itemAccount, mail);
+                Advisor advisor = new Advisor();
+                advisor.advisor_code = itemAccount.user_code;
+                advisor.account_id = getID();
+                advisor.status_id = 1;
+                db.Advisor.Add(advisor);
+                db.SaveChanges();
+                return "Đăng kí thành công cố vấn học tập vào trong hệ thống";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
         // Register Profile
@@ -426,6 +459,29 @@ namespace AdvisorManagement.Middleware
             var index = mssv.IndexOf("K");
             var cours = mssv.Substring(index + 1, 2);
             return int.Parse(cours);
+        }
+
+        public  bool IsPhoneNumberValid(string phoneNumber)
+        {
+            string phonePattern = @"^(84|\+84|0)(1\d{9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8})$";
+            return Regex.IsMatch(phoneNumber, phonePattern);
+        }
+        public bool IsValidEmail(string email)
+        {
+
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            string advisorMailPattems = @"^[^@\s]+@vlu\.edu\.vn$";
+            string studnetPattems = @"^[^@\s]+@(vanlanguni\.vn|vlu\.edu\.vn)$";
+
+            return Regex.IsMatch(email, advisorMailPattems) || Regex.IsMatch(email, studnetPattems) ? true : false;
+        }
+
+        public bool adMailValid(string mail)
+        {
+            string advisorMailPattems = @"^[^@\s]+@vlu\.edu\.vn$";
+            return Regex.IsMatch(mail, advisorMailPattems) ? true : false;
         }
 
     }
