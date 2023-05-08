@@ -34,7 +34,7 @@
                             <a onclick="ImportExcelFile()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
                                 Import<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
-                            <a href="@Url.Action("ExcelExport", "ClassManagements",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white ">
+                            <a onclick="ExportExcel()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white ">
                                 Export<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                             @*<div class="ms-auto text-end">
@@ -64,7 +64,8 @@
                             <option selected value="@yearNow">@yearLast - @yearNow</option>
                             @foreach (var item in hocky)
                             {
-                                <option value="@item.semester_name">@item.semester_name</option>
+                                var i = int.Parse(item.semester_name) - 1;
+                                <option value="@item.semester_name">@i - @item.semester_name</option>
                             }
 
                         </select>
@@ -329,33 +330,128 @@
             ],
         "order": [[3, "desc"]],
         "columnDefs": [{ "targets": 3, "type": "date-eu" }],
-         });
+    });
+
+    dataTable.on('order.dt search.dt', function () {
+        let i = 1;
+        dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+            this.data(i++);
+        });
+    }).draw();
+ //filter data khi Admin chọn năm-->-->-->-->
+        function myFunction() {
+            var input = document.getElementById("semester");
+            filter = input.value.toUpperCase();
+            if (filter != @yearNow) {
+                seleclYear()
+            } else {
+                selectYearNow()
+            }
+            $("#zero_config_admin").DataTable().on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+        }
+        function seleclYear() {
+            $("#zero_config_admin").dataTable().fnDestroy();
+            var dataTable = $("#zero_config_admin").DataTable({
+             'ajax': {
+                    'url': '@Url.Action("GetData", "ClassManagements")',
+                    'data': function (d) {
+                     var input = document.getElementById("semester");
+                        filter = input.value.toUpperCase();
+                     d.year = filter ;
+                     },
+                    'type': 'get',
+                    'datatype':'json',
+                 },
+             'columns':
+             [
+                 { 'data': 'ID', 'width': '5%', },
+                 {
+                     'data': 'idClass', 'width': '15%','render': function (data, type, row) {
+                        @* @Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", id = item.id }, null)*@
+                             return '<a id="proof" href="@Url.Action("DetailClass", "Students", new { area = "" })/' + row.ID + '/" >' + data + '</a>';
+                     }
+                 },
+                 { 'data': 'name', 'width': '15%' },
+                 {
+                     'data': 'create_time', 'width': '15%', 'render': function (data) {
+                         return moment(data).format("DD-MM-YYYY HH:mm");
+                     }
+},
+                 { 'data': 'course', 'width': '5%' },
+                 {
+                     'data': 'ID', 'width': '25%', 'render': function (data, type, row) {
+                         /*<a onclick="Details(' + data + ')" id="btndetail" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px;">Chi tiết <i class="fas fa-tasks"></i></a>*/
+                         return '<a onclick="Update(' + data + ')" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">Sửa <i class="fas fa-edit"></i></a><a onclick="Detele(' + data + ')" id="btnDelete" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px;">XÓA <i class="fas fa-trash-alt"></i></a>'
+                     },
+                 }
+            ],
+        "order": [[3, "desc"]],
+        "columnDefs": [{ "targets": 3, "type": "date-eu" }],
+            });
             dataTable.on('order.dt search.dt', function () {
                 let i = 1;
                 dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
                     this.data(i++);
                 });
-            }).draw();  
-
-    function myFunction() {
-        var input, filter, table, tr, td, i;
-        input = document.getElementById("semester");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[3];
-            if (td) {
-                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
+            }).draw();
         }
-    }
+        function selectYearNow() {
+            $("#zero_config_admin").dataTable().fnDestroy();
+            var dataTable = $("#zero_config_admin").DataTable({
+             'ajax': {
+                    'url': '@Url.Action("GetData", "ClassManagements")',
+                    'data': function (d) {
+                     var input = document.getElementById("semester");
+                     filter = input.value.toUpperCase();
+                     d.year = filter ;
+                     },
+                    'type': 'get',
+                    'datatype':'json',
+             },
+            'columns':
+             [
+                 { 'data': 'ID', 'width': '5%', },
+                 {
+                     'data': 'idClass', 'width': '15%','render': function (data, type, row) {
+                        @* @Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", id = item.id }, null)*@
+                             return '<a id="proof" href="@Url.Action("DetailClass", "Students", new { area = "" })/' + row.ID + '/" >' + data + '</a>';
+                     }
+                 },
+                 { 'data': 'name', 'width': '15%' },
+                 {
+                     'data': 'create_time', 'width': '15%', 'render': function (data) {
+                         return moment(data).format("DD-MM-YYYY HH:mm");
+                     }
+},
+                 { 'data': 'course', 'width': '5%' },
+                 {
+                     'data': 'ID', 'width': '25%', 'render': function (data, type, row) {
+                         /*<a onclick="Details(' + data + ')" id="btndetail" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px;">Chi tiết <i class="fas fa-tasks"></i></a>*/
+                         return '<a onclick="Update(' + data + ')" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">Sửa <i class="fas fa-edit"></i></a><a onclick="Detele(' + data + ')" id="btnDelete" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px;">XÓA <i class="fas fa-trash-alt"></i></a>'
+                     },
+                 }
+            ],
+            "order": [[3, "desc"]],
+                "columnDefs": [{ "targets": 3, "type": "date-eu" }, {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }],
+            });
+            dataTable.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
+       }
 
-    $(document).ready(function () {       
+    $(document).ready(function () {
         $("#myInput").on("keyup", function () {
             var value = $(this).val().toLowerCase();
             $("#myTable tr").filter(function () {
@@ -396,7 +492,7 @@
                                 popup: 'animate__animated animate__fadeOutUp'
                             }
                         }).then(function (result) {
-                            if (result.value) {                                
+                            if (result.value) {
                                 dataTable.ajax.reload(null, false);
                             }
                         })
@@ -413,11 +509,11 @@
                                 popup: 'animate__animated animate__fadeOutUp'
                             }
                         }).then(function (result) {
-                            if (result.value) {                                
+                            if (result.value) {
                                 dataTable.ajax.reload(null, false);
                             }
                         })
-                    }                 
+                    }
                 }
             })
         })
@@ -608,6 +704,33 @@
         })
     }
 
+    function ExportExcel() {
+        var input = document.getElementById("semester");
+        filter = input.value.toUpperCase();
+         $.ajax({
+                url: '@Url.Action("ExcelExport", "ClassManagements")',
+                type: 'POST',
+                data: {
+                    year: filter
+                },
+                /*contentType: "application/json; charset=utf-8", */
+                success: function (data) {
+                    var bytes = new Uint8Array(data.FileContents);
+                    var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var downloadUrl = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = downloadUrl;
+                    a.download = data.FileDownloadName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+                error: function (err) {
+                    alert(err);
+                },
+            })
+    }
+
     //xem chi tiet
     function Detele(id) {
         let id_delete = id;
@@ -639,7 +762,7 @@
                                     }
                                 }).then(function (result) {
                                     if (result.value) {
-                                        dataTable.ajax.reload(null, false);
+                                        location.reload();
                                     }
                                  })
 

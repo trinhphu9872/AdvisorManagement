@@ -61,7 +61,7 @@
                                         <td>@item.user_name</td>
                                         <td>@item.Role.role_name</td>
                                         <td>@item.phone</td>
-                                        <td>@item.create_time</td>
+                                        <td>@item.create_time.Value.ToString("dd-MM-yyyy hh:mm")</td>
                                         <td>@item.email</td>
                                         <td style="width:250px">
                                             <a name="detail" class="btn btn-success"
@@ -306,7 +306,8 @@
                      $('#detail_street').val(data.detail_street);
                      $('#detail_mail').val(data.detail_mail);
                      $('#detail_phone').val(data.detail_phone);
-                     $('#detail_img').attr('src',`${host}${data.detail_img}`);
+
+                     $('#detail_img').attr('src',`${host}${data.detail_img.replace("~","")}`);
                      $('#id_detailUser').val(data.id_detailUser);
                      $('#modalDetail').modal("show");
                  } else {

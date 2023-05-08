@@ -39,7 +39,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1 && x.id_role != 3).OrderBy(y => y.id_role);
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                return View(accountUser.ToList());
+                return View(accountUser.ToList().OrderByDescending(x=>x.create_time));
             }
             else
             {

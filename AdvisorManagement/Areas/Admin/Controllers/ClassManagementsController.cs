@@ -516,10 +516,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             return result;
         }
 
-        public void ExcelExport()
+        [HttpPost]
+        public JsonResult ExcelExport(int year)
         {
-            var year = servicePlan.getYear();
-            var listClass = db.VLClass.OrderByDescending(x => x.create_time).ToList();
+           /* var year = servicePlan.getYear();*/
+            var stringYear = year.ToString();
+            var listClass = db.VLClass.Where(x=>x.semester_name == stringYear).OrderByDescending(x => x.create_time).ToList();
             var nameUser = Session["nameUser"];
             IEnumerable<AccountUser> name = nameUser as IEnumerable<AccountUser>;
             var hocky = Session["hocky"];
@@ -529,12 +531,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 using (ExcelPackage pck = new ExcelPackage())
                 {
                     var package = serviceAccount.getExcelPackage(pck, year, listStudent);
-                    Response.Clear();
+                    var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "CVHT_Phancong_" + (year - 1) + "-" + year + ".xlsx");
+                    return Json(fileOject, JsonRequestBehavior.AllowGet);
+                  /*  Response.Clear();
                     Response.Clear();
                     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                     Response.AddHeader("content-disposition", "attachment; filename=" + "CVHT_Phancong_"+ (year-1) +"-" + year +".xlsx");
                     Response.BinaryWrite(package.GetAsByteArray());
-                    Response.End();
+                    Response.End();*/
                 }
             }
             catch (Exception ex)
@@ -542,5 +546,30 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 throw;
             }
         }
+
+       /* [HttpPost]
+        public JsonResult ExportTemplateAdvisor(int id_class)
+        {
+            var listPlan = db.PlanClass.Where(y => y.id_class == id_class).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
+            var year = (int)db.PlanClass.FirstOrDefault(x => x.id_class == id_class).year;
+            var class_code = db.VLClass.Find(id_class).class_code;
+            var advisor_code = db.VLClass.Find(id_class).advisor_code;
+            var user_name = db.AccountUser.FirstOrDefault(x => x.user_code == advisor_code).user_name;
+            var name_advisor = servicePlan.ConvertToUnsign(user_name);
+            List<PlanClass> template = (List<PlanClass>)listPlan;
+            try
+            {
+                using (ExcelPackage pck = new ExcelPackage())
+                {
+                    var package = servicePlan.ExportTemplateAdvisor(pck, template, year, class_code);
+                    var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "KehoachCVHT_" + (year - 1) + "-" + year + "_" + name_advisor + "_" + class_code + ".xlsx");
+                    return Json(fileOject, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }*/
     }
 }
