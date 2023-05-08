@@ -33,7 +33,6 @@ namespace AdvisorManagement.Models
         public string email { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public Nullable<System.DateTime> update_time { get; set; }
-
         [NotMapped]
         public HttpPostedFileBase ImageUpload { get; set; }
         public virtual Role Role { get; set; }

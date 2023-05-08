@@ -18,5 +18,6 @@ namespace AdvisorManagement.Models
         public string rank_type { get; set; }
         public string rank_des { get; set; }
         public string description { get; set; }
+        public Nullable<int> rank_count { get; set; }
     }
 }
