@@ -19,6 +19,7 @@ using System.Drawing;
 using Spire.Xls.Core;
 using System.Web.UI.WebControls;
 using OfficeOpenXml.Style;
+using Spire.Pdf.OPC;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
@@ -349,17 +350,27 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                         int count = 0;
                         int countEmpty = 0;
                         int countExist = 0;
+                        int checkAdv_code = 0;
+                        int checkEmail = 0;
                         string msgError = "";
                         string msg = "";
-                        ImportData(out count, filePath, out msgError, out countEmpty, out countExist);
-                        if (count > 0 || countEmpty > 0 || countExist > 0) {
+                        ImportData(out count, filePath, out msgError, out countEmpty, out countExist, out checkAdv_code, out checkEmail);
+                        if (count > 0 || countEmpty > 0 || countExist > 0 || checkAdv_code > 0 || checkEmail > 0) {
                             if(count > 0)
                             {
                                 msg += "Thêm thành công " + count + " lớp" + "\n";
                             }
-                            if(countEmpty> 0)
+                            if(checkAdv_code> 0)
                             {
-                                msg += "Có " + countEmpty + " lớp chứa dữ liệu trống, không thực hiện thay đổi" + "\n";
+                                msg += "Có " + checkAdv_code + " cố vấn có mã giảng viên không hợp lệ" + "\n";
+                            }
+                            if (checkEmail > 0)
+                            {
+                                msg += "Có " + checkEmail + " cố vấn có email không hợp lệ" + "\n";
+                            }
+                            if (countEmpty> 0)
+                            {
+                                msg += "Có " + countEmpty + " cố vấn chứa dữ liệu trống, không thực hiện thay đổi" + "\n";
                             }
                             if(countExist > 0)
                             {
@@ -387,7 +398,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Please upload excel file" });
             }
         }
-        private bool ImportData(out int count, string filePath, out string msgError, out int countEmpty, out int countExist)
+        private bool ImportData(out int count, string filePath, out string msgError, out int countEmpty, out int countExist, out int checkAdv_code, out int checkEmail)
         {
             ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
 
@@ -396,6 +407,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             countEmpty = 0;
             countExist = 0;
             msgError = "";
+            checkAdv_code = 0;
+            checkEmail = 0;
             try
             {
                 /* String path = Server.MapPath("/") + "\\import\\class.xlsx";*/
@@ -414,12 +427,13 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     Object email = worksheet.Cells[startRow, startColumn + 3].Value;
                     Object id_class = worksheet.Cells[startRow, startColumn + 4].Value;
                     Object duthua = worksheet.Cells[startRow, startColumn + 5].Value;
+                    Object thieu = worksheet.Cells[5, startColumn + 4].Value;
                     var year = servicePlan.getYear();
                     var isSuccess = false;  
                     if (data == null && advisor_code == null && name_advisor == null && email == null && id_class == null)
                     {                      
                         break;
-                    }else if(id_class == null && duthua == null)
+                    }else if(thieu == null && duthua == null)
                     {
                         msgError = "File import thiếu cột dữ liệu, import thất bại";
                         break;
@@ -428,30 +442,69 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                         msgError = "File import chứa cột dữ liệu thừa, import thất bại";
                         break;
                     }else if(data == null || advisor_code == null || name_advisor == null || email == null || id_class == null ||
-                        data.ToString().Trim() == "" || name_advisor.ToString().Trim() == "" || email.ToString().Trim() == "" || id_class.ToString().Trim() == "")
+                        data.ToString().Trim() == "" || advisor_code == null || name_advisor.ToString().Trim() == "" || email.ToString().Trim() == "" || id_class.ToString().Trim() == "")
                     {
                         countEmpty++;                      
                     }
                     else
                     {
-                        var idClass = id_class.ToString().Split('\n');
-                        foreach (var item in idClass)
+                        string[] mailGet = email.ToString().Trim().Split('@');                        
+                        if (mailGet[mailGet.Length - 1] == "vlu.edu.vn")
                         {
-                            var child = item.Trim().Split(',');
-                            foreach (var item2 in child)
+                            string advisorCode = mailGet[0] + "_cntt";
+                            if (advisorCode.ToString() == advisor_code.ToString())
                             {
-                                var check = serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), item2.ToString(), year.ToString());
-                                if (check)
+                                var idClass = id_class.ToString().Split('\n');
+                                foreach (var item in idClass)
                                 {
-                                    count++;
+                                    var child = item.Trim().Split(',');
+                                    for (var i = 0; i < child.Length; i++)
+                                    {
+                                        var stringClass = "";
+                                        if (child[i].Length <= 3)
+                                        {
+                                            var number = child[0].Substring(child[0].Length - 2);
+                                            foreach (Char c in number)
+                                            {
+                                                if (!Char.IsDigit(c))
+                                                {
+                                                    stringClass = child[0].Substring(0, child[0].Length - 1) + child[i];
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    stringClass = child[0].Substring(0, child[0].Length - 2) + child[i];
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            stringClass = child[i].ToString();
+                                        }
+                                        var check = serviceAccount.WriteDataFromExcelClass(email.ToString(), name_advisor.ToString(), stringClass.ToString().Trim(), year.ToString());
+                                        if (check)
+                                        {
+                                            count++;
+                                        }
+                                        else
+                                        {
+                                            countExist++;
+                                        }
+                                    }                                   
                                 }
-                                else
-                                {
-                                    countExist++;
-                                }
-                            }                            
-                        }                                               
-                    }                    
+                            }
+                            else
+                            {
+                                checkAdv_code++;
+                            }
+                        }
+                        else
+                        {
+                             checkEmail++;
+                        }                                                       
+                    }
+
                     startRow++;
                 }
                 while (data != null);
