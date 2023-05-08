@@ -77,6 +77,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
         public ActionResult CreateApi([Bind(Include = " email,user_name,phone,address ")]AccountUser account)
         {
             
@@ -120,7 +121,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Sai phân quyền" });
             }
         }
+
         // DELETE API
+        [HttpPost]
         public ActionResult DeleteApi(int id)
         {
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))

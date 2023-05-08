@@ -72,7 +72,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult GetReportClass(int id_class)
         {
-            return Json(new { data = this.getData(id_class), success = false }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = this.getData(id_class), success = true }, JsonRequestBehavior.AllowGet);
         }
 
         private List<ReportCustom> getData(int id_class)
