@@ -39,7 +39,7 @@
 </div>
 
 
-    <script>
+<script>
         $("#submit").click(function (e) {
             e.preventDefault();
 
@@ -53,7 +53,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/Announcement/SendNotification",
+                url: "@Url.Action("SendNotification", "Announcement")",
                 data: JSON.stringify(Notification),
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
@@ -71,5 +71,5 @@
             });
 
         });
-    </script>
+</script>
 

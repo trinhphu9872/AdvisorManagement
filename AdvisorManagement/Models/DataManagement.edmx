@@ -37,6 +37,17 @@
           <Property Name="title" Type="nvarchar" MaxLength="50" />
           <Property Name="message" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="EvaluationAdvisor">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rank_type" Type="nvarchar" MaxLength="10" />
+          <Property Name="rank_des" Type="nvarchar" MaxLength="50" />
+          <Property Name="description" Type="nvarchar" MaxLength="150" />
+          <Property Name="rank_count" Type="int" />
+          <Property Name="rank_end" Type="int" />
+        </EntityType>
         <EntityType Name="ListStudents">
           <Key>
             <PropertyRef Name="id" />
@@ -255,6 +266,7 @@
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Annoucement" EntityType="Self.Annoucement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EvaluationAdvisor" EntityType="Self.EvaluationAdvisor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ListStudents" EntityType="Self.ListStudents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
@@ -572,6 +584,7 @@
           </AssociationSet>
           <EntitySet Name="Annoucement" EntityType="CP25Team09Model.Annoucement" />
           <EntitySet Name="Notification" EntityType="CP25Team09Model.Notification" />
+          <EntitySet Name="EvaluationAdvisor" EntityType="CP25Team09Model.EvaluationAdvisor" />
         </EntityContainer>
         <EntityType Name="Annoucement">
           <Key>
@@ -590,6 +603,17 @@
           <Property Name="send_to" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="is_read" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EvaluationAdvisor">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rank_type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="rank_des" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="rank_count" Type="Int32" />
+          <Property Name="rank_end" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -801,6 +825,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="EvaluationAdvisor">
+            <EntityTypeMapping TypeName="CP25Team09Model.EvaluationAdvisor">
+              <MappingFragment StoreEntitySet="EvaluationAdvisor">
+                <ScalarProperty Name="rank_end" ColumnName="rank_end" />
+                <ScalarProperty Name="rank_count" ColumnName="rank_count" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="rank_des" ColumnName="rank_des" />
+                <ScalarProperty Name="rank_type" ColumnName="rank_type" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -816,7 +852,7 @@
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

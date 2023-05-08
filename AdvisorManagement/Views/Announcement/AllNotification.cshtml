@@ -240,17 +240,17 @@
          if (@id_notify != "0") {
             console.log(@id_notify);
             detailNotify(@id_notify);
-        }        
+        }
      })
 
-    function detailNotify(id_notify) {        
+    function detailNotify(id_notify) {
         $.ajax({
-            url: '/Announcement/DetailNotification',
+            url: "@Url.Action("DetailNotification", "Announcement")",
             type: 'get',
             data: { id_notify: id_notify },
             success: function (data) {
                 jQuery('.content-area').empty();
-                $('.content-area').append($('<div class="header" data-region="header"><div class="timestamp">' + moment(data.notify[0].date).format("DD-MM-YYYY HH:mm") + '</div>' + data.notify[0].title + '</div><div class= "content" data - region="content" >' + data.notify[0].message + '</div>'));                
+                $('.content-area').append($('<div class="header" data-region="header"><div class="timestamp">' + moment(data.notify[0].date).format("DD-MM-YYYY HH:mm") + '</div>' + data.notify[0].title + '</div><div class= "content" data - region="content" >' + data.notify[0].message + '</div>'));
             }
         })
     }
