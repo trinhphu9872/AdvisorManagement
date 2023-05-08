@@ -59,7 +59,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            
+            ViewBag.Evol = this.getDes(id);
+            ViewBag.CountE = this.checkIndexReport(this.getData(id));
             this.init();          
             var id_account = serviceStd.getID(User.Identity.Name);           
             var year = servicePlan.getYear();
@@ -71,12 +72,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetReportClass(int id_class)
+        public ActionResult GetReportClass(int? id_class)
         {
-            return Json(new { data = this.getData(id_class), success = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = this.getData(id_class), success = true}, JsonRequestBehavior.AllowGet);
         }
 
-        private List<ReportCustom> getData(int id_class)
+        private List<ReportCustom> getData(int? id_class)
         {
             var reportClass = db.PlanClass.Where(x => x.id_class == id_class).ToList().OrderBy(x => x.number_title);
             List<ReportCustom> lsR = new List<ReportCustom>();
@@ -95,12 +96,25 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         }
 
-        //private EvaluationAdvisor getDes(int id_class)
-        //{
-        //    int stack = 0;
-        //    List<ReportCustom> DataFind = this.getData(id_class);
+        private List<EvaluationAdvisor> getDes(int? id_class)
+        {
+            List<ReportCustom> DataFind = this.getData(id_class);
+            int maxIndex = (int)DataFind.Max(x => x.number_title);
+            int stack = this.checkIndexReport(DataFind);
+            double checkEval = (stack / maxIndex) * 100;
+            return db.EvaluationAdvisor.Where(x => x.rank_count <= checkEval && checkEval <  x.rank_end).ToList();
+        }
 
-        //}
+        private int checkIndexReport(List<ReportCustom> DataFind)
+        {
+            int stack = 0;
+            int maxIndex = (int)DataFind.Max(x => x.number_title);
+            for (int i = 1; i <= maxIndex; i++)
+            {
+                stack += DataFind.Where(x => x.number_title == i && x.status == "Hoàn thành".Trim()).Count() > 0 ? 1 : 0;
+            }
+            return stack;
+        }
 
         [HttpPost]
         public JsonResult ExportTemplateCode(int? year, int id_class)
@@ -119,6 +133,20 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 throw;
+            }
+        }
+
+        [HttpGet]
+        public ActionResult GetEvolTable()
+        {
+            var lsEvol = db.EvaluationAdvisor.ToList();
+            if (lsEvol.Count() > 0)
+            {
+                return Json(new { data = lsEvol, success = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { data = lsEvol, success = false }, JsonRequestBehavior.AllowGet);
             }
         }
     }
