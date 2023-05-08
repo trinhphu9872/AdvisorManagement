@@ -37,8 +37,6 @@
           <Property Name="title" Type="nvarchar" MaxLength="50" />
           <Property Name="message" Type="nvarchar" MaxLength="200" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="EvaluationAdvisor">
           <Key>
             <PropertyRef Name="id" />
@@ -48,6 +46,7 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
           <Property Name="rank_des" Type="nvarchar" MaxLength="50" />
           <Property Name="description" Type="nvarchar" MaxLength="150" />
           <Property Name="rank_count" Type="int" />
+          <Property Name="rank_end" Type="int" />
         </EntityType>
         <EntityType Name="ListStudents">
           <Key>
@@ -267,6 +266,7 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
           <EntitySet Name="AccountUser" EntityType="Self.AccountUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Advisor" EntityType="Self.Advisor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Annoucement" EntityType="Self.Annoucement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EvaluationAdvisor" EntityType="Self.EvaluationAdvisor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ListStudents" EntityType="Self.ListStudents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
@@ -282,15 +282,6 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
           <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VLClass" EntityType="Self.VLClass" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EvaluationAdvisor" EntityType="Self.EvaluationAdvisor" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [EvaluationAdvisor].[id] AS [id], 
-    [EvaluationAdvisor].[rank_type] AS [rank_type], 
-    [EvaluationAdvisor].[rank_des] AS [rank_des], 
-    [EvaluationAdvisor].[description] AS [description], 
-    [EvaluationAdvisor].[rank_count] AS [rank_count]
-    FROM [dbo].[EvaluationAdvisor] AS [EvaluationAdvisor]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AccountUser" EntitySet="AccountUser" />
@@ -622,6 +613,7 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
           <Property Name="rank_des" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="rank_count" Type="Int32" />
+          <Property Name="rank_end" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -836,6 +828,7 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
           <EntitySetMapping Name="EvaluationAdvisor">
             <EntityTypeMapping TypeName="CP25Team09Model.EvaluationAdvisor">
               <MappingFragment StoreEntitySet="EvaluationAdvisor">
+                <ScalarProperty Name="rank_end" ColumnName="rank_end" />
                 <ScalarProperty Name="rank_count" ColumnName="rank_count" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="rank_des" ColumnName="rank_des" />
