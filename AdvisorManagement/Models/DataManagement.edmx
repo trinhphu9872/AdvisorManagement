@@ -47,6 +47,7 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
           <Property Name="rank_type" Type="nvarchar" MaxLength="10" />
           <Property Name="rank_des" Type="nvarchar" MaxLength="50" />
           <Property Name="description" Type="nvarchar" MaxLength="150" />
+          <Property Name="rank_count" Type="int" />
         </EntityType>
         <EntityType Name="ListStudents">
           <Key>
@@ -286,7 +287,8 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
     [EvaluationAdvisor].[id] AS [id], 
     [EvaluationAdvisor].[rank_type] AS [rank_type], 
     [EvaluationAdvisor].[rank_des] AS [rank_des], 
-    [EvaluationAdvisor].[description] AS [description]
+    [EvaluationAdvisor].[description] AS [description], 
+    [EvaluationAdvisor].[rank_count] AS [rank_count]
     FROM [dbo].[EvaluationAdvisor] AS [EvaluationAdvisor]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_AccountUser_Role" Association="Self.FK_AccountUser_Role">
@@ -619,6 +621,7 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
           <Property Name="rank_type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="rank_des" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="rank_count" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -833,6 +836,7 @@ warning 6002: The table/view 'CP25Team09.dbo.EvaluationAdvisor' does not have a 
           <EntitySetMapping Name="EvaluationAdvisor">
             <EntityTypeMapping TypeName="CP25Team09Model.EvaluationAdvisor">
               <MappingFragment StoreEntitySet="EvaluationAdvisor">
+                <ScalarProperty Name="rank_count" ColumnName="rank_count" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="rank_des" ColumnName="rank_des" />
                 <ScalarProperty Name="rank_type" ColumnName="rank_type" />
