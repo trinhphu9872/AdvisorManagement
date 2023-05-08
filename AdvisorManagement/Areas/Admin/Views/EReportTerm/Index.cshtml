@@ -24,7 +24,11 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"></h5>
+                    <h5 class="card-title">
+                        <a onclick="ReadEvol()" class="btn btn-danger" style=" margin-left: 5px; width: 150px; color: white">
+                            Danh mục đánh giá
+                        </a>
+                    </h5>
                     <div class="">
                         <label for="cars">Năm học:</label>
                         <select id="year" name="year" onchange="filterFunction()">
@@ -57,27 +61,57 @@
             </div>
         </div>
     </div>
+
+    @* show *@
+    <div id="modalEvol" class="modal fade" role="document">
+        <div class="modal-dialog" style="max-width: 60%;" role="document">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
+                <div class="modal-header">
+                    <button onclick="createEvol()" class="btn btn-info">Thêm <i class="fas fa-tasks"></i></button>
+
+                    <input hidden id="id_evol" value="" />
+                    <h4 class="modal-title">Tiêu chí đánh giá</h4>
+                </div>
+                <div class="table-responsive" style="margin-top:10px">
+                    <table width="100%" id="zero_config_evol" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">STT</th>
+                                <th style="text-align:center">Loai</th>
+                                <th style="text-align:center">Mô tả</th>
+                                <th style="text-align:center">Đánh giá</th>
+                                <th style="text-align:center">Từ</th>
+                                <th style="text-align:center">Khoảng</th>
+                                <th style="text-align:center">Chỉnh sửa</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="showEvol" class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    @* create *@
     <div id="modalCreate" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Thêm đề mục</h4>
-                </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                        <div class="col-md-4"><span>Số đề mục:</span></div>
-                        <div class="col-md-8">
-                            <input id="txtIDTitle" type="number" class="form-control" min="1" value="1" />
-                        </div>
-                    </div>
+                    <h4 class="modal-title">Thêm đánh giá chỉ tiêu</h4>
                 </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Nội dung:</span></div>
+                        <div class="col-md-4"><span>Loai :</span></div>
                         <div class="col-md-8">
-                            <input id="txtContent" type="text" class="form-control" />
+                            <input id="txtLoai" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -85,57 +119,54 @@
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                         <div class="col-md-4"><span>Mô tả:</span></div>
                         <div class="col-md-8">
-                            <input id="txtDescribe" type="text" class="form-control" />
+                            <input id="txtMota" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Tài nguyên:</span></div>
+                        <div class="col-md-4"><span>Đánh giá:</span></div>
                         <div class="col-md-8">
-                            <input id="txtSource" type="text" class="form-control" />
+                            <input id="txtDanhGia" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Ghi chú:</span></div>
+                <div class="row">
+                    <div class="col-md-6" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Từ:</span></div>
                         <div class="col-md-8">
-                            <input id="txtNote" type="text" class="form-control" />
+                            <input id="txtTu" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Khoảng:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtKhoang" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button id="btnUpload" class="btn btn-primary" type="submit">Thêm</button>
+                    <button id="btnCreate" class="btn btn-success" type="submit">Thêm</button>
                 </div>
-
             </div>
         </div>
     </div>
-
+    @* Update *@
     <div id="modalUpdate" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Chỉnh sửa đề mục</h4>
+                    <h4 class="modal-title">Chỉnh sửa tiêu chí </h4>
                 </div>
-                <input hidden id="id_title" value="" />
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                        <div class="col-md-4"><span>Số đề mục:</span></div>
-                        <div class="col-md-8">
-                            <input id="up_Title" type="number" class="form-control" min="1" />
-                        </div>
-                    </div>
-                </div>
+                <input hidden id="id_edit" value="" />
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Nội dung:</span></div>
+                        <div class="col-md-4"><span>Loai :</span></div>
                         <div class="col-md-8">
-                            <input id="up_Content" type="text" class="form-control" />
+                            <input id="txtLoaiE" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -143,28 +174,32 @@
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                         <div class="col-md-4"><span>Mô tả:</span></div>
                         <div class="col-md-8">
-                            <input id="up_Describe" type="text" class="form-control" />
+                            <input id="txtMotaE" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Tài nguyên:</span></div>
+                        <div class="col-md-4"><span>Đánh giá:</span></div>
                         <div class="col-md-8">
-                            <input id="up_Source" type="text" class="form-control" />
+                            <input id="txtDanhGiaE" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Ghi chú:</span></div>
+                <div class="row">
+                    <div class="col-md-6" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Từ:</span></div>
                         <div class="col-md-8">
-                            <input id="up_Note" type="text" class="form-control" />
+                            <input id="txtTuE" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                        <div class="col-md-4"><span>Khoảng:</span></div>
+                        <div class="col-md-8">
+                            <input id="txtKhoangE" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
-
-
 
                 <div class="modal-footer">
                     <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -175,37 +210,7 @@
         </div>
     </div>
 
-    @*<div id="modalAssignment" class="modal fade" role="dialog">
-            <div class="modal-dialog">
 
-                 Modal content
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Phân quyền template</h4>
-                    </div>
-                    <input hidden id="id_title" value="" />
-                    <div class="">
-                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                            <div class="col-md-4"><span>Lớp:</span></div>
-                            <div class="col-md-8">
-                                <select id="class" name="class" onchange="myFunction()">
-                                    @foreach (var item in listClass)
-                                    {
-                                        <option value="@item.id">@item.class_code - @item.semester_name</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                        <button id="btnAssingment" class="btn btn-primary">Phân quyền</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>*@
     <!-- ============================================================== -->
     <!-- End PAge Content -->
     <!-- ============================================================== -->
@@ -285,6 +290,51 @@
                 });
             }).draw();
         }
+        function ReadEvol() {
+                jQuery('#showEvol').empty();
+                $("#zero_config_evol").dataTable().fnDestroy();
+                dataTable = $("#zero_config_evol").DataTable({
+                 'ajax': {
+                        'url': '@Url.Action("GetEvolTable", "EReportTerm")',
+                        'type': 'get',
+                        'datatype': 'json',
+                 },
+                 'columns':
+                     [
+                         { 'data': 'id', 'width': '5%', },
+                         { 'data': 'rank_type', 'width': '10%'},
+                         { 'data': 'description', 'width': '40%' },
+                         { 'data': 'rank_des', 'width': '40%' },
+                         { 'data': 'rank_count', 'width': '10%' },
+                         { 'data': 'rank_end', 'width': '10%' },
+                         {
+                             'data': 'id', 'width': '30%', 'render': function (data) {
+                                 return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > @*<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
+                             }
+
+                         }
+                     ],
+                    "autoWidth": false,
+                    "aLengthMenu": [[-1], ["All"]],
+                    "bLengthChange": false,
+                    "bPaginate": false,
+                    "bInfo": false,
+               });
+                dataTable.on('order.dt search.dt', function () {
+                       let i = 1;
+                       dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                           this.data(i++);
+                       });
+                }).draw();
+                $('#showEvol').append(`
+                            <button onclick="hideRead()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>`);
+                $("#modalEvol").modal('show');
+            }
+
+            function hideRead() {
+                $("#modalEvol").modal('hide');
+            }
+
 
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
@@ -294,6 +344,205 @@
                 });
             });
         });
+        // thêm đánh giá
+        function createEvol() {
+            $("#modalCreate").modal("show");
+            this.hideRead();
+        }
+        function HideModal() {
+            $("#modalCreate").modal("hide");
+        }
+        $(document).ready(function () {
+            $('#btnCreate').click(function () {
+                let formData = new FormData();
+                let jsonData = {
+                    rank_type  :  $("#txtLoai").val(),
+                    description  :  $("#txtMota").val(),
+                    rank_des  :  $("#txtDanhGia").val(),
+                    rank_count  :  $("#txtTu").val(),
+                    rank_end  :  $("#txtKhoang").val()
+                };
+                for (const [key, value] of Object.entries(jsonData)) {
+                    formData.append(key, value);
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateApi", "EReportTerm")',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (data) {
+                        if (data.success == false) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.message,
+                            })
+                        } else {
+                            $("#modalCreate").modal("hide");
+                            Swal.fire({
+                                icon: "success",
+                                title: 'Thêm tiêu chí thành công',
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (result.value) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    }
+                 })
+            })
+         })
+
+         // cập nhật thông tin đánh giá
+        function Update(id_title) {
+            this.hideRead();
+
+            $.ajax({
+                url:'@Url.Action("Details", "EReportTerm")' ,
+                type: 'get',
+                data: {
+                    id: id_title
+                },
+                success: function (data) {
+                    if (data.success == true) {
+                        console.log(data);
+                        $('#modalUpdate').modal("show");
+                        $('#id_edit').val(id_title);
+                        $("#txtLoaiE").val(data.data.rank_type);
+                        $("#txtMotaE").val(data.data.description);
+                        $("#txtDanhGiaE").val(data.data.rank_des);
+                        $("#txtTuE").val(data.data.rank_count);
+                        $("#txtKhoangE").val(data.data.rank_end);
+
+                    } else {
+                        alert(data.message);
+                    }
+                }
+
+            })
+        }
+        $(document).ready(function () {     //Cập nhật thông tin người dùng
+            $('#btnEdit').click(function () {
+                let formDataEdt = new FormData();
+                let jsonDataEdt = {
+                    id: $("#id_edit").val(),
+                    rank_type: $("#txtLoaiE").val(),
+                    description: $("#txtMotaE").val(),
+                    rank_des: $("#txtDanhGiaE").val(),
+                    rank_count: $("#txtTuE").val(),
+                    rank_end: $("#txtKhoangE").val()
+                };
+                for (const [key, value] of Object.entries(jsonDataEdt)) {
+                    formDataEdt.append(key, value);
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EditApi", "EReportTerm")',
+                    contentType: false,
+                    processData: false,
+                    data: formDataEdt,
+                    success: function (data) {
+                            if (data.success == true) {
+                                $('#modalUpdate').modal('hide');
+                                Swal.fire({
+                                    icon: "success",
+                                    title: 'Tiêu chí đã cập nhập thành công',
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Tiêu chí đã cập nhật thành công',
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                })
+                            }
+                     }
+                })
+
+            })
+        })
+        function HideModalUp() {
+            $("#modalUpdate").modal("hide");
+    }
+        // xoá thông tin người dùng
+    function Delete (id_std) {
+        Swal.fire({
+            title: "Bạn thực sự muốn xóa tiêu chí này?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                 $.ajax({
+                        url: '@Url.Action("DeleteApi", "EReportTerm")',
+                        type: 'POST',
+                        data: {
+                            id: id_std
+                        },
+                        success: function (data) {
+                            if (data.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: 'Tiêu chí này đã xóa thành công',
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                 })
+                             } else {
+                                 Swal.fire(
+                                     'Thông báo',
+                                     data.message
+                                 );
+                             }
+                        }
+                  })
+                //Swal.fire(
+                //    "Deleted!",
+                //    "Your file has been deleted.",
+                //    "success",
+                //)
+                // result.dismiss can be "cancel", "overlay",
+                // "close", and "timer"
+            } else if (result.dismiss === "cancel") {
+
+            }
+        });
+    }
+        // upload
+ 
 
 
 </script>

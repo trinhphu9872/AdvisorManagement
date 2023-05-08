@@ -31,7 +31,7 @@ namespace AdvisorManagement.Models.ViewModel
             this.count = cou;
             this.status = statusMess;
             // base
-
+            this.id = plan.id;
             this.number_title = plan.number_title;
             this.content = plan.content;
             this.describe= plan.describe;
