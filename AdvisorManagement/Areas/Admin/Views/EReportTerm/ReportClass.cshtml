@@ -1,7 +1,7 @@
 ﻿@using AdvisorManagement.Models;
 
 @{
-    ViewBag.Title = "ReportClass";
+    ViewBag.Title = "Báo cáo học kì";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
     var id_class = (int)Session["id_class"];
     IEnumerable<Semester> listSemester = ViewBag.hocky as IEnumerable<Semester>;
@@ -46,7 +46,17 @@
                             <div>
                                 Mô tả: @item.description
                             </div>
+                            if (int.Parse(Session["RoleName"].ToString()) != 1)
+                            {
+                                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                                    <div class="col-md-4"><span>Giảng viên tự đánh giá:</span></div>
+                                    <div class="col-md-4">
+                                        <input id="txtDanhGia" type="text" class="form-control" maxlength="1" />
+                                    </div>
+                                </div>
+                            }
                         }
+
 
                     </h5>
                     <div style="margin-top:10px">
@@ -94,8 +104,8 @@
                                 <th style="text-align:center">Loai</th>
                                 <th style="text-align:center">Mô tả</th>
                                 <th style="text-align:center">Đánh giá</th>
-                                <th style="text-align:center">Khoảng</th>
-                                <th style="text-align:center">Từ</th>
+                                <th style="text-align:center">Khoảng bắt đầu</th>
+                                <th style="text-align:center">Khoảng kết thúc</th>
 
 
                             </tr>
@@ -222,16 +232,18 @@
                  },
              },
 
-    });
+             });
             function ExportTemplate() {
-            input = document.getElementById("semester");
-            let id = 2023;
+                input = document.getElementById("semester");
+                let check = document.getElementById("txtDanhGia") ? document.getElementById("txtDanhGia").value : null ;
+                let id = 2023;
             $.ajax({
                 url: '@Url.Action("ExportTemplateCode", "EReportTerm")',
                 type: 'POST',
                 data: {
                     year: id,
-                    id_class : @id_class
+                    id_class: @id_class,
+                    phanLoai : check
 
                 },
                 /*contentType: "application/json; charset=utf-8", */

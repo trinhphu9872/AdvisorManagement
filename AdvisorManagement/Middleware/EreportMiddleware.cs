@@ -213,7 +213,7 @@ namespace AdvisorManagement.Middleware
         //    return pck;
         //}
 
-        public ExcelPackage ExportTemplate(ExcelPackage pck,List<ReportCustom> reports , string class_code, string us_name, int? year)
+        public ExcelPackage ExportTemplate(ExcelPackage pck,List<ReportCustom> reports , string class_code, string us_name, int? year, string danhGia)
         {
             pck.Workbook.Properties.Title = class_code;
             var ws = pck.Workbook.Worksheets.Add(class_code);
@@ -225,14 +225,14 @@ namespace AdvisorManagement.Middleware
             ws.Column(4).Width = 35; // tài nguyên chuẩn bị
             ws.Column(5).Width = 30; // hồ sơ
             ws.Column(6).Width = 30; // tiêu chí
-            ws.Column(7).Width = 20; // trang thái
+            //ws.Column(7).Width = 20; // trang thái
 
             ws.Column(2).Style.WrapText = true;
             ws.Column(3).Style.WrapText = true;
             ws.Column(4).Style.WrapText = true;
             ws.Column(5).Style.WrapText = true;
             ws.Column(6).Style.WrapText = true;
-            ws.Column(7).Style.WrapText = true;
+            //ws.Column(7).Style.WrapText = true;
 
             ws.Column(1).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
             ws.Column(2).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
@@ -240,7 +240,7 @@ namespace AdvisorManagement.Middleware
             ws.Column(4).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
             ws.Column(5).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
             ws.Column(6).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-            ws.Column(7).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;          
+            //ws.Column(7).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;          
 
             ws.Row(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
             ws.Row(6).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
@@ -254,53 +254,63 @@ namespace AdvisorManagement.Middleware
             ws.Cells[2, 1, 2, 2].Style.Font.Size = 12;
             ws.Cells[2, 1, 2, 2].Style.Font.Bold = true;
             //
-            ws.Cells[3, 1, 3, 2].Merge = true;
-            ws.Cells[3, 1, 3, 2].Value = "Họ và tên giảng viên "+ serviceAccount.getTextName(us_name);
-            ws.Cells[3, 1, 3, 2].Style.Font.Size = 12;
-            ws.Cells[3, 1, 3, 2].Style.Font.Bold = true;
+            //ws.Cells[3, 1, 3, 2].Merge = true;
+            //ws.Cells[3, 1, 3, 2].Value = "Họ và tên giảng viên "+ serviceAccount.getTextName(us_name);
+            //ws.Cells[3, 1, 3, 2].Style.Font.Size = 12;
+            //ws.Cells[3, 1, 3, 2].Style.Font.Bold = true;
+            //
+            //
+            ws.Cells[4, 1, 4, 6].Merge = true;
+            ws.Cells[4, 1, 4, 6].Value = "BÁO CÁO KẾ HOẠCH HOẠT ĐỘNG CỐ VẤN HỌC TẬP";
+            ws.Cells[4, 1, 4, 6].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Cells[4, 1, 4, 6].Style.Font.Size = 14;
+            ws.Cells[4, 1, 4, 6].Style.Font.Bold = true;
+            //
+            ws.Cells[5, 1, 5, 6].Merge = true;
+            ws.Cells[5, 1, 5, 6].Value = "NĂM HỌC " + (year - 1) + " - " + year;
+            ws.Cells[5, 1, 5, 6].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Cells[5, 1, 5, 6].Style.Font.Size = 14;
+            ws.Cells[5, 1, 5, 6].Style.Font.Bold = true;
+            //
+            ws.Cells[6, 1, 6, 6].Merge = true;
+            ws.Cells[6, 1, 6, 6].Value = "Họ và tên giảng viên " + serviceAccount.getTextName(us_name);
+            ws.Cells[6, 1, 6, 6].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            ws.Cells[6, 1, 6, 6].Style.Font.Size = 14;
+            ws.Cells[6, 1, 6, 6].Style.Font.Bold = false;
 
-            ws.Cells[4, 1, 4, 7].Merge = true;
-            ws.Cells[4, 1, 4, 7].Value = "BÁO CÁO KẾ HOẠCH HOẠT ĐỘNG CỐ VẤN HỌC TẬP";
-            ws.Cells[4, 1, 4, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-            ws.Cells[4, 1, 4, 7].Style.Font.Size = 14;
-            ws.Cells[4, 1, 4, 7].Style.Font.Bold = true;
-            ws.Cells[5, 1, 5, 7].Merge = true;
-            ws.Cells[5, 1, 5, 7].Value = "NĂM HỌC " + (year - 1) + " - " + year;
-            ws.Cells[5, 1, 5, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-            ws.Cells[5, 1, 5, 7].Style.Font.Size = 14;
-            ws.Cells[5, 1, 5, 7].Style.Font.Bold = true;
+        
 
             // title
             // stt
-            ws.Cells[6, 1, 6, 1].Merge = true;
-            ws.Cells[6, 1, 6, 1].Value = "STT";
-            ws.Cells[6, 1, 6, 1].Style.Font.Bold = true;
-            ws.Cells[6, 2, 6, 2].Merge = true;
+            ws.Cells[7, 1, 7, 1].Merge = true;
+            ws.Cells[7, 1, 7, 1].Value = "STT";
+            ws.Cells[7, 1, 7, 1].Style.Font.Bold = true;
+            ws.Cells[7, 2, 7, 2].Merge = true;
             // nd
-            ws.Cells[6, 2, 6, 2].Value = "NỘI DUNG";
-            ws.Cells[6, 2, 6, 2].Style.Font.Bold = true;
-            ws.Cells[6, 3, 6, 3].Merge = true;
+            ws.Cells[7, 2, 7, 2].Value = "NỘI DUNG";
+            ws.Cells[7, 2, 7, 2].Style.Font.Bold = true;
+            ws.Cells[7, 3, 7, 3].Merge = true;
             // mô tả
-            ws.Cells[6, 3, 6, 3].Value = "MÔ TẢ CÔNG VIỆC";
-            ws.Cells[6, 3, 6, 3].Style.Font.Bold = true;
-            ws.Cells[6, 4, 6, 4].Merge = true;
+            ws.Cells[7, 3, 7, 3].Value = "MÔ TẢ CÔNG VIỆC";
+            ws.Cells[7, 3, 7, 3].Style.Font.Bold = true;
+            ws.Cells[7, 4, 7, 4].Merge = true;
             // tai nguye
-            ws.Cells[6, 4, 6, 4].Value = "TÀI NGUYÊN CHUẨN BỊ";
-            ws.Cells[6, 4, 6, 4].Style.Font.Bold = true;
-            ws.Cells[6, 5, 6, 5].Merge = true;
+            ws.Cells[7, 4, 7, 4].Value = "TÀI NGUYÊN CHUẨN BỊ";
+            ws.Cells[7, 4, 7, 4].Style.Font.Bold = true;
+            ws.Cells[7, 5, 7, 5].Merge = true;
             // tai nguye
-            ws.Cells[6, 5, 6, 5].Value = "HỒ SƠ MINH CHỨNG";
-            ws.Cells[6, 5, 6, 5].Style.Font.Bold = true;
-            ws.Cells[6, 6, 6, 6].Merge = true;
+            ws.Cells[7, 5, 7, 5].Value = "HỒ SƠ MINH CHỨNG";
+            ws.Cells[7, 5, 7, 5].Style.Font.Bold = true;
+            ws.Cells[7, 6, 7, 6].Merge = true;
             // tai nguye
-            ws.Cells[6, 6, 6, 6].Value = "TIÊU CHÍ ĐÁNH GIÁ";
-            ws.Cells[6, 6, 6, 6].Style.Font.Bold = true;
-            ws.Cells[6, 7, 6, 7].Merge = true;
-            // tai nguye
-            ws.Cells[6, 7, 6, 7].Value = "TRẠNG THÁI";
-            ws.Cells[6, 7, 6, 7].Style.Font.Bold = true;
+            ws.Cells[7, 6, 7, 6].Value = "TRẠNG THÁI";
+            ws.Cells[7, 6, 7, 6].Style.Font.Bold = true;
+            ws.Cells[7, 7, 7, 7].Merge = true;
+            //// tai nguye
+            //ws.Cells[6, 7, 6, 7].Value = "TRẠNG THÁI";
+            //ws.Cells[6, 7, 6, 7].Style.Font.Bold = true;
 
-            int rowStart = 7;
+            int rowStart = 8;
             bool check = false;
             int stt = 0;
             string content = "";
@@ -319,8 +329,8 @@ namespace AdvisorManagement.Middleware
                             ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
                             ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
                             ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
-                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
-                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.status;
+                            //ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
                             countSTT++;
                             countContent++;
                             countSource++;
@@ -330,8 +340,8 @@ namespace AdvisorManagement.Middleware
                             ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
                             ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
                             ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
-                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
-                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.status;
+                            //ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
                             countSTT++;
                             countContent++;
                         }
@@ -344,8 +354,8 @@ namespace AdvisorManagement.Middleware
                             ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
                             ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
                             ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
-                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
-                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.status;
+                            //ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
                             countSTT++;
                             countContent++;
                             countSource++;
@@ -356,8 +366,8 @@ namespace AdvisorManagement.Middleware
                             ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
                             ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
                             ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
-                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
-                            ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                            ws.Cells[string.Format("F{0}", rowStart)].Value = item.status;
+                            //ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
                             countSTT++;
                             countContent++;
                         }                                               
@@ -386,8 +396,8 @@ namespace AdvisorManagement.Middleware
                     ws.Cells[string.Format("C{0}", rowStart)].Value = item.describe;
                     ws.Cells[string.Format("D{0}", rowStart)].Value = item.source;
                     ws.Cells[string.Format("E{0}", rowStart)].Value = item.group_file;
-                    ws.Cells[string.Format("F{0}", rowStart)].Value = item.note;
-                    ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
+                    ws.Cells[string.Format("F{0}", rowStart)].Value = item.status;
+                    //ws.Cells[string.Format("G{0}", rowStart)].Value = item.status;
                 }              
                 rowStart++;
                 stt = (int)item.number_title;
@@ -398,10 +408,12 @@ namespace AdvisorManagement.Middleware
 
             ws.Column(10).Style.Font.Size = 13;
             /* ws.Cells["A:AZ"].AutoFitColumns();*/
-            ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-            ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-            ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-            ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            ws.Cells[5, 1, rowStart - 1, 6].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            ws.Cells[5, 1, rowStart - 1, 6].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            ws.Cells[5, 1, rowStart - 1, 6].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            ws.Cells[5, 1, rowStart - 1, 6].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            ws.Cells[rowStart + 1, 2].Value = "Giảng viên tự xếp loại: "  + danhGia;
+            ws.Cells[rowStart + 1, 2].Style.Font.Bold = true;
             ws.Cells[rowStart + 2, 2].Value = "Trưởng khoa";
             ws.Cells[rowStart + 2, 2].Style.Font.Bold = true;
 

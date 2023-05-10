@@ -1,37 +1,29 @@
 ﻿@model IEnumerable<AdvisorManagement.Models.AccountUser>
 
 @{
-    ViewBag.Title = "Quản Lí Cố Vấn";
+    ViewBag.Title = "Quản lí người dùng";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 }
-
-
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title mb-0">Danh Sách Cố Vấn Học Tập</h5>
+                <h5 class="card-title">Danh sách người dùng hệ thống</h5>
             </div>
-            <div class="page-breadcrumb">
-                <div class="row">
-
-                    <div class="col-12 d-flex no-block align-items-center">
-                        <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 200px;color:white">
-                            Thêm cố vấn học tập<i style="margin-left:5px" class="fas fa-plus"></i>
-                        </a>
-                        <div class="ms-auto text-end">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                </ol>
-                            </nav>
-                        </div>
+            <div class="row">
+                <div class="col-12 d-flex no-block align-items-center">
+                    <a onclick="CreateTitle()" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 200px;color:white">
+                        Thêm người dùng<i style="margin-left:5px" class="fas fa-plus"></i>
+                    </a>
+                    <div class="ms-auto text-end">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            </ol>
+                        </nav>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title"></h5>
@@ -93,7 +85,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Thêm cố vấn học tập</h4>
+                <h4 class="modal-title">Thêm người dùng</h4>
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
@@ -105,7 +97,7 @@
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                    <div class="col-md-4"><span>Họ và tên giảng viên:</span></div>
+                    <div class="col-md-4"><span>Họ và tên :</span></div>
                     <div class="col-md-8">
                         <input id="txtName" type="text" class="form-control" />
                     </div>
@@ -113,7 +105,7 @@
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                    <div class="col-md-4"><span>Số điện thoại giảng viên:</span></div>
+                    <div class="col-md-4"><span>Số điện thoại :</span></div>
                     <div class="col-md-8">
                         <input id="txtPhone" type="text" class="form-control" />
                     </div>
@@ -121,7 +113,7 @@
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                    <div class="col-md-4"><span>Địa chỉ giảng viên:</span></div>
+                    <div class="col-md-4"><span>Địa chỉ :</span></div>
                     <div class="col-md-8">
                         <input id="textAddress" type="text" class="form-control" />
                     </div>

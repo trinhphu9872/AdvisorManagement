@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -123,15 +124,30 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult ExportTemplateCode(int? year, int id_class)
+        public JsonResult ExportTemplateCode(int? year, int id_class, string phanLoai = null)
         {
             var listPlan = db.PlanAdvisor.Where(x => x.year == year).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
             List<PlanAdvisor> template = (List<PlanAdvisor>)listPlan;
+            if (serviceAccount.getRoleTextName(User.Identity.Name) != "Admin" )
+            {
+                if (phanLoai == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng đánh giá" });
+                }
+                if (phanLoai.Length > 1)
+                {
+                    return Json(new { success = false, message = "Vui lòng đánh giá theo dạng 1 kí tự theo chuẩn" });
+                }
+                if (this.checkAplha(phanLoai))
+                {
+                    return Json(new { success = false, message = "Vui lòng đánh giá theo loại tiêu chí theo dạng A - Z" });
+                }
+            }
             try
             {
                 using (ExcelPackage pck = new ExcelPackage())
                 {
-                    var package = serviceEReport.ExportTemplate(pck,this.getData(id_class),"K25-Test", User.Identity.Name.ToString(),year);
+                    var package = serviceEReport.ExportTemplate(pck,this.getData(id_class),"Báo cáo" + db.VLClass.FirstOrDefault(x => x.id == id_class).advisor_code, User.Identity.Name.ToString(),year, phanLoai);
                     var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BaoCaoKehoachCVHT-" + db.VLClass.FirstOrDefault(x => x.id == id_class ).class_code.ToString() +"-" +(year - 1) + "-" + year + ".xlsx");
                     return Json(fileOject, JsonRequestBehavior.AllowGet);
                 }
@@ -177,6 +193,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Vui lòng điền loại tiêu chí" });
             }
+            if (avl.rank_type.Length > 1)
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng 1 kí tự theo chuẩn" });
+            }
+            if (!this.checkAplha(avl.rank_type))
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng A - Z" });
+            }
             if (avl.description == null)
             {
                 return Json(new { success = false, message = "Vui lòng điền mô tả tiêu chí" });
@@ -192,6 +216,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (avl.rank_end == null)
             {
                 return Json(new { success = false, message = "Vui lòng điền giá trị kết thúc" });
+            }
+            if (avl.rank_count < 0 ||  avl.rank_end < 0)
+            {
+                return Json(new { success = false, message = "Vui lòng điền giá trị lớn hơn 0 tại hai khoảng" });
+            }
+            if (avl.rank_count > avl.rank_end)
+            {
+                return Json(new { success = false, message = "Vui lòng điền khoảng bắt đầu nhỏ hơn khoảng kết thúc" });
             }
             var userCheck = db.EvaluationAdvisor.Where(x => x.rank_type == avl.rank_type).ToList().Count();
             if (userCheck > 0)
@@ -210,6 +242,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Vui lòng điền loại tiêu chí" });
             }
+            if (avl.rank_type.Length > 1)
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng 1 kí tự theo chuẩn" });
+            }
+            if (this.checkAplha(avl.rank_type))
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng A - Z" });
+            }
             if (avl.description == null)
             {
                 return Json(new { success = false, message = "Vui lòng điền mô tả tiêu chí" });
@@ -225,6 +265,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (avl.rank_end == null)
             {
                 return Json(new { success = false, message = "Vui lòng điền giá trị kết thúc" });
+            }
+            if (avl.rank_count < 0 || avl.rank_end < 0)
+            {
+                return Json(new { success = false, message = "Vui lòng điền giá trị lớn hơn 0 tại hai    khoảng" });
+            }
+            if (avl.rank_count > avl.rank_end)
+            {
+                return Json(new { success = false, message = "Vui lòng điền khoảng bắt đầu nhỏ hơn khoảng kết thúc" });
             }
             var lsEvol = db.EvaluationAdvisor.FirstOrDefault(x => x.id == avl.id);
             if (lsEvol == null)
@@ -251,6 +299,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             db.EvaluationAdvisor.Remove(userCheck);
             db.SaveChanges();
             return Json(new { success = true, message = "Xoá dữ liêu tiêu chí thành công" });
+        }
+        // check aplha
+        private bool checkAplha(string aplha)
+        {
+            string regexPattern = "^[a-zA-Z]$";
+            return Regex.IsMatch(aplha, regexPattern);
         }
         // upload
 
