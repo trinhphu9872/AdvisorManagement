@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -38,6 +39,97 @@ namespace AdvisorManagement.Middleware
             }
             return db.Role.SingleOrDefault(x => x.id == 4).role_name;
         }
+        // Check User
+        public string UserProfileCheck(string mail, AccountUser account)
+        {
+            try
+            {
+                string Message = "";
+                if (this.adMailValid(mail))
+                {
+                    switch (account.id_role)
+                    {
+                        case 1:
+                            Message += this.AdminProfile(mail ,account);
+                            break;
+                        case 2:
+                            Message += this.AdvisorProfile(mail, account);
+                            break;
+                        default:
+                            Message += this.StudentProfile(mail, account);
+                            break;
+                    }
+                }
+                return Message;
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+        }
+        // Register Admin Profile 
+        public string AdminProfile(string mail, AccountUser account)
+        {
+            try
+            {
+                AccountInitModel itemAccount = new AccountInitModel();
+                itemAccount.role_id = 1;
+                itemAccount.user_name = account.user_name;
+                itemAccount.img_profile = account.img_profile;
+                itemAccount.phone = account.phone;
+
+
+                if (this.adMailValid(mail))
+                {
+                    itemAccount.user_code = mail.Split('@')[0] + "_cntt";
+                }
+                else
+                {
+                    itemAccount.user_code = mail.Split('@')[0];
+                }
+                writeRecordUser(itemAccount, mail);
+                db.SaveChanges();
+                return "Đăng kí thành công admin vào trong hệ thống";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        // Register Student Profile 
+        public string StudentProfile(string mail, AccountUser account)
+        {
+            try
+            {
+                AccountInitModel itemAccount = new AccountInitModel();
+                itemAccount.role_id = 3;
+                itemAccount.user_name = account.user_name;
+                itemAccount.img_profile = account.img_profile;
+                itemAccount.phone = account.phone;
+
+                if (this.stuMailValid(mail))
+                {
+                    itemAccount.user_code = mail.Split('@')[0];
+                }
+                else
+                {
+                    itemAccount.user_code = mail.Split('@')[0];
+                }
+                writeRecordUser(itemAccount, mail);
+                Student student = new Student();
+                student.student_code = itemAccount.user_code;
+                student.account_id = getID();
+                student.status_id = 1;
+                db.Student.Add(student);
+                db.SaveChanges();
+                return "Đăng kí thành công học sinh vào trong hệ thống";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
 
         // Register Advisor Profile
         public string AdvisorProfile(string mail, AccountUser account)
@@ -47,9 +139,11 @@ namespace AdvisorManagement.Middleware
                 AccountInitModel itemAccount = new AccountInitModel();
                 itemAccount.role_id = 2;
                 itemAccount.user_name = account.user_name;
+                itemAccount.img_profile = account.img_profile;
+                itemAccount.phone = account.phone;
                 if (this.adMailValid(mail))
                 {
-                    itemAccount.user_code = mail.Split('@')[0] + "_cntt"; 
+                    itemAccount.user_code = mail.Split('@')[0] + "_cntt";
                 }
                 else
                 {
@@ -76,7 +170,9 @@ namespace AdvisorManagement.Middleware
             var objectTest = logData;
             string[] data = objectTest.Claims.Where(x => x.Type == "name").First().Value.Split('-');
             AccountInitModel itemAccount = new AccountInitModel();
-            string [] mailGet = logData.Name.Trim().Split('@');
+            itemAccount.img_profile = string.Empty;
+
+            string[] mailGet = logData.Name.Trim().Split('@');
 
             if (mailGet[mailGet.Length - 1] == "vlu.edu.vn")
             {
@@ -113,6 +209,8 @@ namespace AdvisorManagement.Middleware
             accountUser.email = mail;
             accountUser.id_role = data.role_id;
             accountUser.user_code = data.user_code;
+            accountUser.img_profile = data.img_profile;
+            accountUser.phone = data.phone;
             accountUser.user_name = data.user_name;
             accountUser.create_time = DateTime.Now;
             accountUser.update_time = DateTime.Now;
@@ -482,6 +580,12 @@ namespace AdvisorManagement.Middleware
         {
             string advisorMailPattems = @"^[^@\s]+@vlu\.edu\.vn$";
             return Regex.IsMatch(mail, advisorMailPattems) ? true : false;
+        }
+
+        public bool stuMailValid(string mail)
+        {
+            string studnetPattems = @"^[^@\s]+@(vanlanguni\.vn|vlu\.edu\.vn)$";
+            return Regex.IsMatch(mail, studnetPattems) ? true : false;
         }
 
     }

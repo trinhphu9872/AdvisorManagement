@@ -1,8 +1,9 @@
 ﻿@model IEnumerable<AdvisorManagement.Models.AccountUser>
-
+@using AdvisorManagement.Models;
 @{
     ViewBag.Title = "Quản lí người dùng";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+    IEnumerable<Role> rolelist = ViewBag.id_role as IEnumerable<Role>;
 }
 <div class="row">
     <div class="col-12">
@@ -90,7 +91,7 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Email văn lang:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="txtEmail" type="text" class="form-control" />
                     </div>
                 </div>
@@ -98,7 +99,7 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Họ và tên :</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="txtName" type="text" class="form-control" />
                     </div>
                 </div>
@@ -106,7 +107,7 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Số điện thoại :</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="txtPhone" type="text" class="form-control" />
                     </div>
                 </div>
@@ -114,8 +115,30 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Địa chỉ :</span></div>
-                    <div class="col-md-8">
-                        <input id="textAddress" type="text" class="form-control" />
+                    <div class="col-md-11">
+                        <input id="txtAddress" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Hình ảnh :</span></div>
+                    <div class="col-md-11">
+                        <img src="#" id="imagePreview" />
+                        <input type="file" name="txtImage" id="txtImage" accept="image/*" class="form-control"  />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Phân quyền :</span></div>
+                    <div class="col-md-11">
+                        <select id="txt_id_role" name="txt_id_role" style=" width: 155px; height: 35px; text-align: center; font-size: 15px;">
+                            @foreach (var item in rolelist)
+                            {
+                                <option value="@item.id">@item.role_name</option>
+                            }
+                        </select>
                     </div>
                 </div>
             </div>
@@ -167,7 +190,32 @@
                     </div>
                 </div>
             </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Hình ảnh :</span></div>
+                    <div class="col-md-11">
+                        <img src="#" id="imagePreview" />
+                        <input type="file" name="txtImageEdit" id="txtImageEdit" accept="image/*" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            @*<div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Phân quyền :</span></div>
+                    <div class="col-md-11">
+                        <select id="txt_id_roleEdit" name="txt_id_roleEdit" style=" width: 155px; height: 35px; text-align: center; font-size: 15px;">
+                            @foreach (var item in rolelist)
+                            {
+                                if (item.id == 1 )
+                                {
 
+                                }
+                                <option value="@item.id">@item.role_name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>*@
             <div class="modal-footer">
                 <button onclick="HideModalUp()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 <button id="btnEdit" class="btn btn-primary" type="submit">Sửa</button>
@@ -323,13 +371,28 @@
     }
     $(document).ready(function () {
         $('#btnCreate').click(function () {
+            // validate file
+            var fileInput = $('#txtImage');
+            var file = fileInput[0].files[0];
+            // get data
+            if (!file.type.startsWith('image/')) {
+                alert('Vui lòng chọn hình ảnh.');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Vui lòng chọn file ảnh dưới 5 MB.');
+                return;
+            }
             let formData = new FormData();
             let jsonData = {
                 email    : $("#txtEmail").val(),
                 user_name: $("#txtName").val(),
                 phone    : $("#txtPhone").val(),
-                address  : $("#txtAddress").val()
+                address: $("#txtAddress").val(),
+                id_role: $("#txt_id_role").val(),
+                ImageUpload: file
             };
+
             for (const [key, value] of Object.entries(jsonData)) {
                 formData.append(key, value);
             }
@@ -349,7 +412,7 @@
                         $("#modalCreate").modal("hide");
                         Swal.fire({
                             icon: "success",
-                            title: 'Menu đã thêm thành công',
+                            title: data.message,
                             showClass: {
                                 popup: 'animate__animated animate__fadeInDown'
                             },
@@ -371,7 +434,7 @@
         let id_std = $(this).closest('tr').attr('id');
         console.log(id_std);
         Swal.fire({
-            title: "Bạn thực sự muốn xóa cố vấn này?",
+            title: "Bạn thực sự muốn xóa người dùng này?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Xóa",
@@ -389,7 +452,7 @@
                             if (data.success == true) {
                                 Swal.fire({
                                     icon: "success",
-                                    title: 'Cố vấn học tập đã xóa thành công',
+                                    title: data.message,
                                     showClass: {
                                         popup: 'animate__animated animate__fadeInDown'
                                     },
@@ -439,8 +502,22 @@
                     $("#txtNameEdit").val(data.detail_name);
                     $("#txtPhoneEdit").val(data.detail_phone);
                     $("#textAddressEdit").val(data.detail_street);
+
                 } else {
-                    alert(data.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: data.message,
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    }).then(function (result) {
+                        if (result.value) {
+                            location.reload();
+                        }
+                    })
                 }
             }
 
@@ -448,13 +525,25 @@
     })
     $(document).ready(function () {     //Cập nhật thông tin người dùng
         $('#btnEdit').click(function () {
+            var fileInput = $('#txtImageEdit');
+            var file = fileInput[0].files[0];
+            // get data
+            if (!file.type.startsWith('image/')) {
+                alert('Vui lòng chọn hình ảnh.');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Vui lòng chọn file ảnh dưới 5 MB.');
+                return;
+            }
             let formDataEdt = new FormData();
             let jsonDataEdt = {
                 id: $("#id_edit").val(),
                 email: $("#txtEmailEdit").val(),
                 user_name: $("#txtNameEdit").val(),
                 phone: $("#txtPhoneEdit").val(),
-                address: $("#txtAddressEdit").val()
+                address: $("#txtAddressEdit").val(),
+                ImageUpload: file
             };
             for (const [key, value] of Object.entries(jsonDataEdt)) {
                 formDataEdt.append(key, value);
@@ -470,7 +559,7 @@
                             $('#modalUpdate').modal('hide');
                             Swal.fire({
                                 icon: "success",
-                                title: 'Menu đã cập nhập thành công',
+                                title: data.message,
                                 showClass: {
                                     popup: 'animate__animated animate__fadeInDown'
                                 },
@@ -485,7 +574,7 @@
                         } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Menu đã thêm thành công',
+                                title: data.message,
                                 showClass: {
                                     popup: 'animate__animated animate__fadeInDown'
                                 },
