@@ -3,10 +3,16 @@ using AdvisorManagement.Models;
 using AdvisorManagement.Models.ViewModel;
 using Microsoft.Ajax.Utilities;
 using OfficeOpenXml;
+using Spire.Xls;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.SqlTypes;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -57,6 +63,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            ViewBag.hocky = db.Semester.DistinctBy(x => x.semester_name).ToList();
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.Evol = this.getDes(id);
@@ -117,15 +124,30 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult ExportTemplateCode(int? year, int id_class)
+        public JsonResult ExportTemplateCode(int? year, int id_class, string phanLoai = null)
         {
             var listPlan = db.PlanAdvisor.Where(x => x.year == year).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
             List<PlanAdvisor> template = (List<PlanAdvisor>)listPlan;
+            if (serviceAccount.getRoleTextName(User.Identity.Name) != "Admin" )
+            {
+                if (phanLoai == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng đánh giá" });
+                }
+                if (phanLoai.Length > 1)
+                {
+                    return Json(new { success = false, message = "Vui lòng đánh giá theo dạng 1 kí tự theo chuẩn" });
+                }
+                if (this.checkAplha(phanLoai))
+                {
+                    return Json(new { success = false, message = "Vui lòng đánh giá theo loại tiêu chí theo dạng A - Z" });
+                }
+            }
             try
             {
                 using (ExcelPackage pck = new ExcelPackage())
                 {
-                    var package = serviceEReport.ExportTemplate(pck,this.getData(id_class),"K25-Test", User.Identity.Name.ToString(),year);
+                    var package = serviceEReport.ExportTemplate(pck,this.getData(id_class),"Báo cáo" + db.VLClass.FirstOrDefault(x => x.id == id_class).advisor_code, User.Identity.Name.ToString(),year, phanLoai);
                     var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BaoCaoKehoachCVHT-" + db.VLClass.FirstOrDefault(x => x.id == id_class ).class_code.ToString() +"-" +(year - 1) + "-" + year + ".xlsx");
                     return Json(fileOject, JsonRequestBehavior.AllowGet);
                 }
@@ -147,6 +169,215 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             else
             {
                 return Json(new { data = lsEvol, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        // Detail
+        [HttpGet]
+        public ActionResult Details(int? id)
+        {
+            var lsEvol = db.EvaluationAdvisor.FirstOrDefault(x => x.id == id);  
+            if (lsEvol != null)
+            {
+                return Json(new { data = lsEvol, success = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { data = lsEvol, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        // Create 
+        public ActionResult CreateApi([Bind(Include = " rank_type,description,rank_des,rank_count,rank_end ")] EvaluationAdvisor avl)
+        {
+            if (avl.rank_type == null)
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí" });
+            }
+            if (avl.rank_type.Length > 1)
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng 1 kí tự theo chuẩn" });
+            }
+            if (!this.checkAplha(avl.rank_type))
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng A - Z" });
+            }
+            if (avl.description == null)
+            {
+                return Json(new { success = false, message = "Vui lòng điền mô tả tiêu chí" });
+            }
+            if (avl.rank_des == null)
+            {
+                return Json(new { success = false, message = "Vui lòng điền đánh giá tiêu chí" });
+            }
+            if (avl.rank_count == null)
+            {
+                return Json(new { success = false, message = "Vui lòng  điền giá trị bắt đầu" });
+            }
+            if (avl.rank_end == null)
+            {
+                return Json(new { success = false, message = "Vui lòng điền giá trị kết thúc" });
+            }
+            if (avl.rank_count < 0 ||  avl.rank_end < 0)
+            {
+                return Json(new { success = false, message = "Vui lòng điền giá trị lớn hơn 0 tại hai khoảng" });
+            }
+            if (avl.rank_count > avl.rank_end)
+            {
+                return Json(new { success = false, message = "Vui lòng điền khoảng bắt đầu nhỏ hơn khoảng kết thúc" });
+            }
+            var userCheck = db.EvaluationAdvisor.Where(x => x.rank_type == avl.rank_type).ToList().Count();
+            if (userCheck > 0)
+            {
+                return Json(new { success = false, message = "Tiêu chỉ đã tồn tại trong hệ thông" });
+            }
+            db.EvaluationAdvisor.Add(avl);
+            db.SaveChanges();
+            return Json(new { success = true, message = "Thêm dữ liêu tiêu chí thành công" });
+        }
+        // EDIT API 
+        [HttpPost]
+        public ActionResult EditApi([Bind(Include = "id,rank_type,description,rank_des,rank_count,rank_end ")] EvaluationAdvisor avl)
+        {
+            if (avl.rank_type == null)
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí" });
+            }
+            if (avl.rank_type.Length > 1)
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng 1 kí tự theo chuẩn" });
+            }
+            if (this.checkAplha(avl.rank_type))
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng A - Z" });
+            }
+            if (avl.description == null)
+            {
+                return Json(new { success = false, message = "Vui lòng điền mô tả tiêu chí" });
+            }
+            if (avl.rank_des == null)
+            {
+                return Json(new { success = false, message = "Vui lòng điền đánh giá tiêu chí" });
+            }
+            if (avl.rank_count == null)
+            {
+                return Json(new { success = false, message = "Vui lòng  điền giá trị bắt đầu" });
+            }
+            if (avl.rank_end == null)
+            {
+                return Json(new { success = false, message = "Vui lòng điền giá trị kết thúc" });
+            }
+            if (avl.rank_count < 0 || avl.rank_end < 0)
+            {
+                return Json(new { success = false, message = "Vui lòng điền giá trị lớn hơn 0 tại hai    khoảng" });
+            }
+            if (avl.rank_count > avl.rank_end)
+            {
+                return Json(new { success = false, message = "Vui lòng điền khoảng bắt đầu nhỏ hơn khoảng kết thúc" });
+            }
+            var lsEvol = db.EvaluationAdvisor.FirstOrDefault(x => x.id == avl.id);
+            if (lsEvol == null)
+            {
+                return Json(new { success = false, message = "Tiêu chỉ không tồn tại trong hệ thông" });
+            }
+            lsEvol.description = avl.description;
+            lsEvol.rank_end = avl.rank_end; 
+            lsEvol.rank_count   = avl.rank_count;
+            lsEvol.rank_des = avl.rank_des;
+            db.Entry(lsEvol).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(new { success = true, message = "Cập dữ liêu tiêu chí thành công" });
+        }
+        // Delete
+        [HttpPost]
+        public ActionResult DeleteApi(int id)
+        {
+            var userCheck = db.EvaluationAdvisor.FirstOrDefault(x => x.id == id);
+            if (userCheck == null)
+            {
+                return Json(new { success = false, message = "Tiêu chỉ không có tồn tại trong hệ thông" });
+            }
+            db.EvaluationAdvisor.Remove(userCheck);
+            db.SaveChanges();
+            return Json(new { success = true, message = "Xoá dữ liêu tiêu chí thành công" });
+        }
+        // check aplha
+        private bool checkAplha(string aplha)
+        {
+            string regexPattern = "^[a-zA-Z]$";
+            return Regex.IsMatch(aplha, regexPattern);
+        }
+        // upload
+
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase postedfile, string mota, string semester, int id)
+        {
+
+            try
+            {
+                string filePath = string.Empty;
+
+                if (postedfile == null || postedfile.ContentLength == 0)
+                {
+                    ViewBag.Error = "Vui lòng chọn file";
+                    return Json(new { success = false, message = "Vui lòng chọn file" });
+                }
+                else if (mota == "")
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập đầy đủ thông tin" });
+                }
+                else
+                {
+                    if (postedfile.FileName.EndsWith(".xls") || postedfile.FileName.EndsWith(".xlsx") || postedfile.FileName.EndsWith(".docx") || postedfile.FileName.EndsWith(".doc") ||
+                        postedfile.FileName.EndsWith(".pdf") || postedfile.FileName.EndsWith(".png") || postedfile.FileName.EndsWith(".jpg"))
+                    {
+                        //var id = Session["id"];
+                        var class_code = servicePlan.getClassCode((int)id);
+                        var year = db.PlanClass.Find(id).year;
+                        string path = Server.MapPath("~/Proof/" + year + "/" + class_code + "/");
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        filePath = path + Path.GetFileName(postedfile.FileName);
+                        string extension = Path.GetExtension(postedfile.FileName);
+                        /*FileInfo fi = new FileInfo(filePath)*/
+                        if (!System.IO.File.Exists(filePath))
+                        {
+                            postedfile.SaveAs(filePath);
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Tên file đã tồn tại" });
+                        }
+
+                        if (Path.GetExtension(postedfile.FileName) == ".xls")
+                        {
+                            Workbook workbook = new Workbook();
+                            workbook.LoadFromFile(filePath);
+                            workbook.SaveToFile(filePath, ExcelVersion.Version2013);
+                        }
+                        var id_account = db.AccountUser.FirstOrDefault(x => x.email == User.Identity.Name).id;
+                        ProofPlan proof = new ProofPlan();
+                        proof.content = mota;
+                        proof.semester = semester;
+                        proof.file_proof = postedfile.FileName;
+                        proof.create_time = DateTime.Now;
+                        proof.id_creator = id_account;
+                        proof.id_titleplan = (int)id;
+                        db.ProofPlan.Add(proof);
+                        db.SaveChanges();
+                        return Json(new { success = true, message = "Upload thành công" });
+
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Vui lòng chọn file hợp lệ" });
+                    }
+                }
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Vui lòng chọn file excel hoặc word" });
             }
         }
     }

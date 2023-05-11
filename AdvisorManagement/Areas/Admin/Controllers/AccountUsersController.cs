@@ -36,7 +36,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 this.init();
-                var accountUser = db.AccountUser.Include(a => a.Role).Where(x => x.id_role != 1 && x.id_role != 3).OrderBy(y => y.id_role);
+                ViewBag.id_role = db.Role.ToList();
+                var accountUser = db.AccountUser.Include(a => a.Role).OrderBy(y => y.id_role);
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
                 return View(accountUser.ToList().OrderByDescending(x=>x.create_time));
@@ -69,7 +70,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     detail_street = user.address,
                     detail_mail = user.email,
                     detail_phone = user.phone,
-                    detail_img = user.img_profile != null ?  user.img_profile.ToString() : "/Images/imageProfile/avata.png",
+                    detail_id_role = user.id_role,
+                    detail_img = user.img_profile != null ?  user.img_profile.ToString().Replace("~","") : "/Images/imageProfile/avata.png",
                     id_detailUser = user.id, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
@@ -78,11 +80,19 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public ActionResult CreateApi([Bind(Include = " email,user_name,phone,address ")]AccountUser account)
+        public ActionResult CreateApi([Bind(Include = " email,user_name,phone,address,ImageUpload,id_role")]AccountUser account)
         {
             
             if (serviceAccount.getPermission(User.Identity.Name, routePermission)  )
             {
+                if (account.ImageUpload != null)
+                {
+                    string filename = Path.GetFileNameWithoutExtension(account.ImageUpload.FileName).ToString();
+                    string extension = Path.GetExtension(account.ImageUpload.FileName);
+                    filename = filename + extension;
+                    account.img_profile = "~/Images/imageProfile/" + filename;
+                    account.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                }
                 if (account.email == null)
                 {
                     return Json(new { success = false, message = "Vui lòng điền mail" });
@@ -112,7 +122,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Email tồn tại trong hệ thông" });
                 }
-                string mess =  serviceAccount.AdvisorProfile(account.email, account);
+                string mess =  serviceAccount.UserProfileCheck(account.email, account);
                 return Json(new { success = true, message = mess });
 
             }
@@ -133,27 +143,47 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Cố vấn không tồn tại trong hệ thông" });
                 }
-                var classCheck = db.VLClass.Where(y => y.advisor_code == userCheck.user_code).ToList().Count();
-                var adCheck = db.Advisor.FirstOrDefault(x => x.advisor_code == userCheck.user_code);
-                if (classCheck > 0)
+                if (userCheck.id_role == 2)
                 {
-                    adCheck.status_id = 0;
-                    db.Entry(adCheck).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Tài khoản tạm khoá do giảng viên có chủ nhiệm lớp" });
-                }
-                else
-                {
-                    if (adCheck != null)
+                    var classCheck = db.VLClass.Where(y => y.advisor_code == userCheck.user_code).ToList().Count();
+                    var adCheck = db.Advisor.FirstOrDefault(x => x.advisor_code == userCheck.user_code);
+                    if (classCheck > 0)
                     {
-                        db.Advisor.Remove(adCheck);
+                        adCheck.status_id = 0;
+                        db.Entry(adCheck).State = EntityState.Modified;
+                        db.SaveChanges();
+                        return Json(new { success = true, message = "Tài khoản tạm khoá do giảng viên có chủ nhiệm lớp" });
+                    }
+                    else
+                    {
+                        if (adCheck != null)
+                        {
+                            db.Advisor.Remove(adCheck);
+                            db.SaveChanges();
+                        }
+                        db.AccountUser.Remove(userCheck);
+                        db.SaveChanges();
+                        return Json(new { success = true, message = "Tài khoản cố vấn đã xoá khỏi hệ thống" });
+                    }
+                }
+                else if (userCheck.id_role == 3)
+                {
+                    var studentCheck = db.Student.FirstOrDefault(x => x.account_id == id);
+                    if (studentCheck != null) {
+                        db.Student.Remove(studentCheck);
                         db.SaveChanges();
                     }
                     db.AccountUser.Remove(userCheck);
                     db.SaveChanges();
-                    return Json(new { success = true, message = "Tài khoản cố vấn đã xoá khỏi hệ thống"});
-                }
+                    return Json(new { success = true, message = "Tài khoản sinh viên đã xoá khỏi hệ thống" });
 
+                }
+                else
+                {
+                    db.AccountUser.Remove(userCheck);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Tài khoản admin đã xoá khỏi hệ thống" });
+                }
             }
             else
             {
@@ -162,12 +192,20 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
         // EDIT API 
         [HttpPost]
-        public ActionResult EditApi([Bind(Include = " id,email,user_name,phone,address ")] AccountUser account)
+        public ActionResult EditApi([Bind(Include = " id,email,user_name,phone,address,ImageUpload ")] AccountUser account)
         {
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
                 var edtUser = db.AccountUser.FirstOrDefault(x => x.id == account.id);
+                if (account.ImageUpload != null)
+                {
+                    string filename = Path.GetFileNameWithoutExtension(account.ImageUpload.FileName).ToString();
+                    string extension = Path.GetExtension(account.ImageUpload.FileName);
+                    filename = filename + extension;
+                    account.img_profile = "~/Images/imageProfile/" + filename;
+                    account.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                }
                 if (account.user_name == null)
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên cố vấn" });
@@ -189,6 +227,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Email không tồn tại trong hệ thông" });
                 }
+                edtUser.img_profile = account.img_profile;
                 edtUser.user_name = account.user_name;
                 edtUser.phone = account.phone;
                 edtUser.address = account.address;

@@ -1,8 +1,10 @@
-﻿
+﻿@using AdvisorManagement.Models;
+
 @{
-    ViewBag.Title = "ReportClass";
+    ViewBag.Title = "Báo cáo học kì";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
     var id_class = (int)Session["id_class"];
+    IEnumerable<Semester> listSemester = ViewBag.hocky as IEnumerable<Semester>;
 }
 
 <div class="container-fluid">
@@ -44,7 +46,17 @@
                             <div>
                                 Mô tả: @item.description
                             </div>
+                            if (int.Parse(Session["RoleName"].ToString()) != 1)
+                            {
+                                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                                    <div class="col-md-4"><span>Giảng viên tự đánh giá:</span></div>
+                                    <div class="col-md-4">
+                                        <input id="txtDanhGia" type="text" class="form-control" maxlength="1" />
+                                    </div>
+                                </div>
+                            }
                         }
+
 
                     </h5>
                     <div style="margin-top:10px">
@@ -61,6 +73,7 @@
                                     <th style="text-align:center">Hồ sơ, minh chứng</th>
                                     <th style="text-align:center">Tiêu chí đánh giá</th>
                                     <th style="text-align:center">Trang thái</th>
+                                    <th style="text-align:center">Nộp minh chứng</th>
                                 </tr>
                             </thead>
                             <tbody id="myTable">
@@ -78,7 +91,9 @@
             <div class="modal-content">
                 @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
                 <div class="modal-header">
-                    <input hidden id="id_class" value="" />
+
+
+                    <input hidden id="id_evol" value="" />
                     <h4 class="modal-title">Tiêu chí đánh giá</h4>
                 </div>
                 <div class="table-responsive" style="margin-top:10px">
@@ -89,8 +104,10 @@
                                 <th style="text-align:center">Loai</th>
                                 <th style="text-align:center">Mô tả</th>
                                 <th style="text-align:center">Đánh giá</th>
-                                <th style="text-align:center">Khoảng</th>
-                                <th style="text-align:center">Từ</th>
+                                <th style="text-align:center">Khoảng bắt đầu</th>
+                                <th style="text-align:center">Khoảng kết thúc</th>
+
+
                             </tr>
                         </thead>
                         <tbody id="myTable">
@@ -99,6 +116,54 @@
                 </div>
                 <div id="showEvol" class="modal-footer">
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload file minh chứng</h4>
+                </div>
+                <input hidden id="idProof"/>
+                <div class="">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px;padding-left:15px ">
+                        <div class="col-md-4"><span>Mô tả:</span></div>
+                        <div class="col-md-8">
+                            <input id="motaPlan" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px;padding-left:15px ">
+                    <div class="col-md-4"><span>Chọn file:</span></div>
+                    <div class="col-md-8">
+                        <input name="" type="file" id="fileExcel" class="" />
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px;padding-left:15px ">
+                    <div class="col-md-4"><span>Chọn học kỳ:</span></div>
+                    <div class="col-md-8">
+                        <select id="semester" style=" width: 155px; height: 35px; text-align: center; font-size: 15px;" , required="true">
+
+                            @foreach (var item in listSemester)
+                            {
+                                <option value="@item.semester_name">@item.semester_name</option>
+
+                            }
+                        </select>
+                        @* @Html.DropDownList("id_semester", null, htmlAttributes: new { @id = "" })*@
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnUpload" class="btn btn-primary" type="submit">Upload</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -137,7 +202,11 @@
                  { 'data': 'group_file', 'width': '20%' },
                  { 'data': 'note', 'width': '10%' },
                  { 'data': 'status', 'width': '10%' },
-
+                 {
+                     'data': 'id', 'width': '30%', 'render': function (data) {
+                         return '<button onclick="Upload('+data+')" class="btn btn-info">Thêm minh chứng <i class="fas fa-tasks" ></i></button >'
+                     }
+                 },
                  ],
              'bAutoWidth': false,
              'responsive': false,
@@ -163,16 +232,18 @@
                  },
              },
 
-    });
+             });
             function ExportTemplate() {
-            input = document.getElementById("semester");
-            let id = 2023;
+                input = document.getElementById("semester");
+                let check = document.getElementById("txtDanhGia") ? document.getElementById("txtDanhGia").value : null ;
+                let id = 2023;
             $.ajax({
                 url: '@Url.Action("ExportTemplateCode", "EReportTerm")',
                 type: 'POST',
                 data: {
                     year: id,
-                    id_class : @id_class
+                    id_class: @id_class,
+                    phanLoai : check
 
                 },
                 /*contentType: "application/json; charset=utf-8", */
@@ -205,10 +276,12 @@
              [
                  { 'data': 'id', 'width': '5%', },
                  { 'data': 'rank_type', 'width': '10%'},
-                 { 'data': 'rank_des', 'width': '40%' },
                  { 'data': 'description', 'width': '40%' },
+                 { 'data': 'rank_des', 'width': '40%' },
                  { 'data': 'rank_count', 'width': '10%' },
                  { 'data': 'rank_end', 'width': '10%' },
+          
+
              ],
             "autoWidth": false,
             "aLengthMenu": [[-1], ["All"]],
@@ -216,19 +289,82 @@
             "bPaginate": false,
             "bInfo": false,
        });
-        //dataTable.on('order.dt search.dt', function () {
-        //       let i = 1;
-        //       dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
-        //           this.data(i++);
-        //       });
-        //}).draw();
+        dataTable.on('order.dt search.dt', function () {
+               let i = 1;
+               dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                   this.data(i++);
+               });
+        }).draw();
         $('#showEvol').append(`
-                    <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>`);
+                    <button onclick="hideRead()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>`);
         $("#modalEvol").modal('show');
     }
 
-    function HideListAdvisor() {
+    function hideRead() {
         $("#modalEvol").modal('hide');
     }
+
+    function Upload(id) {
+        $("#idProof").val(id);
+        $("#myModal").modal("show");
+    }
+
+    function HideModal() {
+        $("#myModal").modal("hide");
+    }
+
+    $(document).ready(function () {
+        $('#btnUpload').click(function () {
+            var formData = new FormData();
+            var fileExcel = document.getElementById("fileExcel");
+            var myFile = fileExcel.files[0];
+            var mota = $("#motaPlan").val();
+            var sel_semester = document.getElementById("semester");
+            var semester = sel_semester.value;
+            let id = $("#idProof").val();
+            formData.append("id", id);
+            formData.append("postedfile", myFile);
+            formData.append("mota", mota);
+            formData.append("semester", semester);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Upload", "EReportTerm", new {area = ""})',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success == false) {
+                        alert(data.message);
+                    } else {
+                        $("#myModal").modal("hide");
+                        $("#motaPlan").val("");
+                        $("#fileExcel").val("");
+                        alert(data.message);
+                        dataTable.ajax.reload(null, false);
+                    }
+                }
+             })
+        })
+    })
+   //Sự kiện xóa
+         function Delete(id) {
+             if (confirm("Bạn thực sự muốn xóa minh chứng này?")) {
+                $.ajax({
+                    url: '@Url.Action("DeleteProof", "PlansAdvisor")',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    },
+                    success: function (data) {
+                         if (data.success == true) {
+                             alert(data.message);
+                             dataTable.ajax.reload(null, false);
+                         } else {
+                             alert(data.message);
+                         }
+                    }
+                })
+            }
+         }
 
 </script>
