@@ -32,10 +32,10 @@
                                 Thêm<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                             <a onclick="ImportExcelFile()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
-                                Import<i style="margin-left:5px" class="fas fa-plus"></i>
+                                Nhập danh sách<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                             <a onclick="ExportExcel()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white ">
-                                Export<i style="margin-left:5px" class="fas fa-plus"></i>
+                                Xuất danh sách<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                             @*<div class="ms-auto text-end">
                                     <nav aria-label="breadcrumb">
@@ -57,7 +57,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
-                    <div class="col-md-1">
+                    <div class="col-md-4">
                         <label for="cars">Chọn học kỳ:</label>
 
                         <select id="semester" name="semester" onchange="myFunction()">
@@ -77,10 +77,12 @@
                         <table width="100%" id="zero_config_admin" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th width="5%">Stt</th>
-                                    <th width="15%">Lớp</th>
-                                    <th width="20%">CVHT</th>
-                                    <th width="16%">Ngày tạo</th>
+                                    <th>Stt</th>
+                                    <th>Mã lớp</th>
+                                    <th>MGV</th>
+                                    <th>CVHT</th>
+                                    <th>Email</th>
+                                    <th>Ngày tạo</th>
                                     <th>Khóa</th>
                                     <th>Hoạt động</th>
                                 </tr>
@@ -266,9 +268,15 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Import Class</h4>
+                <h4 class="modal-title">Nhập danh sách lớp</h4>
             </div>
             <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                    <div class="col-md-10">
+                        <span>File mẫu:</span>
+                        <a href="@Url.Action("Download", "ClassManagements")">CVHT_Phancong_@yearLast-@yearNow</a>
+                    </div>
+                </div>
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>Chọn file:</span></div>
                     <div class="col-md-8">
@@ -308,13 +316,17 @@
          'columns':
              [
                  { 'data': 'ID', 'width': '5%', },
-                 {
-                     'data': 'idClass', 'width': '15%','render': function (data, type, row) {
+                  {
+                     'data': 'idClass', 'width': '13%','render': function (data, type, row) {
                         @* @Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", id = item.id }, null)*@
                              return '<a id="proof" href="@Url.Action("DetailClass", "Students", new { area = "" })/' + row.ID + '/" >' + data + '</a>';
                      }
                  },
+                 {
+                     'data': 'idAdvisor', 'width': '15%'
+                 },
                  { 'data': 'name', 'width': '15%' },
+                 { 'data': 'email', 'width': '15%'},
                  {
                      'data': 'create_time', 'width': '15%', 'render': function (data) {
                          return moment(data).format("DD-MM-YYYY HH:mm");
@@ -322,14 +334,38 @@
 },
                  { 'data': 'course', 'width': '5%' },
                  {
-                     'data': 'ID', 'width': '25%', 'render': function (data, type, row) {
+                     'data': 'ID', 'width': '20%', 'render': function (data, type, row) {
                          /*<a onclick="Details(' + data + ')" id="btndetail" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px;">Chi tiết <i class="fas fa-tasks"></i></a>*/
                          return '<a onclick="Update(' + data + ')" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">Sửa <i class="fas fa-edit"></i></a><a onclick="Detele(' + data + ')" id="btnDelete" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px;">XÓA <i class="fas fa-trash-alt"></i></a>'
                      },
                  }
             ],
-        "order": [[3, "desc"]],
-        "columnDefs": [{ "targets": 3, "type": "date-eu" }],
+        'bAutoWidth': false,
+        'responsive': false,
+        "order": [[0, "asc"]],
+        'ordering': false,
+        'rowsGroup': [0, 1],
+        'language': {
+            "decimal": "",
+            "emptyTable": "Không có dữ liệu",
+            "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Hiển thị _MENU_ mục",
+            "loadingRecords": "Đang tải...",
+            "search": "Tìm kiếm:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": "Sau",
+                "previous": "Trước"
+            },
+        },
+        "order": [[4, "desc"]],
+        "columnDefs": [{ "targets": 4, "type": "date-eu" }],
     });
 
     dataTable.on('order.dt search.dt', function () {
@@ -347,36 +383,34 @@
             } else {
                 selectYearNow()
             }
-            $("#zero_config_admin").DataTable().on('order.dt search.dt', function () {
-                let i = 1;
-                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
-                    this.data(i++);
-                });
-            }).draw();
         }
         function seleclYear() {
             $("#zero_config_admin").dataTable().fnDestroy();
-            var dataTable = $("#zero_config_admin").DataTable({
-             'ajax': {
-                    'url': '@Url.Action("GetData", "ClassManagements")',
-                    'data': function (d) {
-                     var input = document.getElementById("semester");
-                        filter = input.value.toUpperCase();
-                     d.year = filter ;
-                     },
-                    'type': 'get',
-                    'datatype':'json',
-                 },
-             'columns':
+              var dataTable = $("#zero_config_admin").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetData", "ClassManagements")',
+                'data': function (d) {
+                 var input = document.getElementById("semester");
+                         filter = input.value.toUpperCase();
+                            d.year = filter ;
+                         },
+                'type': 'get',
+                'datatype':'json',
+         },
+         'columns':
              [
                  { 'data': 'ID', 'width': '5%', },
-                 {
-                     'data': 'idClass', 'width': '15%','render': function (data, type, row) {
+                  {
+                     'data': 'idClass', 'width': '13%','render': function (data, type, row) {
                         @* @Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", id = item.id }, null)*@
                              return '<a id="proof" href="@Url.Action("DetailClass", "Students", new { area = "" })/' + row.ID + '/" >' + data + '</a>';
                      }
                  },
+                 {
+                     'data': 'idAdvisor', 'width': '15%'
+                 },
                  { 'data': 'name', 'width': '15%' },
+                 { 'data': 'email', 'width': '15%'},
                  {
                      'data': 'create_time', 'width': '15%', 'render': function (data) {
                          return moment(data).format("DD-MM-YYYY HH:mm");
@@ -384,45 +418,74 @@
 },
                  { 'data': 'course', 'width': '5%' },
                  {
-                     'data': 'ID', 'width': '25%', 'render': function (data, type, row) {
+                     'data': 'ID', 'width': '20%', 'visible': false, 'render': function (data, type, row) {
                          /*<a onclick="Details(' + data + ')" id="btndetail" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px;">Chi tiết <i class="fas fa-tasks"></i></a>*/
                          return '<a onclick="Update(' + data + ')" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">Sửa <i class="fas fa-edit"></i></a><a onclick="Detele(' + data + ')" id="btnDelete" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px;">XÓA <i class="fas fa-trash-alt"></i></a>'
                      },
                  }
             ],
-        "order": [[3, "desc"]],
-        "columnDefs": [{ "targets": 3, "type": "date-eu" }],
-            });
-            dataTable.on('order.dt search.dt', function () {
-                let i = 1;
-                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
-                    this.data(i++);
-                });
-            }).draw();
+        'bAutoWidth': false,
+        'responsive': false,
+        "order": [[0, "asc"]],
+        'ordering': false,
+        'rowsGroup': [0, 1],
+        'language': {
+            "decimal": "",
+            "emptyTable": "Không có dữ liệu",
+            "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Hiển thị _MENU_ mục",
+            "loadingRecords": "Đang tải...",
+            "search": "Tìm kiếm:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": "Sau",
+                "previous": "Trước"
+            },
+        },
+        "order": [[4, "desc"]],
+        "columnDefs": [{ "targets": 4, "type": "date-eu" }],
+    });
+
+    dataTable.on('order.dt search.dt', function () {
+        let i = 1;
+        dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+            this.data(i++);
+        });
+    }).draw();
         }
         function selectYearNow() {
             $("#zero_config_admin").dataTable().fnDestroy();
-            var dataTable = $("#zero_config_admin").DataTable({
-             'ajax': {
-                    'url': '@Url.Action("GetData", "ClassManagements")',
-                    'data': function (d) {
-                     var input = document.getElementById("semester");
-                     filter = input.value.toUpperCase();
-                     d.year = filter ;
-                     },
-                    'type': 'get',
-                    'datatype':'json',
-             },
-            'columns':
+              var dataTable = $("#zero_config_admin").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetData", "ClassManagements")',
+                'data': function (d) {
+                 var input = document.getElementById("semester");
+                         filter = input.value.toUpperCase();
+                            d.year = filter ;
+                         },
+                'type': 'get',
+                'datatype':'json',
+         },
+         'columns':
              [
                  { 'data': 'ID', 'width': '5%', },
-                 {
-                     'data': 'idClass', 'width': '15%','render': function (data, type, row) {
+                  {
+                     'data': 'idClass', 'width': '13%','render': function (data, type, row) {
                         @* @Html.ActionLink(item.class_code, "DetailClass", "Students", new { area = "", id = item.id }, null)*@
                              return '<a id="proof" href="@Url.Action("DetailClass", "Students", new { area = "" })/' + row.ID + '/" >' + data + '</a>';
                      }
                  },
+                 {
+                     'data': 'idAdvisor', 'width': '15%'
+                 },
                  { 'data': 'name', 'width': '15%' },
+                 { 'data': 'email', 'width': '15%'},
                  {
                      'data': 'create_time', 'width': '15%', 'render': function (data) {
                          return moment(data).format("DD-MM-YYYY HH:mm");
@@ -430,25 +493,46 @@
 },
                  { 'data': 'course', 'width': '5%' },
                  {
-                     'data': 'ID', 'width': '25%', 'render': function (data, type, row) {
+                     'data': 'ID', 'width': '20%', 'render': function (data, type, row) {
                          /*<a onclick="Details(' + data + ')" id="btndetail" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px;">Chi tiết <i class="fas fa-tasks"></i></a>*/
                          return '<a onclick="Update(' + data + ')" id="btnUpdate" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">Sửa <i class="fas fa-edit"></i></a><a onclick="Detele(' + data + ')" id="btnDelete" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px;">XÓA <i class="fas fa-trash-alt"></i></a>'
                      },
                  }
             ],
-            "order": [[3, "desc"]],
-                "columnDefs": [{ "targets": 3, "type": "date-eu" }, {
-                    "searchable": false,
-                    "orderable": false,
-                    "targets": 0
-                }],
-            });
-            dataTable.on('order.dt search.dt', function () {
-                let i = 1;
-                dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
-                    this.data(i++);
-                });
-            }).draw();
+        'bAutoWidth': false,
+        'responsive': false,
+        "order": [[0, "asc"]],
+        'ordering': false,
+        'rowsGroup': [0, 1],
+        'language': {
+            "decimal": "",
+            "emptyTable": "Không có dữ liệu",
+            "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Hiển thị _MENU_ mục",
+            "loadingRecords": "Đang tải...",
+            "search": "Tìm kiếm:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": "Sau",
+                "previous": "Trước"
+            },
+        },
+        "order": [[4, "desc"]],
+        "columnDefs": [{ "targets": 4, "type": "date-eu" }],
+    });
+
+    dataTable.on('order.dt search.dt', function () {
+        let i = 1;
+        dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+            this.data(i++);
+        });
+    }).draw();
        }
 
     $(document).ready(function () {
@@ -637,6 +721,7 @@
                         id: id,
                         class_code: class_code,
                         advisor_code: advisor_code,
+                        year: @yearNow
                     },
                     success: function (data) {
                             if (data.success == true) {

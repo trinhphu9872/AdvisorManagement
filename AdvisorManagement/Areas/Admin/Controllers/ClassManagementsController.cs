@@ -174,7 +174,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             if(class_code.Trim() != "")
             {
                 var stringYear = year.ToString();
-                if (db.VLClass.Where(x => x.class_code.ToUpper() == class_code.ToUpper() && x.semester_name == stringYear).Count() == 0)
+                if (db.VLClass.Where(x => x.class_code.Trim().ToUpper() == class_code.Trim().ToUpper() && x.semester_name == stringYear).Count() == 0)
                 {
                     VLClass vLClass = new VLClass();
                     vLClass.class_code = class_code;
@@ -292,16 +292,35 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
         // http post edit class
         [HttpPost]
-        public ActionResult UpdateClass(int id, string class_code, string advisor_code)
+        public ActionResult UpdateClass(int id, string class_code, string advisor_code, int year)
         {
             if(class_code.Trim() != "")
             {
                 VLClass vLClass = db.VLClass.Find(id);
-                vLClass.class_code = class_code;
-                vLClass.advisor_code = advisor_code;
-                vLClass.course = serviceAccount.getCours(class_code);
-                db.SaveChanges();
-                return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
+                var stringYear = year.ToString();
+                if (vLClass.class_code.Trim().ToUpper() != class_code.Trim().ToUpper())
+                {
+                    if (db.VLClass.Where(x => x.class_code.Trim().ToUpper() == class_code.Trim().ToUpper() && x.semester_name == stringYear).Count() == 0)
+                    {
+                        vLClass.class_code = class_code;
+                        vLClass.advisor_code = advisor_code;
+                        vLClass.course = serviceAccount.getCours(class_code);
+                        db.SaveChanges();
+                        return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Mã lớp học đã tồn tại" });
+                    }
+                }
+                else
+                {
+                    vLClass.class_code = class_code;
+                    vLClass.advisor_code = advisor_code;
+                    vLClass.course = serviceAccount.getCours(class_code);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
+                }                             
             }
             else
             {
@@ -547,29 +566,35 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
         }
 
-       /* [HttpPost]
-        public JsonResult ExportTemplateAdvisor(int id_class)
-        {
-            var listPlan = db.PlanClass.Where(y => y.id_class == id_class).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
-            var year = (int)db.PlanClass.FirstOrDefault(x => x.id_class == id_class).year;
-            var class_code = db.VLClass.Find(id_class).class_code;
-            var advisor_code = db.VLClass.Find(id_class).advisor_code;
-            var user_name = db.AccountUser.FirstOrDefault(x => x.user_code == advisor_code).user_name;
-            var name_advisor = servicePlan.ConvertToUnsign(user_name);
-            List<PlanClass> template = (List<PlanClass>)listPlan;
-            try
-            {
-                using (ExcelPackage pck = new ExcelPackage())
-                {
-                    var package = servicePlan.ExportTemplateAdvisor(pck, template, year, class_code);
-                    var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "KehoachCVHT_" + (year - 1) + "-" + year + "_" + name_advisor + "_" + class_code + ".xlsx");
-                    return Json(fileOject, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }*/
+        /* [HttpPost]
+         public JsonResult ExportTemplateAdvisor(int id_class)
+         {
+             var listPlan = db.PlanClass.Where(y => y.id_class == id_class).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
+             var year = (int)db.PlanClass.FirstOrDefault(x => x.id_class == id_class).year;
+             var class_code = db.VLClass.Find(id_class).class_code;
+             var advisor_code = db.VLClass.Find(id_class).advisor_code;
+             var user_name = db.AccountUser.FirstOrDefault(x => x.user_code == advisor_code).user_name;
+             var name_advisor = servicePlan.ConvertToUnsign(user_name);
+             List<PlanClass> template = (List<PlanClass>)listPlan;
+             try
+             {
+                 using (ExcelPackage pck = new ExcelPackage())
+                 {
+                     var package = servicePlan.ExportTemplateAdvisor(pck, template, year, class_code);
+                     var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "KehoachCVHT_" + (year - 1) + "-" + year + "_" + name_advisor + "_" + class_code + ".xlsx");
+                     return Json(fileOject, JsonRequestBehavior.AllowGet);
+                 }
+             }
+             catch (Exception ex)
+             {
+                 throw;
+             }
+         }*/
+
+        public FileResult Download()
+        {            
+            var filePath = Server.MapPath("~/FileSource/CVHT_Phancong_2022-2023.xlsx");
+            return File(filePath, "application/force- download", Path.GetFileName(filePath));
+        }
     }
 }

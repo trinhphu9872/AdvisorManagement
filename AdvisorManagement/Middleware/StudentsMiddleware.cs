@@ -123,6 +123,7 @@ namespace AdvisorManagement.Middleware
                                      course = (int)cl.course,
                                      semester = cl.semester_name,
                                      create_time = cl.create_time,
+                                     email = pq.email
                                  }).OrderByDescending(x => x.create_time).ToList();
                 return classList;
             }
@@ -160,6 +161,8 @@ namespace AdvisorManagement.Middleware
                                     name = acc.user_name,
                                     email = acc.email,
                                     phone = acc.phone,
+                                    address = acc.address,
+                                    gender = acc.gender,
                                     status = st.status_name
                                 }).OrderBy(x => x.name).ToList();
             return classStudent;
@@ -206,7 +209,7 @@ namespace AdvisorManagement.Middleware
         {
             var result = false;
             try
-            {
+            {                
                 var item = new AccountUser();
                 item.id = serviceAccount.getID() + 1;
                 item.id_role = 3;
@@ -284,7 +287,7 @@ namespace AdvisorManagement.Middleware
             var result = false;
             try
             {
-                var status_id = db.StudentStatus.FirstOrDefault(x => x.status_name.Equals(status)).id;
+                var status_id = db.StudentStatus.FirstOrDefault(x => x.status_name == status).id;
                 Student user = db.Student.Find(mssv);
                 if (user.status_id != status_id)
                 {
@@ -316,12 +319,16 @@ namespace AdvisorManagement.Middleware
             var result = false;
             try
             {
-                ListStudents std = new ListStudents();
-                std.id_class = classCode;
-                std.student_code = mssv;
-                db.ListStudents.Add(std);
-                db.SaveChanges();
-                result = true;
+                var check = db.ListStudents.Where(x=>x.id_class== classCode && x.student_code == mssv).Count();
+                if(check == 0)
+                {
+                    ListStudents std = new ListStudents();
+                    std.id_class = classCode;
+                    std.student_code = mssv;
+                    db.ListStudents.Add(std);
+                    db.SaveChanges();
+                    result = true;
+                }               
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@
     int i = 1;
     List<AdvisorManagement.Models.ViewModel.ListStudent> listStudent = (List<AdvisorManagement.Models.ViewModel.ListStudent>)ViewBag.detailClass;
     List<AdvisorManagement.Models.StudentStatus> listStatus =(List<AdvisorManagement.Models.StudentStatus>)ViewBag.listStdStatus;
+
 }
 
 <div class="container-fluid">
@@ -33,21 +34,36 @@
                         </form>
                         if (ViewBag.role == "Advisor" || ViewBag.role == "Admin")
                         {
-                            <div class="page-breadcrumb">
-                                <div class="row">
-                                    <div class="col-12 d-flex no-block align-items-center">
-                                        <a href="" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                            Thêm<i style="margin-left:5px" class="fas fa-plus"></i>
-                                        </a>
-                                        <a onclick="ImportExcelFile()" id="btnUpdate" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                            Import Excel<i style="margin-left:5px" class="fas fa-plus"></i>
-                                        </a>
-                                        <a href="@Url.Action("ExcelExport", "Students")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                            Export Excel<i style="margin-left:5px" class="fas fa-plus"></i>
-                                        </a>
+                            if (ViewBag.yearClass == ViewBag.yearNow)
+                            {
+                                <div class="page-breadcrumb">
+                                    <div class="row">
+                                        <div class="col-12 d-flex no-block align-items-center">
+                                            <a onclick="AddStudent()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                                Thêm<i style="margin-left:5px" class="fas fa-plus"></i>
+                                            </a>
+                                            <a onclick="ImportExcelFile()" id="btnUpdate" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                                Nhập danh sách<i style="margin-left:5px" class="fas fa-plus"></i>
+                                            </a>
+                                            <a href="@Url.Action("ExcelExport", "Students")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                                Xuất danh sách<i style="margin-left:5px" class="fas fa-plus"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
+                            else
+                            {
+                                <div class="page-breadcrumb">
+                                    <div class="row">
+                                        <div class="col-12 d-flex no-block align-items-center">                                            
+                                            <a href="@Url.Action("ExcelExport", "Students")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                                Xuất danh sách<i style="margin-left:5px" class="fas fa-plus"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         }
                     }
                 }
@@ -69,15 +85,20 @@
                             <table id="zero_config" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th width="10%" style="text-align:center">STT</th>
-                                        <th width="10%" style="text-align:center">MSSV</th>
-                                        <th width="25%" style="text-align:center">Họ và tên</th>
-                                        <th width="20%" style="text-align:center">Email</th>
-                                        <th width="10%" style="text-align:center">SDT</th>                                     
-                                        <th width="15%" style="text-align:center">Trạng thái</th>
+                                        <th width="5%">STT</th>
+                                        <th width="5%">MSSV</th>
+                                        <th width="5%">Họ và tên</th>
+                                        <th width="5%">Email</th>
+                                        <th >SDT</th>       
+                                        <th >Địa chỉ</th>
+                                        <th >Giới tính</th>
+                                        <th >Trạng thái</th>
                                         @if (ViewBag.role == "Advisor" || ViewBag.role == "Admin")
                                         {
+                                            if (ViewBag.yearClass == ViewBag.yearNow)
+                                            {
                                             <th width="20%" style="text-align:center">Hoạt động</th>
+                                            }
                                         }
                                     </tr>
                                 </thead>
@@ -85,22 +106,27 @@
                                     @foreach (var item in listStudent)
                                     {
                                         <tr id="@item.id">
-                                            <td style="text-align: center ;">@i</td>
-                                            <td style="text-align: center ;">@item.idStudent</td>
-                                            <td style="text-align:center">@item.name</td>
-                                            <td style="text-align:center">@item.email</td>
-                                            <td style="text-align:center">@item.phone</td>                                          
-                                            <td style="text-align:center">@item.status</td>
+                                            <td>@i</td>
+                                            <td>@item.idStudent</td>
+                                            <td>@item.name</td>
+                                            <td>@item.email</td>
+                                            <td>@item.phone</td>
+                                            <td>@item.address</td>
+                                            <td>@item.gender</td>
+                                            <td>@item.status</td>
                                             @if (ViewBag.role == "Advisor" || ViewBag.role == "Admin")
                                             {
-                                                <td style="text-align:center">
-                                                    <a onclick="Update(@item.idAcc)" id="btnUpdate" class="btn btn-primary">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button name="delete" class="btn btn-danger">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
-                                                </td>
+                                                if (ViewBag.yearClass == ViewBag.yearNow)
+                                                {
+                                                    <td style="text-align:center">
+                                                        <a onclick="Update(@item.idAcc)" id="btnUpdate" class="btn btn-primary">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <button name="delete" class="btn btn-danger">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </td>
+                                                }
                                             }
                                         </tr>
                                         i++;
@@ -131,7 +157,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Import danh sách sinh viên</h4>
+                <h4 class="modal-title">Nhập danh sách sinh viên</h4>
             </div>
             @if (ViewBag.classInfo != null)
             {
@@ -139,6 +165,12 @@
                 foreach (var item in idClass)
                 {
                     <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                            <div class="col-md-10">
+                                <span>File mẫu:</span>
+                                <a href="@Url.Action("Download", "Students")">Danhsachsinhvien.xlsx</a>
+                            </div>
+                        </div>
                         <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                             <div class="col-md-4"><span>Chọn file:</span></div>
                             <div class="col-md-8">
@@ -170,7 +202,7 @@
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>MSSV:</span></div>
                     <div class="col-md-8">
-                        <input id="up_mssv" type="text" class="form-control" disabled/>
+                        <input id="up_mssv" type="text" class="form-control" disabled />
                     </div>
                 </div>
             </div>
@@ -178,7 +210,7 @@
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Email:</span></div>
                     <div class="col-md-8">
-                        <input id="up_email" type="text" class="form-control" disabled/>
+                        <input id="up_email" type="text" class="form-control" disabled />
                     </div>
                 </div>
             </div>
@@ -195,6 +227,25 @@
                     <div class="col-md-4"><span>Số điện thoại:</span></div>
                     <div class="col-md-8">
                         <input id="up_phone" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Địa chỉ:</span></div>
+                    <div class="col-md-8">
+                        <input id="up_address" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Giới tính:</span></div>
+                    <div class="col-md-8">
+                        <select id="up_gender" name="up_gender" style="width: 155px; height: 35px; text-align: center; font-size: 15px;">
+                            <option selected value="TRUE">Nam</option>
+                            <option selected value="FALSE">Nữ</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -222,10 +273,115 @@
     </div>
 </div>
 
+<div id="modalAdd" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thêm sinh viên</h4>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                    <div class="col-md-4"><span>MSSV:</span></div>
+                    <div class="col-md-8">
+                        <input id="add_mssv" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Email:</span></div>
+                    <div class="col-md-8">
+                        <input id="add_email" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Họ và tên:</span></div>
+                    <div class="col-md-8">
+                        <input id="add_name" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Số điện thoại:</span></div>
+                    <div class="col-md-8">
+                        <input id="add_phone" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Địa chỉ:</span></div>
+                    <div class="col-md-8">
+                        <input id="add_address" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Giới tính:</span></div>
+                    <div class="col-md-8">
+                        <select id="add_gender" name="add_gender" style="width: 155px; height: 35px; text-align: center; font-size: 15px;">
+                            <option selected value="TRUE">Nam</option>
+                            <option selected value="FALSE">Nữ</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                    <div class="col-md-4"><span>Trạng thái:</span></div>
+                    <div class="col-md-8">
+                        <select id="add_status" name="add_status" style="width: 155px; height: 35px; text-align: center; font-size: 15px;">
+                            @foreach (var item in listStatus)
+                            {
+                                <option selected value="@item.id">@item.status_name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button onclick="HideModalAdd()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button id="btnAdd" class="btn btn-primary" type="submit">Thêm</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 <script>
 
-    $("#zero_config").DataTable();
+    $("#zero_config").DataTable({
+        'bAutoWidth': false,
+     /*   'responsive': false,  */     
+        'language': {
+            "decimal": "",
+            "emptyTable": "Không có dữ liệu",
+            "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Hiển thị _MENU_ mục",
+            "loadingRecords": "Đang tải...",
+            "search": "Tìm kiếm:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": "Sau",
+                "previous": "Trước"
+            },
+        },
+        });
     function myFunction() {
         var input, filter, table, tr, td, i;
         input = document.getElementById("semester");
@@ -253,12 +409,20 @@
         });
     });
 
+    function AddStudent() {
+        $("#modalAdd").modal("show");
+    }
+
     function ImportExcelFile() {
         $("#myModal").modal("show");
     }
 
     function HideModal() {
         $("#myModal").modal("hide");
+    }
+
+    function HideModalAdd() {
+        $("#modalAdd").modal("hide");
     }
 
     $(document).ready(function () {
@@ -276,11 +440,32 @@
                 data: formData,
                 success: function (data) {
                     if (data.success == false) {
-                        alert(data.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        })
                     } else {
                         $("#myModal").modal("hide");
-                        alert(data.message);
-                        location.reload();
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
                     }
                 }
              })
@@ -290,23 +475,60 @@
     //Sự kiện xóa
     $(document).on('click', "button[name=delete]", function () {
         let id_std = $(this).closest('tr').attr('id');
-        if (confirm("Bạn thực sự muốn xóa sinh viên này?")) {
-            $.ajax({
+         Swal.fire({
+            title: "Bạn thực sự muốn xóa sinh viên này?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                $.ajax({
                 url: '@Url.Action("Delete", "Students")',
                 type: 'POST',
                 data: {
                     id: id_std
                 },
                 success: function (data) {
-                     if (data.success == true) {
-                         alert(data.message);
-                         location.reload();
-                     } else {
-                         alert(data.message);
-                     }
+                    if (data.success == true) {
+                        $('#modalUpdate').modal('hide');
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                            }
+                        })
+
+                    }
                 }
             })
-        }
+            } else if (result.dismiss === "cancel") {
+
+            }
+        });        
     })
 
     function HideModalUp() {
@@ -322,12 +544,14 @@
                     data: {
                         id: id
                     },
-                    success: function (data) {
+                  success: function (data) {
                         if (data.success == true) {
                             $('#up_mssv').val(data.mssv);
                             $('#up_email').val(data.email);
                             $('#up_name').val(data.name);
                             $('#up_phone').val(data.phone);
+                            $('#up_address').val(data.address);
+                            $('select[name="up_gender"]').val(data.gender).prop('selected', true);
                             $('select[name="up_status"]').val(data.status).prop('selected', true);
                             $('#up_status').val(data.status).prop('selected', true);
                             $('#id_std').val(data.id_std);
@@ -340,12 +564,14 @@
          }
 
     //Cập nhật thông tin sinh viên
-    $(document).ready(function () {     
+    $(document).ready(function () {
         $('#btnEdit').click(function () {
             var name = $('#up_name').val();
             var phone = $('#up_phone').val();
+            var address = $('#up_address').val();
+            var gender = $('select[name="up_gender"]').val();
             var status = $('select[name="up_status"]').val();
-            var id = $('#id_std').val();          
+            var id = $('#id_std').val();
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("UpdateStudent", "Students")',
@@ -354,15 +580,101 @@
                         name: name,
                         phone: phone,
                         status: status,
+                        address: address,
+                        gender: gender
                     },
                     success: function (data) {
-                            if (data.success == true) {
-                                alert(data.message);
-                                $('#modalUpdate').modal('hide');
-                                location.reload();
-                            } else {
-                                alert(data.message);
-                            }
+                        if (data.success == true) {
+                            $('#modalUpdate').modal('hide');
+                            Swal.fire({
+                                icon: "success",
+                                title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (result.value) {
+                                    location.reload();
+                                }
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (result.value) {
+                                }
+                            })
+
+                        }                            
+                     }
+                })
+        })
+    })
+
+     $(document).ready(function () {
+         $('#btnAdd').click(function () {
+            var mssv = $('#add_mssv').val();
+            var email = $('#add_email').val();
+            var name = $('#add_name').val();
+             var phone = $('#add_phone').val();
+             var address = $('#add_address').val();
+             var gender = $('select[name="add_gender"]').val();
+            var status = $('select[name="add_status"]').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddStudent", "Students")',
+                    data: {
+                        mssv: mssv,
+                        email: email,
+                        name: name,
+                        phone: phone,
+                        status: status,
+                        address: address,
+                        gender: gender
+                    },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#modalAdd').modal('hide');
+                            Swal.fire({
+                                icon: "success",
+                                title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (result.value) {
+                                    location.reload();
+                                }
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }   
+                            }).then(function (result) {
+                                if (result.value) {
+                                }
+                            })
+
+                        }                                   
                      }
                 })
         })
