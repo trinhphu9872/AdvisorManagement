@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Gửi thông báo";
+    ViewBag.Title = "Thông báo";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
     var id_notify = ViewBag.id_notify;
     //id_notify = Session["id_notify"].ToString();
@@ -11,6 +11,24 @@
         <div>
             <div>
                 <div class="row">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-0">Thông báo</h5>
+                        </div>
+              
+                            <div class="page-breadcrumb">
+                                <div class="row">
+                                    <div class="col-12 d-flex no-block align-items-center">
+                                        <a onclick="Clear()" id="clear" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px; width: 200px;color:white">
+                                            Xoá hết thông báo<i style="margin-left:5px" class="fas fa-plus"></i>
+                                        </a>
+                          
+                                    </div>
+                                </div>
+                            </div>
+                    
+
+                    </div>
                     <div class="col-5">
                         <table width="100%" class="table table-bordered table-striped table-responsive">
                             <div class="card-body ">
@@ -21,15 +39,15 @@
 
                                     <div class="form-group">
                                         <label for="email">Gửi đến:</label>
-                                        <input type="email" class="form-control" id="toUser" value=""  />
+                                        <input type="email" class="form-control" id="toUser" value="" placeholder="Nhập mail " />
                                     </div>
                                     <div class="form-group">
                                         <label for="pwd">Tiêu đề:</label>
-                                        <input type="text" class="form-control" id="myTitle" value="" placeholder="Title" />
+                                        <input type="text" class="form-control" id="myTitle" value="" placeholder="Nhập tiêu đề" />
                                     </div>
                                     <div class="form-group">
                                         <label for="pwd">Nội dung:</label>
-                                        <input type="text" class="form-control" id="myMessage" value="" placeholder="Message" />
+                                        <input type="text" class="form-control" id="myMessage" value="" placeholder="Nhập nội dung" />
                                     </div>
 
                                     <button type="submit" class="btn btn-default" id="submit">Gửi</button>
@@ -47,15 +65,19 @@
                                     <div role="main" id="yui_3_17_2_1_1681618016053_21" class="mt-4">
                                         <span id="maincontent"></span><h2 id="yui_3_17_2_1_1681618016053_20">Tất cả thông báo</h2><div class="notification-area" data-region="notification-area" data-user-id="5885" id="yui_3_17_2_1_1681618016053_22" style="background-color :white">
                                             <div class="control-area" data-region="control-area">
-                                       
+
                                                 <div style="padding-top: 20px;text-align:center">Bạn đang không có thông báo nào</div>
-                                                @* <span class="loading-icon icon-no-margin"><i class="icon fa fa-circle-o-notch fa-spin fa-fw " title="Loading" aria-label="Loading"></i></span>*@
+                                             
                                             </div>
                                             <div class="content-area" data-region="content-area">
                                                 <div class="header" data-region="header"></div>
-                                                <div class="content" data-region="content"></div>
+                                                <div class="content" data-region="content">
+                                              
+                                                </div>
                                                 <div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div>
-                                                <div class="footer" data-region="footer"></div>
+                                                <div class="footer" data-region="footer">
+                                                
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -287,6 +309,46 @@
 
         });
 
+             function Clear() {
+              $.ajax({
+                    url:'@Url.Action("ClearNotification", "Announcement")',
+                    type: 'post',
+                    success: function (data) {
+                        if (data.success == true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (result.success) {
+                                    location.reload();
+                                }
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (!result.success) {
+                                    location.reload();
+
+                                }
+                            })
+                        }
+                    }
+                })
+         }
 
     $(function () {
         var hub = $.connection.notificationHub;

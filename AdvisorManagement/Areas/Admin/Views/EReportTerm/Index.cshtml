@@ -69,7 +69,7 @@
                             <tbody id="myTable">
                             </tbody>
                         </table>
-                        <a href="javascript:history.back()">Back to List</a>
+                  
                     </div>
                 </div>
             </div>
@@ -266,6 +266,25 @@
                  { 'data': 'name', 'width': '25%' },
                  { 'data': 'course', 'width': '30%' },
                  ],
+             'language': {
+                 "decimal": "",
+                 "emptyTable": "Không có dữ liệu",
+                 "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                 "infoEmpty": "Showing 0 to 0 of 0 entries",
+                 "infoFiltered": "(filtered from _MAX_ total entries)",
+                 "infoPostFix": "",
+                 "thousands": ",",
+                 "lengthMenu": "Hiển thị _MENU_ mục",
+                 "loadingRecords": "Đang tải...",
+                 "search": "Tìm kiếm:",
+                 "zeroRecords": "No matching records found",
+                 "paginate": {
+                     "first": "First",
+                     "last": "Last",
+                     "next": "Sau",
+                     "previous": "Trước"
+                 },
+             }
 
          });
             dataTable.on('order.dt search.dt', function () {
@@ -331,7 +350,26 @@
                              }
 
                          }
-                     ],
+                        ],
+                    'language': {
+                        "decimal": "",
+                        "emptyTable": "Không có dữ liệu",
+                        "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                        "infoEmpty": "Showing 0 to 0 of 0 entries",
+                        "infoFiltered": "(filtered from _MAX_ total entries)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Hiển thị _MENU_ mục",
+                        "loadingRecords": "Đang tải...",
+                        "search": "Tìm kiếm:",
+                        "zeroRecords": "No matching records found",
+                        "paginate": {
+                            "first": "First",
+                            "last": "Last",
+                            "next": "Sau",
+                            "previous": "Trước"
+                        },
+                    },
                     "autoWidth": false,
                     "aLengthMenu": [[-1], ["All"]],
                     "bLengthChange": false,

@@ -11,6 +11,7 @@ using AdvisorManagement.Models;
 using Microsoft.Ajax.Utilities;
 using AdvisorManagement.Models.ViewModel;
 using System.IO;
+using System.Runtime.Remoting.Contexts;
 
 namespace AdvisorManagement.Controllers
 {
@@ -31,7 +32,13 @@ namespace AdvisorManagement.Controllers
         }
         public ActionResult Index()
         {
-            ViewBag.id_notify = db.Notification.FirstOrDefault(x => x.send_to == User.Identity.Name).id_notification;
+            int obj = db.Notification.Where(x => x.send_to == User.Identity.Name).ToList().Count();
+            
+            if (obj > 1)
+            {
+                obj = db.Notification.FirstOrDefault(x => x.send_to == User.Identity.Name).id;
+            }
+            ViewBag.id_notify = obj;
             this.init();
             return View();
         }
@@ -43,9 +50,10 @@ namespace AdvisorManagement.Controllers
             
                 return Json(new { message = "Mail không hợp lệ " }, JsonRequestBehavior.AllowGet);
             }
-            var id_account = db.AccountUser.FirstOrDefault(x=>x.email == userID).id;
-            if (id_account != null)
+            
+            if (db.AccountUser.Where(x => x.email == userID).ToList().Count() > 0)
             {
+                var id_account = db.AccountUser.FirstOrDefault(x => x.email == userID).id;
                 NotificationHub objNotifHub = new NotificationHub();
                 Annoucement objNotif = new Annoucement();
                 objNotif.title = title;
@@ -92,11 +100,20 @@ namespace AdvisorManagement.Controllers
         public JsonResult ClearNotification()
         {
             var obj  =  db.Notification.Where(x =>  x.send_to == User.Identity.Name).ToList();
+            if (obj != null && obj.Any())
+            {
+                db.Notification.RemoveRange(obj);
 
-            var notify = db.Notification.Remove()
-       
+            }
+            else
+            {
+                return Json(new { success = false, message = "Dữ liệu trống" });
+
+            }
+
             db.SaveChanges();
-            return Json(new { redirectToUrl = Url.Action("AllNotification", "Announcement", new { area = "", id_notify = (int)id_notify }) });
+            return Json(new { success = true, message = "Xoá thành công" });
+
         }
 
         [HttpGet]
@@ -104,7 +121,11 @@ namespace AdvisorManagement.Controllers
         {
             NotificationHub objNotifHub = new NotificationHub();
             var notify = db.Notification.Find(id_notify);
-            notify.is_read = true;
+            if (notify != null)
+            {
+                notify.is_read = true;
+
+            }
             db.SaveChanges();
             var detailNoti = serviceAnnoun.LoadDetailNotify(User.Identity.Name,(int)id_notify);
             objNotifHub.GetNotification(User.Identity.Name);         

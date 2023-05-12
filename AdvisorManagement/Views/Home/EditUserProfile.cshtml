@@ -1,6 +1,6 @@
 ﻿@model AdvisorManagement.Models.AccountUser
 @{
-    ViewBag.Title = "EditUserProfile";
+    ViewBag.Title = "Sửa thông tin cá nhân";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 }
 
@@ -16,7 +16,7 @@
     <div class="page-breadcrumb">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title mb-0">Profile - VLU</h5>
+                <h5 class="card-title mb-0">Sửa thông tin cá nhân - VLU</h5>
             </div>
             <div class="page-breadcrumb">
                 <div class="row">
@@ -67,7 +67,7 @@
                                 </div>
                                 <label for="fname" class="col-sm-3 text-end control-label col-form-label">MSSV:</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" id="user_code" name="user_code" placeholder="197PM29124" value="@Model.user_code" />
+                                    <input type="text" class="form-control" id="user_code" name="user_code" placeholder="197PM29124" value="@Model.user_code" disabled="disabled" />
                                     <p id="valid_code" style="color:red"></p>
                                 </div>
                             </div>
@@ -123,11 +123,11 @@
                                 <div class="border-top">
                                     <div class="card-body">
 
-                                        <button id="submitbtn" type="submit" class="btn btn-info text-white" style="margin-left: 30%;width: 100px;">
+                        
+
+                                        <a href="javascript:history.back()"  class="btn btn-info text-white" style="margin-left: 30%;width: 100px;">
                                             Quay lại
-                                        </button>
-
-
+                                        </a>
                                         <a href="@Url.Action("UserProfile", "Home",Model)" class="btn btn-primary text-white" style="margin-left: 30%;width: 100px;">
                                             Lưu
                                         </a>
