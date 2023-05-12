@@ -329,7 +329,7 @@ namespace AdvisorManagement.Middleware
         public string getAvatar(string user_mail)
         {
             var sql = db.AccountUser.FirstOrDefault(x => x.email == user_mail);
-            if(sql.img_profile != null)
+            if(sql.img_profile != null && sql.img_profile != "")
             {
                 return sql.img_profile.Replace("~/Images/imageProfile/", "");
             }

@@ -56,9 +56,16 @@ namespace AdvisorManagement.Controllers
                 }
                 else if (role == "Student")
                 {
-                    return RedirectToAction("DetailClass", new { id = classCode });
+               
+                    return classCode != 0 ?  RedirectToAction("DetailClass", new { id = classCode }) : RedirectToAction("NoClass");
                 }
             }
+            return View();
+        }
+
+        public ActionResult NoClass()
+        {
+            this.init();
             return View();
         }
 

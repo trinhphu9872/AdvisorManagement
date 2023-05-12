@@ -33,7 +33,7 @@
                         <h4 class="card-title">Thông tin</h4>
                         <div class="form-group row">
                             <div class="card-body text-center">
-                                @if (Model.img_profile != null)
+                                @if (Model.img_profile != null && Model.img_profile != "")
                                 {
                                     <img src="@Url.Content(Model.img_profile+" ")" alt="avatar"
                                          class="rounded-circle img-fluid" style="width: 150px;">

@@ -1672,6 +1672,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Announcement\Index.cshtml" />
     <Content Include="Views\Announcement\AllNotification.cshtml" />
+    <Content Include="Views\Students\NoClass.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

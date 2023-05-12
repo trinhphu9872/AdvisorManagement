@@ -38,7 +38,22 @@ namespace AdvisorManagement.Middleware
             var sql = db.AccountUser.FirstOrDefault(x => x.email == user_email);
             if (sql != null)
             {
-                return (int)db.Student.SingleOrDefault(x => x.student_code == sql.user_code).id_class;
+                var stu =  db.Student.Where(x => x.student_code == sql.user_code).ToList();
+                if (stu.Count() > 0)
+                {
+                    var user = db.Student.SingleOrDefault(x => x.student_code == sql.user_code);
+                    if (user.id_class == null)
+                    {
+                        return 0;
+
+                    }
+                    return (int)db.Student.SingleOrDefault(x => x.student_code == sql.user_code).id_class ;
+                }
+                else
+                {
+                    return 0;
+                }
+                 
             }
             return 0;
         }
