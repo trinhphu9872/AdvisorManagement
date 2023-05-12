@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Sắp xếp Menu";
+    ViewBag.Title = "Sắp xếp danh mục";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
 }
@@ -25,24 +25,9 @@
                 <div class="page-breadcrumb">
                     <div class="row">
                         <div class="col-12 d-flex no-block align-items-center">
-                            <a href="@Url.Action("Create", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                Thêm Menu<i class="fas fa-plus"></i>
-                            </a>
-
-                            <a href="@Url.Action("SortMenu", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                            <a href="@Url.Action("SortMenu", "RoleMenus",new {area = "Admin"})" class="mb-1 btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
                                 Sắp xếp menu<i class="fas fa-plus"></i>
                             </a>
-
-                            @*<div class="ms-auto text-end">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">
-                                                Library
-                                            </li>
-                                        </ol>
-                                    </nav>
-                                </div>*@
                         </div>
                     </div>
 
@@ -104,7 +89,28 @@
     <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 
     <script>
-        $("#zero_config").DataTable();
+        $("#zero_config").DataTable({
+            'language': {
+                "decimal": "",
+                "emptyTable": "Không có dữ liệu",
+                "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                "infoEmpty": "Showing 0 to 0 of 0 entries",
+                "infoFiltered": "(filtered from _MAX_ total entries)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Hiển thị _MENU_ mục",
+                "loadingRecords": "Đang tải...",
+                "search": "Tìm kiếm:",
+                "zeroRecords": "No matching records found",
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Sau",
+                    "previous": "Trước"
+                }
+            },
+            "iDisplayLength": 15
+        });
         function myFunction() {
             var input, filter, table, tr, td, i;
             input = document.getElementById("semester");

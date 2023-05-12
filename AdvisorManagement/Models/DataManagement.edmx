@@ -138,6 +138,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="role_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="role_name_vn" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RoleMenu">
           <Key>
@@ -418,6 +419,7 @@
           <Property Name="role_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AccountUser" Relationship="Self.FK_AccountUser_Role" FromRole="Role" ToRole="AccountUser" />
           <NavigationProperty Name="RoleMenu" Relationship="Self.FK_RoleMenu_Role" FromRole="Role" ToRole="RoleMenu" />
+          <Property Name="role_name_vn" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="RoleMenu">
           <Key>
@@ -730,6 +732,7 @@
           <EntitySetMapping Name="Role">
             <EntityTypeMapping TypeName="CP25Team09Model.Role">
               <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="role_name_vn" ColumnName="role_name_vn" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="role_name" ColumnName="role_name" />
               </MappingFragment>

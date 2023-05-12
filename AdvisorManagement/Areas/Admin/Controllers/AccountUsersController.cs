@@ -99,7 +99,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 }
                 if (account.user_name == null)
                 {
-                    return Json(new { success = false, message = "Vui lòng điền tên cố vấn" });
+                    return Json(new { success = false, message = "Vui lòng điền tên " });
                 }
                 if (account.phone == null)
                 {
@@ -208,7 +208,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 }
                 if (account.user_name == null)
                 {
-                    return Json(new { success = false, message = "Vui lòng điền tên cố vấn" });
+                    return Json(new { success = false, message = "Vui lòng điền tên " });
                 }
                 if (account.phone == null)
                 {
@@ -233,7 +233,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 edtUser.address = account.address;
                 db.Entry(edtUser).State = EntityState.Modified;
                 db.SaveChanges();
-                return Json(new { success = true, message = "Cập nhật thành công tài khoản của cố vấn" });
+                return Json(new { success = true, message = "Cập nhật tài khoản thành công" });
             }
             else
             {

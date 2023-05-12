@@ -1,7 +1,7 @@
 ﻿
 @using AdvisorManagement.Models;
 @{
-    ViewBag.Title = "RoleMenu";
+    ViewBag.Title = "Quản lí danh mục";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
     IEnumerable<Role> rolelist = ViewBag.id_role as IEnumerable<Role>;
     IEnumerable<Menu> menulist = ViewBag.id_menu as IEnumerable<Menu>;
@@ -17,17 +17,17 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Quản lí Menu</h5>
+                    <h5 class="card-title mb-0">Quản lí danh mục</h5>
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
                         <div class="col-12 d-flex no-block align-items-center">
                             <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;color:white">
-                                Thêm Menu<i style="margin-left:5px" class="fas fa-plus"></i>
+                                Thêm danh mục<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
 
-                            <a href="@Url.Action("SortMenu", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
-                                Sắp xếp menu<i style="margin-left:5px" class="fas fa-plus"></i>
+                            <a href="@Url.Action("SortMenu", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 200px; color: white">
+                                Sắp xếp danh mục<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                         </div>
                     </div>
@@ -50,10 +50,10 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Role
+                                        Quyền
                                     </th>
                                     <th>
-                                        Menu
+                                        Danh mục
                                     </th>
                                     <th>
                                         Hành động
@@ -106,10 +106,10 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Thêm menu</h4>
+                    <h4 class="modal-title">Thêm danh mục</h4>
                 </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+            
+                    <div class="col-md-7" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                         <div class="col-md-4"><span>Vai trò</span></div>
                         <div class="col-md-8">
                             @if (ViewBag.error != null)
@@ -124,7 +124,7 @@
                                 @foreach (var item in rolelist)
                                 {
 
-                                    <option value="@item.id">@item.role_name</option>
+                                    <option value="@item.id">@item.role_name_vn</option>
 
 
                                 }
@@ -134,10 +134,9 @@
 
                         </div>
                     </div>
-                </div>
-                <div class="">
+            
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Tên menu có trong hệ thống</span></div>
+                        <div class="col-md-6"><span>Tên danh mục có trong hệ thống</span></div>
                         <div class="col-md-8">
                             <select id="id_menu" name="id_menu" style=" width: 155px;
                                                                 height: 35px; text-align: center; font-size: 15px;">
@@ -153,7 +152,7 @@
 
                             </select>
                         </div>
-                    </div>
+                
                 </div>
                 @* <div class="">
                         <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
@@ -192,12 +191,12 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Chỉnh sửa menu vào phân quyền</h4>
+                    <h4 class="modal-title">Chỉnh sửa danh mục vào phân quyền</h4>
                 </div>
                 <input hidden id="id_rolemenu" value="" />
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                        <div class="col-md-4"><span>Vai trò:</span></div>
+                        <div class="col-md-6"><span>Vai trò:</span></div>
                         <div class="col-md-8">
                             <select id="edit_id_role" name="edit_id_role" style=" width: 155px;
                                                                 height: 35px; text-align: center; font-size: 15px;">
@@ -206,7 +205,7 @@
                                 {
 
 
-                                    <option value="@item.id">@item.role_name</option>
+                                    <option value="@item.id">@item.role_name_vn</option>
 
 
 
@@ -219,7 +218,7 @@
                 </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Tên menu có trong hệ thống:</span></div>
+                        <div class="col-md-4"><span>Tên menu có trong danh mục:</span></div>
                         <div class="col-md-8">
                             <select id="edit_id_menu" name="edit_id_menu" style=" width: 155px;
                                                                     height: 35px; text-align: center; font-size: 15px;">
@@ -321,7 +320,27 @@
                 });
             });
         });
-        $("#zero_config").DataTable();
+    $("#zero_config").DataTable({
+        'language': {
+            "decimal": "",
+            "emptyTable": "Không có dữ liệu",
+            "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Hiển thị _MENU_ mục",
+            "loadingRecords": "Đang tải...",
+            "search": "Tìm kiếm:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": "Sau",
+                "previous": "Trước"
+            }
+        },
+    });
          function CreateTitle() {
             $("#modalCreate").modal("show");
         }

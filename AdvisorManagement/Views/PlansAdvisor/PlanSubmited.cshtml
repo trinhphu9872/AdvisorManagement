@@ -27,8 +27,8 @@
                             <a onclick="ListAdvisor()" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 250px;">
                                 Danh sách cố vấn chưa nộp<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
-                            <a href="@Url.Action("ExportAllTemplateAdvisor","PlansAdvisor")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 250px;">
-                                Export tất cả<i style="margin-left:5px" class="fas fa-plus"></i>
+                            <a href="@Url.Action("ExportAllTemplateAdvisor","PlansAdvisor")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 250px; color:white">
+                                Xuất tất cả kế hoạch<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                         </div>
                     </div>
@@ -64,7 +64,10 @@
                             <tbody id="myTable">
                             </tbody>
                         </table>
-                        <a href="javascript:history.back()">Back to List</a>
+                        <a href="javascript:history.back()" class="btn btn-primary" style="margin-right : 70%;width: 100px;">
+                            Quay lại
+                        </a>
+              
                     </div>
                 </div>
             </div>

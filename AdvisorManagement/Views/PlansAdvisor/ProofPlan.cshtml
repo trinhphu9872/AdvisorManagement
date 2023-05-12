@@ -2,7 +2,7 @@
 @using AdvisorManagement.Models;
 
 @{
-    ViewBag.Title = "ProofPlan";
+    ViewBag.Title = "Danh sách minh chứng";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
     List<PlanAdvisor> listYear = (List<PlanAdvisor>)ViewBag.listYear;
@@ -39,22 +39,24 @@
                             </select>
                         </div>
                
-                <div class="table-responsive" style="margin-top:10px">
-                        <table width="100%" id="zero_config_advisor" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
-                            <thead>
-                                <tr>
-                                    <th width="10%" style="text-align:center">STT</th>
-                                    <th width="25%" style="text-align:center">Mã lớp học</th>
-                                    <th width="15%" style="text-align:center">Người cố vấn</th>
-                                    <th width="15%" style="text-align:center">Khóa</th>
-                                    @*<th width="15%" style="text-align:center">Ngày nhận</th>*@
-                                </tr>
-                            </thead>
-                            <tbody id="myTable">
-                            </tbody>
-                        </table>
-                    <a href="javascript:history.back()">Back to List</a>
-                </div>
+                        <div class="table-responsive" style="margin-top:10px">
+                            <table width="100%" id="zero_config_advisor" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                                <thead>
+                                    <tr>
+                                        <th width="10%" style="text-align:center">STT</th>
+                                        <th width="25%" style="text-align:center">Mã lớp học</th>
+                                        <th width="15%" style="text-align:center">Người cố vấn</th>
+                                        <th width="15%" style="text-align:center">Khóa</th>
+                                        @*<th width="15%" style="text-align:center">Ngày nhận</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody id="myTable">
+                                </tbody>
+                            </table>
+                            <a href="javascript:history.back()" class="btn btn-primary" style="margin-right : 70%;width: 100px;">
+                                Quay lại
+                            </a>
+                        </div>
                 </div>
             </div>
         </div>
@@ -245,6 +247,25 @@
                  { 'data': 'name', 'width': '25%' },
                  { 'data': 'course', 'width': '30%' },
                  ],
+             'language': {
+                 "decimal": "",
+                 "emptyTable": "Không có dữ liệu",
+                 "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                 "infoEmpty": "Showing 0 to 0 of 0 entries",
+                 "infoFiltered": "(filtered from _MAX_ total entries)",
+                 "infoPostFix": "",
+                 "thousands": ",",
+                 "lengthMenu": "Hiển thị _MENU_ mục",
+                 "loadingRecords": "Đang tải...",
+                 "search": "Tìm kiếm:",
+                 "zeroRecords": "No matching records found",
+                 "paginate": {
+                     "first": "First",
+                     "last": "Last",
+                     "next": "Sau",
+                     "previous": "Trước"
+                 },
+             }
 
          });
             dataTable.on('order.dt search.dt', function () {

@@ -40,6 +40,7 @@ namespace AdvisorManagement.Middleware
 
         public string MailSendMuiltiRequest(MailRequest request, List<string> MultiMail, string content)
         {
+
             // Load the HTML template
             string htmlTemplate = content;
             var emails = new List<MimeMessage>();
@@ -47,14 +48,17 @@ namespace AdvisorManagement.Middleware
             {
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse(WebConfigurationManager.AppSettings["EmailSystem"]));
-                email.To.Add(MailboxAddress.Parse(m.Trim()));
+                if (this.IsValidEmail(m))
+                {
+                    email.To.Add(MailboxAddress.Parse(m.Trim()));
+                }
                 //email.To.Add(MailboxAddress.Parse("phu.197pm09495@vanlanguni.vn"));
 
                 email.Subject = request.Subject;
                 // get name
                 string nameUser = serviceAccount.getTextName(m.Trim());
                 // Create the message body
-                string finalHtml = htmlTemplate.Replace("[[Name]]", nameUser).Replace("[[Subject]]", request.Subject).Replace("[[message]]", request.Message);
+                string finalHtml = htmlTemplate.Replace("[[Name]]", nameUser).Replace("[[Subject]]", request.Subject).Replace("[[Message]]", request.Message);
                 var builder = new BodyBuilder();
                 builder.HtmlBody = finalHtml;
                 email.Body = builder.ToMessageBody();
@@ -71,6 +75,43 @@ namespace AdvisorManagement.Middleware
                 smtp.Disconnect(true);
             }
             return "Nhắc nhở thành công";
+        }
+
+
+        public string MailSendRequest(MailRequest request, string content)
+        {
+             if (this.IsValidEmail(request.To))
+             {
+                // Load the HTML template
+                string htmlTemplate = content;
+                var emails = new List<MimeMessage>();
+
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse(WebConfigurationManager.AppSettings["EmailSystem"]));
+                email.To.Add(MailboxAddress.Parse(request.To.Trim()));
+                //email.To.Add(MailboxAddress.Parse("phu.197pm09495@vanlanguni.vn"));
+                email.Subject = request.Subject;
+                // get name
+                string nameUser = serviceAccount.getTextName(request.To.Trim());
+                // Create the message body
+                string finalHtml = htmlTemplate.Replace("[[Name]]", nameUser).Replace("[[Subject]]", request.Subject).Replace("[[Message]]", request.Message);
+                var builder = new BodyBuilder();
+                builder.HtmlBody = finalHtml;
+                email.Body = builder.ToMessageBody();
+                emails.Add(email);
+
+                using (var smtp = new SmtpClient())
+                {
+                    smtp.Connect(WebConfigurationManager.AppSettings["EmailHost"], int.Parse(WebConfigurationManager.AppSettings["EmailPort"]), SecureSocketOptions.StartTls);
+                    smtp.Authenticate(WebConfigurationManager.AppSettings["EUserName"], WebConfigurationManager.AppSettings["EPassword"]);
+
+                    smtp.Send(email);
+
+                    smtp.Disconnect(true);
+                }
+                return "Nhắc nhở thành công";
+             }
+            return "Nhắc nhở không thành công";
         }
 
         public  bool IsValidEmail(string email)

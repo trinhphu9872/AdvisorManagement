@@ -13,7 +13,7 @@
             </div>
             <div class="row">
                 <div class="col-12 d-flex no-block align-items-center">
-                    <a onclick="CreateTitle()" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 200px;color:white">
+                    <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 10px; margin-left: 20px; width: 200px;color:white">
                         Thêm người dùng<i style="margin-left:5px" class="fas fa-plus"></i>
                     </a>
                     <div class="ms-auto text-end">
@@ -52,9 +52,14 @@
                                         <td>@i</td>
                                         <td>@item.user_code</td>
                                         <td>@item.user_name</td>
-                                        <td>@item.Role.role_name</td>
+                                        <td>@item.Role.role_name_vn</td>
                                         <td>@item.phone</td>
-                                        <td>@item.create_time.Value.ToString("dd-MM-yyyy hh:mm")</td>
+                                        <td>
+                                            @if (item.create_time.HasValue)
+                                            {
+                                                @item.create_time.Value.ToString("dd-MM-yyyy hh:mm")
+                                            }
+                                        </td>
                                         <td>@item.email</td>
                                         <td style="width:250px">
                                             <a name="detail" class="btn btn-success"
@@ -124,8 +129,8 @@
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Hình ảnh :</span></div>
                     <div class="col-md-11">
-                        <img src="#" id="imagePreview" />
-                        <input type="file" name="txtImage" id="txtImage" accept="image/*" class="form-control"  />
+                        <img src="~/Images/imageProfile/avata.png" id="imagePreview"  width="150" height="150" class="mb-2" />
+                        <input type="file" name="txtImage" id="txtImage" accept="image/*" class="form-control" onchange="ShowImageProduct(this, document.getElementById('imagePreview'))" />
                     </div>
                 </div>
             </div>
@@ -136,7 +141,7 @@
                         <select id="txt_id_role" name="txt_id_role" style=" width: 155px; height: 35px; text-align: center; font-size: 15px;">
                             @foreach (var item in rolelist)
                             {
-                                <option value="@item.id">@item.role_name</option>
+                                <option value="@item.id">@item.role_name_vn</option>
                             }
                         </select>
                     </div>
@@ -144,7 +149,7 @@
             </div>
             <div class="modal-footer">
                 <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button id="btnCreate" class="btn btn-success" type="submit">Thêm</button>
+                <button id="btnCreate" class="btn btn-primary" type="submit">Thêm</button>
             </div>
         </div>
     </div>
@@ -161,31 +166,31 @@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Email văn lang:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-11">
                         <input id="txtEmailEdit" type="text" class="form-control" disabled />
                     </div>
                 </div>
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                    <div class="col-md-4"><span>Họ và tên giảng viên:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-4"><span>Họ và tên :</span></div>
+                    <div class="col-md-11">
                         <input id="txtNameEdit" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                    <div class="col-md-4"><span>Số điện thoại giảng viên:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-4"><span>Số điện thoại :</span></div>
+                    <div class="col-md-11">
                         <input id="txtPhoneEdit" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                    <div class="col-md-4"><span>Địa chỉ giảng viên:</span></div>
-                    <div class="col-md-8">
+                    <div class="col-md-4"><span>Địa chỉ :</span></div>
+                    <div class="col-md-11">
                         <input id="textAddressEdit" type="text" class="form-control" />
                     </div>
                 </div>
@@ -194,8 +199,8 @@
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Hình ảnh :</span></div>
                     <div class="col-md-11">
-                        <img src="#" id="imagePreview" />
-                        <input type="file" name="txtImageEdit" id="txtImageEdit" accept="image/*" class="form-control" />
+                        <img src="~/Images/imageProfile/avata.png" id="imagePreviewEdit" width="150" height="150" class="mb-2" />
+                        <input type="file" name="txtImageEdit" id="txtImageEdit" accept="image/*" class="form-control"  onchange="ShowImageProduct(this, document.getElementById('imagePreviewEdit'))"  />
                     </div>
                 </div>
             </div>
@@ -229,7 +234,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Chi tiết cố vấn học tập</h4>
+                <h4 class="modal-title">Chi tiết thông tin người dùng</h4>
             </div>
             <input hidden id="id_detailUser" value="" />
             <div class="mx-auto " style="width: 150px;">
@@ -242,7 +247,7 @@
             </div>
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                    <div class="col-md-4"><span>Mã cố vấn:</span></div>
+                    <div class="col-md-4"><span>Mã người dùng:</span></div>
                     <div class="col-md-11">
                         <input id="detail_code" type="text" class="form-control" disabled="disabled" />
                     </div>
@@ -327,7 +332,39 @@
             });
         });
     });
-    $("#zero_config").DataTable();
+
+    $("#zero_config").DataTable({
+        order: [[3, 'asc']],
+        'language': {
+            "decimal": "",
+            "emptyTable": "Không có dữ liệu",
+            "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Hiển thị _MENU_ mục",
+            "loadingRecords": "Đang tải...",
+            "search": "Tìm kiếm:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": "Sau",
+                "previous": "Trước"
+            }
+        },
+    });
+
+    function ShowImageProduct(txtImage, previewImage) {
+        if (txtImage.files && txtImage.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $(previewImage).attr('src', e.target.result);
+            }
+            reader.readAsDataURL(txtImage.files[0]);
+        }
+    }
     // get thong tin nguoi dung
     $(document).on('click', "a[name=detail]", function () {
          let host = window.location.origin;
@@ -346,7 +383,6 @@
                      $('#detail_street').val(data.detail_street);
                      $('#detail_mail').val(data.detail_mail);
                      $('#detail_phone').val(data.detail_phone);
-
                      $('#detail_img').attr('src',`${host}${data.detail_img.replace("~","")}`);
                      $('#id_detailUser').val(data.id_detailUser);
                      $('#modalDetail').modal("show");
@@ -488,6 +524,8 @@
     // cập nhật thông tin người dùng
     $(document).on('click', "a[name=update]", function () {
         let id_title = $(this).closest('tr').attr('id');
+        let host = window.location.origin;
+
         $.ajax({
             url:'@Url.Action("Details", "AccountUsers")' ,
             type: 'get',
@@ -496,14 +534,14 @@
             },
             success: function (data) {
                 if (data.success == true) {
-                    console.log(data);
+          
                     $('#modalUpdate').modal("show");
                     $('#id_edit').val(id_title);
                     $("#txtEmailEdit").val(data.detail_mail);
                     $("#txtNameEdit").val(data.detail_name);
                     $("#txtPhoneEdit").val(data.detail_phone);
                     $("#textAddressEdit").val(data.detail_street);
-
+                    $('#imagePreviewEdit').attr('src', `${host}${data.detail_img.replace("~", "")}`);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -592,11 +630,9 @@
             })
 
         })
-
     })
     function HideModalUp() {
         $("#modalUpdate").modal("hide");
     }
-
 
 </script>

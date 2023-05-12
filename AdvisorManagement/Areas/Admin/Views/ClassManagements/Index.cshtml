@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AdvisorManagement.Models.VLClass>
 @using AdvisorManagement.Models;
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Phân Công lớp";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
     IEnumerable<AccountUser> nameUser = ViewBag.nameUser as IEnumerable<AccountUser>;
@@ -27,9 +27,9 @@
                 <div class="page-breadcrumb">
                     <div class="row">
 
-                        <div class="col-12 d-flex no-block align-items-center">
+                        <div class="col-12 d-flex no-block align-items-center mb-1">
                             <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;color:white">
-                                Thêm<i style="margin-left:5px" class="fas fa-plus"></i>
+                                Thêm lớp<i style="margin-left:5px" class="fas fa-plus"></i>
                             </a>
                             <a onclick="ImportExcelFile()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
                                 Nhập danh sách<i style="margin-left:5px" class="fas fa-plus"></i>

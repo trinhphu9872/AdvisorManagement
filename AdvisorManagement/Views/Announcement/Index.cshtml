@@ -1,38 +1,253 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Gửi thông báo";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
+    var id_notify = ViewBag.id_notify;
+    //id_notify = Session["id_notify"].ToString();
 }
 
 <div class="col-md-15">
     <div class="divmain">
         <div>
             <div>
-                <table width="100%" class="table table-bordered table-striped table-responsive">
-                    <div class="card-body p-3">
-                        <div class="card-text content mt-3">
-                            <h2>Gửi thông báo</h2>
-                            <span id="messages" class="warning"></span>
-                            <hr />
+                <div class="row">
+                    <div class="col-5">
+                        <table width="100%" class="table table-bordered table-striped table-responsive">
+                            <div class="card-body ">
+                                <div class="card-text content ">
+                                    <h2>Gửi thông báo</h2>
+                                    <span id="messages" class="warning"></span>
+                                    <hr />
 
-                            <div class="form-group">
-                                <label for="email">Gửi đến:</label>
-                                <input type="email" class="form-control" id="toUser" value="" placeholder="ha.197pm09438@vanlanguni.vn" />
-                            </div>
-                            <div class="form-group">
-                                <label for="pwd">Tiêu đề:</label>
-                                <input type="text" class="form-control" id="myTitle" value="" placeholder="Title" />
-                            </div>
-                            <div class="form-group">
-                                <label for="pwd">Nội dung:</label>
-                                <input type="text" class="form-control" id="myMessage" value="" placeholder="Message" />
+                                    <div class="form-group">
+                                        <label for="email">Gửi đến:</label>
+                                        <input type="email" class="form-control" id="toUser" value=""  />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pwd">Tiêu đề:</label>
+                                        <input type="text" class="form-control" id="myTitle" value="" placeholder="Title" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pwd">Nội dung:</label>
+                                        <input type="text" class="form-control" id="myMessage" value="" placeholder="Message" />
+                                    </div>
+
+                                    <button type="submit" class="btn btn-default" id="submit">Gửi</button>
+                                </div>
                             </div>
 
-                            <button type="submit" class="btn btn-default" id="submit">Gửi</button>
-                        </div>
+                        </table>
                     </div>
+                    <div class="col-7">
 
-                </table>
+                        <div id="page-content" class="row">
+                            <div id="region-main-box" class="col-12">
+                                <section id="region-main" aria-label="Content">
+                                    <span class="notifications" id="user-notifications"></span>
+                                    <div role="main" id="yui_3_17_2_1_1681618016053_21" class="mt-4">
+                                        <span id="maincontent"></span><h2 id="yui_3_17_2_1_1681618016053_20">Tất cả thông báo</h2><div class="notification-area" data-region="notification-area" data-user-id="5885" id="yui_3_17_2_1_1681618016053_22" style="background-color :white">
+                                            <div class="control-area" data-region="control-area">
+                                       
+                                                <div style="padding-top: 20px;text-align:center">Bạn đang không có thông báo nào</div>
+                                                @* <span class="loading-icon icon-no-margin"><i class="icon fa fa-circle-o-notch fa-spin fa-fw " title="Loading" aria-label="Loading"></i></span>*@
+                                            </div>
+                                            <div class="content-area" data-region="content-area">
+                                                <div class="header" data-region="header"></div>
+                                                <div class="content" data-region="content"></div>
+                                                <div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div>
+                                                <div class="footer" data-region="footer"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </section>
+                            </div>
+                        </div>
+                        <style>
+                            .notification-area {
+                                height: 600px;
+                                -webkit-box-sizing: border-box;
+                                box-sizing: border-box;
+                                border-radius: 4px;
+                                margin-bottom: 30px;
+                                border: 1px solid #e3e3e3
+                            }
+
+                                .notification-area .control-area {
+                                    -webkit-box-sizing: border-box;
+                                    box-sizing: border-box;
+                                    display: inline-block;
+                                    width: 300px;
+                                    height: 100%;
+                                    overflow: auto;
+                                    -webkit-overflow-scrolling: touch;
+                                    border-right: 1px solid #e3e3e3
+                                }
+
+                                    .notification-area .control-area .content {
+                                        position: relative
+                                    }
+
+                                        .notification-area .control-area .content .content-item-container {
+                                            cursor: pointer
+                                        }
+
+                                        .notification-area .control-area .content:empty + .empty-text {
+                                            display: block
+                                        }
+
+                                    .notification-area .control-area .loading-icon {
+                                        display: none
+                                    }
+
+                                    .notification-area .control-area .empty-text {
+                                        display: none;
+                                        text-align: center;
+                                        padding-top: 20px
+                                    }
+
+                                    .notification-area .control-area.loading .loading-icon {
+                                        display: block;
+                                        text-align: center;
+                                        -webkit-box-sizing: border-box;
+                                        box-sizing: border-box;
+                                        padding: 5px
+                                    }
+
+                                    .notification-area .control-area.loading .content:empty + .empty-text {
+                                        display: none
+                                    }
+
+                                .notification-area .content-area {
+                                    -webkit-box-sizing: border-box;
+                                    box-sizing: border-box;
+                                    display: inline-block;
+                                    width: calc(100% - 300px);
+                                    float: right
+                                }
+
+                                    .notification-area .content-area .toggle-mode {
+                                        display: none
+                                    }
+
+                                    .notification-area .content-area .header {
+                                        height: 70px;
+                                        -webkit-box-sizing: border-box;
+                                        box-sizing: border-box;
+                                        border-bottom: 1px solid #e3e3e3;
+                                        padding: 15px
+                                    }
+
+                                        .notification-area .content-area .header .image-container {
+                                            display: inline-block;
+                                            height: 25px;
+                                            width: 24px;
+                                            float: left
+                                        }
+
+                                        .notification-area .content-area .header .subject-container {
+                                            display: inline-block;
+                                            max-width: calc(100% - 24px);
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            height: 25px;
+                                            padding-left: 5px;
+                                            -webkit-box-sizing: border-box;
+                                            box-sizing: border-box
+                                        }
+
+                                        .notification-area .content-area .header .timestamp {
+                                            font-size: 10px;
+                                            line-height: 10px;
+                                            margin: 0;
+                                            color: #666;
+                                            margin-left: 30px;
+                                            float: right !important;
+                                            padding-top: 5px;
+                                        }
+
+                                        .notification-area .content-area .header:empty {
+                                            display: none
+                                        }
+
+                                    .notification-area .content-area > .content {
+                                        height: 500px;
+                                        -webkit-box-sizing: border-box;
+                                        box-sizing: border-box;
+                                        overflow: auto;
+                                        -webkit-overflow-scrolling: touch;
+                                        padding: 15px
+                                    }
+
+                                        .notification-area .content-area > .content:empty {
+                                            display: none
+                                        }
+
+                                            .notification-area .content-area > .content:empty + .empty-text {
+                                                display: block;
+                                                text-align: center;
+                                                padding-top: 100px
+                                            }
+
+                                    .notification-area .content-area .empty-text {
+                                        display: none
+                                    }
+
+                                    .notification-area .content-area .footer {
+                                        height: 50px;
+                                        -webkit-box-sizing: border-box;
+                                        box-sizing: border-box;
+                                        text-align: center
+                                    }
+
+                                        .notification-area .content-area .footer a {
+                                            line-height: 50px
+                                        }
+
+                                        .notification-area .content-area .footer:empty {
+                                            display: none
+                                        }
+
+                                    .notification-area .content-area .toggle-mode {
+                                        display: inline-block;
+                                        float: left;
+                                        width: 70px;
+                                        height: 50px;
+                                        line-height: 50px;
+                                        -webkit-box-sizing: border-box;
+                                        box-sizing: border-box;
+                                        border-right: 1px solid #e3e3e3;
+                                        border-bottom: 1px solid #e3e3e3
+                                    }
+
+                                    .notification-area .content-area .header {
+                                        display: inline-block;
+                                        width: calc(100% - 40px)
+                                    }
+
+                                .notification-area.show-content-area .control-area {
+                                    left: -100%;
+                                    opacity: 0;
+                                    visibility: hidden;
+                                    -webkit-transition: left .25s,opacity .25s,visibility .25s;
+                                    -o-transition: left .25s,opacity .25s,visibility .25s;
+                                    transition: left .25s,opacity .25s,visibility .25s
+                                }
+
+                                .notification-area.show-content-area .content-area {
+                                    right: 0;
+                                    opacity: 1;
+                                    visibility: visible;
+                                    -webkit-transition: right .25s;
+                                    -o-transition: right .25s;
+                                    transition: right .25s
+                                }
+                            }
+                        </style>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -47,7 +262,7 @@
             var sendtouser = $("#toUser").val();
             var title = $("#myTitle").val();
 
-            //$("#messages").append("<p>" + message + "</p>");
+
 
             var Notification = { userID: sendtouser, title: title, message: message };
 
@@ -71,5 +286,41 @@
             });
 
         });
+
+
+    $(function () {
+        var hub = $.connection.notificationHub;
+        //Client call,
+        hub.client.detail = function (message) {
+           /* hub.server.getNotification();*/
+            if (message.length > 0) {
+                jQuery('.control-area').empty();
+                for (let i = 0; i < message.length; i++) {
+                    if (message[i].isRead == true) {
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                    } else {
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                    }
+                }
+            }
+        };
+
+         if (@id_notify != "0") {
+            console.log(@id_notify);
+            detailNotify(@id_notify);
+        }
+     })
+
+    function detailNotify(id_notify) {
+        $.ajax({
+            url: "@Url.Action("DetailNotification", "Announcement")",
+            type: 'get',
+            data: { id_notify: id_notify },
+            success: function (data) {
+                jQuery('.content-area').empty();
+                $('.content-area').append($('<div class="header" data-region="header"><div class="timestamp">' + moment(data.notify[0].date).format("DD-MM-YYYY HH:mm") + '</div>' + data.notify[0].title + '</div><div class= "content" data - region="content" >' + data.notify[0].message + '</div>'));
+            }
+        })
+    }
 </script>
 
