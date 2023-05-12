@@ -23,6 +23,8 @@ using System.Web.UI;
 using Ionic.Zip;
 using OfficeOpenXml.DataValidation;
 using MimeKit;
+using AdvisorManagement.Hubs;
+using MailKit;
 
 namespace AdvisorManagement.Controllers
 {
@@ -799,7 +801,23 @@ namespace AdvisorManagement.Controllers
         [HttpPost]
         public ActionResult SendMailRemind(string to, string subject, string message)
         {
-            List<string> mail = to.Split(',').AsEnumerable().ToList();
+            var id_account = db.AccountUser.FirstOrDefault(x => x.email == to).id;
+            NotificationHub objNotifHub = new NotificationHub();
+            Annoucement objNotif = new Annoucement();
+            objNotif.title = subject;
+            objNotif.message = message;
+            db.Annoucement.Add(objNotif);
+            db.SaveChanges();
+            Notification notif = new Notification();
+            notif.id_notification = objNotif.id;
+            notif.send_to = to;
+            notif.create_time = DateTime.Now;
+            notif.is_read = false;            
+            db.Configuration.ProxyCreationEnabled = false;
+            db.Notification.Add(notif);
+            db.SaveChanges();
+            objNotifHub.SendNotification(to);
+            List<string> mail = to.Split(',').AsEnumerable().ToList(); 
             var status = servicesMail.MailSendMuiltiRequest(new MailRequest { Message = message, Subject = subject, To = ""},mail, LoadHtmlTemplate());
             return Json(new { message = status, success = true }, JsonRequestBehavior.AllowGet);
         }
