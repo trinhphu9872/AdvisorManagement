@@ -234,6 +234,7 @@ namespace AdvisorManagement.Middleware
                 item.email = email;
                 item.address = address;
                 item.gender = getGender(gender.ToString());
+                item.create_time = DateTime.Now;
                 db.AccountUser.Add(item);
                 db.SaveChanges();
                 result = true;
