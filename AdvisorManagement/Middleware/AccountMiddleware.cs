@@ -588,5 +588,11 @@ namespace AdvisorManagement.Middleware
             return Regex.IsMatch(mail, studnetPattems) ? true : false;
         }
 
+        public bool IsValidVietnameseName(string name)
+        {
+            string pattern = @"^([A-ZĐ][a-zđ]*)(\s[A-ZĐ][a-zđ]*)+$";
+            return Regex.IsMatch(name, pattern);
+        }
+
     }
 }

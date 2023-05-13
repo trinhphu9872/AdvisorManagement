@@ -29,7 +29,7 @@
             <div class="card-body">
                 <h5 class="card-title"></h5>
                 <div class="table-responsive">
-                    <table id="zero_config" class="table table-hover table-info table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                    <table id="zero_config" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
                         <thead>
                             <tr>
                                 <th>Stt</th>
@@ -346,7 +346,7 @@
             "lengthMenu": "Hiển thị _MENU_ mục",
             "loadingRecords": "Đang tải...",
             "search": "Tìm kiếm:",
-            "zeroRecords": "No matching records found",
+            "zeroRecords": "Không tìm thấy dữ liệu",
             "paginate": {
                 "first": "First",
                 "last": "Last",
@@ -410,15 +410,17 @@
         $('#btnCreate').click(function () {
             // validate file
             var fileInput = $('#txtImage');
-            var file = fileInput[0].files[0];
-            // get data
-            if (!file.type.startsWith('image/')) {
-                alert('Vui lòng chọn hình ảnh.');
-                return;
-            }
-            if (file.size > 5 * 1024 * 1024) {
-                alert('Vui lòng chọn file ảnh dưới 5 MB.');
-                return;
+            if (fileInput.length > 1) {
+                var file = fileInput[0].files[0];
+                // get data
+                if (!file.type.startsWith('image/')) {
+                    alert('Vui lòng chọn hình ảnh.');
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Vui lòng chọn file ảnh dưới 5 MB.');
+                    return;
+                }
             }
             let formData = new FormData();
             let jsonData = {
@@ -469,13 +471,12 @@
     // xoá thông tin người dùng
     $(document).on('click', "a[name=delete]", function () {
         let id_std = $(this).closest('tr').attr('id');
-        console.log(id_std);
         Swal.fire({
-            title: "Bạn thực sự muốn xóa người dùng này?",
-            icon: "warning",
-            showCancelButton: true,
+            icon: "question",
+            title: "Bạn muốn xóa người dùng này?",
             confirmButtonText: "Xóa",
             cancelButtonText: "Hủy",
+            showCancelButton: true,
             reverseButtons: true
         }).then(function (result) {
             if (result.value) {

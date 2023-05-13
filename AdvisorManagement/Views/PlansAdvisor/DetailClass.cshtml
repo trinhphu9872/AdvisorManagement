@@ -24,6 +24,8 @@
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
+                        @if (ViewBag.yearClass == ViewBag.yearNow)
+                        {
                         <div class="col-12 d-flex no-block align-items-center">
                             @if (Session["name_status"].ToString() == "Đang làm")
                             {
@@ -35,7 +37,7 @@
                                 </a>
                                 <a onclick="SubmitPlan()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                     Nộp kế hoạch <i class="fas fa-plus"></i>
-                                </a>                               
+                                </a>
                             }
                             else if (Session["name_status"].ToString() == "Chờ duyệt")
                             {
@@ -59,6 +61,32 @@
                                 </a>
                             }
                         </div>
+                        }
+                        else { 
+                            <div class="col-12 d-flex no-block align-items-center">
+                                @if (Session["name_status"].ToString() == "Đang làm")
+                                {                                  
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                        Export template <i class="fas fa-plus"></i>
+                                    </a>                                   
+                                }
+                                else if (Session["name_status"].ToString() == "Chờ duyệt")
+                                {
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                        Export template <i class="fas fa-plus"></i>
+                                    </a>                                  
+                                }
+                                else
+                                {
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                        Export template <i class="fas fa-plus"></i>
+                                    </a>
+                                    <a onclick="" class="btn btn-default" style="background-color:darkolivegreen; margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                        Hoàn thành <i class="fas fa-plus"></i>
+                                    </a>
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -152,13 +180,21 @@
                                             <td width="10%">
                                                 @Html.DisplayFor(modelItem => item.note)
                                             </td>
+
                                             @if (Session["name_status"].ToString() == "Đang làm")
                                             {
-                                                <td width="25%">
-                                                    <button onclick="Update(@item.id)" class="btn btn-success">Sửa <i class="fas fa-tasks"></i></button>
-                                                    <button onclick="Delete(@item.id)" class="btn btn-danger">Xóa <i class="fas fa-trash-alt"></i></button>
-                                                    <a id="proof" href="@Url.Action("Details", "PlansAdvisor", new {id = item.id})" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>
-                                                </td>
+                                                if (ViewBag.yearClass == ViewBag.yearNow)
+                                                {
+                                                    <td width="25%">
+                                                        <button onclick="Update(@item.id)" class="btn btn-success">Sửa <i class="fas fa-tasks"></i></button>
+                                                        <button onclick="Delete(@item.id)" class="btn btn-danger">Xóa <i class="fas fa-trash-alt"></i></button>
+                                                        <a id="proof" href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td hidden></td>
+                                                }
                                             }
                                             else
                                             {

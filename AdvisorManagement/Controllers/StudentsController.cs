@@ -51,6 +51,8 @@ namespace AdvisorManagement.Controllers
             {
                 if (role == "Advisor")
                 {
+                    ViewBag.listYearAdvisor = db.VLClass.Where(x => x.semester_name != year.ToString()).DistinctBy(x => x.semester_name).ToList();
+                    Session["yearNow"] = year;
                     ViewBag.classAdvisor = listClass;
                     return View(listClass);
                 }
@@ -61,6 +63,13 @@ namespace AdvisorManagement.Controllers
                 }
             }
             return View();
+        }
+
+         [HttpGet]
+        public ActionResult GetDataAdvisor(int year)
+        {
+            var listClassAdvisor = serviceStudents.getClass(User.Identity.Name, year);
+            return Json(new { data = listClassAdvisor, success = false }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult NoClass()
@@ -75,10 +84,10 @@ namespace AdvisorManagement.Controllers
             {
                 this.init();
                 var detailClass = serviceStudents.getStudentList(id);
-                if (detailClass == null)
+               /* if (detailClass == null)
                 {
                     return HttpNotFound();
-                }
+                }*/
                 ViewBag.detailClass = detailClass;
                 ViewBag.classInfo = serviceStudents.getInfoClass(id);
                 Session["id_class"] = id;

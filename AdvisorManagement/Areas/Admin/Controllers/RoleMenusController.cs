@@ -100,11 +100,16 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 ViewBag.Error = "Sai phan quyen";
                 return Json(new { success = false, message = "Sai phan quyen" });
-
+                
+            }
+            var checkRole = db.RoleMenu.Where(x => x.id_role == roleMenu.id_role && x.id_menu == roleMenu.id_menu).ToList();
+            if (checkRole.Count > 0)
+            {
+                return Json(new { success = false, message = "Đã tồn tại danh mục theo phân quyền" });
             }
             db.RoleMenu.Add(roleMenu);
             db.SaveChanges();
-            return Json(new { success = true, message = "Thêm thành công" });
+            return Json(new { success = true, message = "Thêm danh mục thành công" });
 
             //}
             //ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_menu);
@@ -128,9 +133,6 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 var roleMenu = db.RoleMenu.FirstOrDefault(x => x.id == id);
                 var menu = db.Menu.Find(roleMenu.id_menu);
-
-                //ViewBag.role = roleMenu.id_role;
-                //ViewBag.menu = roleMenu.id_menu;
                 return Json(new { success = true, R_id_menu = roleMenu.id_menu, R_id_role = roleMenu.id_role, R_id = roleMenu.id, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
