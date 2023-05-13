@@ -293,11 +293,17 @@
                 url: "@Url.Action("SendNotification", "Announcement")",
                 data: JSON.stringify(Notification),
                 contentType: 'application/json; charset=utf-8',
-                success: function (data) {
-                    Swal.fire(
-                        'Thông báo',
-                        data.message
-                    )
+                success:  function (data) {
+                    Swal.fire({
+                        icon: "success",
+                        title: data.message,
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    })
                     $("#toUser").val("");
                     $("#myTitle").val("");
                     $("#myMessage").val("");
@@ -325,7 +331,7 @@
                                     popup: 'animate__animated animate__fadeOutUp'
                                 }
                             }).then(function (result) {
-                                if (result.success) {
+                                if (result.value) {
                                     location.reload();
                                 }
                             })
@@ -340,9 +346,8 @@
                                     popup: 'animate__animated animate__fadeOutUp'
                                 }
                             }).then(function (result) {
-                                if (!result.success) {
+                                if (result.value) {
                                     location.reload();
-
                                 }
                             })
                         }

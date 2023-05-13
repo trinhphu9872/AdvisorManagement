@@ -303,7 +303,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         // check aplha
         private bool checkAplha(string aplha)
         {
-            string regexPattern = "^[a-zA-Z]$";
+            string regexPattern = "^[A-Z]$";
             return Regex.IsMatch(aplha, regexPattern);
         }
         // upload

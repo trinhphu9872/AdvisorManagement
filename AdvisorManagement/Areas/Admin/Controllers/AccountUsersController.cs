@@ -93,13 +93,17 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     account.img_profile = "~/Images/imageProfile/" + filename;
                     account.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
                 }
-                if (account.email == null)
+                if (account.email == null )
                 {
                     return Json(new { success = false, message = "Vui lòng điền mail" });
                 }
                 if (account.user_name == null)
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên " });
+                }
+                if (serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
+                {
+                    return Json(new { success = false, message = "Vui lòng điền tên không chứa kí tự đặc biệt" });
                 }
                 if (account.phone == null)
                 {
@@ -123,6 +127,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     return Json(new { success = false, message = "Email tồn tại trong hệ thông" });
                 }
                 string mess =  serviceAccount.UserProfileCheck(account.email, account);
+                if (mess == "")
+                {
+                
+                    return Json(new { success = false, message = "Thêm người dùng không thành công" });
+
+                }
                 return Json(new { success = true, message = mess });
 
             }
@@ -206,9 +216,17 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     account.img_profile = "~/Images/imageProfile/" + filename;
                     account.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
                 }
+                if (account.email == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng điền mail" });
+                }
                 if (account.user_name == null)
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên " });
+                }
+                if (serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
+                {
+                    return Json(new { success = false, message = "Vui lòng điền tên không chứa kí tự đặc biệt" });
                 }
                 if (account.phone == null)
                 {
@@ -218,11 +236,15 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điền địa chỉ" });
                 }
+                if (!serviceAccount.IsValidEmail(account.email))
+                {
+                    return Json(new { success = false, message = "Email không đúng định dạng" });
+                }
                 if (!serviceAccount.IsPhoneNumberValid(account.phone))
                 {
                     return Json(new { success = false, message = "Số điện thoại không đúng định dạng" });
                 }
-              
+
                 if (edtUser == null)
                 {
                     return Json(new { success = false, message = "Email không tồn tại trong hệ thông" });

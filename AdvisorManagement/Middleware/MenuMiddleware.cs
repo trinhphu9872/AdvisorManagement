@@ -34,7 +34,7 @@ namespace AdvisorManagement.Middleware
                             select new Models.ViewModel.MenuRole
                             {
                                 id = mnrole.id,
-                                roleName = role.role_name,
+                                roleName = role.role_name_vn,
                                 menuName = mn.menu_name
                             }).OrderBy(x => x.roleName).ToList();
             return roleMenu;
