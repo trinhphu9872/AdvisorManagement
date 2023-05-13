@@ -384,7 +384,30 @@
                  { 'data': 'name', 'width': '25%' },
                  { 'data': 'course', 'width': '30%' },
                  ],
-
+             'bAutoWidth': false,
+             'responsive': false,
+             "order": [[0, "asc"]],
+             'ordering': false,
+             'rowsGroup': [0, 1],
+             'language': {
+                 "decimal": "",
+                 "emptyTable": "Không có dữ liệu",
+                 "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                 "infoEmpty": "",
+                 "infoFiltered": "(filtered from _MAX_ total entries)",
+                 "infoPostFix": "",
+                 "thousands": ",",
+                 "lengthMenu": "Hiển thị _MENU_ mục",
+                 "loadingRecords": "Đang tải...",
+                 "search": "Tìm kiếm:",
+                 "zeroRecords": "No matching records found",
+                 "paginate": {
+                     "first": "First",
+                     "last": "Last",
+                     "next": "Sau",
+                     "previous": "Trước"
+                 },
+             }
          });
             dataTable.on('order.dt search.dt', function () {
                 let i = 1;
@@ -432,7 +455,31 @@
                                  return '<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>'
                          }
                      },
-                     ],
+                    ],
+                'bAutoWidth': false,
+                'responsive': false,
+                "order": [[0, "asc"]],
+                'ordering': false,
+                'rowsGroup': [0, 1],
+                'language': {
+                    "decimal": "",
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                    "infoEmpty": "",
+                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "No matching records found",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                }
              });
         }
         function selectYearNow() {
@@ -462,7 +509,31 @@
                              return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data +')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > @*<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
                          }
                      },
-                 ]
+                    ],
+                'bAutoWidth': false,
+                'responsive': false,
+                "order": [[0, "asc"]],
+                'ordering': false,
+                'rowsGroup': [0, 1],
+                'language': {
+                    "decimal": "",
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                    "infoEmpty": "",
+                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "No matching records found",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                }
             });
     }
 
@@ -490,7 +561,30 @@
                          { 'data': 'name', 'width': '25%' },
                          { 'data': 'course', 'width': '30%' },
                          ],
-
+                'bAutoWidth': false,
+                'responsive': false,
+                "order": [[0, "asc"]],
+                'ordering': false,
+                'rowsGroup': [0, 1],
+                'language': {
+                    "decimal": "",
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                    "infoEmpty": "",
+                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "No matching records found",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                }
                  });
             dataTable.on('order.dt search.dt', function () {
                 let i = 1;

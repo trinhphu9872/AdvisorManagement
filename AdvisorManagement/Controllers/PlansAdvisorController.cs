@@ -376,7 +376,9 @@ namespace AdvisorManagement.Controllers
             ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
             var year = servicePlan.getYear();
             var id_status = db.PlanStatus.FirstOrDefault(x => x.id_class == id).id_status;
-            var nameStatus = db.StatusPlan.FirstOrDefault(x => x.id == id_status).status_name;            
+            var nameStatus = db.StatusPlan.FirstOrDefault(x => x.id == id_status).status_name;
+            ViewBag.yearClass = db.VLClass.Find(id).semester_name.ToString();
+            ViewBag.yearNow = servicePlan.getYear().ToString();
             Session["yearNow"] = year;
             Session["id_class"] = id;
             Session["name_status"] = nameStatus;

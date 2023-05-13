@@ -42,7 +42,8 @@ namespace AdvisorManagement.Middleware
                 if (stu.Count() > 0)
                 {
                     var user = db.Student.SingleOrDefault(x => x.student_code == sql.user_code);
-                    if (user.id_class == null)
+                    var checkclassExist = db.VLClass.SingleOrDefault(x => x.id == user.id_class);
+                    if (user.id_class == null || checkclassExist == null)
                     {
                         return 0;
 
@@ -212,7 +213,7 @@ namespace AdvisorManagement.Middleware
                 var user_code = db.AccountUser.FirstOrDefault(x => x.email == user_email).user_code;
                 var advisor_code = db.VLClass.FirstOrDefault(x => x.id.Equals(id_class)).advisor_code;
                 var role_admin = db.AccountUser.FirstOrDefault(x => x.email == user_email).id_role; 
-                if (advisor_code == user_code || role_admin == 1)
+                if (advisor_code == user_code || role_admin == 1 || role_admin == 3)
                 {
                     return true;
                 }
