@@ -81,8 +81,6 @@ namespace AdvisorManagement.Middleware
             ws.Cells[6, 1, 6, 7].Style.Font.Size = 14;
             ws.Cells[6, 1, 6, 7].Style.Font.Bold = false;
 
-
-
             // title
             // stt
             ws.Cells[7, 1, 7, 1].Merge = true;
