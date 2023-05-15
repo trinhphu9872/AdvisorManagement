@@ -45,13 +45,13 @@
                             @if (ViewBag.Menu != null)
                             {
                                 List<AdvisorManagement.Models.ViewModel.MenuItem> listMenu = (List<AdvisorManagement.Models.ViewModel.MenuItem>)ViewBag.ListMenu;
-                                <thead>
+                                <thead class="table-active text-uppercase">
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Tên danh mục</th>
+                                        <th><b>STT </b></th>
+                                        <th><b>Tên danh mục </b></th>
                                     </tr>
                                 </thead>
-                                <tbody id="sortMenu" style="cursor:pointer;">
+                                <tbody id="sortMenu " style="cursor:pointer;">
                                     @foreach (var item in listMenu)
                                     {
                                         <tr>

@@ -48,17 +48,17 @@
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-hover table-light table-bordered">
                             <thead>
-                                <tr>
+                                <tr class="table-active text-uppercase">
                                     <th>
-                                        Quyền
+                                        <b>   Quyền </b>
                                     </th>
                                     <th>
-                                        Danh mục
+                                        <b>  Danh mục</b>
                                     </th>
                                     <th>
-                                        Hành động
+                                        <b>  Hành động</b>
                                     </th>
-                                </tr>
+                                </trclass="table-active>
                             </thead>
                             <tbody id="myTable">
                                 @if (ViewBag.roleMenu != null)
@@ -68,7 +68,7 @@
                                     {
                                         <tr id="@item.id">
                                             <td>
-                                                @item.roleName
+                                                <b> @item.roleName </b>
                                             </td>
                                             <td>
                                                 @item.menuName

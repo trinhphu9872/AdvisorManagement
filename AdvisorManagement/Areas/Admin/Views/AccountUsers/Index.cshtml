@@ -29,17 +29,17 @@
             <div class="card-body">
                 <h5 class="card-title"></h5>
                 <div class="table-responsive">
-                    <table id="zero_config" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
+                    <table id="zero_config" class="table table-hover table-light table-bordered " role="grid" aria-describedby="zero_config_info">
                         <thead>
-                            <tr>
-                                <th>Stt</th>
-                                <th>Mã số</th>
-                                <th>Họ tên</th>
-                                <th>Chức vụ</th>
-                                <th>Số điện thoại</th>
-                                <th>Ngày tham gia</th>
-                                <th>Email</th>
-                                <th>Hoạt động</th>
+                            <tr class="table-active text-uppercase" >
+                                <th scope="col"><b>Stt           </b> </th>
+                                <th scope="col"><b>Mã số         </b> </th>
+                                <th scope="col"><b>Họ tên        </b> </th>
+                                <th scope="col"><b>Chức vụ       </b> </th>
+                                <th scope="col"><b>Số điện thoại </b> </th>
+                                <th scope="col"><b>Ngày tham gia </b> </th>
+                                <th scope="col"><b>Email         </b> </th>
+                                <th scope="col"><b>Hoạt động     </b> </th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
@@ -50,7 +50,7 @@
                                 {
                                         <tr id="@item.id">
                                             <td>@i</td>
-                                            <td>@item.user_code</td>
+                                            <td><b> @item.user_code </b></td>
                                             <td>@item.user_name</td>
                                             <td>@item.Role.role_name_vn</td>
 
