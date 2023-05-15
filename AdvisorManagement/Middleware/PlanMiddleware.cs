@@ -376,34 +376,11 @@ namespace AdvisorManagement.Middleware
                     }
                 }
                 else
-                {
-                    if (item.number_title == 3)
-                    {
-                        ws.InsertRow(rowStart - countSTT, 1);
-                        ws.Row(rowStart - countSTT).Height = 31.20;
-                        ws.Cells[rowStart - countSTT, 2].Value = "Tổ chức họp lớp SV theo định kỳ/đột xuất.";
-                        ws.Cells[rowStart - countSTT, 3, rowStart - countSTT, 8].Merge = true;
-
-                        ws.InsertRow(rowStart + countSTT - 1, 1);
-                        ws.Row(rowStart + countSTT - 1).Height = 31.20;
-                        ws.Cells[rowStart + countSTT - 1, 2].Value = "...";
-                        ws.Cells[rowStart + countSTT - 1, 6].Value = "...";
-                        rowStart = rowStart + 2;
-                    }
+                {                   
                     if (countSTT > 1)
                     {
-                        if (item.number_title == 3)
-                        {
-                            ws.Cells[rowStart - countSTT - 2, 1, rowStart - 1, 1].Merge = true;
-                            ws.Cells[rowStart - countSTT - 2, 1, rowStart - 1, 1].Value = ws.Cells[rowStart - countSTT - 1, 1].Value;
-                            ws.Cells[rowStart - countSTT - 2, 1, rowStart - 1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                            countSTT = 1;
-                        }
-                        else
-                        {
-                            ws.Cells[rowStart - countSTT, 1, rowStart - 1, 1].Merge = true;
-                            countSTT = 1;
-                        }
+                        ws.Cells[rowStart - countSTT, 1, rowStart - 1, 1].Merge = true;
+                        countSTT = 1;
                     }
                     if (countContent > 1)
                     {
