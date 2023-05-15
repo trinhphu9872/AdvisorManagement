@@ -31,6 +31,10 @@
                                 <a onclick="ReadEvol()" class="btn btn-danger" style=" margin-left: 5px; width: 150px; color: white">
                                     Danh mục đánh giá
                                 </a>
+
+                                <a onclick="ReadAllUser()" class="btn btn-danger" style=" margin-left: 5px; width: 230px; color: white">
+                                    Danh mục đánh giá giảng viên
+                                </a>
                             }
                         </div>
                     </div>
@@ -58,11 +62,11 @@
                     <div class="table-responsive" style="margin-top:10px">
                         <table width="100%" id="zero_config_advisor" class="table table-light table-hover table-bordered" role="grid" aria-describedby="zero_config_info">
                             <thead>
-                                <tr>
-                                    <th width="10%" style="text-align:center">STT</th>
-                                    <th width="25%" style="text-align:center">Mã lớp học</th>
-                                    <th width="15%" style="text-align:center">Người cố vấn</th>
-                                    <th width="15%" style="text-align:center">Khóa</th>
+                                <tr class="table-active text-uppercase">
+                                    <th width="10%" style="text-align:center"><b>STT</b></th>
+                                    <th width="25%" style="text-align:center"><b>Mã lớp học  </b></th>
+                                    <th width="15%" style="text-align:center"><b>Người cố vấn</b></th>
+                                    <th width="15%" style="text-align:center"><b>Khóa        </b></th>
                                     @*<th width="15%" style="text-align:center">Ngày nhận</th>*@
                                 </tr>
                             </thead>
