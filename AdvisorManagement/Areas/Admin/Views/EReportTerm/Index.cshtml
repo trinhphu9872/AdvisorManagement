@@ -30,7 +30,7 @@
                             {
                                 <a onclick="ReadEvol()" class="btn btn-success" style=" margin-left: 5px; width: 200px; color: white">
                                     Danh mục đánh giá <i style="margin-left:5px" class="fas fa-clipboard-list"></i>
-                                
+
                                 </a>
 
                                 <a onclick="ReadAllUser()" class="btn btn-danger" style=" margin-left: 5px; width: 230px; color: white">
@@ -45,8 +45,6 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">
-             
-
                     </h5>
                     <div class="">
                         <label for="cars">Năm học:</label>
@@ -74,7 +72,7 @@
                             <tbody id="myTable">
                             </tbody>
                         </table>
-                  
+
                     </div>
                 </div>
             </div>
@@ -114,6 +112,44 @@
                         </table>
                     </div>
                     <div id="showEvol" class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* show *@
+        <div id="modalEvolUser" class="modal fade" role="document">
+            <div class="modal-dialog" style="max-width: 60%;" role="document">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
+                    <div class="modal-header">
+                        <button onclick="ExportUserAll()" class="btn btn-info">Xuất đánh giá tổng thể <i class="fas fa-tasks"></i></button>
+
+                        <input hidden id="id_evol_user" value="" />
+                        <h4 class="modal-title">Đánh giá giảng viên</h4>
+                    </div>
+                    <div class="table-responsive" style="margin-top:10px">
+                        <table width="100%" id="zero_config_evol_user" class="table table-light table-hover table-bordered" role="grid" aria-describedby="zero_config_info">
+                            <thead>
+                                <tr class="table-active text-uppercase">
+                                    <th scope="col" style="text-align:center"><b>STT               </b> </th>
+                                    <th scope="col" style="text-align:center"><b>Mã lớp            </b>  </th>
+                                    <th scope="col" style="text-align:center"><b>Cố vấn học tập    </b>   </th>
+                                    <th scope="col" style="text-align:center"><b>Phần mềm đánh giá </b>    </th>
+                                    <th scope="col" style="text-align:center"><b>Cố vấn tự đánh giá       </b>     </th>
+                                    <th scope="col" style="text-align:center"><b>Khoa đánh giá     </b>      </th>
+                                    <th scope="col" style="text-align:center"><b>Ghi chú           </b>      </th>
+                                    <th scope="col" style="text-align:center"><b>Chỉnh sửa         </b>      </th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="showEvolUser" class="modal-footer">
                     </div>
                 </div>
             </div>
@@ -394,7 +430,126 @@
 
             function hideRead() {
                 $("#modalEvol").modal('hide');
+    }
+
+
+        // modal Evol User
+             function ReadAllUser() {
+                jQuery('#showEvolUser').empty();
+                $("#zero_config_evol_user").dataTable().fnDestroy();
+                dataTable = $("#zero_config_evol_user").DataTable({
+                 'ajax': {
+                        'url': '@Url.Action("GetEvolUserTable", "EReportTerm")',
+                        'type': 'get',
+                        'datatype': 'json',
+                 },
+                 'columns':
+                     [
+                         { 'data': 'stt', 'width': '5%', },
+                         {
+                             'data': 'class_id', 'width': '10%', 'render': function (data, type, row) {
+                                 return '<a id="proof" href="@Url.Action("ReportClass", "EReportTerm")/' + row.id + '/" >' + data + '</a>';
+                             }
+                            },
+                         { 'data': 'name_advisor', 'width': '15%' },
+                         { 'data': 'evol_sys', 'width': '10%' },
+                         { 'data': 'eval_advisor', 'width': '10%' },
+                         { 'data': 'eval_admin', 'width': '10%' },
+                         { 'data': 'note', 'width': '10%' },
+                         {
+                             'data': 'class_id', 'width': '10%', 'render': function (data) {
+                                 return '<button onclick="UpdateAdmin(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button >'
+                             }
+
+                         }
+                        ],
+                    'language': {
+                        "decimal": "",
+                        "emptyTable": "Không có dữ liệu",
+                        "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                        "infoEmpty": "Showing 0 to 0 of 0 entries",
+                        "infoFiltered": "(filtered from _MAX_ total entries)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Hiển thị _MENU_ mục",
+                        "loadingRecords": "Đang tải...",
+                        "search": "Tìm kiếm:",
+                        "zeroRecords": "Không tìm thấy dữ liệu",
+                        "paginate": {
+                            "first": "First",
+                            "last": "Last",
+                            "next": "Sau",
+                            "previous": "Trước"
+                        },
+                    },
+                    "autoWidth": false,
+                    "aLengthMenu": [[-1], ["All"]],
+                    "bLengthChange": false,
+                    "bPaginate": false,
+                    "bInfo": false,
+               });
+                dataTable.on('order.dt search.dt', function () {
+                       let i = 1;
+                       dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                           this.data(i++);
+                       });
+                }).draw();
+                $('#showEvolUser').append(`
+                            <button onclick="hideReadUser()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>`);
+                $("#modalEvolUser").modal('show');
             }
+
+            function hideReadUser() {
+                $("#modalEvolUser").modal('hide');
+        }
+        // model export
+            function ExportUserAll() {
+                input = document.getElementById("semester");
+                const d = new Date();
+                let id = d.getFullYear();
+            $.ajax({
+                url: '@Url.Action("ExportUserAll", "EReportTerm")',
+                type: 'POST',
+                data: {
+                    year: id,
+                },
+                success: function (data) {
+                    if (data.success == false) {
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
+
+                    } else {
+                        var bytes = new Uint8Array(data.FileContents);
+                        var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                        var downloadUrl = URL.createObjectURL(blob);
+                        var a = document.createElement("a");
+                        a.href = downloadUrl;
+                        a.download = data.FileDownloadName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+
+                },
+                error: function (err) {
+                    alert(err);
+                },
+            })
+        }
+
 
 
         $(document).ready(function () {
@@ -606,7 +761,7 @@
         });
     }
         // upload
- 
+
 
 
 </script>

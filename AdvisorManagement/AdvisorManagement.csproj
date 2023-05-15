@@ -421,6 +421,7 @@
     </Compile>
     <Compile Include="Models\ViewModel\AccountInitModel.cs" />
     <Compile Include="Models\ViewModel\AccountUserModel.cs" />
+    <Compile Include="Models\ViewModel\AdminCheckEvol.cs" />
     <Compile Include="Models\ViewModel\ClassModel\AdvisorClass.cs" />
     <Compile Include="Models\ViewModel\ClassModel\ListStudent.cs" />
     <Compile Include="Models\ViewModel\ListAdvisorUnfinished.cs" />

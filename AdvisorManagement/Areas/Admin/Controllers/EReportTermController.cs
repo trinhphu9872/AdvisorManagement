@@ -48,6 +48,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         }
 
 
+
         [HttpGet]
         public ActionResult GetListClass(int year)
         {
@@ -56,6 +57,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
            
             return Json(new { data = listClass, success = false }, JsonRequestBehavior.AllowGet);
         }
+
+
+
 
         public ActionResult ReportClass(int? id)
         {
@@ -68,6 +72,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             ViewBag.Evol = this.getDes(id);
             ViewBag.CountE = this.checkIndexReport(this.getData(id));
+            ViewBag.DanhGia =  int.Parse(serviceAccount.getRoleTextName(User.Identity.Name)) == 1 ? db.PlanStatus.FirstOrDefault(x => x.id_class == id).eval_admin : db.PlanStatus.FirstOrDefault(x => x.id_class == id).eval_advisor;
+            //ViewBag.DanhGia = 1;
             this.init();          
             var id_account = serviceStd.getID(User.Identity.Name);           
             var year = servicePlan.getYear();
@@ -169,6 +175,123 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             else
             {
                 return Json(new { data = lsEvol, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public List<AdminCheckEvol> EvalData()
+        {
+            var lsEvol = db.PlanStatus.ToList();
+            List<AdminCheckEvol> AdminEval = new List<AdminCheckEvol>();
+            int index = 1;
+            foreach (var item in lsEvol)
+            {
+                var sql = db.VLClass.Where(x => x.id == item.id_class).ToList();
+                if (sql.Count > 0)
+                {
+                    var classItem = db.VLClass.FirstOrDefault(x => x.id == item.id_class);
+
+                    AdminCheckEvol adminCheckItem = new AdminCheckEvol();
+                    adminCheckItem.stt = index;
+                    adminCheckItem.id = classItem.id;
+                    adminCheckItem.class_id = classItem.class_code;
+                    adminCheckItem.name_advisor = db.AccountUser.FirstOrDefault(y => y.user_code == classItem.advisor_code).user_name;
+                    adminCheckItem.evol_sys = this.getDes(classItem.id)[0].rank_type;
+                    adminCheckItem.eval_advisor = item.eval_advisor == null ? "Giảng viên chưa đánh giá" : item.eval_advisor;
+                    adminCheckItem.eval_admin = item.eval_admin == null ? "Khoa chưa đánh giá" : item.eval_admin;
+                    adminCheckItem.note = "";
+                    AdminEval.Add(adminCheckItem);
+                    index++;
+                }
+            }
+            return AdminEval;
+        }
+
+        [HttpGet]
+        public ActionResult GetEvolUserTable()
+        {
+
+            List<AdminCheckEvol> AdminEval = this.EvalData();
+
+            if (AdminEval.Count() > 0)
+            {
+                return Json(new { data = AdminEval, success = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { data = AdminEval, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EvalInitChecked(int? id, string val)
+        {
+            int option = int.Parse(serviceAccount.getRoleTextName(User.Identity.Name)) == 1 ? 1 : 2;
+            var lsEvol = db.PlanStatus.Where(x => x.id_class == id).ToList();
+            if (val == null || val == "")
+            {
+                return Json(new { message = "Vui lòng điền đánh giá", success = false }, JsonRequestBehavior.AllowGet);
+
+            }
+            if (val.Length > 1)
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng 1 kí tự theo chuẩn" });
+            }
+            if (!this.checkAplha(val))
+            {
+                return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng A - Z" });
+            }
+            var checkDanhGia = db.EvaluationAdvisor.Where(x => x.rank_type == val).ToList();
+            if (checkDanhGia.Count() < 1)
+            {
+                return Json(new { success = false, message = "Vui lòng đánh giá dựa trên bảng tiêu chí" });
+
+            }
+
+            if (lsEvol.Count > 0)
+            {
+                var itemUpdate = db.PlanStatus.FirstOrDefault(x => x.id_class == id);
+                switch (option)
+                {
+                    case 1:
+                        itemUpdate.eval_admin = val;
+                        break;
+                    case 2:
+                        itemUpdate.eval_advisor = val;
+                        break;
+                    default:
+                        itemUpdate.eval_admin = "D";
+                        itemUpdate.eval_advisor = "D";
+                        break;
+                }
+
+                db.Entry(itemUpdate).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { message = "Đánh giá thành công", success = true }, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                return Json(new { message = "Đánh giá thất bại", success = false }, JsonRequestBehavior.AllowGet);
+
+            }
+
+        }
+
+        [HttpPost]
+        public JsonResult ExportUserAll(int? year)
+        {
+            try
+            {
+                using (ExcelPackage pck = new ExcelPackage())
+                {
+                    var package = serviceEReport.ExportEvalUser(pck, this.EvalData(), "Báo cáo cuối kì" , User.Identity.Name.ToString(), year);
+                    var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BaoCaoKehoachToanCVHT-" + "-" + (year - 1) + "-" + year + ".xlsx");
+                    return Json(fileOject, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
         // Detail

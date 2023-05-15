@@ -49,9 +49,34 @@
                             if (int.Parse(Session["RoleName"].ToString()) != 1)
                             {
                                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                                    <div class="col-md-4"><span>Giảng viên tự đánh giá:</span></div>
-                                    <div class="col-md-4">
-                                        <input id="txtDanhGia" type="text" class="form-control" maxlength="1" />
+                                    <div class="col-md-4"><span>Cố vấn tự đánh giá:</span></div>
+                                    <div class="col-md-4 row">
+                                        <div class="col-6 row">
+                                            <input id="txtDanhGia" type="text" class="form-control col-2" maxlength="1" value=@ViewData["DanhGia"] />
+                                        </div>
+                                        <div class="col-5">
+                                            <a onclick="DanhGia(@id_class)" class="btn btn-success" style=" margin-left: 5px; width: 200px; color: white">
+                                                Cố vấn đánh giá  <i class="fas fa-check"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            }
+                            else if (int.Parse(Session["RoleName"].ToString()) == 1)
+                            {
+                                <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                                    <div class="col-md-4"><span>Admin tự đánh giá:</span></div>
+                                    <div class="col-md-4 row">
+                                        <div class="col-6 row">
+                                            <input id="txtDanhGia" type="text" class="form-control col-2" maxlength="1" value=@ViewData["DanhGia"] />
+                                        </div>
+                                        <div class="col-5">
+                                            <a onclick="DanhGia(@id_class)" class="btn btn-success" style=" margin-left: 5px; width: 200px; color: white">
+                                                Admin đánh giá  <i class="fas fa-check"></i>
+                                            </a>
+                                        </div>
+
                                     </div>
                                 </div>
                             }
@@ -253,7 +278,7 @@
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {
                     if (data.success == false) {
-      
+
                         Swal.fire({
                             icon: 'error',
                             title: data.message,
@@ -268,7 +293,7 @@
                                 location.reload();
                             }
                         })
-              
+
                     } else {
                         var bytes = new Uint8Array(data.FileContents);
                         var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -280,7 +305,7 @@
                         a.click();
                         document.body.removeChild(a);
                     }
-      
+
                 },
                 error: function (err) {
                     alert(err);
@@ -304,7 +329,7 @@
                  { 'data': 'rank_des', 'width': '40%' },
                  { 'data': 'rank_count', 'width': '10%' },
                  { 'data': 'rank_end', 'width': '10%' },
-          
+
 
                 ],
             'language': {
@@ -390,24 +415,70 @@
         })
     })
    //Sự kiện xóa
-         function Delete(id) {
-             if (confirm("Bạn thực sự muốn xóa minh chứng này?")) {
-                $.ajax({
-                    url: '@Url.Action("DeleteProof", "PlansAdvisor")',
-                    type: 'POST',
-                    data: {
-                        id: id
-                    },
-                    success: function (data) {
-                         if (data.success == true) {
-                             alert(data.message);
-                             dataTable.ajax.reload(null, false);
-                         } else {
-                             alert(data.message);
-                         }
-                    }
-                })
+    function DanhGia(id) {
+        let val = $('#txtDanhGia').val();
+        console.log(val);
+             Swal.fire({
+             title: "Bạn chắc chắn đánh giá kế hoạch này?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                 $.ajax({
+                        url: '@Url.Action("EvalInitChecked", "EReportTerm")',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            val: val
+                        },
+                        success: function (data) {
+                            if (data.success == true) {
+                                $('#modalUpdate').modal('hide');
+                                Swal.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                           
+                                })
+                            }
+                        }
+                  })
+                //Swal.fire(
+                //    "Deleted!",
+                //    "Your file has been deleted.",
+                //    "success",
+                //)
+                // result.dismiss can be "cancel", "overlay",
+                // "close", and "timer"
+            } else if (result.dismiss === "cancel") {
+
             }
+        });
+
          }
 
 </script>
