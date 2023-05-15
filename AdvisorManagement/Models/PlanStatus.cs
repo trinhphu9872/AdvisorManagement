@@ -19,5 +19,7 @@ namespace AdvisorManagement.Models
         public Nullable<int> id_status { get; set; }
         public Nullable<System.DateTime> modify_time { get; set; }
         public string message { get; set; }
+        public string eval_advisor { get; set; }
+        public string eval_admin { get; set; }
     }
 }
