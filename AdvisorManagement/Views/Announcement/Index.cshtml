@@ -19,8 +19,8 @@
                             <div class="page-breadcrumb">
                                 <div class="row">
                                     <div class="col-12 d-flex no-block align-items-center">
-                                        <a onclick="Clear()" id="clear" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px; width: 200px;color:white">
-                                            Xoá hết thông báo<i style="margin-left:5px" class="fas fa-plus"></i>
+                                        <a onclick="Clear()" id="clear" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px; width: 200px; color: white">
+                                            Xoá hết thông báo<i style="margin-left:5px" class="fas fa-trash-alt"></i>
                                         </a>
                           
                                     </div>
@@ -29,31 +29,32 @@
                     
 
                     </div>
-                    <div class="col-5">
+                    <div class="col-5" style="margin-top:26px">
                         <table width="100%" class="table table-bordered table-striped table-responsive">
-                            <div class="card-body ">
-                                <div class="card-text content ">
-                                    <h2>Gửi thông báo</h2>
-                                    <span id="messages" class="warning"></span>
-                                    <hr />
+                            <h2>Gửi thông báo</h2>
+                            
+                            <div class="card">
+                                <div class="card-body ">
+                                    <div class="card-text content ">
 
-                                    <div class="form-group">
-                                        <label for="email">Gửi đến:</label>
-                                        <input type="email" class="form-control" id="toUser" value="" placeholder="Nhập mail " />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="pwd">Tiêu đề:</label>
-                                        <input type="text" class="form-control" id="myTitle" value="" placeholder="Nhập tiêu đề" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="pwd">Nội dung:</label>
-                                        <input type="text" class="form-control" id="myMessage" value="" placeholder="Nhập nội dung" />
-                                    </div>
 
-                                    <button type="submit" class="btn btn-default" id="submit">Gửi</button>
+                                        <div class="form-group">
+                                            <label for="email">Gửi đến:</label>
+                                            <input type="email" class="form-control" id="toUser" value="" placeholder="Nhập mail " />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pwd">Tiêu đề:</label>
+                                            <input type="text" class="form-control" id="myTitle" value="" placeholder="Nhập tiêu đề" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pwd">Nội dung:</label>
+                                            <input type="text" class="form-control" id="myMessage" value="" placeholder="Nhập nội dung" />
+                                        </div>
+
+                                        <button type="submit" class="btn btn-default" id="submit">Gửi</button>
+                                    </div>
                                 </div>
                             </div>
-
                         </table>
                     </div>
                     <div class="col-7">
