@@ -117,6 +117,8 @@
           <Property Name="id_status" Type="int" />
           <Property Name="modify_time" Type="datetime" />
           <Property Name="message" Type="nvarchar" MaxLength="200" />
+          <Property Name="eval_advisor" Type="nchar" MaxLength="10" />
+          <Property Name="eval_admin" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="ProofPlan">
           <Key>
@@ -396,6 +398,8 @@
           <Property Name="id_status" Type="Int32" />
           <Property Name="modify_time" Type="DateTime" Precision="3" />
           <Property Name="message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="eval_advisor" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="eval_admin" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="ProofPlan">
           <Key>
@@ -706,6 +710,8 @@
           <EntitySetMapping Name="PlanStatus">
             <EntityTypeMapping TypeName="CP25Team09Model.PlanStatus">
               <MappingFragment StoreEntitySet="PlanStatus">
+                <ScalarProperty Name="eval_admin" ColumnName="eval_admin" />
+                <ScalarProperty Name="eval_advisor" ColumnName="eval_advisor" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="id_class" ColumnName="id_class" />
                 <ScalarProperty Name="id_status" ColumnName="id_status" />
