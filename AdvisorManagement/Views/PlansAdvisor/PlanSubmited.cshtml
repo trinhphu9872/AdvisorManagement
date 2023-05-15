@@ -25,10 +25,10 @@
                     <div class="row">
                         <div class="col-12 d-flex no-block align-items-center">
                             <a onclick="ListAdvisor()" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px; width: 250px;">
-                                Danh sách cố vấn chưa nộp<i style="margin-left:5px" class="fas fa-plus"></i>
+                                Danh sách cố vấn chưa nộp<i style="margin-left:5px" class="fas fa-clipboard-list"></i>
                             </a>
                             <a href="@Url.Action("ExportAllTemplateAdvisor","PlansAdvisor")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 250px; color:white">
-                                Xuất tất cả kế hoạch<i style="margin-left:5px" class="fas fa-plus"></i>
+                                Xuất tất cả kế hoạch<i style="margin-left:5px" class="fas fa-download"></i>
                             </a>
                         </div>
                     </div>
@@ -171,7 +171,7 @@
                  { 'data': 'status', 'width': '20%' },
                  {
                      'data': 'id_class', 'width': '25%', 'render': function (data, type, row) {
-                         return '<button onclick="Check(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 200px;color:white">Kiểm tra <i class="fas fa-trash-alt"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 200px;color:white">Xuất excel <i class="fas fa-trash-alt"></i></button>';
+                         return '<button onclick="Check(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 200px;color:white">Kiểm tra <i class="fas fa-clipboard-check"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 200px;color:white">Xuất excel <i class="fas fa-download"></i></button>';
                      }
                  },
                  ],
@@ -226,7 +226,7 @@
                  { 'data': 'status', 'width': '20%' },
                  {
                      'data': 'id_class', 'width': '25%', 'render': function (data, type, row) {
-                         return '<button onclick="Check(' + data + ')" class="btn btn-success">Kiểm tra <i class="fas fa-trash-alt"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success">Export excel<i class="fas fa-trash-alt"></i></button>';
+                         return '<button onclick="Check(' + data + ')" class="btn btn-success">Kiểm tra <i class="fas fa-file"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success">Export excel<i class="fas fa-file"></i></button>';
                      }
                  },
                     ],
