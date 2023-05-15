@@ -16,7 +16,7 @@ namespace AdvisorManagement.Hubs
     public class NotificationHub : Hub
     {
         private static readonly ConcurrentDictionary<string, UserHubModels> Users =
-            new ConcurrentDictionary<string, UserHubModels>(StringComparer.InvariantCultureIgnoreCase);
+        new ConcurrentDictionary<string, UserHubModels>(StringComparer.InvariantCultureIgnoreCase);
         private CP25Team09Entities db = new CP25Team09Entities();
         private AnnouncementMiddleware serviceAnnoun = new AnnouncementMiddleware();
         /*  public void Send(string message)

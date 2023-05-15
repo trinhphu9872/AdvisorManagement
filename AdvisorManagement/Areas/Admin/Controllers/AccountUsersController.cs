@@ -9,6 +9,7 @@ using System.Net;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using AdvisorManagement.Middleware;
 using AdvisorManagement.Models;
 
@@ -40,7 +41,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 var accountUser = db.AccountUser.Include(a => a.Role).OrderBy(y => y.id_role);
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-                return View(accountUser.ToList().OrderByDescending(x=>x.create_time));
+                return View(accountUser.ToList().OrderByDescending(x=>x.update_time));
             }
             else
             {
@@ -80,11 +81,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public ActionResult CreateApi([Bind(Include = " email,user_name,phone,address,ImageUpload,id_role")]AccountUser account)
+        public ActionResult CreateApi([Bind(Include = " email,user_name,phone,ImageUpload,id_role")]AccountUser account)
         {
             
             if (serviceAccount.getPermission(User.Identity.Name, routePermission)  )
             {
+                account.address = null;
                 if (account.ImageUpload != null)
                 {
                     string filename = Path.GetFileNameWithoutExtension(account.ImageUpload.FileName).ToString();
@@ -101,6 +103,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên " });
                 }
+                if (account.user_name.Trim().Length == 0 && account.user_name.Length > 0 && string.IsNullOrWhiteSpace(account.user_name))
+                {
+                    return Json(new { success = false, message = "Vui lòng điển tên " });
+                }
                 if (serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên không chứa kí tự đặc biệt" });
@@ -109,9 +115,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điền số điện thoại" });
                 }
-                if (account.address == null)
+                if (db.AccountUser.Where(x => x.phone == account.phone).ToList().Count() > 0)
                 {
-                    return Json(new { success = false, message = "Vui lòng điền địa chỉ" });
+                    return Json(new { success = false, message = "Số điện thoại tồn tại trong hệ thống" });
+
                 }
                 if (!serviceAccount.IsValidEmail(account.email))
                 {
@@ -129,7 +136,6 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 string mess =  serviceAccount.UserProfileCheck(account.email, account);
                 if (mess == "")
                 {
-                
                     return Json(new { success = false, message = "Thêm người dùng không thành công" });
 
                 }
@@ -190,6 +196,20 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 }
                 else
                 {
+                    
+                    var advisorClone = db.Advisor.Where(x => x.account_id == id).ToList();
+                    if (advisorClone.Count() > 0)
+                    {
+                        db.Advisor.Remove(db.Advisor.FirstOrDefault(y => y.account_id == id));
+                        db.SaveChanges();
+                    }
+                    var studentClone = db.Advisor.Where(z => z.account_id == id).ToList();
+                    if (studentClone.Count() > 0)
+                    {
+                        db.Student.Remove(db.Student.FirstOrDefault(y => y.account_id == id));
+                        db.SaveChanges();
+                    }
+
                     db.AccountUser.Remove(userCheck);
                     db.SaveChanges();
                     return Json(new { success = true, message = "Tài khoản admin đã xoá khỏi hệ thống" });
@@ -207,6 +227,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             if (serviceAccount.getPermission(User.Identity.Name, routePermission))
             {
+                account.address = null;
                 var edtUser = db.AccountUser.FirstOrDefault(x => x.id == account.id);
                 if (account.ImageUpload != null)
                 {
@@ -224,6 +245,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên " });
                 }
+                if (account.user_name.Trim().Length == 0 && account.user_name.Length > 0 && string.IsNullOrWhiteSpace(account.user_name))
+                {
+                    return Json(new { success = false, message = "Vui lòng điển tên " });
+                }
                 if (serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên không chứa kí tự đặc biệt" });
@@ -232,9 +257,9 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điền số điện thoại" });
                 }
-                if (account.address == null)
+                if (db.AccountUser.Where(x => x.phone == account.phone).ToList().Count() > 0)
                 {
-                    return Json(new { success = false, message = "Vui lòng điền địa chỉ" });
+                    return Json(new { success = false, message = "Số điện thoại tồn tại trong hệ thống" });
                 }
                 if (!serviceAccount.IsValidEmail(account.email))
                 {
@@ -253,6 +278,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 edtUser.user_name = account.user_name;
                 edtUser.phone = account.phone;
                 edtUser.address = account.address;
+                edtUser.update_time = DateTime.Now;
                 db.Entry(edtUser).State = EntityState.Modified;
                 db.SaveChanges();
                 return Json(new { success = true, message = "Cập nhật tài khoản thành công" });

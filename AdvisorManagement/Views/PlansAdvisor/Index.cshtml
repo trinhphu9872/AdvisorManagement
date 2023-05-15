@@ -2,7 +2,7 @@
 @using AdvisorManagement.Models;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Quản lí kế hoạch năm học";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
     List<PlanAdvisor> listYear = (List<PlanAdvisor>)ViewBag.listYear;
@@ -135,50 +135,57 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Thêm đề mục</h4>
                 </div>
-                <div class="">
+
+                <div class="modal-body">
+                                    <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                         <div class="col-md-4"><span>Số đề mục:</span></div>
-                        <div class="col-md-8">
+                        <div class="col-md-11">
                             <input id="txtIDTitle" type="number" class="form-control" min="1" value="1" />
                         </div>
                     </div>
                 </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Nội dung:</span></div>
-                        <div class="col-md-8">
-                            <input id="txtContent" type="text" class="form-control" />
+         
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>Nội dung:</span></div>
+                            <div class="col-md-11">
+                                <textarea id="txtContent" class="form-control" rows="3" cols="70"> </textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Mô tả:</span></div>
-                        <div class="col-md-8">
-                            <input id="txtDescribe" type="text" class="form-control" />
+
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>Mô tả:</span></div>
+                            <div class="col-md-11">
+                                <textarea id="txtDescribe" class="form-control" rows="3" cols="70"> </textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
+        
+
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                         <div class="col-md-4"><span>Tài nguyên:</span></div>
-                        <div class="col-md-8">
-                            <input id="txtSource" type="text" class="form-control" />
+                        <div class="col-md-11"> 
+                            <textarea id="txtSource" class="form-control"  rows="3" cols="70"> </textarea>
+
                         </div>
                     </div>
                 </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                         <div class="col-md-4"><span>Tiêu chí đánh giá:</span></div>
-                        <div class="col-md-8">
-                            <input id="txtEvaluate" type="text" class="form-control" />
+                        <div class="col-md-11">
+                            <input id="txtEvaluate" type="number" class="form-control" />
                         </div>
                     </div>
                 </div>
                 <div class="">
                     <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                         <div class="col-md-4"><span>Ghi chú:</span></div>
-                        <div class="col-md-8">
+                        <div class="col-md-11">
                             <input id="txtNote" type="text" class="form-control" />
                         </div>
                     </div>
@@ -187,6 +194,8 @@
                     <button onclick="HideModal()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     <button id="btnUpload" class="btn btn-primary" type="submit">Thêm</button>
                 </div>
+                </div>
+
 
             </div>
         </div>
@@ -200,56 +209,61 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Chỉnh sửa đề mục</h4>
                 </div>
-                <input hidden id="id_title" value="" />
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                        <div class="col-md-4"><span>Số đề mục:</span></div>
-                        <div class="col-md-8">
-                            <input id="up_Title" type="number" class="form-control" min="1" />
+                <div class="modal-body">
+                    <input hidden id="id_title" value="" />
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                            <div class="col-md-4"><span>Số đề mục:</span></div>
+                            <div class="col-md-11">
+                                <input id="up_Title" type="number" class="form-control" min="1" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Nội dung:</span></div>
-                        <div class="col-md-8">
-                            <input id="up_Content" type="text" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Mô tả:</span></div>
-                        <div class="col-md-8">
-                            <input id="up_Describe" type="text" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Tài nguyên:</span></div>
-                        <div class="col-md-8">
-                            <input id="up_Source" type="text" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Tiêu chí đánh giá:</span></div>
-                        <div class="col-md-8">
-                            <input id="up_Evaluate" type="text" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                        <div class="col-md-4"><span>Ghi chú:</span></div>
-                        <div class="col-md-8">
-                            <input id="up_Note" type="text" class="form-control" />
-                        </div>
-                    </div>
-                </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>Nội dung:</span></div>
+                            <div class="col-md-11">
+                                <textarea id="up_Content" class="form-control" rows="3" cols="70"> </textarea>
 
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>Mô tả:</span></div>
+                            <div class="col-md-11">
+                           
+                                <textarea id="up_Describe" class="form-control" rows="3" cols="70"> </textarea>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>Tài nguyên:</span></div>
+                            <div class="col-md-11">
+                                <textarea id="up_Source" class="form-control" rows="3" cols="70"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>Tiêu chí đánh giá:</span></div>
+                            <div class="col-md-11">
+                                <input id="up_Evaluate" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                            <div class="col-md-4"><span>Ghi chú:</span></div>
+                            <div class="col-md-11">
+                                <input id="up_Note" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
                 <div class="modal-footer">

@@ -1383,10 +1383,6 @@
     <Content Include="Areas\Admin\Views\RoleMenus\Index.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\SortMenu.cshtml" />
     <Content Include="Areas\Admin\Views\web.config" />
-    <Content Include="Areas\Admin\Views\AccountUsers\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\AccountUsers\Delete.cshtml" />
-    <Content Include="Areas\Admin\Views\AccountUsers\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\AccountUsers\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\AccountUsers\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ClassManagements\EditClass.cshtml" />
     <Content Include="Areas\Admin\Views\ClassManagements\Index.cshtml" />
@@ -1661,7 +1657,6 @@
     <Content Include="Views\Home\EditUserProfile.cshtml" />
     <Content Include="Views\Shared\_Layoutvlu.cshtml" />
     <Content Include="Views\Students\Index.cshtml" />
-    <Content Include="Views\Students\DetailClass.cshtml" />
     <Content Include="Views\Students\UpdateStudent.cshtml" />
     <Content Include="Views\PlansAdvisor\Details.cshtml" />
     <Content Include="Views\PlansAdvisor\Index.cshtml" />
@@ -1673,6 +1668,7 @@
     <Content Include="Views\Announcement\Index.cshtml" />
     <Content Include="Views\Announcement\AllNotification.cshtml" />
     <Content Include="Views\Students\NoClass.cshtml" />
+    <Content Include="Views\Students\DetailClass.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

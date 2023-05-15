@@ -1,10 +1,10 @@
-﻿
+﻿﻿
 @{
     ViewBag.Title = "Chi tiết lớp học";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
     int i = 1;
     List<AdvisorManagement.Models.ViewModel.ListStudent> listStudent = (List<AdvisorManagement.Models.ViewModel.ListStudent>)ViewBag.detailClass;
-    List<AdvisorManagement.Models.StudentStatus> listStatus =(List<AdvisorManagement.Models.StudentStatus>)ViewBag.listStdStatus;
+    List<AdvisorManagement.Models.StudentStatus> listStatus = (List<AdvisorManagement.Models.StudentStatus>)ViewBag.listStdStatus;
 
 }
 
@@ -56,7 +56,7 @@
                             {
                                 <div class="page-breadcrumb">
                                     <div class="row">
-                                        <div class="col-12 d-flex no-block align-items-center">                                            
+                                        <div class="col-12 d-flex no-block align-items-center">
                                             <a href="@Url.Action("ExcelExport", "Students")" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
                                                 Xuất danh sách<i style="margin-left:5px" class="fas fa-plus"></i>
                                             </a>
@@ -89,15 +89,15 @@
                                         <th width="5%">MSSV</th>
                                         <th width="5%">Họ và tên</th>
                                         <th width="5%">Email</th>
-                                        <th >SDT</th>       
-                                        <th >Địa chỉ</th>
-                                        <th >Giới tính</th>
-                                        <th >Trạng thái</th>
+                                        <th>SDT</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Giới tính</th>
+                                        <th>Trạng thái</th>
                                         @if (ViewBag.role == "Advisor" || ViewBag.role == "Admin")
                                         {
                                             if (ViewBag.yearClass == ViewBag.yearNow)
                                             {
-                                            <th width="20%" style="text-align:center">Hoạt động</th>
+                                                <th width="20%" style="text-align:center">Hoạt động</th>
                                             }
                                         }
                                     </tr>
@@ -361,7 +361,7 @@
 
     $("#zero_config").DataTable({
         'bAutoWidth': false,
-     /*   'responsive': false,  */     
+     /*   'responsive': false,  */
         'language': {
             "decimal": "",
             "emptyTable": "Không có dữ liệu",
@@ -528,7 +528,7 @@
             } else if (result.dismiss === "cancel") {
 
             }
-        });        
+        });
     })
 
     function HideModalUp() {
@@ -615,7 +615,7 @@
                                 }
                             })
 
-                        }                            
+                        }
                      }
                 })
         })
@@ -668,17 +668,16 @@
                                 },
                                 hideClass: {
                                     popup: 'animate__animated animate__fadeOutUp'
-                                }   
+                                }
                             }).then(function (result) {
                                 if (result.value) {
                                 }
                             })
 
-                        }                                   
+                        }
                      }
                 })
         })
     })
 
 </script>
-

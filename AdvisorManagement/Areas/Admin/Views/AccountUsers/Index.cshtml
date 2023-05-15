@@ -48,33 +48,46 @@
                                 int i = 1;
                                 foreach (var item in Model)
                                 {
-                                    <tr id="@item.id">
-                                        <td>@i</td>
-                                        <td>@item.user_code</td>
-                                        <td>@item.user_name</td>
-                                        <td>@item.Role.role_name_vn</td>
-                                        <td>@item.phone</td>
-                                        <td>
-                                            @if (item.create_time.HasValue)
+                                        <tr id="@item.id">
+                                            <td>@i</td>
+                                            <td>@item.user_code</td>
+                                            <td>@item.user_name</td>
+                                            <td>@item.Role.role_name_vn</td>
+
+                                            @if (item.phone != null || item.phone == "")
                                             {
-                                                @item.create_time.Value.ToString("dd-MM-yyyy hh:mm")
+                                                <td>
+                                                    @item.phone
+                                                </td>
                                             }
-                                        </td>
-                                        <td>@item.email</td>
-                                        <td style="width:250px">
-                                            <a name="detail" class="btn btn-success"
-                                               style="margin-bottom: 5px; margin-left: 5px; color: white">
-                                                Chi tiết <i class="fas fa-tasks"></i>
-                                            </a>
-                                            <a name="update" id="update" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
-                                                Sửa <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a name="delete" id="btnDelete" class="btn btn-danger"
-                                               style="margin-bottom: 5px; margin-left: 5px;">
-                                                Xoá <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                            else
+                                            {
+                                                <td>
+                                                    Chưa cập nhật số điện thoai
+                                                </td>
+                                            }
+
+                                                <td>
+                                                    @if (item.create_time.HasValue)
+                                                    {
+                                                        @item.create_time.Value.ToString("dd-MM-yyyy hh:mm")
+                                                    }
+                                                </td>
+                                                <td>@item.email</td>
+                                                <td style="width:250px">
+                                                    <a name="detail" class="btn btn-success"
+                                                       style="margin-bottom: 5px; margin-left: 5px; color: white">
+                                                        Chi tiết <i class="fas fa-tasks"></i>
+                                                    </a>
+                                                    <a name="update" id="update" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
+                                                        Sửa <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a name="delete" id="btnDelete" class="btn btn-danger"
+                                                       style="margin-bottom: 5px; margin-left: 5px;">
+                                                        Xoá <i class="fas fa-trash-alt"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
                                     i++;
                                 }
                             }
@@ -117,14 +130,14 @@
                     </div>
                 </div>
             </div>
-            <div class="">
+            @*<div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Địa chỉ :</span></div>
                     <div class="col-md-11">
                         <input id="txtAddress" type="text" class="form-control" />
                     </div>
                 </div>
-            </div>
+            </div>*@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Hình ảnh :</span></div>
@@ -160,7 +173,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Chỉnh sửa cố vấn </h4>
+                <h4 class="modal-title">Chỉnh sửa thông tin người dùng </h4>
             </div>
             <input hidden id="id_edit" value="" />
             <div class="">
@@ -187,14 +200,14 @@
                     </div>
                 </div>
             </div>
-            <div class="">
+            @*<div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Địa chỉ :</span></div>
                     <div class="col-md-11">
                         <input id="textAddressEdit" type="text" class="form-control" />
                     </div>
                 </div>
-            </div>
+            </div>*@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                     <div class="col-md-4"><span>Hình ảnh :</span></div>
@@ -261,14 +274,14 @@
                     </div>
                 </div>
             </div>
-            <div class="">
+            @*<div class="">
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>Địa chỉ:</span></div>
                     <div class="col-md-11">
                         <input id="detail_street" type="text" class="form-control" disabled="disabled" />
                     </div>
                 </div>
-            </div>
+            </div>*@
             <div class="">
                 <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="col-md-4"><span>Email Văn Lang:</span></div>
@@ -334,7 +347,7 @@
     });
 
     $("#zero_config").DataTable({
-        order: [[3, 'asc']],
+        "aaSorting": [],
         'language': {
             "decimal": "",
             "emptyTable": "Không có dữ liệu",
@@ -382,7 +395,7 @@
                      $('#detail_name').val(data.detail_name);
                      $('#detail_street').val(data.detail_street);
                      $('#detail_mail').val(data.detail_mail);
-                     $('#detail_phone').val(data.detail_phone);
+                     $('#detail_phone').val(data.detail_phone == "" || data.detail_phone == null ? "Số điện thoại chưa cập nhật" : data.detail_phone );
                      $('#detail_img').attr('src',`${host}${data.detail_img.replace("~","")}`);
                      $('#id_detailUser').val(data.id_detailUser);
                      $('#modalDetail').modal("show");
@@ -427,7 +440,7 @@
                 email    : $("#txtEmail").val(),
                 user_name: $("#txtName").val(),
                 phone    : $("#txtPhone").val(),
-                address: $("#txtAddress").val(),
+       /*         address: $("#txtAddress").val(),*/
                 id_role: $("#txt_id_role").val(),
                 ImageUpload: file
             };
@@ -541,7 +554,7 @@
                     $("#txtEmailEdit").val(data.detail_mail);
                     $("#txtNameEdit").val(data.detail_name);
                     $("#txtPhoneEdit").val(data.detail_phone);
-                    $("#textAddressEdit").val(data.detail_street);
+                    //$("#textAddressEdit").val(data.detail_street);
                     $('#imagePreviewEdit').attr('src', `${host}${data.detail_img.replace("~", "")}`);
                 } else {
                     Swal.fire({
@@ -553,10 +566,6 @@
                         hideClass: {
                             popup: 'animate__animated animate__fadeOutUp'
                         }
-                    }).then(function (result) {
-                        if (result.value) {
-                            location.reload();
-                        }
                     })
                 }
             }
@@ -566,23 +575,26 @@
     $(document).ready(function () {     //Cập nhật thông tin người dùng
         $('#btnEdit').click(function () {
             var fileInput = $('#txtImageEdit');
-            var file = fileInput[0].files[0];
-            // get data
-            if (!file.type.startsWith('image/')) {
-                alert('Vui lòng chọn hình ảnh.');
-                return;
+            if (fileInput.length > 1) {
+                var file = fileInput[0].files[0];
+                // get data
+                if (!file.type.startsWith('image/')) {
+                    alert('Vui lòng chọn hình ảnh.');
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Vui lòng chọn file ảnh dưới 5 MB.');
+                    return;
+                }
             }
-            if (file.size > 5 * 1024 * 1024) {
-                alert('Vui lòng chọn file ảnh dưới 5 MB.');
-                return;
-            }
+
             let formDataEdt = new FormData();
             let jsonDataEdt = {
                 id: $("#id_edit").val(),
                 email: $("#txtEmailEdit").val(),
                 user_name: $("#txtNameEdit").val(),
                 phone: $("#txtPhoneEdit").val(),
-                address: $("#txtAddressEdit").val(),
+                //address: $("#txtAddressEdit").val(),
                 ImageUpload: file
             };
             for (const [key, value] of Object.entries(jsonDataEdt)) {
@@ -620,10 +632,6 @@
                                 },
                                 hideClass: {
                                     popup: 'animate__animated animate__fadeOutUp'
-                                }
-                            }).then(function (result) {
-                                if (result.value) {
-                                    location.reload();
                                 }
                             })
                         }

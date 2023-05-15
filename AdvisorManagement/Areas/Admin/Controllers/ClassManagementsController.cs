@@ -258,9 +258,6 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             try
             {
                 var detailClass = db.VLClass.Find(id);
-
-                //ViewBag.role = roleMenu.id_role;
-                //ViewBag.menu = roleMenu.id_menu;
                 return Json(new { success = true, R = detailClass.id, R_class_code = detailClass.class_code, R_advisor = detailClass.advisor_code, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
