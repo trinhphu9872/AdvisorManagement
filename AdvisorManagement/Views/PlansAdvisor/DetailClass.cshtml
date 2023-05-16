@@ -9,7 +9,6 @@
     var id_class = (int)Session["id_class"];
     var roleABC = (string)Session["role"];
     var list = Model;
-    var message = Session["message"];
 }
 
 <div class="container-fluid">
@@ -94,21 +93,14 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>                    
-                    <div style="margin-top:10px">
-                        @if (Session["name_status"].ToString() == "Đang làm")
-                        {
-                            if (message != null)
-                            {
-                                <p style="margin-bottom: 5px; margin-left: 10px; color: red; text-align: center ">@message.ToString()</p>
-                            }
-                        }
+                    <div style="margin-top:10px">                        
                         <i class="fa fa-check" style="color:limegreen"></i> Cố vấn đã thực hiện nộp minh chứng
                     </div>
 
                         <div class="table-responsive" style="margin-top:10px">
-                            <table width="100%" id="zero_config" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                            <table width="100%" id="zero_config" class="table table-light table-hover table-bordered" role="grid" aria-describedby="zero_config_info">
                                 <thead>
-                                    <tr>
+                                    <tr class="table-active text-uppercase">
                                         <th style="text-align:center">STT</th>
                                         <th style="text-align:center">Nội dung</th>
                                         <th style="text-align:center">HK1</th>

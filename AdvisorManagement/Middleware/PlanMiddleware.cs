@@ -633,5 +633,12 @@ namespace AdvisorManagement.Middleware
             var class_code = db.VLClass.Find(id_class).class_code;
             return class_code;
         }
+
+        public string getEmailAdvisor(int id)
+        {
+            var user_code = db.VLClass.Find(id).advisor_code;
+            var email = db.AccountUser.SingleOrDefault(x=>x.user_code == user_code).email;
+            return email;
+        }
     }
 }

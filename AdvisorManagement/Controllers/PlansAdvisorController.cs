@@ -36,6 +36,7 @@ namespace AdvisorManagement.Controllers
         private StudentsMiddleware serviceStd = new StudentsMiddleware();
         private PlanMiddleware servicePlan = new PlanMiddleware();
         private AccountMiddleware serviceAccount = new AccountMiddleware();
+        private MailServicesMiddleware mailService = new MailServicesMiddleware();
         public void init()
         {
             ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
@@ -381,17 +382,7 @@ namespace AdvisorManagement.Controllers
             ViewBag.yearNow = servicePlan.getYear().ToString();
             Session["yearNow"] = year;
             Session["id_class"] = id;
-            Session["name_status"] = nameStatus;
-            var message = db.PlanStatus.FirstOrDefault(x => x.id_class == id).message;
-            var modify_time = db.PlanStatus.FirstOrDefault(x => x.id_class == id).modify_time;
-            if(message != null && modify_time != null)
-            {
-                Session["message"] = modify_time + ": " + message;
-            }
-            else
-            {
-                Session["message"] = null;
-            }
+            Session["name_status"] = nameStatus;                  
             return View(db.PlanClass.Where(x => x.id_class == id).Where(y => y.year == year).ToList().OrderBy(x => x.number_title));
         }
 
@@ -712,26 +703,110 @@ namespace AdvisorManagement.Controllers
             return Json(new { success = true, message = "Hoàn tác thành công" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ReturnPlan(int id_class, string message)
+        public ActionResult ReturnPlan(int id_class, string message, string subject)
         {
+            if(message == "" || subject == "")
+            {
+                return Json(new { success = false, message = "Vui lòng điền đầy đủ trường dữ liệu" }, JsonRequestBehavior.AllowGet);
+            }
             var checkStatus = db.PlanStatus.FirstOrDefault(x => x.id_class == id_class).id_status;
             var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Đang làm").id;
+            var email_advisor = servicePlan.getEmailAdvisor(id_class);
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
             planStatus.id_status = id_status;
             planStatus.message = message;
             planStatus.modify_time = DateTime.Now;
             db.SaveChanges();
-            return Json(new { success = true, message = "Trả về thành công" }, JsonRequestBehavior.AllowGet);
+            if (!mailService.IsValidEmail(email_advisor))
+            {
+
+                return Json(new { success = false, message = "Mail không hợp lệ " }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (db.AccountUser.Where(x => x.email == email_advisor).ToList().Count() > 0)
+            {
+                var id_account = db.AccountUser.FirstOrDefault(x => x.email == email_advisor).id;
+                NotificationHub objNotifHub = new NotificationHub();
+                Annoucement objNotif = new Annoucement();
+                objNotif.title = subject;
+                objNotif.message = message;
+                db.Annoucement.Add(objNotif);
+                db.SaveChanges();
+                Notification notif = new Notification();
+                notif.id_notification = objNotif.id;
+                notif.send_to = email_advisor;
+                notif.create_time = DateTime.Now;
+                notif.is_read = false;
+                MailRequest mail = new MailRequest();
+                mail.To = email_advisor;
+                mail.Message = message;
+                mail.Subject = subject;
+                mailService.MailSendRequest(mail, this.LoadHtmlTemplate());
+                db.Configuration.ProxyCreationEnabled = false;
+                db.Notification.Add(notif);
+                db.SaveChanges();
+
+                objNotifHub.SendNotification(email_advisor);
+
+                return Json(new { success = true, message = "Trả về thành công" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = false, message = "Gửi không thành công" }, JsonRequestBehavior.AllowGet);
+
+            }            
         }
 
-        public ActionResult BrowsePlan(int id_class)
+        public ActionResult BrowsePlan(int id_class, string message, string subject)
         {
+            if (message == "" || subject == "")
+            {
+                return Json(new { success = false, message = "Vui lòng điền đầy đủ trường dữ liệu" }, JsonRequestBehavior.AllowGet);
+            }
+            var email_advisor = servicePlan.getEmailAdvisor(id_class);
             var id_status = db.StatusPlan.FirstOrDefault(x => x.status_name == "Hoàn thành").id;
             PlanStatus planStatus = db.PlanStatus.SingleOrDefault(x => x.id_class == id_class);
             planStatus.id_status = id_status;
             planStatus.modify_time = DateTime.Now;
             db.SaveChanges();
-            return Json(new { success = true, message = "Duyệt kế hoạch thành công" }, JsonRequestBehavior.AllowGet);
+            if (!mailService.IsValidEmail(email_advisor))
+            {
+
+                return Json(new { success = false, message = "Mail không hợp lệ " }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (db.AccountUser.Where(x => x.email == email_advisor).ToList().Count() > 0)
+            {
+                var id_account = db.AccountUser.FirstOrDefault(x => x.email == email_advisor).id;
+                NotificationHub objNotifHub = new NotificationHub();
+                Annoucement objNotif = new Annoucement();
+                objNotif.title = subject;
+                objNotif.message = message;
+                db.Annoucement.Add(objNotif);
+                db.SaveChanges();
+                Notification notif = new Notification();
+                notif.id_notification = objNotif.id;
+                notif.send_to = email_advisor;
+                notif.create_time = DateTime.Now;
+                notif.is_read = false;
+                MailRequest mail = new MailRequest();
+                mail.To = email_advisor;
+                mail.Message = message;
+                mail.Subject = subject;
+                mailService.MailSendRequest(mail, this.LoadHtmlTemplate());
+                db.Configuration.ProxyCreationEnabled = false;
+                db.Notification.Add(notif);
+                db.SaveChanges();
+
+                objNotifHub.SendNotification(email_advisor);
+
+                return Json(new { success = true, message = "Duyệt kế hoạch thành công" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = false, message = "Duyệt không thành công" }, JsonRequestBehavior.AllowGet);
+
+            }
         }
 
         public ActionResult PlanSubmited()

@@ -20,8 +20,8 @@
                         <div style="padding-top: 20px;text-align:center">Bạn đang không có thông báo nào</div>
                         @* <span class="loading-icon icon-no-margin"><i class="icon fa fa-circle-o-notch fa-spin fa-fw " title="Loading" aria-label="Loading"></i></span>*@
                     </div>
-                    <div class="content-area" data-region="content-area">
-                        <div class="header" data-region="header"></div>
+                    <div class="content-area" data-region="content-area">                       
+                        <div class="header" data-region="header"></div> 
                         <div class="content" data-region="content"></div>
                         <div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div>
                         <div class="footer" data-region="footer"></div>
@@ -250,9 +250,68 @@
             data: { id_notify: id_notify },
             success: function (data) {
                 jQuery('.content-area').empty();
-                $('.content-area').append($('<div class="header" data-region="header"><div class="timestamp">' + moment(data.notify[0].date).format("DD-MM-YYYY HH:mm") + '</div>' + data.notify[0].title + '</div><div class= "content" data - region="content" >' + data.notify[0].message + '</div>'));
+                $('.content-area').append($('<div class="header" style="width: calc(100%);" data-region="header"><div style = "width: calc(100%);" ><div class="timestamp"><i onclick="DeleteNotification(' + data.notify[0].id + ')" class="fas fa-trash-alt fa-2x"></i></div><div class="timestamp">' + moment(data.notify[0].date).format("HH:mm") + '</div><div style="font-weight: bold;">' + data.notify[0].title + '</div></div></div ><div class="content" data - region="content" > ' + data.notify[0].message + '</div > '));
             }
         })
+    }
+
+    function DeleteNotification(id_notify) {
+        let id_delete = id_notify;
+         Swal.fire({
+            title: "Bạn thực sự muốn xóa thông báo này?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                  $.ajax({
+                        url: '@Url.Action("DeleteNotification", "Announcement")',
+                        type: 'post',
+                        data: {
+                            id_notify: id_delete
+                        },
+                        success: function (data) {
+                            if (data.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    location.reload();
+                                    jQuery('.content-area').empty();
+                                    $('.content-area').append($('<div class="header" data-region="header"></div><div class= "content" data - region="content" ></div ><div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div><div class="footer" data-region="footer"></div>'));
+                                    /*if (result.value) {
+                                        
+                                        jQuery('.content-area').empty();
+                                        $('.content-area').append($('<div class="header" data-region="header"></div><div class= "content" data - region="content" ></div ><div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div><div class="footer" data-region="footer"></div>'));
+                                    }*/
+                                 })
+                             } else {
+                                 Swal.fire(
+                                     'Thông báo',
+                                     data.message
+                                 );
+                             }
+                        }
+                  })
+                //Swal.fire(
+                //    "Deleted!",
+                //    "Your file has been deleted.",
+                //    "success",
+                //)
+                // result.dismiss can be "cancel", "overlay",
+                // "close", and "timer"
+            } else if (result.dismiss === "cancel") {
+
+            }
+        });       
     }
 
 </script>

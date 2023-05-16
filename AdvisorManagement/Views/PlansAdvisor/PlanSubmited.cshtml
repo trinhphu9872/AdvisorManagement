@@ -53,7 +53,7 @@
                     <div class="table-responsive" style="margin-top:10px">
                         <table width="100%" id="zero_config" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
                             <thead>
-                                <tr>
+                                <tr class="table-active text-uppercase">
                                     <th width="5%" style="text-align:center">STT</th>
                                     <th width="20%" style="text-align:center">Mã lớp học</th>
                                     <th width="20%" style="text-align:center">Người cố vấn</th>
@@ -84,9 +84,9 @@
                     <h4 class="modal-title">Kế hoạch cố vấn</h4>
                 </div>
                 <div class="table-responsive" style="margin-top:10px">
-                    <table width="100%" id="zero_config_plan" class="table table-hover table-light  table-bordered" role="grid" aria-describedby="zero_config_info">
+                    <table width="100%" id="zero_config_plan" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
                         <thead>
-                            <tr>
+                            <tr class="table-active text-uppercase">
                                 <th style="text-align:center">STT</th>
                                 <th style="text-align:center">Nội dung</th>
                                 <th style="text-align:center">HK1</th>
@@ -119,9 +119,9 @@
                     <h4 class="modal-title">Danh sách cố vấn chưa nộp kế hoạch năm học</h4>
                 </div>
                 <div class="table-responsive" style="margin-top:10px">
-                    <table width="100%" id="zero_config_listadvisor" class="table table-striped table-bordered" role="grid" aria-describedby="zero_config_info">
+                    <table width="100%" id="zero_config_listadvisor" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
                         <thead>
-                            <tr>
+                            <tr class="table-active text-uppercase">
                                 <th style="text-align:center">STT</th>
                                 <th style="text-align:center">Tên cố vấn</th>
                                 <th style="text-align:center">Lớp chưa nộp</th>                           
@@ -327,11 +327,18 @@
 
     function ReturnPlan() {
         jQuery('#modal-footer').empty();
-        $('#modal-footer').append(`<textarea maxlength="200" placeholder="Giới hạn 200 từ" id="message_return" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 16px;resize: none;" type="text"></textarea>
+        $('#modal-footer').append(`
+  <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class=""><span>Tiêu đề:</span><input id="subject_return" type="text" class="form-control" value=""/></div>
+                    </div>
+          <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class=""><span>Nội dung:</span><textarea maxlength="200" placeholder="Giới hạn 200 từ" id="message_return" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 16px;resize: none;" type="text"></textarea></div>
+                    </div>    
         <button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button> <button onclick = "SendReturnPlan()" type = "button" class= "btn btn-default" data - dismiss="modal" > Trả về</button >`);
     }
 
     function SendReturnPlan() {
+        let subject = $('#subject_return').val();
         let message = $('#message_return').val();
         let id_class = $('#id_class').val();
         $.ajax({
@@ -340,6 +347,7 @@
                 data: {
                     id_class: id_class,
                     message: message,
+                    subject: subject
                 },
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {
@@ -381,12 +389,28 @@
     }
 
     function BrowsePlan() {
+        jQuery('#modal-footer').empty();
+        $('#modal-footer').append(`
+  <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class=""><span>Tiêu đề:</span><input id="subject_browse" type="text" class="form-control" value=""/></div>
+                    </div>
+          <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class=""><span>Nội dung:</span><textarea maxlength="200" placeholder="Giới hạn 200 từ" id="message_browse" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 16px;resize: none;" type="text"></textarea></div>
+                    </div>    
+        <button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button> <button onclick = "SendBrowsePlan()" type = "button" class= "btn btn-default" data - dismiss="modal" >Duyệt</button >`);
+    }
+
+    function SendBrowsePlan() {
+        let subject = $('#subject_browse').val();
+        let message = $('#message_browse').val();
         let id_class = $('#id_class').val();
         $.ajax({
                 url: '@Url.Action("BrowsePlan", "PlansAdvisor")',
                 type: 'POST',
                 data: {
-                    id_class: id_class
+                    id_class: id_class,
+                    subject: subject,
+                    message: message
                 },
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {

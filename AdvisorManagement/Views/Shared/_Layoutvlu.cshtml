@@ -602,7 +602,7 @@
 
         function updateNotification(id_notify) {
             $.ajax({
-                url: "@Url.Action("UpdateNotification", "Announcement")",
+                url: "@Url.Action("UpdateNotification", "Announcement", new {area = ""})",
                 type: 'post',
                 data: { id_notify: id_notify },
                 success: function (response) {

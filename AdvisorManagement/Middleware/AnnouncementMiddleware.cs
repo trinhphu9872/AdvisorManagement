@@ -34,7 +34,7 @@ namespace AdvisorManagement.Middleware
         {
             var query = (from n in db.Notification
                          join a in db.Annoucement on n.id_notification equals a.id
-                         where n.id_notification == a.id && n.send_to == userId && n.id_notification == id_notify
+                         where n.send_to == userId && n.id == id_notify
                          select new UserNotification
                          {
                              id = n.id,

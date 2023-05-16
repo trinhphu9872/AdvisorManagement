@@ -50,7 +50,11 @@
                                             <label for="pwd">Nội dung:</label>
                                             <input type="text" class="form-control" id="myMessage" value="" placeholder="Nhập nội dung" />
                                         </div>
-
+                                        <div class="form-group">
+                                            <label for="pwd">Đính kèm file:</label>
+                                            <input type="file" id="file_attached"/>
+                                            @*<button id="testbtn" class="button">Attached to me</button>   *@                                       
+                                        </div>
                                         <button type="submit" class="btn btn-default" id="submit">Gửi</button>
                                     </div>
                                 </div>
@@ -267,6 +271,17 @@
                                     -o-transition: right .25s;
                                     transition: right .25s
                                 }
+
+                            /*#testbtn {
+                                background-color: #4CAF50;*/ /* Green */
+                                /*border: none;
+                                color: white;
+                                padding: 15px 32px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                font-size: 16px;
+                            }*/
                             }
                         </style>
                     </div>
@@ -278,6 +293,8 @@
 
 
 <script>
+
+    /*$('#testbtn').click(function () { $('#file_attached').trigger('click'); });*/
         $("#submit").click(function (e) {
             e.preventDefault();
 
