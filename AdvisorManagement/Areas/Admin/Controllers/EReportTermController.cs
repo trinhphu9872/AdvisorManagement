@@ -503,5 +503,18 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Vui lòng chọn file excel hoặc word" });
             }
         }
+
+        [HttpGet]
+        public ActionResult ShowCheck(int id)
+        {
+
+            var dataM = db.PlanStatus.Where(x => x.id_class == id).ToList();
+            if (dataM.Count() == 0 )
+            {
+                return Json(new { success = false, message = "Không tìm thấy dữ liệu" });
+            }
+            return Json(new { data = dataM,  success = true ,message ="Ok"}, JsonRequestBehavior.AllowGet);
+
+        }
     }
 }
