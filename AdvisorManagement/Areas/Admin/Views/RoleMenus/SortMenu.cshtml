@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Sắp xếp danh mục";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
@@ -24,10 +23,25 @@
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
-                        <div class="col-12 d-flex no-block align-items-center mb-2">
-                            <a href="@Url.Action("SortMenu", "RoleMenus",new {area = "Admin"})" class="mb-1 btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            @*<a href="@Url.Action("Create", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                Thêm Menu<i class="fas fa-plus"></i>
+                            </a>*@
+
+                            <a href="@Url.Action("SortMenu", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;color:white">
                                 Sắp xếp menu<i class="fas fa-plus"></i>
                             </a>
+
+                            @*<div class="ms-auto text-end">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">
+                                                Library
+                                            </li>
+                                        </ol>
+                                    </nav>
+                                </div>*@
                         </div>
                     </div>
 
@@ -38,20 +52,20 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
-                 
-                 
+
+
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-bordered">
                             @if (ViewBag.Menu != null)
                             {
                                 List<AdvisorManagement.Models.ViewModel.MenuItem> listMenu = (List<AdvisorManagement.Models.ViewModel.MenuItem>)ViewBag.ListMenu;
-                                <thead class="table-active text-uppercase">
-                                    <tr>
-                                        <th><b>STT </b></th>
-                                        <th><b>Tên danh mục </b></th>
+                                <thead>
+                                    <tr class=" text-uppercase">
+                                        <th><b>STT</b> </th>
+                                        <th><b>Tên danh mục</b> </th>
                                     </tr>
                                 </thead>
-                                <tbody id="sortMenu " style="cursor:pointer;">
+                                <tbody id="sortMenu" style="cursor:pointer;">
                                     @foreach (var item in listMenu)
                                     {
                                         <tr>
@@ -159,4 +173,3 @@
         });
     });
     </script>
-

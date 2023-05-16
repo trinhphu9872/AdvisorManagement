@@ -247,7 +247,7 @@
                         </div>
                         <div class="row mx-1">
                             <div class="col-md-6" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
-                                <div class="col-md-8"><span>Khoảng kết thúc:</span></div>
+                                <div class="col-md-8"><span>Khoảng bắt đầu:</span></div>
                                 <div class="col-md-4">
                                     <input id="txtTuE" type="number" class="form-control" min="0" max="100" />
                                 </div>
@@ -268,6 +268,35 @@
                 </div>
             </div>
         </div>
+        //
+        <div id="modalUpdateCheck" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Cập nhật đánh giá báo cáo </h4>
+                    </div>
+                    <input hidden id="id_edit_check" value="" />
+                    <div class="modal-body">
+                        <div class="">
+                            <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                                <div class="col-md-8"><span>Loai (điền kí tự dữ liệu Alphabet):</span></div>
+                                <div class="col-md-12">
+                                    <input id="txtLoaiECheck"  type="text" class="form-control" maxlength="1" min="1" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="HideModalUpCheck()" type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                        <button id="btnEditCheckUser" class="btn btn-info" type="submit">Cập nhật</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     }
 
     <!-- ============================================================== -->
@@ -380,13 +409,13 @@
                  'columns':
                      [
                          { 'data': 'id', 'width': '5%', },
-                         { 'data': 'rank_type', 'width': '10%'},
+                         { 'data': 'rank_type', 'width': '5%'},
                          { 'data': 'description', 'width': '40%' },
-                         { 'data': 'rank_des', 'width': '40%' },
+                         { 'data': 'rank_des', 'width': '20%' },
                          { 'data': 'rank_count', 'width': '10%' },
                          { 'data': 'rank_end', 'width': '10%' },
                          {
-                             'data': 'id', 'width': '30%', 'render': function (data) {
+                             'data': 'id', 'width': '20%', 'render': function (data) {
                                  return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > @*<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
                              }
 
@@ -457,8 +486,8 @@
                          { 'data': 'eval_admin', 'width': '10%' },
                          { 'data': 'note', 'width': '10%' },
                          {
-                             'data': 'class_id', 'width': '10%', 'render': function (data) {
-                                 return '<button onclick="UpdateAdmin(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button >'
+                             'data': 'id', 'width': '10%', 'render': function (data) {
+                                 return '<button onclick="UpdateAdminReport(' + data + ')" class="btn btn-danger">Cập nhật đánh giá <i class="fas fa-tasks" ></i></button >'
                              }
 
                          }
@@ -552,6 +581,103 @@
 
 
 
+
+  
+
+        // cập nhật thông tin đánh giá
+        function UpdateAdminReport(idItem) {
+            this.hideRead();
+  
+            $.ajax({
+                url: '@Url.Action("ShowCheck", "EReportTerm")',
+                type: 'get',
+                data: {
+                    id: idItem
+                },
+                success: function (data) {
+                    if (data.success == true) {
+                        console.log(data);
+                        $('#modalUpdateCheck').modal("show");
+                        $('#id_edit_check').val(idItem);
+                        $("#txtLoaiECheck").val(data.data[0].eval_admin);
+                    } else {
+                        alert(data.message);
+                    }
+                }
+
+            })
+    }
+        function HideModalUpCheck() {
+            $('#modalUpdateCheck').modal("hide");
+
+        }
+    
+        $(document).ready(function () {     //Cập nhật thông tin người dùng
+            $('#btnEditCheckUser').click(function () {
+                let formDataEdt = new FormData();
+                let jsonDataEdt = {
+                    id: $("#id_edit_check").val(),
+                    val: $("#txtLoaiECheck").val()
+                };
+                for (const [key, value] of Object.entries(jsonDataEdt)) {
+                    formDataEdt.append(key, value);
+
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EvalInitChecked", "EReportTerm")',
+                    contentType: false,
+                    processData: false,
+                    data: formDataEdt,
+
+                    success: function (data) {
+                            if (data.success == true) {
+                                $('#modalUpdate').modal('hide');
+                                Swal.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        this.HideModalUpCheck();
+                                        $("#zero_config_evol_user").DataTable().ajax.reload(null,false);
+
+                                  
+                                    }
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        $("#zero_config_evol_user").DataTable().ajax.reload(null, false);
+
+
+                                    }
+                                })
+                            }
+                     }
+                })
+
+            })
+        })
+        function HideModalUp() {
+            $("#modalUpdate").modal("hide");
+         }
+
+
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
@@ -615,6 +741,8 @@
                  })
             })
          })
+
+
 
          // cập nhật thông tin đánh giá
         function Update(id_title) {
@@ -706,7 +834,7 @@
         })
         function HideModalUp() {
             $("#modalUpdate").modal("hide");
-    }
+         }
         // xoá thông tin người dùng
     function Delete (id_std) {
         Swal.fire({
