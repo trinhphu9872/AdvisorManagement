@@ -86,7 +86,8 @@ namespace AdvisorManagement.Middleware
                 }
                 else
                 {
-                    itemAccount.user_code = mail.Split('@')[0];
+                    string code = mail.Split('@')[0];
+                    itemAccount.user_code = code.Split('.').Length == 2 ? code.Split('.')[1] : code ;
                 }
                 AccountUser accountUser = new AccountUser();
                 accountUser.id = getID() + 1;
@@ -100,8 +101,7 @@ namespace AdvisorManagement.Middleware
                 accountUser.update_time = DateTime.Now;
                 db.AccountUser.Add(accountUser);
                 db.SaveChanges();
-                //writeRecordUser(itemAccount, mail);
-                //db.SaveChanges();
+
                 return "Đăng kí thành công admin vào trong hệ thống";
             }
             catch (Exception ex)
@@ -122,11 +122,13 @@ namespace AdvisorManagement.Middleware
 
                 if (this.stuMailValid(mail))
                 {
-                    itemAccount.user_code = mail.Split('@')[0];
+                    string code = mail.Split('@')[0];
+                    itemAccount.user_code = code.Split('.').Length == 2 ? code.Split('.')[1] : code;
                 }
                 else
                 {
-                    itemAccount.user_code = mail.Split('@')[0];
+                    string code = mail.Split('@')[0];
+                    itemAccount.user_code = code.Split('.').Length == 2 ? code.Split('.')[1] : code;
                 }
                 AccountUser accountUser = new AccountUser();
                 accountUser.id = getID() + 1;
@@ -170,7 +172,8 @@ namespace AdvisorManagement.Middleware
                 }
                 else
                 {
-                    itemAccount.user_code = mail.Split('@')[0];
+                    string code = mail.Split('@')[0];
+                    itemAccount.user_code = code.Split('.').Length == 2 ? code.Split('.')[1] : code;
                 }
                 AccountUser accountUser = new AccountUser();
                 accountUser.id = getID() + 1;

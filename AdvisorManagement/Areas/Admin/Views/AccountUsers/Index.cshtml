@@ -518,8 +518,16 @@
                                  })
                              } else {
                                  Swal.fire(
-                                     'Thông báo',
-                                     data.message
+                                     {
+                                         icon: "danger",
+                                         title: data.message,
+                                         showClass: {
+                                             popup: 'animate__animated animate__fadeInDown'
+                                         },
+                                         hideClass: {
+                                             popup: 'animate__animated animate__fadeOutUp'
+                                         }
+                                     }
                                  );
                              }
                         }
@@ -576,7 +584,7 @@
     $(document).ready(function () {     //Cập nhật thông tin người dùng
         $('#btnEdit').click(function () {
             var fileInput = $('#txtImageEdit');
-            if (fileInput.length > 1) {
+            if (fileInput.val().length > 1) {
                 var file = fileInput[0].files[0];
                 // get data
                 if (!file.type.startsWith('image/')) {
