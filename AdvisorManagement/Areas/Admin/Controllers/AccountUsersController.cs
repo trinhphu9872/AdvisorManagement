@@ -136,6 +136,23 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Số điện thoại tồn tại trong hệ thống" });
                 }
+                if (account.id_role == 1 || account.id_role == 2)
+                {
+                    if (!serviceAccount.adMailValid(account.email))
+                    {
+                        return Json(new { success = false, message = "Vui lòng chọn đúng định dạng mail phù hợp phân quyền" });
+
+                    }
+                }
+                 if(account.id_role == 3)
+                {
+                    if (serviceAccount.stuMailValid(account.email))
+                    {
+                        return Json(new { success = false, message = "Vui lòng chọn đúng định dạng mail phù hợp phân quyền" });
+
+                    }
+                }
+                
                 var userCheck = db.AccountUser.Where(x => x.email == account.email).ToList().Count();
                 if (userCheck > 0)
                 {
