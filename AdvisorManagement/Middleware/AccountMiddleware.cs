@@ -45,7 +45,7 @@ namespace AdvisorManagement.Middleware
             try
             {
                 string Message = "";
-                if (this.adMailValid(mail))
+                if (this.adMailValid(mail) || this.stuMailValid(mail))
                 {
                     switch (account.id_role)
                     {
@@ -88,8 +88,20 @@ namespace AdvisorManagement.Middleware
                 {
                     itemAccount.user_code = mail.Split('@')[0];
                 }
-                writeRecordUser(itemAccount, mail);
+                AccountUser accountUser = new AccountUser();
+                accountUser.id = getID() + 1;
+                accountUser.email = mail;
+                accountUser.id_role = itemAccount.role_id;
+                accountUser.user_code = itemAccount.user_code;
+                accountUser.img_profile = itemAccount.img_profile;
+                accountUser.phone = itemAccount.phone;
+                accountUser.user_name = itemAccount.user_name;
+                accountUser.create_time = DateTime.Now;
+                accountUser.update_time = DateTime.Now;
+                db.AccountUser.Add(accountUser);
                 db.SaveChanges();
+                //writeRecordUser(itemAccount, mail);
+                //db.SaveChanges();
                 return "Đăng kí thành công admin vào trong hệ thống";
             }
             catch (Exception ex)
@@ -116,7 +128,18 @@ namespace AdvisorManagement.Middleware
                 {
                     itemAccount.user_code = mail.Split('@')[0];
                 }
-                writeRecordUser(itemAccount, mail);
+                AccountUser accountUser = new AccountUser();
+                accountUser.id = getID() + 1;
+                accountUser.email = mail;
+                accountUser.id_role = itemAccount.role_id;
+                accountUser.user_code = itemAccount.user_code;
+                accountUser.img_profile = itemAccount.img_profile;
+                accountUser.phone = itemAccount.phone;
+                accountUser.user_name = itemAccount.user_name;
+                accountUser.create_time = DateTime.Now;
+                accountUser.update_time = DateTime.Now;
+                db.AccountUser.Add(accountUser);
+                db.SaveChanges();
                 Student student = new Student();
                 student.student_code = itemAccount.user_code;
                 student.account_id = getID();
@@ -149,7 +172,18 @@ namespace AdvisorManagement.Middleware
                 {
                     itemAccount.user_code = mail.Split('@')[0];
                 }
-                writeRecordUser(itemAccount, mail);
+                AccountUser accountUser = new AccountUser();
+                accountUser.id = getID() + 1;
+                accountUser.email = mail;
+                accountUser.id_role = itemAccount.role_id;
+                accountUser.user_code = itemAccount.user_code;
+                accountUser.img_profile = itemAccount.img_profile;
+                accountUser.phone = itemAccount.phone;
+                accountUser.user_name = itemAccount.user_name;
+                accountUser.create_time = DateTime.Now;
+                accountUser.update_time = DateTime.Now;
+                db.AccountUser.Add(accountUser);
+                db.SaveChanges();
                 Advisor advisor = new Advisor();
                 advisor.advisor_code = itemAccount.user_code;
                 advisor.account_id = getID();
@@ -572,8 +606,8 @@ namespace AdvisorManagement.Middleware
 
             string advisorMailPattems = @"^[^@\s]+@vlu\.edu\.vn$";
             string studnetPattems = @"^[^@\s]+@(vanlanguni\.vn|vlu\.edu\.vn)$";
-
-            return Regex.IsMatch(email, advisorMailPattems) || Regex.IsMatch(email, studnetPattems) ? true : false;
+            bool Check = Regex.IsMatch(email, advisorMailPattems) || Regex.IsMatch(email, studnetPattems) ? true : false;
+            return Check;
         }
 
         public bool adMailValid(string mail)

@@ -203,14 +203,15 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     index++;
                 }
             }
-            return AdminEval;
+            return AdminEval.OrderBy(x => x.name_advisor).ToList();
         }
 
         [HttpGet]
         public ActionResult GetEvolUserTable()
         {
-
-            List<AdminCheckEvol> AdminEval = this.EvalData();
+            int _idRole = int.Parse(serviceAccount.getRoleTextName(User.Identity.Name).Trim());
+            string name = serviceAccount.getTextName(User.Identity.Name);
+            List<AdminCheckEvol> AdminEval = _idRole == 1 ? this.EvalData() : this.EvalData().Where(x => x.name_advisor == name).ToList();
 
             if (AdminEval.Count() > 0)
             {
@@ -507,7 +508,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult ShowCheck(int id)
         {
-
+            
             var dataM = db.PlanStatus.Where(x => x.id_class == id).ToList();
             if (dataM.Count() == 0 )
             {
