@@ -24,6 +24,7 @@
                         <div class="header" data-region="header"></div> 
                         <div class="content" data-region="content"></div>
                         <div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div>
+                        <div class="file_attached"></div>
                         <div class="footer" data-region="footer"></div>
                     </div>
                 </div>
@@ -142,8 +143,8 @@
                 }
 
             .notification-area .content-area > .content {
-                height: 500px;
-                -webkit-box-sizing: border-box;
+                height: 400px;
+                -webkit-box-sizing: border-box; 
                 box-sizing: border-box;
                 overflow: auto;
                 -webkit-overflow-scrolling: touch;
@@ -214,6 +215,10 @@
             transition: right .25s
         }
 
+        .file_attached {
+            margin-left: 15px;
+        }
+
     }
 
 </style>
@@ -229,9 +234,9 @@
                 jQuery('.control-area').empty();
                 for (let i = 0; i < message.length; i++) {
                     if (message[i].isRead == true) {
-                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
                     } else {
-                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
                     }
                 }
             }
@@ -250,7 +255,14 @@
             data: { id_notify: id_notify },
             success: function (data) {
                 jQuery('.content-area').empty();
-                $('.content-area').append($('<div class="header" style="width: calc(100%);" data-region="header"><div style = "width: calc(100%);" ><div class="timestamp"><i onclick="DeleteNotification(' + data.notify[0].id + ')" class="fas fa-trash-alt fa-2x"></i></div><div class="timestamp">' + moment(data.notify[0].date).format("HH:mm") + '</div><div style="font-weight: bold;">' + data.notify[0].title + '</div></div></div ><div class="content" data - region="content" > ' + data.notify[0].message + '</div > '));
+                $('.content-area').append($('<div class="header" style="width: calc(100%);" data-region="header"><div style = "width: calc(100%);" ><div class="timestamp"><i onclick="DeleteNotification(' + data.notify[0].id + ')" class="fas fa-trash-alt fa-2x"></i></div><div class="timestamp">' + moment(data.notify[0].date).format("DD/MM HH:mm") + '</div><div style="font-weight: bold;">' + data.notify[0].title + '</div></div></div ><div class="content" data - region="content" > ' + data.notify[0].message + '</div>'));
+                if (data.notify[0].file_attach != null) {
+                    var filenames = data.notify[0].file_attach.split(";");
+                    for (let i = 0; i < filenames.length; i++) {
+                        $('.content-area').append($('<div style="margin-left: 15px;"><a href="@Url.Action("DownloadFileAttach", "Announcement")?id=' + data.notify[0].id + '&file_name=' + filenames[i] + '" style="max-width:400px" class="label label-primary">' + filenames[i] + '</a></div>'));
+                    }
+                }
+                $('.content-area').append($(' <div class="footer" data-region="footer"><p width="600" border="0" style="padding:0 48px 48px 48px; color:#707070; font-family:Arial; font-size:12px; line-height:125%; text-align:center;">KHOA CÔNG NGHỆ THÔNG TIN - TRƯỜNG ĐẠI HỌC VĂN LANG</p></div>'));
             }
         })
     }
@@ -284,11 +296,10 @@
                                         popup: 'animate__animated animate__fadeOutUp'
                                     }
                                 }).then(function (result) {
-                                    location.reload();
+                                    window.location.href = data.redirectToUrl;
                                     jQuery('.content-area').empty();
-                                    $('.content-area').append($('<div class="header" data-region="header"></div><div class= "content" data - region="content" ></div ><div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div><div class="footer" data-region="footer"></div>'));
                                     /*if (result.value) {
-                                        
+
                                         jQuery('.content-area').empty();
                                         $('.content-area').append($('<div class="header" data-region="header"></div><div class= "content" data - region="content" ></div ><div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div><div class="footer" data-region="footer"></div>'));
                                     }*/
@@ -311,7 +322,7 @@
             } else if (result.dismiss === "cancel") {
 
             }
-        });       
+        });
     }
 
 </script>

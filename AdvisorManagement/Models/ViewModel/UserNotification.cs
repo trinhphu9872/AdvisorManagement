@@ -14,5 +14,7 @@ namespace AdvisorManagement.Models.ViewModel
         public Nullable<System.DateTime> date { get; set; }
         public Nullable<bool> isRead { get; set; }
 
+        public string file_attach { get; set; }
+
     }
 }

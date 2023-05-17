@@ -15,24 +15,24 @@
                         <div class="card-body">
                             <h5 class="card-title mb-0">Thông báo</h5>
                         </div>
-              
-                            <div class="page-breadcrumb">
-                                <div class="row">
-                                    <div class="col-12 d-flex no-block align-items-center">
-                                        <a onclick="Clear()" id="clear" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px; width: 200px; color: white">
-                                            Xoá hết thông báo<i style="margin-left:5px" class="fas fa-trash-alt"></i>
-                                        </a>
-                          
-                                    </div>
+
+                        <div class="page-breadcrumb">
+                            <div class="row">
+                                <div class="col-12 d-flex no-block align-items-center">
+                                    <a onclick="Clear()" id="clear" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px; width: 200px; color: white">
+                                        Xoá hết thông báo<i style="margin-left:5px" class="fas fa-trash-alt"></i>
+                                    </a>
+
                                 </div>
                             </div>
-                    
+                        </div>
+
 
                     </div>
                     <div class="col-5" style="margin-top:26px">
                         <table width="100%" class="table table-bordered table-striped table-responsive">
                             <h2>Gửi thông báo</h2>
-                            
+
                             <div class="card">
                                 <div class="card-body ">
                                     <div class="card-text content ">
@@ -52,15 +52,21 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="pwd">Đính kèm file:</label>
-                                            <input type="file" id="file_attached"/>
-                                            @*<button id="testbtn" class="button">Attached to me</button>   *@                                       
+                                            <input id="fileInput" type="file" multiple hidden />
+                                            <i style="padding-left:10px" id="icon_attach" class="fa fa-paperclip fa-lg" aria-hidden="true"></i>
                                         </div>
+                                        <div class="form-group">
+                                            <div id="filelist">
+                                                <!--show proccessbar-->
+                                            </div>
+                                        </div>
+
                                         <button type="submit" class="btn btn-default" id="submit">Gửi</button>
                                     </div>
                                 </div>
                             </div>
                         </table>
-                    </div>
+                    </div>                   
                     <div class="col-7">
 
                         <div id="page-content" class="row">
@@ -72,16 +78,16 @@
                                             <div class="control-area" data-region="control-area">
 
                                                 <div style="padding-top: 20px;text-align:center">Bạn đang không có thông báo nào</div>
-                                             
+
                                             </div>
                                             <div class="content-area" data-region="content-area">
                                                 <div class="header" data-region="header"></div>
                                                 <div class="content" data-region="content">
-                                              
+
                                                 </div>
                                                 <div class="empty-text">Chọn thông báo trong danh sách để xem chi tiết</div>
                                                 <div class="footer" data-region="footer">
-                                                
+
                                                 </div>
                                             </div>
                                         </div>
@@ -270,18 +276,7 @@
                                     -webkit-transition: right .25s;
                                     -o-transition: right .25s;
                                     transition: right .25s
-                                }
-
-                            /*#testbtn {
-                                background-color: #4CAF50;*/ /* Green */
-                                /*border: none;
-                                color: white;
-                                padding: 15px 32px;
-                                text-align: center;
-                                text-decoration: none;
-                                display: inline-block;
-                                font-size: 16px;
-                            }*/
+                                }                           
                             }
                         </style>
                     </div>
@@ -294,45 +289,7 @@
 
 <script>
 
-    /*$('#testbtn').click(function () { $('#file_attached').trigger('click'); });*/
-        $("#submit").click(function (e) {
-            e.preventDefault();
-
-            var message = $("#myMessage").val();
-            var sendtouser = $("#toUser").val();
-            var title = $("#myTitle").val();
-
-
-
-            var Notification = { userID: sendtouser, title: title, message: message };
-
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("SendNotification", "Announcement")",
-                data: JSON.stringify(Notification),
-                contentType: 'application/json; charset=utf-8',
-                success:  function (data) {
-                    Swal.fire({
-                        icon: "success",
-                        title: data.message,
-                        showClass: {
-                            popup: 'animate__animated animate__fadeInDown'
-                        },
-                        hideClass: {
-                            popup: 'animate__animated animate__fadeOutUp'
-                        }
-                    })
-                    $("#toUser").val("");
-                    $("#myTitle").val("");
-                    $("#myMessage").val("");
-                },
-                error: function () {
-                    alert("Error occured!!")
-                }
-            });
-
-        });
-
+    $('#icon_attach').click(function () { $('#fileInput').trigger('click'); });
              function Clear() {
               $.ajax({
                     url:'@Url.Action("ClearNotification", "Announcement")',
@@ -407,5 +364,127 @@
             }
         })
     }
+      
+
+      var formdata = new FormData(); //FormData object
+        $(document).ready(function () {
+            $("#fileInput").on("change", function () {
+                var fileInput = document.getElementById('fileInput');
+                //Iterating through each files selected in fileInput
+                var processBar = "";
+                for (i = 0; i < fileInput.files.length; i++) {
+
+                    var sfilename = fileInput.files[i].name + i;
+                    let srandomid = Math.random().toString(36).substring(7);
+                    var processID = "processID_" + i;
+                    formdata.append(srandomid, fileInput.files[i])
+                   /* var markup = "<tr id='" + srandomid + "'><td><label class=\"label label-primary\">File:" + sfilename + "</label><br/></td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                        "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name
+                    $("#FilesList tbody").append(markup);
+                    "<label class=\"label label-primary\">File:" + nameFile.name + "</label><a> Xóa</a><br/><div class=\"progress\">" +
+                        "<div id='" + processID + "' class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:0%\">" +
+                        "0% Complete (success)" +
+                        "</div>" +
+                        "</div>";*/
+                    processBar += "<div id='" + srandomid + "' ><label style=\"max-width:400px\" class=\"label label-primary\">"
+                                + fileInput.files[i].name + "</label> <a href='#' onclick='DeleteFile(\"" + srandomid + "\")'><i class=\"fas fa-trash-alt\"></i></a><br/><div class=\"progress\">" +
+                        "<div id='" + processID + "' class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:0%\">" +
+                        "0% Complete (success)" +
+                        "</div>" +
+                        "</div></div>";
+                }
+                $('#fileInput').val('');
+                $("#filelist").append(processBar);
+            });
+             $("#submit").click(function (e) {
+                e.preventDefault();              
+                var message = $("#myMessage").val();
+                var sendtouser = $("#toUser").val();
+                var title = $("#myTitle").val();
+                 formdata.append("message", message);
+                 formdata.append("userID", sendtouser);
+                 formdata.append("title", title);                         
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SendNotification", "Announcement")",
+                    contentType: false,
+                    processData: false,
+                    data: formdata,
+                    /*  contentType: 'application/json; charset=utf-8',*/
+                    success: function (data) {
+                        if (data.success == true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function () {
+                                $("#toUser").val("");
+                                $("#myTitle").val("");
+                                $("#myMessage").val("");
+                                jQuery('#filelist').empty();
+                                deleteFormData(formdata);
+                            })
+                            
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function () {
+                                deleteFormData(formdata);
+                                jQuery('#filelist').empty();
+                            })
+                        }                        
+                    },
+                    error: function () {
+                        alert("Error occured!!")
+                    }
+                });
+
+            });
+           @* $("#submit").click(function () {
+                formdata.append('uploadername', $('#txtuploader').val());
+                $.ajax({
+                    url: "@Url.Action("SendNotification", "Announcement")",
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: formdata,
+                    async: false,
+                    success: function (result) {
+                        if (result != "") {
+                            alert(result);
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            });*@
+        });
+        function DeleteFile(Fileid, FileName) {
+            formdata.delete(Fileid)
+            $("#" + Fileid).remove();         
+    }
+
+    function deleteFormData(formdata) {
+        const keys = [];
+        for (const key of formdata.keys()) {
+            keys.push(key);
+        }
+        for (const idx in keys) {
+            formdata.delete(keys[idx]);
+        }
+    }       
 </script>
 
