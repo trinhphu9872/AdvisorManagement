@@ -36,6 +36,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="title" Type="nvarchar" MaxLength="50" />
           <Property Name="message" Type="nvarchar" MaxLength="200" />
+          <Property Name="file_attach" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="EvaluationAdvisor">
           <Key>
@@ -117,8 +118,8 @@
           <Property Name="id_status" Type="int" />
           <Property Name="modify_time" Type="datetime" />
           <Property Name="message" Type="nvarchar" MaxLength="200" />
-          <Property Name="eval_advisor" Type="nchar" MaxLength="10" />
-          <Property Name="eval_admin" Type="nchar" MaxLength="10" />
+          <Property Name="eval_advisor" Type="nchar" MaxLength="1" />
+          <Property Name="eval_admin" Type="nchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="ProofPlan">
           <Key>
@@ -398,8 +399,8 @@
           <Property Name="id_status" Type="Int32" />
           <Property Name="modify_time" Type="DateTime" Precision="3" />
           <Property Name="message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="eval_advisor" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="eval_admin" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="eval_advisor" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="eval_admin" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="ProofPlan">
           <Key>
@@ -599,6 +600,7 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="file_attach" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Notification">
           <Key>
@@ -817,6 +819,7 @@
           <EntitySetMapping Name="Annoucement">
             <EntityTypeMapping TypeName="CP25Team09Model.Annoucement">
               <MappingFragment StoreEntitySet="Annoucement">
+                <ScalarProperty Name="file_attach" ColumnName="file_attach" />
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="id" ColumnName="id" />

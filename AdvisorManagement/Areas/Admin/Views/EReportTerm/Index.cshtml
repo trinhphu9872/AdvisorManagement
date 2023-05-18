@@ -32,11 +32,19 @@
                                     Danh mục đánh giá <i style="margin-left:5px" class="fas fa-clipboard-list"></i>
 
                                 </a>
+                                <a onclick="ReadAllUser()" class="btn btn-danger" style=" margin-left: 5px; width: 230px; color: white">
+                                    Danh mục đánh giá giảng viên
+                                </a>
 
+                            }
+                            else if (int.Parse(Session["RoleName"].ToString()) == 2)
+                            {
                                 <a onclick="ReadAllUser()" class="btn btn-danger" style=" margin-left: 5px; width: 230px; color: white">
                                     Danh mục đánh giá giảng viên
                                 </a>
                             }
+
+
                         </div>
                     </div>
                 </div>
@@ -154,6 +162,35 @@
                 </div>
             </div>
         </div>
+
+        //
+        <div id="modalUpdateCheck" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Cập nhật đánh giá báo cáo </h4>
+                    </div>
+                    <input hidden id="id_edit_check" value="" />
+                    <div class="modal-body">
+                        <div class="">
+                            <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
+                                <div class="col-md-8"><span>Loai (điền kí tự dữ liệu Alphabet):</span></div>
+                                <div class="col-md-12">
+                                    <input id="txtLoaiECheck" type="text" class="form-control" maxlength="1" min="1" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="HideModalUpCheck()" type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                        <button id="btnEditCheckUser" class="btn btn-info" type="submit">Cập nhật</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         @* create *@
         <div id="modalCreate" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -268,6 +305,49 @@
                 </div>
             </div>
         </div>
+
+
+    }
+    else if (int.Parse(Session["RoleName"].ToString()) == 2)
+    {
+        @* show *@
+        <div id="modalEvolUser" class="modal fade" role="document">
+            <div class="modal-dialog" style="max-width: 60%;" role="document">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
+                    <div class="modal-header">
+                       @* <button onclick="ExportUserAll()" class="btn btn-info">Xuất đánh giá tổng thể <i class="fas fa-tasks"></i></button>*@
+
+                        <input hidden id="id_evol_user" value="" />
+                        <h4 class="modal-title">Đánh giá cá nhân</h4>
+                    </div>
+                    <div class="table-responsive" style="margin-top:10px">
+                        <table width="100%" id="zero_config_evol_user" class="table table-light table-hover table-bordered" role="grid" aria-describedby="zero_config_info">
+                            <thead>
+                                <tr class="table-active text-uppercase">
+                                    <th scope="col" style="text-align:center"><b>STT               </b> </th>
+                                    <th scope="col" style="text-align:center"><b>Mã lớp            </b>  </th>
+                                    <th scope="col" style="text-align:center"><b>Cố vấn học tập    </b>   </th>
+                                    <th scope="col" style="text-align:center"><b>Phần mềm đánh giá </b>    </th>
+                                    <th scope="col" style="text-align:center"><b>Cố vấn tự đánh giá       </b>     </th>
+                                    <th scope="col" style="text-align:center"><b>Khoa đánh giá     </b>      </th>
+                                    <th scope="col" style="text-align:center"><b>Ghi chú           </b>      </th>
+                                    <th scope="col" style="text-align:center"><b>Chỉnh sửa         </b>      </th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="showEvolUser" class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         //
         <div id="modalUpdateCheck" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -283,7 +363,7 @@
                             <div class="col-md-12" style="padding-bottom: 12px; padding-top: 12px; padding-left: 15px">
                                 <div class="col-md-8"><span>Loai (điền kí tự dữ liệu Alphabet):</span></div>
                                 <div class="col-md-12">
-                                    <input id="txtLoaiECheck"  type="text" class="form-control" maxlength="1" min="1" />
+                                    <input id="txtLoaiECheck" type="text" class="form-control" maxlength="1" min="1" />
                                 </div>
                             </div>
                         </div>
@@ -296,7 +376,6 @@
                 </div>
             </div>
         </div>
-
     }
 
     <!-- ============================================================== -->
@@ -336,6 +415,8 @@
                  { 'data': 'name', 'width': '25%' },
                  { 'data': 'course', 'width': '30%' },
                  ],
+             "aaSorting": [[2, "asc"]],
+
              'language': {
                  "decimal": "",
                  "emptyTable": "Không có dữ liệu",
@@ -440,6 +521,8 @@
                             "previous": "Trước"
                         },
                     },
+                    "aaSorting": [],
+
                     "autoWidth": false,
                     "aLengthMenu": [[-1], ["All"]],
                     "bLengthChange": false,
@@ -487,11 +570,13 @@
                          { 'data': 'note', 'width': '10%' },
                          {
                              'data': 'id', 'width': '10%', 'render': function (data) {
-                                 return '<button onclick="UpdateAdminReport(' + data + ')" class="btn btn-danger">Cập nhật đánh giá <i class="fas fa-tasks" ></i></button >'
+                                 return '<button onclick="UpdateAdminReport(' + data + ')" class="btn btn-danger">Đánh giá <i class="fas fa-tasks" ></i></button >'
                              }
 
                          }
                         ],
+                    "aaSorting": [],
+
                     'language': {
                         "decimal": "",
                         "emptyTable": "Không có dữ liệu",
@@ -596,7 +681,7 @@
                 },
                 success: function (data) {
                     if (data.success == true) {
-                        console.log(data);
+                      
                         $('#modalUpdateCheck').modal("show");
                         $('#id_edit_check').val(idItem);
                         $("#txtLoaiECheck").val(data.data[0].eval_admin);
@@ -756,7 +841,7 @@
                 },
                 success: function (data) {
                     if (data.success == true) {
-                        console.log(data);
+                      
                         $('#modalUpdate').modal("show");
                         $('#id_edit').val(id_title);
                         $("#txtLoaiE").val(data.data.rank_type);

@@ -72,7 +72,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     detail_mail = user.email,
                     detail_phone = user.phone,
                     detail_id_role = user.id_role,
-                    detail_img = user.img_profile != null ?  user.img_profile.ToString().Replace("~","") : "/Images/imageProfile/avata.png",
+                    detail_img = (user.img_profile != null && user.img_profile != "" && user.img_profile != " " ) ?  user.img_profile.ToString().Replace("~","") : "/Images/imageProfile/avata.png",
                     id_detailUser = user.id, message = "Lấy thông tin thành công" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
@@ -98,6 +98,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 if (account.email == null )
                 {
                     return Json(new { success = false, message = "Vui lòng điền mail" });
+                }
+                if (!serviceAccount.IsValidEmail(account.email) )
+                {
+                    return Json(new { success = false, message = "Email không thuộc tổ chức" });
                 }
                 if (account.user_name == null)
                 {
@@ -128,6 +132,27 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Số điện thoại không đúng định dạng" });
                 }
+                if (db.AccountUser.Where(x => x.phone == account.phone && x.id != account.id).ToList().Count() > 0)
+                {
+                    return Json(new { success = false, message = "Số điện thoại tồn tại trong hệ thống" });
+                }
+                if (account.id_role == 1 || account.id_role == 2)
+                {
+                    if (!serviceAccount.adMailValid(account.email))
+                    {
+                        return Json(new { success = false, message = "Vui lòng chọn đúng định dạng mail phù hợp phân quyền" });
+
+                    }
+                }
+                 if(account.id_role == 3)
+                {
+                    if (serviceAccount.stuMailValid(account.email))
+                    {
+                        return Json(new { success = false, message = "Vui lòng chọn đúng định dạng mail phù hợp phân quyền" });
+
+                    }
+                }
+                
                 var userCheck = db.AccountUser.Where(x => x.email == account.email).ToList().Count();
                 if (userCheck > 0)
                 {
@@ -241,6 +266,10 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điền mail" });
                 }
+                if (!serviceAccount.IsValidEmail(account.email))
+                {
+                    return Json(new { success = false, message = "Email không thuộc tổ chức" });
+                }
                 if (account.user_name == null)
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên " });
@@ -257,7 +286,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điền số điện thoại" });
                 }
-                if (db.AccountUser.Where(x => x.phone == account.phone).ToList().Count() > 0)
+                if (db.AccountUser.Where(x => x.phone == account.phone && x.id != account.id).ToList().Count() > 0)
                 {
                     return Json(new { success = false, message = "Số điện thoại tồn tại trong hệ thống" });
                 }

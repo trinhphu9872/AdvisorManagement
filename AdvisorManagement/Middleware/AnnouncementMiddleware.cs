@@ -1,7 +1,10 @@
 ﻿using AdvisorManagement.Models;
 using AdvisorManagement.Models.ViewModel;
+using Microsoft.AspNetCore.Hosting.Server;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -23,7 +26,7 @@ namespace AdvisorManagement.Middleware
                              userID = n.send_to,
                              message = a.message,
                              title = a.title,
-                             date = n.create_time,
+                             date = n.create_time,                          
                              isRead = n.is_read
                          }).OrderByDescending(x => x.date)
                        .ToList();
@@ -42,10 +45,36 @@ namespace AdvisorManagement.Middleware
                              message = a.message,
                              title = a.title,
                              date = n.create_time,
-                             isRead = n.is_read
+                             isRead = n.is_read,
+                             file_attach = a.file_attach
                          }).OrderByDescending(x => x.date)
                        .ToList();
             return query;
+        }
+
+        public string GetFileAttach(HttpFileCollectionBase files)
+        {
+            string path_file = "";
+            for (int i = 0; i < files.Count; i++)
+            {
+                HttpPostedFileBase file = files[i];
+                string fname;               
+                fname = file.FileName;
+                if (path_file == "")
+                {
+                   path_file += fname;
+                }
+                else
+                {
+                   path_file += ";" + fname;
+                }                
+            }
+
+            if(path_file == "")
+            {
+                return null;
+            }
+            return path_file;
         }
     }
 }
