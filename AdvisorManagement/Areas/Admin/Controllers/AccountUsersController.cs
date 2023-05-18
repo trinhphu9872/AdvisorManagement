@@ -146,7 +146,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 }
                  if(account.id_role == 3)
                 {
-                    if (serviceAccount.stuMailValid(account.email))
+                    if (!serviceAccount.stuMailValid(account.email))
                     {
                         return Json(new { success = false, message = "Vui lòng chọn đúng định dạng mail phù hợp phân quyền" });
 
