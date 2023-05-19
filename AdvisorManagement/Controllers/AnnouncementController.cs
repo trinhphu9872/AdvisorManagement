@@ -58,6 +58,7 @@ namespace AdvisorManagement.Controllers
                 return Json(new { success = false, message = "Vui lòng điền đầy đủ trường dữ liệu" }, JsonRequestBehavior.AllowGet);
             }
 
+
             if (db.AccountUser.Where(x => x.email == userID).ToList().Count() > 0)
             {
                 var path_file = serviceAnnoun.GetFileAttach(files);
