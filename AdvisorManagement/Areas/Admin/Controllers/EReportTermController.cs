@@ -170,6 +170,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             }
         }
 
+
         [HttpGet]
         public ActionResult GetEvolTable()
         {
