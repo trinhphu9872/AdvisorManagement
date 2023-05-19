@@ -134,7 +134,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             var listPlan = db.PlanAdvisor.Where(x => x.year == year).OrderBy(x => x.number_title).ThenBy(x => x.content).ToList();
             List<PlanAdvisor> template = (List<PlanAdvisor>)listPlan;
-            if (serviceAccount.getRoleTextName(User.Identity.Name) != "Admin" )
+            if (serviceAccount.getRoleTextName(User.Identity.Name).Trim() !=  "1" )
             {
                 if (phanLoai == null)
                 {
@@ -153,6 +153,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 using (ExcelPackage pck = new ExcelPackage())
                 {
+                    var phanStatus = db.PlanStatus.Where(x => x.id_class == id_class).ToList();
+                    if (phanStatus.Count() > 0 )
+                    {
+                        var reObj = db.PlanStatus.FirstOrDefault(x => x.id_class == id_class);
+                        phanLoai = reObj.eval_advisor != "" && reObj.eval_advisor != null ? reObj.eval_advisor : "Giáo viên chưa được phân loại";
+                    }
                     var package = serviceEReport.ExportTemplate(pck,this.getData(id_class),"Báo cáo" + db.VLClass.FirstOrDefault(x => x.id == id_class).advisor_code, User.Identity.Name.ToString(),year, phanLoai);
                     var fileOject = File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BaoCaoKehoachCVHT-" + db.VLClass.FirstOrDefault(x => x.id == id_class ).class_code.ToString() +"-" +(year - 1) + "-" + year + ".xlsx");
                     return Json(fileOject, JsonRequestBehavior.AllowGet);
