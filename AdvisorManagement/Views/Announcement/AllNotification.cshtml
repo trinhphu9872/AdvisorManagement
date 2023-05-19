@@ -296,7 +296,8 @@
                                         popup: 'animate__animated animate__fadeOutUp'
                                     }
                                 }).then(function (result) {
-                                    window.location.href = data.redirectToUrl;
+                                    location.reload();
+                              /*      window.location.href = data.redirectToUrl;*/
                                     jQuery('.content-area').empty();
                                     /*if (result.value) {
 
