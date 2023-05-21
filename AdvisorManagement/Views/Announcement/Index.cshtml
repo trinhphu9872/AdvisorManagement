@@ -51,7 +51,6 @@
                                             <div id="editor"></div>
 
                                
-                                            @*<input type="text" class="form-control" id="myMessage" value="" placeholder="Nhập nội dung" />*@
                                         </div>
                                         <div class="form-group">
                                             <label for="pwd">Đính kèm file:</label>
@@ -355,16 +354,16 @@
                 jQuery('.control-area').empty();
                 for (let i = 0; i < message.length; i++) {
                     if (message[i].isRead == true) {
-                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">Người gửi: '+message[i].userSend+' </small></div></div></a>'));
                     } else {
-                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">Người gửi: ' + message[i].userSend +'</small></div></div></a>'));
                     }
                 }
             }
         };
 
          if (@id_notify != "0") {
-            console.log(@id_notify);
+            ////console.log(@id_notify);
             detailNotify(@id_notify);
         }
      })
@@ -376,7 +375,7 @@
             data: { id_notify: id_notify },
             success: function (data) {
                 jQuery('.content-area').empty();
-                $('.content-area').append($('<div class="header" style="width: calc(100%);" data-region="header"><div style = "width: calc(100%);" ><div class="timestamp"><i onclick="DeleteNotification(' + data.notify[0].id + ')" class="fas fa-trash-alt fa-2x"></i></div><div class="timestamp">' + moment(data.notify[0].date).format("DD/MM HH:mm") + '</div><div style="font-weight: bold;">' + data.notify[0].title + '</div></div></div ><div class="content" data - region="content" > ' + data.notify[0].message + '</div>'));
+                $('.content-area').append($('<div class="header" style="width: calc(100%);" data-region="header"><div style = "width: calc(100%);" ><div class="timestamp"><i onclick="DeleteNotification(' + data.notify[0].id + ')" class="fas fa-trash-alt fa-2x"></i></div><div class="timestamp">' + moment(data.notify[0].date).format("DD/MM HH:mm") + '</div><div style="font-weight: bold;">' + data.notify[0].title + '</div></div></div ><div class="content" data - region="content" > ' + data.notify[0].message + '</div> '  ));
                 if (data.notify[0].file_attach != null) {
                     var filenames = data.notify[0].file_attach.split(";");
                     for (let i = 0; i < filenames.length; i++) {
@@ -476,8 +475,9 @@
                 $("#filelist").append(processBar);
             });
             $("#submit").click(function (e) {
+                e.preventDefault();
                 const editorData = myEditor.getData();
-                 e.preventDefault();
+
                 var message = `${editorData.toString()}`;
                 var sendtouser = $("#toUser").val();
                 var title = $("#myTitle").val();
@@ -509,7 +509,7 @@
                             }).then(function () {
                                 $("#toUser").val("");
                                 $("#myTitle").val("");
-                                editorData.editorData('');
+                                editorData.setData('');
                                 jQuery('#filelist').empty();
                                 deleteFormData(formdata);
                             })

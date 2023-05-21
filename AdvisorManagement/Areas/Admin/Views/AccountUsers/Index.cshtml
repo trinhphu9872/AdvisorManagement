@@ -7,39 +7,90 @@
 }
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Danh sách người dùng hệ thống</h5>
+
+        <div class="row">
+            <div class="col-lg-3 col-sm-6">
+                <div class="card">
+                    <div class="card-body  row d-flex align-items-center justify-content-between">
+                        <div class="col-10">
+                            <h3 class="fw-bolder mb-75" id="totalFBoard">@ViewBag.CountUser </h3>
+                            <span>Tổng người dùng</span>
+                        </div>
+                        <div class="col-2">
+                            <i class="fa fa-users" style="font-size:30px"></i>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-12 d-flex no-block align-items-center">
-                    <a onclick="CreateTitle()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 20px; width: 200px;color:white">
-                        Thêm người dùng<i style="margin-left:5px" class="fas fa-plus"></i>
-                    </a>
-                    <div class="ms-auto text-end">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                            </ol>
-                        </nav>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card">
+                    <div class="card-body row d-flex align-items-center justify-content-between">
+                        <div class="col-10">
+                            <h3 class="fw-bolder mb-75" id="totalDHead">@ViewBag.CountAdmin</h3>
+                            <span>Admin khoa</span>
+                        </div>
+                        <div class="col-2">
+                            <i class="fa fa-user-secret" style="font-size:30px"></i>
+
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card">
+                    <div class="card-body row d-flex align-items-center justify-content-between">
+                        <div class="col-10">
+                            <h3 class="fw-bolder mb-75" id="totalLecturer">@ViewBag.CountAdvisor</h3>
+                            <span>Cố vấn học tập</span>
+                        </div>
+                        <div class="col-2">
+                            <i class="fa fa-users" style="font-size:30px"></i>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card">
+                    <div class="card-body row d-flex align-items-center justify-content-between">
+                        <div class="col-10">
+                            <h3 class="fw-bolder mb-75" id="totalUnassigned">@ViewBag.CountStudent</h3>
+                            <span>Sinh viên</span>
+                        </div>
+                        <div class="col-2">
+                            <i class="  fa fa-graduation-cap" style="font-size:30px"></i>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title"></h5>
+                <h4 class="card-title">Quản lí người dùng</h4>
+                <a onclick="CreateTitle()" class="btn btn-success my-2 " style="width: 200px;color:white">
+                    Thêm người dùng<i style="margin-left:5px" class="fas fa-plus"></i>
+                </a>
+
+            </div>
+
+            <div class="">
+
                 <div class="table-responsive">
-                    <table id="zero_config" class="table table-hover table-light table-bordered " role="grid" aria-describedby="zero_config_info">
+                    <table id="zero_config" class="table table-hover table-light  table-striped-columns" role="grid" aria-describedby="zero_config_info">
                         <thead>
-                            <tr class="table-active text-uppercase" >
-                                <th scope="col"><b>Stt           </b> </th>
-                                <th scope="col"><b>Mã số         </b> </th>
+                            <tr class="table-active text-uppercase">
+                                <th scope="col"><b>              </b> </th>
+                                <th scope="col"><b>Mã            </b> </th>
                                 <th scope="col"><b>Họ tên        </b> </th>
                                 <th scope="col"><b>Chức vụ       </b> </th>
                                 <th scope="col"><b>Số điện thoại </b> </th>
                                 <th scope="col"><b>Ngày tham gia </b> </th>
                                 <th scope="col"><b>Email         </b> </th>
-                                <th scope="col"><b>Hoạt động     </b> </th>
+                                <th scope="col"><b> Hoạt động   </b> </th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
@@ -48,46 +99,46 @@
                                 int i = 1;
                                 foreach (var item in Model)
                                 {
-                                        <tr id="@item.id">
-                                            <td>@i</td>
-                                            <td><b> @item.user_code </b></td>
-                                            <td>@item.user_name</td>
-                                            <td>@item.Role.role_name_vn</td>
+                                    <tr id="@item.id">
+                                        <td>@i</td>
+                                        <td><b> @item.user_code </b></td>
+                                        <td>@item.user_name</td>
+                                        <td style="width:100px">@item.Role.role_name_vn</td>
 
-                                            @if (item.phone != null || item.phone == "")
-                                            {
-                                                <td>
-                                                    @item.phone
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                    Chưa cập nhật số điện thoai
-                                                </td>
-                                            }
+                                        @if (item.phone != null || item.phone == "")
+                                        {
+                                            <td>
+                                                @item.phone
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                Chưa cập nhật 
+                                            </td>
+                                        }
 
-                                                <td>
-                                                    @if (item.create_time.HasValue)
-                                                    {
-                                                        @item.create_time.Value.ToString("dd-MM-yyyy hh:mm")
-                                                    }
-                                                </td>
-                                                <td>@item.email</td>
-                                                <td style="width:250px">
-                                                    <a name="detail" class="btn btn-success"
-                                                       style="margin-bottom: 5px; margin-left: 5px; color: white">
-                                                        Chi tiết <i class="fas fa-tasks"></i>
-                                                    </a>
-                                                    <a name="update" id="update" class="btn btn-info" style="margin-bottom: 5px; margin-left: 5px;">
-                                                        Sửa <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a name="delete" id="btnDelete" class="btn btn-danger"
-                                                       style="margin-bottom: 5px; margin-left: 5px;">
-                                                        Xoá <i class="fas fa-trash-alt"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                        <td>
+                                            @if (item.create_time.HasValue)
+                                            {
+                                                @item.create_time.Value.ToString("dd-MM-yyyy hh:mm")
+                                            }
+                                        </td>
+                                        <td>@item.email</td>
+                                        <td style="width:200">
+                                            <a name="detail" class="btn btn-success"
+                                               style=" margin-left: 5px; color: white">
+                                                Chi tiết <i class="fas fa-tasks"></i>
+                                            </a>
+                                            <a name="update" id="update" class="btn btn-info" style=" margin-left: 5px;">
+                                                Sửa <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a name="delete" id="btnDelete" class="btn btn-danger"
+                                               style=" margin-left: 5px;">
+                                                Xoá <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     i++;
                                 }
                             }
@@ -254,7 +305,7 @@
                 <div class="my-2 d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
                     <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">
                         <img src="" id="detail_img" alt="avatar"
-                             class="rounded-circle img-fluid" style="width: 150px;">
+                             class=" img-fluid" style="width: 150px; height:150px">
                     </span>
                 </div>
             </div>

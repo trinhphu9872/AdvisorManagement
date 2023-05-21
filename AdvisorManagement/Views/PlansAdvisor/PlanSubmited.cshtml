@@ -3,7 +3,7 @@
 @using AdvisorManagement.Models;
 
 @{
-    ViewBag.Title = "PlanSubmited";
+    ViewBag.Title = "Kiểm tra kế hoạch";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
     List<VLClass> listYearAdvisor = (List<VLClass>)ViewBag.listYearAdvisor;
     var yearNow = (int)Session["yearNow"];
@@ -19,7 +19,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Kế hoạch năm học của cố vấn</h5>
+                    <h4 class="card-title mb-0">Kiểm tra kế hoạch</h4>
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
@@ -67,7 +67,7 @@
                         <a href="javascript:history.back()" class="btn btn-primary" style="margin-right : 70%;width: 100px;">
                             Quay lại
                         </a>
-              
+
                     </div>
                 </div>
             </div>
@@ -102,55 +102,151 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="modal-footer" class="modal-footer">
+                <div class="modal-body">
+                    <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class=""><span>Tiêu đề:</span><input id="txt_subject_check" type="text" class="form-control" value="" /></div>
+                    </div>
+                    <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                        <div class="form-group">
+                            <label for="pwd">Nội dung:</label>
+                            <div id="editor"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button onclick="SendReturnPlan()" type="button" class="btn btn-default" data-dismiss="modal">Phản hồi kế hoạch</button>
+                        <button onclick="SendBrowsePlan()" type="button" class="btn btn-success" style="color:white" data-dismiss="modal">Duyệt kế hoạch</button>
+
+                        <button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div id="modalListAdvisor" class="modal fade" role="document">
-        <div class="modal-dialog" style="max-width: 60%;" role="document">
+    <div id="modalDone" class="modal fade" role="document">
+        <div class="modal-dialog" style="max-width: 90%;" role="document">
 
             <!-- Modal content-->
             <div class="modal-content">
                 @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
                 <div class="modal-header">
                     <input hidden id="id_class" value="" />
-                    <h4 class="modal-title">Danh sách cố vấn chưa nộp kế hoạch năm học</h4>
+                    <h4 class="modal-title">Kế hoạch cố vấn</h4>
                 </div>
                 <div class="table-responsive" style="margin-top:10px">
-                    <table width="100%" id="zero_config_listadvisor" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
+                    <table width="100%" id="zero_config_done" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
                         <thead>
                             <tr class="table-active text-uppercase">
                                 <th style="text-align:center">STT</th>
-                                <th style="text-align:center">Tên cố vấn</th>
-                                <th style="text-align:center">Lớp chưa nộp</th>                           
+                                <th style="text-align:center">Nội dung</th>
+                                <th style="text-align:center">HK1</th>
+                                <th style="text-align:center">HK2</th>
+                                <th style="text-align:center">HK3</th>
+                                <th style="text-align:center">Mô tả công việc</th>
+                                <th style="text-align:center">Tài nguyên chuẩn bị</th>
+                                <th style="text-align:center">Ghi chú</th>
+                                <th hidden>year</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
                         </tbody>
                     </table>
                 </div>
-                <div id="remind" class="modal-footer">                    
-                </div>
+   
+
+                    <div class="modal-footer">
+
+                       
+
+                        <button onclick="HideModalDone()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
+
+                    </div>
+     
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End PAge Content -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Right sidebar -->
-    <!-- ============================================================== -->
-    <!-- .right-sidebar -->
-    <!-- ============================================================== -->
-    <!-- End Right sidebar -->
-    <!-- ============================================================== -->
+        </div>
+
+<div id="modalListAdvisor" class="modal fade" role="document">
+    <div class="modal-dialog" style="max-width: 60%;" role="document">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
+            <div class="modal-header">
+                <input hidden id="id_class" value="" />
+                <h4 class="modal-title">Danh sách cố vấn chưa nộp kế hoạch năm học</h4>
+            </div>
+            <div class="table-responsive" style="margin-top:10px">
+                <table width="100%" id="zero_config_listadvisor" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
+                    <thead>
+                        <tr class="table-active text-uppercase">
+                            <th style="text-align:center">STT</th>
+                            <th style="text-align:center">Tên cố vấn</th>
+                            <th style="text-align:center">Lớp chưa nộp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-body">
+
+                <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                    <div class=""><span>Đến:</span><input id="txt_to" type="text" class="form-control" value="" disabled /></div>
+                </div>
+                <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                    <div class=""><span>Tiêu đề:</span><input id="txt_subject" type="text" class="form-control" value="" /></div>
+                </div>
+                <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                    <div class="form-group">
+                        <label for="pwd">Nội dung:</label>
+                        <div id="editor"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
+                    <button onclick="SendRemind()" type="button" class="btn btn-default" data-dismiss="modal">Gửi</button>
+                </div>
+            </div>
+
+            @*<div id="remind"">
+
+                </div>*@
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Right sidebar -->
+<!-- ============================================================== -->
+<!-- .right-sidebar -->
+<!-- ============================================================== -->
+<!-- End Right sidebar -->
+<!-- ============================================================== -->
 </div>
 <script src="~/Assets/extra-libs/DataTables/datatables.js"></script>
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
 <script>
+    var myEditor;
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editor => {
+            myEditor = editor;
+
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
+</script>
+<script>
+
         //Lấy data khi vừa vào web admin
          var dataTable = $("#zero_config").DataTable({
          'ajax': {
@@ -170,8 +266,18 @@
                  { 'data': 'user_name', 'width': '20%' },
                  { 'data': 'status', 'width': '20%' },
                  {
+
                      'data': 'id_class', 'width': '25%', 'render': function (data, type, row) {
-                         return '<button onclick="Check(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 200px;color:white">Kiểm tra <i class="fas fa-clipboard-check"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 200px;color:white">Xuất excel <i class="fas fa-download"></i></button>';
+
+                         if (row.status == "Chờ duyệt") {
+                             return '<button onclick="Check(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 150px;color:white">Kiểm tra <i class="fas fa-clipboard-check"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 150px;color:white">Xuất excel <i class="fas fa-download"></i></button>';
+                         } else {
+                             return '<button onclick="ShowDone(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 150px;color:white">Kiểm tra <i class="fas fa-clipboard-check"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 150px;color:white">Xuất excel <i class="fas fa-download"></i></button>';
+
+                         }
+
+
+
                      }
                  },
                  ],
@@ -250,7 +356,80 @@
             });
         });
 
-    function Check(id_class) {
+        function ShowDone(id_class) {
+            jQuery('#modal-footer').empty();
+            $('#id_class').val(id_class);
+            $(document).on('destroy.dt', function (e, settings) {
+                var api = new $.fn.dataTable.Api(settings);
+                api.off('order.dt');
+                api.off('preDraw.dt');
+                api.off('column-visibility.dt');
+                api.off('search.dt');
+                api.off('page.dt');
+                api.off('length.dt ');
+                api.off('xhr.dt');
+            });
+            $("#zero_config_done").dataTable().fnDestroy();
+            $.ajax({
+                    url: '@Url.Action("GetListPlanSubmitedClass", "PlansAdvisor")',
+                    type: 'GET',
+                    data: {
+                        id_class: id_class
+                    },
+                    /*contentType: "application/json; charset=utf-8", */
+                    success: function (data) {
+                        if (data.success == true) {
+                            GeneraTableDone(id_class)
+                            $('#modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button>`);
+                        } else {
+                            GeneraTableDone(id_class);
+                            $('#modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>`);
+                        }
+                    }
+                })
+                /*dataTable.on('order.dt search.dt', function () {
+                    let i = 1;
+                    dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                        this.data(i++);
+                    });
+                }).draw();*/
+            $("#modalDone").modal('show');
+        }
+        function HideModalDone() {
+            $("#modalDone").modal('hide');
+        }
+        function GeneraTableDone(id_class) {
+            $("#zero_config_done").DataTable({
+             'ajax': {
+                    'url': '@Url.Action("GetListPlanSubmitedClass", "PlansAdvisor")',
+                    'data': function (d) {
+                        d.id_class = id_class;
+                     },
+                    'type': 'get',
+                    'datatype': 'json',
+             },
+             'columns':
+                 [
+                     { 'data': 'number_title', 'width': '1%', },
+                     { 'data': 'content', 'width': '25%'},
+                     { 'data': 'hk1', 'width': '3%' },
+                     { 'data': 'hk2', 'width': '3%' },
+                     { 'data': 'hk3', 'width': '3%' },
+                     { 'data': 'describe', 'width': '30%' },
+                     { 'data': 'source', 'width': '25%' },
+                     { 'data': 'note', 'width': '10%' },
+                    ],
+                "autoWidth": false,
+                "aLengthMenu": [[-1], ["All"]],
+                "bLengthChange": false,
+                "bPaginate": false,
+                "bInfo": false,
+                responsive: true,
+                "rowsGroup": [0, 1],
+             });
+        }
+
+        function Check(id_class) {
         jQuery('#modal-footer').empty();
         $('#id_class').val(id_class);
         $(document).on('destroy.dt', function (e, settings) {
@@ -261,8 +440,8 @@
             api.off('search.dt');
             api.off('page.dt');
             api.off('length.dt ');
-            api.off('xhr.dt');            
-        });       
+            api.off('xhr.dt');
+        });
         $("#zero_config_plan").dataTable().fnDestroy();
         $.ajax({
                 url: '@Url.Action("GetListPlanSubmitedClass", "PlansAdvisor")',
@@ -277,7 +456,7 @@
                         $('#modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button>`);
                     } else {
                         GeneraTable(id_class);
-                        $('#modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button><button onclick = "ReturnPlan()" type = "button" class= "btn btn-default" data - dismiss="modal" > Trả về</button ><button onclick = "BrowsePlan()" class="btn btn-primary" type="submit">Duyệt</button>`);
+                        $('#modal-footer').append(`<button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>`);
                     }
                 }
             })
@@ -310,7 +489,7 @@
                  { 'data': 'describe', 'width': '30%' },
                  { 'data': 'source', 'width': '25%' },
                  { 'data': 'note', 'width': '10%' },
-                ],           
+                ],
             "autoWidth": false,
             "aLengthMenu": [[-1], ["All"]],
             "bLengthChange": false,
@@ -332,23 +511,31 @@
                         <div class=""><span>Tiêu đề:</span><input id="subject_return" type="text" class="form-control" value=""/></div>
                     </div>
           <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                        <div class=""><span>Nội dung:</span><textarea maxlength="200" placeholder="Giới hạn 200 từ" id="message_return" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 16px;resize: none;" type="text"></textarea></div>
-                    </div>    
+
+
+         <div class="">
+            <span>Nội dung:</span>
+            <div id="editor"></div>
+          </div>
+                    </div>
         <button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button> <button onclick = "SendReturnPlan()" type = "button" class= "btn btn-default" data - dismiss="modal" > Trả về</button >`);
     }
 
     function SendReturnPlan() {
-        let subject = $('#subject_return').val();
-        let message = $('#message_return').val();
+        var editorData = myEditor.getData();
+        var subject = $('#txt_subject_check').val();
+        var message = `${editorData.toString()}`;
         let id_class = $('#id_class').val();
         $.ajax({
                 url: '@Url.Action("ReturnPlan", "PlansAdvisor")',
                 type: 'POST',
-                data: {
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data:JSON.stringify({
                     id_class: id_class,
                     message: message,
                     subject: subject
-                },
+                }),
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {
                     if (data.success == true) {
@@ -364,7 +551,8 @@
                             }
                         }).then(function (result) {
                             if (result.value) {
-                                dataTable.ajax.reload(null, false);
+                                location.reload();
+
 
                             }
                         })
@@ -396,22 +584,25 @@
                     </div>
           <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                         <div class=""><span>Nội dung:</span><textarea maxlength="200" placeholder="Giới hạn 200 từ" id="message_browse" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 16px;resize: none;" type="text"></textarea></div>
-                    </div>    
+                    </div>
         <button onclick="HideModal()" type="button" class="btn btn-danger" data-dismiss="modal">Trở về</button> <button onclick = "SendBrowsePlan()" type = "button" class= "btn btn-default" data - dismiss="modal" >Duyệt</button >`);
     }
 
     function SendBrowsePlan() {
-        let subject = $('#subject_browse').val();
-        let message = $('#message_browse').val();
+        var editorData = myEditor.getData();
+        var subject = $('#txt_subject_check').val();
+        var message = `${editorData.toString()}`;
         let id_class = $('#id_class').val();
         $.ajax({
                 url: '@Url.Action("BrowsePlan", "PlansAdvisor")',
                 type: 'POST',
-                data: {
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
                     id_class: id_class,
                     subject: subject,
                     message: message
-                },
+                }),
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {
                     if (data.success == true) {
@@ -427,7 +618,8 @@
                             }
                         }).then(function (result) {
                             if (result.value) {
-                                dataTable.ajax.reload(null, false);
+                                location.reload();
+
 
                             }
                         })
@@ -445,7 +637,7 @@
                             if (result.value) {
                             }
                         })
-                       
+
                     }
                 }
             })
@@ -503,10 +695,10 @@
                    this.data(i++);
                });
         }).draw();
-        $('#remind').append(`
-                    <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
-                    <button onclick="Remind()" type="button" class= "btn btn-default" data-dismiss="modal">Nhắc nhở</button>`);
+
+        this.Remind();
         $("#modalListAdvisor").modal('show');
+
     }
 
     function HideListAdvisor() {
@@ -514,41 +706,39 @@
     }
 
     function Remind() {
-        jQuery('#remind').empty();
          $.ajax({
                 url: '@Url.Action("GetRemind", "PlansAdvisor")',
                 type: 'GET',
                 /*contentType: "application/json; charset=utf-8", */
              success: function (data) {
+
                  let email = data.data;
-                 $('#remind').append(`
-                    <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                        <div class=""><span>Đến:</span><input id="txt_to" type="text" class="form-control" value="${data.data}" disabled/></div>
-                    </div>
-                     <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                        <div class=""><span>Tiêu đề:</span><input id="txt_subject" type="text" class="form-control" value=""/></div>
-                    </div>
-                    <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
-                        <div class=""><span>Nội dung:</span><textarea maxlength="200" placeholder="Giới hạn 200 từ" id="txt_message" style="width: 100%; height: 80px;padding: 12px 20px ;box-sizing: border-box; border: 2px solid #ccc;border-radius: 4px;background-color: #f8f8f8;font-size: 11px;resize: none;" type="text"></textarea></div>
-                    </div>
-                    <button onclick="HideListAdvisor()" type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button> <button onclick ="SendRemind('${data.data}')" type = "button" class= "btn btn-default" data - dismiss="modal" >Gửi</button >`);
+                 console.log(email);
+                 $('#txt_to').val(email);
              }
-         })      
+         })
     }
 
-    function SendRemind(email) {
-        var to = email;        
+    function SendRemind() {
+
+        var editorData = myEditor.getData();
+
+        var to = $('#txt_to').val();
         var subject = $('#txt_subject').val();
-        var message = $('#txt_message').val();
+        var message = `${editorData.toString()}`;
+        console.log(message);
         if ($('#txt_to').prop("disabled") == true){
             $.ajax({
-                url: '@Url.Action("SendMailRemind", "PlansAdvisor")',
                 type: 'POST',
-                data: {
+                url: '@Url.Action("SendMailRemind", "PlansAdvisor")',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+
+                data:JSON.stringify({
                     to: to,
                     subject: subject,
                     message: message
-                },
+                }),
                 success: function (data) {
                     if (data.success == true) {
                         Swal.fire({
@@ -562,6 +752,7 @@
                             }
                         }).then(function (result) {
                             if (result.value) {
+                      
                                 location.reload();
                             }
                         })

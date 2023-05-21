@@ -1360,6 +1360,7 @@
     <Content Include="Images\imageProfile\View file list.png" />
     <Content Include="Images\imageProfile\ViewlistQ&amp;A.png" />
     <Content Include="Images\imageProfile\Write_Q&amp;A.png" />
+    <Content Include="Images\img_vlu_name.png" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\logo2.png" />
     <Content Include="Images\logon.png" />

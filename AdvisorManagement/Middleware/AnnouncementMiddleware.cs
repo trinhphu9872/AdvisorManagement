@@ -24,6 +24,8 @@ namespace AdvisorManagement.Middleware
                          {
                              id = n.id,
                              userID = n.send_to,
+                             userSend = db.AccountUser.FirstOrDefault(x => x.id == n.id_user).email,
+
                              message = a.message,
                              title = a.title,
                              date = n.create_time,                          
@@ -41,6 +43,7 @@ namespace AdvisorManagement.Middleware
                          select new UserNotification
                          {
                              id = n.id,
+                             userSend = db.AccountUser.FirstOrDefault(x => x.id == n.id_user).email,
                              userID = n.send_to,
                              message = a.message,
                              title = a.title,
@@ -75,6 +78,12 @@ namespace AdvisorManagement.Middleware
                 return null;
             }
             return path_file;
+        }
+
+        public int getId(string mail)
+        {
+            int id = db.AccountUser.FirstOrDefault(x => x.email == mail).id;
+            return id;
         }
     }
 }

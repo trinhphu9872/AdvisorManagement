@@ -41,6 +41,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 var accountUser = db.AccountUser.Include(a => a.Role).OrderBy(y => y.id_role);
                 ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
                 ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
+                ViewBag.CountUser = accountUser.Count();
+                ViewBag.CountAdmin = accountUser.Where(x => x.id_role == 1).Count();
+                ViewBag.CountAdvisor = accountUser.Where(x => x.id_role == 2).Count();
+                ViewBag.CountStudent = accountUser.Where(x => x.id_role == 3).Count();
+
+
                 return View(accountUser.ToList().OrderByDescending(x=>x.update_time));
             }
             else

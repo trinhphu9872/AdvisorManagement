@@ -98,11 +98,12 @@ namespace AdvisorManagement.Controllers
                 notif.send_to = userID;
                 notif.create_time = DateTime.Now;
                 notif.is_read = false;
-                MailRequest mail = new MailRequest();
-                mail.To = userID;
-                mail.Message = message;
-                mail.Subject = title;
-                mailService.MailSendRequest(mail, this.LoadHtmlTemplate());
+                notif.id_user = serviceAnnoun.getId(User.Identity.Name);
+                //MailRequest mail = new MailRequest();
+                //mail.To = userID;
+                //mail.Message = message;
+                //mail.Subject = title;
+                //mailService.MailSendRequest(mail, this.LoadHtmlTemplate());
                 db.Configuration.ProxyCreationEnabled = false;
                 db.Notification.Add(notif);
                 db.SaveChanges();

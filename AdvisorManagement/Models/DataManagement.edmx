@@ -75,6 +75,7 @@
           <Property Name="send_to" Type="varchar" MaxLength="100" />
           <Property Name="create_time" Type="datetime" />
           <Property Name="is_read" Type="bit" />
+          <Property Name="id_user" Type="int" />
         </EntityType>
         <EntityType Name="PlanAdvisor">
           <Key>
@@ -611,6 +612,7 @@
           <Property Name="send_to" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="is_read" Type="Boolean" />
+          <Property Name="id_user" Type="Int32" />
         </EntityType>
         <EntityType Name="EvaluationAdvisor">
           <Key>
@@ -829,6 +831,7 @@
           <EntitySetMapping Name="Notification">
             <EntityTypeMapping TypeName="CP25Team09Model.Notification">
               <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="id_user" ColumnName="id_user" />
                 <ScalarProperty Name="is_read" ColumnName="is_read" />
                 <ScalarProperty Name="create_time" ColumnName="create_time" />
                 <ScalarProperty Name="send_to" ColumnName="send_to" />

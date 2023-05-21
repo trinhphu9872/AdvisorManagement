@@ -234,9 +234,9 @@
                 jQuery('.control-area').empty();
                 for (let i = 0; i < message.length; i++) {
                     if (message[i].isRead == true) {
-                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].userSend + '</small></div></div></a>'));
                     } else {
-                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].message + '</small></div></div></a>'));
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].userSend + '</small></div></div></a>'));
                     }
                 }
             }

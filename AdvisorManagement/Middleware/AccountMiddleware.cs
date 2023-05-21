@@ -631,5 +631,11 @@ namespace AdvisorManagement.Middleware
             return Regex.IsMatch(name, pattern);
         }
 
+        public int getIdMail(string mail)
+        {
+            int id = db.AccountUser.FirstOrDefault(x => x.email == mail).id;
+            return id;
+        }
+
     }
 }

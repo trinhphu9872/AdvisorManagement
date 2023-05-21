@@ -19,5 +19,6 @@ namespace AdvisorManagement.Models
         public string send_to { get; set; }
         public Nullable<System.DateTime> create_time { get; set; }
         public Nullable<bool> is_read { get; set; }
+        public Nullable<int> id_user { get; set; }
     }
 }
