@@ -118,7 +118,7 @@
           <Property Name="id_class" Type="int" />
           <Property Name="id_status" Type="int" />
           <Property Name="modify_time" Type="datetime" />
-          <Property Name="message" Type="nvarchar" MaxLength="200" />
+          <Property Name="message" Type="nvarchar(max)" />
           <Property Name="eval_advisor" Type="nchar" MaxLength="1" />
           <Property Name="eval_admin" Type="nchar" MaxLength="1" />
         </EntityType>
@@ -399,7 +399,7 @@
           <Property Name="id_class" Type="Int32" />
           <Property Name="id_status" Type="Int32" />
           <Property Name="modify_time" Type="DateTime" Precision="3" />
-          <Property Name="message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="eval_advisor" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Name="eval_admin" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
