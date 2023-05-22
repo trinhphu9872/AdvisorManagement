@@ -15,6 +15,7 @@ using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
@@ -136,7 +137,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             List<PlanAdvisor> template = (List<PlanAdvisor>)listPlan;
             if (serviceAccount.getRoleTextName(User.Identity.Name).Trim() !=  "1" )
             {
-                if (phanLoai == null)
+                if (phanLoai == null || phanLoai == "" || phanLoai == " ")
                 {
                     return Json(new { success = false, message = "Vui lòng đánh giá" });
                 }
@@ -144,10 +145,21 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng đánh giá theo dạng 1 kí tự theo chuẩn" });
                 }
-                if (this.checkAplha(phanLoai))
+                if (!this.checkAplha(phanLoai))
                 {
                     return Json(new { success = false, message = "Vui lòng đánh giá theo loại tiêu chí theo dạng A - Z" });
                 }
+                if (db.EvaluationAdvisor.Where(x => x.rank_type == phanLoai).ToList().Count() < 1)
+                {
+                    return Json(new { success = false, message = "Vui lòng đánh giá theo tiêu trí "});
+
+                }
+                var plan = db.PlanStatus.FirstOrDefault(x => x.id_class == id_class);
+                plan.eval_advisor = phanLoai;
+                db.Entry(plan).State = EntityState.Modified;
+                db.SaveChanges();
+
+
             }
             try
             {
