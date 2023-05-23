@@ -21,7 +21,7 @@
                                 <div class="row">
                                     <div class="col-4 text-center pt-5 ml-5 mt-5">
 
-                                        <img src="@Url.Content(Model.img_profile+" ")" alt="avatar" id="previewImage"
+                                        <img src="@Url.Content("~/"+Model.img_profile+" ")" alt="avatar" id="previewImage"
                                              class=" img-fluid mt-5" style="width: 180px;">
 
                                         <h5 class=""> @Model.user_name</h5>
@@ -128,7 +128,7 @@
             }
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("EditApi", "AccountUsers")',
+                url: '@Url.Action("EditUserApi", "AccountUsers")',
                 contentType: false,
                 processData: false,
                 data: formData,

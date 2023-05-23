@@ -323,6 +323,75 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Sai phân quyền" });
             }
         }
+
+        // EDIT API 
+        [HttpPost]
+        public ActionResult EditUserApi([Bind(Include = " id,email,user_name,phone,address,ImageUpload ")] AccountUser account)
+        {
+
+        
+                account.address = null;
+                var edtUser = db.AccountUser.FirstOrDefault(x => x.id == account.id);
+                if (account.ImageUpload != null)
+                {
+                    string filename = Path.GetFileNameWithoutExtension(account.ImageUpload.FileName).ToString();
+                    string extension = Path.GetExtension(account.ImageUpload.FileName);
+                    filename = filename + extension;
+                    account.img_profile = "~/Images/imageProfile/" + filename;
+                    account.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Images/imageProfile/"), filename));
+                }
+                if (account.email == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng điền mail" });
+                }
+                if (!serviceAccount.IsValidEmail(account.email))
+                {
+                    return Json(new { success = false, message = "Email không thuộc tổ chức" });
+                }
+                if (account.user_name == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng điền tên " });
+                }
+                if (account.user_name.Trim().Length == 0 && account.user_name.Length > 0 && string.IsNullOrWhiteSpace(account.user_name))
+                {
+                    return Json(new { success = false, message = "Vui lòng điển tên " });
+                }
+                if (serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
+                {
+                    return Json(new { success = false, message = "Vui lòng điền tên không chứa kí tự đặc biệt" });
+                }
+                if (account.phone == null)
+                {
+                    return Json(new { success = false, message = "Vui lòng điền số điện thoại" });
+                }
+                if (db.AccountUser.Where(x => x.phone == account.phone && x.id != account.id).ToList().Count() > 0)
+                {
+                    return Json(new { success = false, message = "Số điện thoại tồn tại trong hệ thống" });
+                }
+                if (!serviceAccount.IsValidEmail(account.email))
+                {
+                    return Json(new { success = false, message = "Email không đúng định dạng" });
+                }
+                if (!serviceAccount.IsPhoneNumberValid(account.phone))
+                {
+                    return Json(new { success = false, message = "Số điện thoại không đúng định dạng" });
+                }
+
+                if (edtUser == null)
+                {
+                    return Json(new { success = false, message = "Email không tồn tại trong hệ thông" });
+                }
+
+                edtUser.img_profile = (account.img_profile != null && account.img_profile != "" && account.img_profile != " ") ? account.img_profile : edtUser.img_profile;
+                edtUser.user_name = account.user_name;
+                edtUser.phone = account.phone;
+                edtUser.address = account.address;
+                edtUser.update_time = DateTime.Now;
+                db.Entry(edtUser).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true, message = "Cập nhật tài khoản thành công" });
+            
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
