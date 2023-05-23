@@ -34,7 +34,8 @@ namespace AdvisorManagement.Controllers
         public ActionResult UserProfile(string email)
         {
             this.init();
-            AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(email));
+            AccountUser user = dbApp.AccountUser.FirstOrDefault(u => u.email.Equals(User.Identity.Name));
+            user.img_profile = (user.img_profile != null && user.img_profile != "" && user.img_profile != " ") ? user.img_profile.ToString().Replace("~", "") : "/Images/imageProfile/avata.png";
             return View(user);
         }
         public ActionResult EditUserProfile(int id)

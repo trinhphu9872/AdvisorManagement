@@ -95,7 +95,7 @@
                                         <th scop ="col"  style="text-align:center">            <b> Nội dung</b></th>
                                         <th scop ="col"  style="text-align:center">            <b> Mô tả công việc</b></th>
                                         <th scop ="col"  style="text-align:center">            <b> Tài nguyên chuẩn bị</b></th>
-                                        <th scop ="col"  style="text-align:center">            <b> Tiêu chí đánh giá</b></th>
+                                        <th scop ="col"  style="text-align:center">            <b> Tiêu chí</b></th>
                                         <th scop ="col"  style="text-align:center">            <b> Ghi chú</b></th>
                                         <th scop ="col"  hidden>                               <b> year</b></th>
                                         <th scop ="col"  style="text-align:center" id="action"><b> Hoạt động</b></th>
@@ -337,10 +337,10 @@
              [
                  { 'data': 'number_title', 'width': '0%' },
                  { 'data': 'content', 'width': '20%' },
-                 { 'data': 'describe', 'width': '25%' },
-                 { 'data': 'source', 'width': '25%' },
+                 { 'data': 'describe', 'width': '20%' },
+                 { 'data': 'source', 'width': '20%' },
                  { 'data': 'evaluate', 'width': '   10%' },
-                 { 'data': 'note', 'width': '5%' },
+                 { 'data': 'note', 'width': '15%' },
                  {
                      'data': 'id', 'width': '20%', 'render': function (data) {
                          return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button >@* <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'

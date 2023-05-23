@@ -1365,6 +1365,10 @@
     <Content Include="Images\logo2.png" />
     <Content Include="Images\logon.png" />
     <Content Include="Images\search.png" />
+    <Content Include="Images\test.png" />
+    <Content Include="Images\tester.png" />
+    <Content Include="Images\update.jpg" />
+    <Content Include="Images\updatein.png" />
     <Content Include="Models\DataManagement.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DataManagement.edmx</DependentUpon>

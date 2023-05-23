@@ -222,6 +222,18 @@
     }
 
 </style>
+<script>
+    var myEditor;
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editor => {
+            myEditor = editor;
+
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
+</script>
 <script type="text/javascript">
 
 
@@ -234,7 +246,7 @@
                 jQuery('.control-area').empty();
                 for (let i = 0; i < message.length; i++) {
                     if (message[i].isRead == true) {
-                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark" >' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].userSend + '</small></div></div></a>'));
+                        $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 fw-normal text-dark">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].userSend + '</small></div></div></a>'));
                     } else {
                         $('.control-area').append($('<a onclick="detailNotify(' + message[i].id + ')" id="' + message[i].id + '" class="dropdown-item py-3"><small class= "float-end text-muted ps-2" >' + moment(message[i].date).format("DD/MM HH:mm") + '</small ><div class="media"><div class="media-body align-self-center ms-2 text-truncate"><h6 class="my-0 text-dark" style="font-weight:800">' + message[i].title + '</h6><small class="text-muted mb-0">' + message[i].userSend + '</small></div></div></a>'));
                     }
@@ -255,7 +267,7 @@
             data: { id_notify: id_notify },
             success: function (data) {
                 jQuery('.content-area').empty();
-                $('.content-area').append($('<div class="header" style="width: calc(100%);" data-region="header"><div style = "width: calc(100%);" ><div class="timestamp"><i onclick="DeleteNotification(' + data.notify[0].id + ')" class="fas fa-trash-alt fa-2x"></i></div><div class="timestamp">' + moment(data.notify[0].date).format("DD/MM HH:mm") + '</div><div style="font-weight: bold;">' + data.notify[0].title + '</div></div></div ><div class="content" data - region="content" > ' + data.notify[0].message + '</div>'));
+                $('.content-area').append($('<div class="header" style="width: calc(100%);" data-region="header"><div style = "width: calc(100%);" ><div class="timestamp"><i onclick="DeleteNotification(' + data.notify[0].id + ')" class="fas fa-trash-alt fa-2x"></i></div><div class="timestamp">' + moment(data.notify[0].date).format("DD/MM HH:mm") + '</div><div style="font-weight: bold;">' + data.notify[0].title + '</div></div></div ><div class="content" data - region="content" >  <div id="editor">' + data.notify[0].message + '</div></div>'));
                 if (data.notify[0].file_attach != null) {
                     var filenames = data.notify[0].file_attach.split(";");
                     for (let i = 0; i < filenames.length; i++) {
@@ -263,6 +275,21 @@
                     }
                 }
                 $('.content-area').append($(' <div class="footer" data-region="footer"><p width="600" border="0" style="padding:0 48px 48px 48px; color:#707070; font-family:Arial; font-size:12px; line-height:125%; text-align:center;">KHOA CÔNG NGHỆ THÔNG TIN - TRƯỜNG ĐẠI HỌC VĂN LANG</p></div>'));
+                var myEditor;
+                ClassicEditor
+                    .create(document.querySelector('#editor'), {
+                        toolbar : []
+                    })
+                    .then(editor => {
+                        editor.enableReadOnlyMode("editor");
+                   
+                        myEditor = editor;
+
+
+                    })
+                    .catch(err => {
+                        console.error(err.stack);
+                    });
             }
         })
     }

@@ -204,7 +204,7 @@
                 <div class="col-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                     <div class="form-group">
                         <label for="pwd">Nội dung:</label>
-                        <div id="editor"></div>
+                        <div id="editorRemind"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -239,6 +239,18 @@
         .create(document.querySelector('#editor'))
         .then(editor => {
             myEditor = editor;
+
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
+</script>
+<script>
+    var myEditorRemind;
+    ClassicEditor
+        .create(document.querySelector('#editorRemind'))
+        .then(editor => {
+            myEditorRemind = editor;
 
         })
         .catch(err => {
@@ -324,19 +336,48 @@
                 'type': 'get',
                 'datatype':'json',
          },
-         'columns':
-             [
-                 { 'data': 'id', 'width': '5%', },
-                 { 'data': 'class_code', 'width': '20%'},
-                 { 'data': 'user_name', 'width': '20%' },
-                 { 'data': 'status', 'width': '20%' },
-                 {
-                     'data': 'id_class', 'width': '25%', 'render': function (data, type, row) {
-                         return '<button onclick="Check(' + data + ')" class="btn btn-success">Kiểm tra <i class="fas fa-file"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success">Export excel<i class="fas fa-file"></i></button>';
-                     }
-                 },
+                'columns':
+                    [
+                        { 'data': 'id', 'width': '5%', },
+                        { 'data': 'class_code', 'width': '20%' },
+                        { 'data': 'user_name', 'width': '20%' },
+                        { 'data': 'status', 'width': '20%' },
+                        {
+
+                            'data': 'id_class', 'width': '25%', 'render': function (data, type, row) {
+
+                                if (row.status == "Chờ duyệt") {
+                                    return '<button onclick="Check(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 150px;color:white">Kiểm tra <i class="fas fa-clipboard-check"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 150px;color:white">Xuất excel <i class="fas fa-download"></i></button>';
+                                } else {
+                                    return '<button onclick="ShowDone(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 150px;color:white">Kiểm tra <i class="fas fa-clipboard-check"></i></button> <button onclick="ExportExcel(' + data + ')" class="btn btn-success"  style="margin-bottom: 10px; margin-left: 20px; width: 150px;color:white">Xuất excel <i class="fas fa-download"></i></button>';
+
+                                }
+
+
+
+                            }
+                        },
                     ],
-                "order": [[3, "desc"]],
+                'language': {
+                    "decimal": "",
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                    "infoEmpty": "",
+                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "Không tìm thấy dữ liệu",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                },
+                "order": [[3, "asc"]],
          });
             dataTable.on('order.dt search.dt', function () {
                 let i = 1;
@@ -721,7 +762,7 @@
 
     function SendRemind() {
 
-        var editorData = myEditor.getData();
+        var editorData = myEditorRemind.getData();
 
         var to = $('#txt_to').val();
         var subject = $('#txt_subject').val();

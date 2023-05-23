@@ -309,7 +309,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Email không tồn tại trong hệ thông" });
                 }
-                edtUser.img_profile = account.img_profile;
+                edtUser.img_profile = (account.img_profile != null && account.img_profile != "" && account.img_profile != " ") ? account.img_profile : edtUser.img_profile;
                 edtUser.user_name = account.user_name;
                 edtUser.phone = account.phone;
                 edtUser.address = account.address;

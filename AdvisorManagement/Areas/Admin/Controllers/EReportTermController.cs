@@ -533,7 +533,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Không tìm thấy dữ liệu" });
             }
-            return Json(new { data = dataM,  success = true ,message ="Ok"}, JsonRequestBehavior.AllowGet);
+            var re = int.Parse(serviceAccount.getRoleTextName(User.Identity.Name)) == 1 ? dataM[0].eval_admin : dataM[0].eval_advisor;
+            return Json(new { data = re,  success = true ,message ="Ok"}, JsonRequestBehavior.AllowGet);
 
         }
     }

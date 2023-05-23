@@ -1,26 +1,11 @@
 ﻿@model AdvisorManagement.Models.AccountUser
 @{
-    ViewBag.Title = "UserProfile";
+    ViewBag.Title = "Thông tin cá nhân";
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
 
 }
-<div class="col-12">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title mb-0">Thông tin cá nhân </h5>
-        </div>
-        <div class="page-breadcrumb">
-            <div class="row">
-                <div class="col-12 d-flex no-block align-items-center">
-                    
-                </div>
-            </div>
 
-        </div>
-
-    </div>
-</div>
 <div class="container-fluid">
     <!-- ============================================================== -->
     <!-- Start Page Content -->
@@ -30,93 +15,67 @@
             <div class="card">
                 <form class="form-horizontal">
                     <div class="card-body">
-                        <h4 class="card-title">Thông tin</h4>
+                        <h4 class="card-title">Cập nhật thông tin người dùng</h4>
                         <div class="form-group row">
-                            <div class="card-body text-center">
-                                @if (Model.img_profile != null && Model.img_profile != "")
-                                {
-                                    <img src="@Url.Content(Model.img_profile+" ")" alt="avatar"
-                                         class="rounded-circle img-fluid" style="width: 150px;">
-                                }
-                                else
-                                {
-                                    <img src="@Url.Content("~/Images/imageProfile/avata.png"+" ")" alt="avatar"
-                                         class="rounded-circle img-fluid" style="width: 150px;">
-                                }
+                            <div class=" text-left col-7">
+                                <div class="row">
+                                    <div class="col-4 text-center pt-5 ml-5 mt-5">
 
-                                <h5 class="my-3">@Model.user_name</h5>
-                                <p class="text-muted mb-1">@Model.user_code</p>
+                                        <img src="@Url.Content(Model.img_profile+" ")" alt="avatar" id="previewImage"
+                                             class=" img-fluid mt-5" style="width: 180px;">
 
-                                <!-- <div class="d-flex justify-content-center mb-2">
-      <button type="button" class="btn btn-primary">Message</button>
-
-    </div> -->
-                            </div>
-                            <label for="fname" class="col-sm-3 text-end control-label col-form-label">MSSV:</label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control" id="user_name" placeholder="197PM29124" value="@Model.user_code" disabled="disabled" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="lname" class="col-sm-3 text-end control-label col-form-label">Họ tên:</label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control" id="user_name" placeholder="Trần Thanh Hoài" value="@Model.user_name" disabled="disabled" />
-                            </div>
-                        </div>
-                        <!-- <div class="form-group row" style="margin-left: 20%;">
-      <label for="lname" class="col-sm-3 text-end control-label col-form-label">Gender:
-        <select class="col-sm-9" name="option">
-          <option value="" disabled selected>Choose your gender</option>
-          <option value="1">Nam</option>
-          <option value="2">Nữ</option>
-
-        </select>
-      </label>
-    </div> -->
-                        <div class="form-group row">
-                            <label for="email1" class="col-sm-3 text-end control-label col-form-label">Mail: </label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control" id="email" placeholder="mail" value="@Model.email" disabled="disabled"/>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="email1" class="col-sm-3 text-end control-label col-form-label">SDT: </label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control" id="phone" placeholder="0906172097" value="@Model.phone" disabled="disabled" />
-                            </div>
-                        </div>
-                        @*<div class="form-group row">
-            <label for="cono1" class="col-sm-3 text-end control-label col-form-label">Tình trạng</label>
-            <div class="col-sm-7">
-                <input type="text" class="form-control" id="cono1" placeholder="Đang dạy" />
-            </div>
-        </div>*@
-                        <!-- <div class="form-group row">
-      <label for="cono1" class="col-sm-3 text-end control-label col-form-label">Message</label>
-      <div class="col-sm-9">
-        <textarea class="form-control"></textarea>
-      </div> -->
+                                        <h5 class=""> @Model.user_name</h5>
 
 
 
+                                    </div>
+                                    <div class="col-6 my-5">
+                                        <form>
+                                            <input hidden id="id_edit" value="@Model.id" />
+
+                                            <div class="mb-3">
+                                                <label for="user_code" class="form-label">Mã cá nhân</label>
+                                                <input type="text" class="form-control" id="user_code" value="@Model.user_code" disabled="disabled">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="user_name" class="form-label">Tên cá nhân</label>
+                                                <input type="text" class="form-control" id="user_name" value="@Model.user_name">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" value="@Model.email" disabled="disabled">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">Số điện thoại</label>
+                                                <input type="text" class="form-control" id="phone" value="@Model.phone">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="txtImage" class="form-label">Hình ảnh</label>
+                                                <input  class="form-control" accept="image/*" type="file" placeholder="Vui lòng chọn ảnh" id="txtImage" name="ImageUpload" onchange="ShowImageProduct(this, document.getElementById('previewImage'))" />
+
+                                            </div>
 
 
-                        <div class="border-top">
+                                            <div class="mb-3">
 
-                            <div class="border-top">
-                                <div class="card-body">
-                                    <a href="@Url.Action("EditUserProfile", "Home",new {id =Model.id})" class="btn btn-primary" style="margin-left: 45%;width: 100px;">
-                                        SỬA
-                                    </a>
-                                    @*<button type="submit" class="btn btn-success text-white" style="margin-left: 30%;width: 100px;">
-                        Lưu
-                    </button>
+                                                <button class="btn btn-primary form-control" id="updateInfo">Cập nhật thông tin cá nhân</button>
 
-                    <button type="submit" class="btn btn-danger text-white" style="margin-left: 30%;width: 100px;">
-                        Hủy
-                    </button>*@
+                                            </div>
+                                        </form>
+                                       
+                                    </div>
                                 </div>
+                    
+
                             </div>
+                            <div class="col-1"></div>
+                            <div class="col-4 text-right ml-5">
+
+                                <img src="~/Images/tester.png"  alt="profile"
+                                     class=" img-responsive mt-5 img-fit-cover img-fluid" style="">
+                            </div>
+
+                      
                         </div>
                     </div>
                 </form>
@@ -138,126 +97,66 @@
     <!-- End Right sidebar -->
     <!-- ============================================================== -->
 </div>
-<!--<div class="col-md-9">
-    <div class="divmain">
-            VLU - Profile
-        </div>
-        <section style="background-color: #eee;">
-            <div class="container py-5">
-                <div class="row">
-                    <div class="col">
+<script>
+        $(document).ready(function () {
+            $('#updateInfo').click(function () {
+            // validate file
+            var fileInput = $('#txtImage');
+            if (fileInput.val().length > 1) {
+                var file = fileInput[0].files[0];
+                // get data
+                if (!file.type.startsWith('image/')) {
+                    alert('Vui lòng chọn hình ảnh.');
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Vui lòng chọn file ảnh dưới 5 MB.');
+                    return;
+                }
+            }
+            let formData = new FormData();
+            let jsonData = {
+                id: $("#id_edit").val(),
+                email: $("#email").val(),
+                user_name: $("#user_name").val(),
+                phone: $("#phone").val(),
+                ImageUpload: file
+            };
 
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="card mb-4">
-                            <div class="card-body text-center">
-                                <img src="@Url.Content(Model.img_profile+" ")" alt="avatar"
-                                     class="rounded-circle img-fluid" style="width: 150px;">
-                                <h5 class="my-3">@Model.user_name</h5>
-                                <p class="text-muted mb-1">@Model.user_code</p>
-
-                                <!-- <div class="d-flex justify-content-center mb-2">
-                                  <button type="button" class="btn btn-primary">Message</button>
-
-                                </div> -->
-                            <!--</div>
-                        </div>
-
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Họ tên</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@Model.user_name</p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Email</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@Model.email</p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">SDT</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@Model.phone</p>
-                                    </div>
-                                </div>-->
-                                @*<hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Tình trạng</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0"></p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Niên khóa</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">2019-2023</p>
-                                    </div>
-                                </div>*@
-                            </div>
-                        </div>
-                        <div class="row">-->
-                            <!-- <div class="col-md-6">
-                              <div class="card mb-4 mb-md-0">
-                                <div class="card-body">
-                                  <p class="mb-4"><span class="text-primary font-italic me-1"></span> Project Status
-                                  </p>
-                                  <p class="mb-1" style="font-size: .77rem;">Web Design</p>
-                                  <div class="progress rounded" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                                      aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-
-                                </div> -->
-
-
-
-
-                        <!--</div>-->
-                        <!-- <div class="col-md-6">
-                          <div class="card mb-4 mb-md-0">
-                            <div class="card-body">
-                              <p class="mb-4"><span class="text-primary font-italic me-1"></span>
-                              </p>
-                              <p class="mb-1" style="font-size: .77rem;">Tiến độ hoàn thành giảng dạy</p>
-                              <div class="progress rounded" style="height: 5px;">
-                                <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                                  aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-
-                            </div>
-                          </div> -->
-                    <!--</div>
-
-                </div>
-            </div>
-            </section>
-            <div class="btn-box">
-
-                <a href="@Url.Action("EditUserProfile", "Home",new {id =Model.id})" class="btn btn-primary" style="margin-bottom: 2%;margin-left:10%; width: 170px;">
-                    SỬA
-                </a>
-
-            </div>
-    </div>-->
-
+            for (const [key, value] of Object.entries(jsonData)) {
+                formData.append(key, value);
+            }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("EditApi", "AccountUsers")',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success == false) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                        })
+                    } else {
+                        $("#modalCreate").modal("hide");
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
+                    }
+                }
+             })
+        })
+     })
+</script>

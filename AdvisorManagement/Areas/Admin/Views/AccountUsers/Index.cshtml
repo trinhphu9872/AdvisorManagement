@@ -538,7 +538,7 @@
     $(document).on('click', "a[name=delete]", function () {
         let id_std = $(this).closest('tr').attr('id');
         Swal.fire({
-            icon: "question",
+            icon: "warning",
             title: "Bạn muốn xóa người dùng này?",
             confirmButtonText: "Xóa",
             cancelButtonText: "Hủy",
