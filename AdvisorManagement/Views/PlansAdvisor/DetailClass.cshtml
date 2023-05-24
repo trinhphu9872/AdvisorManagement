@@ -17,67 +17,70 @@
     <!-- ============================================================== -->
     <div class="row">
         <div class="col-12">
+  
+
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Quản lí kế hoạch đầu học kì</h5>
+                    <h4 class="card-title mb-0">Quản lí kế hoạch đầu học kì</h4>
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
                         @if (ViewBag.yearClass == ViewBag.yearNow)
                         {
-                        <div class="col-12 d-flex no-block align-items-center">
-                            @if (Session["name_status"].ToString() == "Đang làm")
-                            {
-                                <a onclick="CreateTitle()" id="create" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Tạo đề mục<i style="margin-left:5px" class="fas fa-plus"></i>
-                                </a>
-                                <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Xuất template <i class="fas fa-plus"></i>
-                                </a>
-                                <a onclick="SubmitPlan()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Nộp kế hoạch <i class="fas fa-plus"></i>
-                                </a>
-                            }
-                            else if (Session["name_status"].ToString() == "Chờ duyệt")
-                            {
-                                <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Export template <i class="fas fa-plus"></i>
-                                </a>
-                                @*<a onclick="" class="btn btn-default" style="background-color:darkolivegreen; margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Chờ duyệt <i class="fas fa-plus"></i>
-                                </a>*@
-                                <a onclick="UndoPlan()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Hoàn tác <i class="fas fa-plus"></i>
-                                </a>
-                            }
-                            else
-                            {
-                                <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Xuất template <i class="fas fa-plus"></i>
-                                </a>
-                                <a onclick="" class="btn btn-default" style="background-color:darkolivegreen; margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                    Hoàn thành <i class="fas fa-plus"></i>
-                                </a>
-                            }
-                        </div>
-                        }
-                        else { 
                             <div class="col-12 d-flex no-block align-items-center">
                                 @if (Session["name_status"].ToString() == "Đang làm")
-                                {                                  
-                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                        Export template <i class="fas fa-plus"></i>
-                                    </a>                                   
+                                {
+                                    <a onclick="CreateTitle()" id="create" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color:white">
+                                        Tạo đề mục<i style="margin-left:5px" class="fas fa-plus"></i>
+                                    </a>
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
+                                        Xuất template <i class="fas fa-plus"></i>
+                                    </a>
+                                    <a onclick="SubmitPlan()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
+                                        Nộp kế hoạch <i class="fas fa-plus"></i>
+                                    </a>
                                 }
                                 else if (Session["name_status"].ToString() == "Chờ duyệt")
                                 {
-                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
                                         Export template <i class="fas fa-plus"></i>
-                                    </a>                                  
+                                    </a>
+                                    @*<a onclick="" class="btn btn-default" style="background-color:darkolivegreen; margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                Chờ duyệt <i class="fas fa-plus"></i>
+                            </a>*@
+                                    <a onclick="UndoPlan()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
+                                        Hoàn tác <i class="fas fa-plus"></i>
+                                    </a>
                                 }
                                 else
                                 {
-                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
+                                        Xuất template <i class="fas fa-plus"></i>
+                                    </a>
+                                    <a onclick="" class="btn btn-default" style="background-color:darkolivegreen; margin-bottom: 5px; margin-left: 5px; width: 150px;">
+                                        Hoàn thành <i class="fas fa-plus"></i>
+                                    </a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-12 d-flex no-block align-items-center">
+                                @if (Session["name_status"].ToString() == "Đang làm")
+                                {
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
+                                        Export template <i class="fas fa-plus"></i>
+                                    </a>
+                                }
+                                else if (Session["name_status"].ToString() == "Chờ duyệt")
+                                {
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
+                                        Export template <i class="fas fa-plus"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a onclick="ExportTemplate()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white">
                                         Export template <i class="fas fa-plus"></i>
                                     </a>
                                     <a onclick="" class="btn btn-default" style="background-color:darkolivegreen; margin-bottom: 5px; margin-left: 5px; width: 150px;">
@@ -88,116 +91,115 @@
                         }
                     </div>
                 </div>
-            </div>
-
-            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"></h5>                    
-                    <div style="margin-top:10px">                        
+                    <h5 class="card-title"></h5>
+                    <div style="margin-top:10px">
                         <i class="fa fa-check" style="color:limegreen"></i> Cố vấn đã thực hiện nộp minh chứng
                     </div>
 
-                        <div class="table-responsive" style="margin-top:10px">
-                            <table width="100%" id="zero_config" class="table table-light table-hover table-bordered" role="grid" aria-describedby="zero_config_info">
-                                <thead>
-                                    <tr class="table-active text-uppercase">
-                                        <th style="text-align:center">STT</th>
-                                        <th style="text-align:center">Nội dung</th>
-                                        <th style="text-align:center">HK1</th>
-                                        <th style="text-align:center">HK2</th>
-                                        <th style="text-align:center">HK3</th>
-                                        <th style="text-align:center">Mô tả công việc</th>
-                                        <th style="text-align:center">Tài nguyên chuẩn bị</th>
-                                        <th style="text-align:center">Ghi chú</th>
-                                        <th hidden>year</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="myTable">
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr id="@item.id">
-                                            <td width="5%">
-                                                @Html.DisplayFor(modelItem => item.number_title)
-                                            </td>
-                                            <td width="20%">
-                                                @Html.DisplayFor(modelItem => item.content)
-                                            </td>
-                                            @if (ViewBag.listProof != null)
-                                            {
-                                                List<ProofPlan> proofPlans = (List<ProofPlan>)ViewBag.listProof;
+                    <div class="table-responsive" style="margin-top:10px">
+                        <table width="100%" id="zero_config" class="table table-light table-hover table-bordered" role="grid" aria-describedby="zero_config_info">
+                            <thead>
+                                <tr class="table-active text-uppercase">
+                                    <th style="text-align:center">STT</th>
+                                    <th style="text-align:center">Nội dung</th>
+                                    <th style="text-align:center">HK1</th>
+                                    <th style="text-align:center">HK2</th>
+                                    <th style="text-align:center">HK3</th>
+                                    <th style="text-align:center">Mô tả công việc</th>
+                                    <th style="text-align:center">Tài nguyên chuẩn bị</th>
+                                    <th style="text-align:center">Ghi chú</th>
+                                    <th style="text-align:center">Hoạt động</th>
 
-                                                <td style="text-align:center" width="5%">
-                                                    @item.hk1
-                                                    @foreach (var i in proofPlans)
-                                                    {
-                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 1")
-                                                        {
+                                    <th hidden>year</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.id">
+                                        <td width="5%">
+                                            @Html.DisplayFor(modelItem => item.number_title)
+                                        </td>
+                                        <td width="20%">
+                                            @Html.DisplayFor(modelItem => item.content)
+                                        </td>
+                                        @if (ViewBag.listProof != null)
+                                        {
+                                            List<ProofPlan> proofPlans = (List<ProofPlan>)ViewBag.listProof;
 
-                                                            <i class="fa fa-check" style="color:limegreen"></i>
-                                                            break;
-                                                        }
-
-                                                    }
-                                                </td>
-                                                <td style="text-align:center" width="5%">
-                                                    @item.hk2
-                                                    @foreach (var i in proofPlans)
-                                                    {
-                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 2")
-                                                        {
-
-                                                            <i class="fa fa-check" style="color:limegreen"></i>
-                                                            break;
-                                                        }
-                                                    }
-                                                </td>
-                                                <td style="text-align:center" width="5%">
-                                                    @item.hk3
-                                                    @foreach (var i in proofPlans)
-                                                    {
-                                                        if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 3")
-                                                        {
-                                                            <i class="fa fa-check" style="color:limegreen"></i>
-                                                            break;
-                                                        }
-                                                    }
-                                                </td>
-                                            }
-                                            <td width="30%">
-                                                @Html.DisplayFor(modelItem => item.describe)
-                                            </td>
-                                            <td width="25%">
-                                                @Html.DisplayFor(modelItem => item.source)
-                                            </td>
-                                            <td width="10%">
-                                                @Html.DisplayFor(modelItem => item.note)
-                                            </td>
-
-                                            @if (Session["name_status"].ToString() == "Đang làm")
-                                            {
-                                                if (ViewBag.yearClass == ViewBag.yearNow)
+                                            <td style="text-align:center" width="5%">
+                                                @item.hk1
+                                                @foreach (var i in proofPlans)
                                                 {
-                                                    <td width="25%">
-                                                        <button onclick="Update(@item.id)" class="btn btn-success">Sửa <i class="fas fa-tasks"></i></button>
-                                                        <button onclick="Delete(@item.id)" class="btn btn-danger">Xóa <i class="fas fa-trash-alt"></i></button>
-                                                        <a id="proof" href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>
-                                                    </td>
+                                                    if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 1")
+                                                    {
+
+                                                        <i class="fa fa-check" style="color:limegreen"></i>
+                                                        break;
+                                                    }
+
                                                 }
-                                                else
+                                            </td>
+                                            <td style="text-align:center" width="5%">
+                                                @item.hk2
+                                                @foreach (var i in proofPlans)
                                                 {
-                                                    <td hidden></td>
+                                                    if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 2")
+                                                    {
+
+                                                        <i class="fa fa-check" style="color:limegreen"></i>
+                                                        break;
+                                                    }
                                                 }
+                                            </td>
+                                            <td style="text-align:center" width="5%">
+                                                @item.hk3
+                                                @foreach (var i in proofPlans)
+                                                {
+                                                    if (i.id_titleplan == item.id && i.semester.Trim() == "Học kỳ 3")
+                                                    {
+                                                        <i class="fa fa-check" style="color:limegreen"></i>
+                                                        break;
+                                                    }
+                                                }
+                                            </td>
+                                        }
+                                        <td width="30%">
+                                            @Html.DisplayFor(modelItem => item.describe)
+                                        </td>
+                                        <td width="25%">
+                                            @Html.DisplayFor(modelItem => item.source)
+                                        </td>
+                                        <td width="10%">
+                                            @Html.DisplayFor(modelItem => item.note)
+                                        </td>
+
+                                        @if (Session["name_status"].ToString() == "Đang làm")
+                                        {
+                                            if (ViewBag.yearClass == ViewBag.yearNow)
+                                            {
+                                                <td width="25%">
+                                                    <button onclick="Update(@item.id)" class="btn btn-success" style="color:white">Sửa <i class="fas fa-tasks"></i></button>
+                                                    <button onclick="Delete(@item.id)" class="btn btn-danger">Xóa <i class="fas fa-trash-alt"></i></button>
+                                                    <a id="proof" href="@Url.Action("Details", "PlansAdvisor", new { id = item.id })" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>
+                                                </td>
                                             }
                                             else
                                             {
                                                 <td hidden></td>
                                             }
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                        }
+                                        else
+                                        {
+                                            <td hidden></td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
+                </div>
             </div>
         </div>
     </div>
@@ -513,7 +515,16 @@
 
 
         //Export template
-        function ExportTemplate() {
+    function ExportTemplate() {
+        Swal.fire({
+
+            text: 'Hệ thống đang xử lí !',
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading()
+
+            },
+        });
             $.ajax({
                 url: '@Url.Action("ExportTemplateAdvisor", "PlansAdvisor")',
                 type: 'POST',
@@ -522,6 +533,14 @@
                 },
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {
+                    Swal.close();
+
+                    // Show a success message using SweetAlert2
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Xuất dữ liệu thành công.'
+                    });
                     var bytes = new Uint8Array(data.FileContents);
                     var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     var downloadUrl = URL.createObjectURL(blob);

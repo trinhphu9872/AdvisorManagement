@@ -15,9 +15,11 @@
     <!-- ============================================================== -->
     <div class="row">
         <div class="col-12">
+      
+
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Quản lí danh mục</h5>
+                    <h4 class="card-title mb-0">Quản lí danh mục</h4>
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
@@ -33,18 +35,14 @@
                     </div>
 
                 </div>
-
-            </div>
-
-            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
                     <div class="col-md-1">
 
                     </div>
                     @*<div class="searchbar">
-                            <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
-                        </div>*@
+                <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá..."
+            </div>*@
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-hover table-light table-bordered">
                             <thead>
@@ -58,7 +56,7 @@
                                     <th>
                                         <b>  Hành động</b>
                                     </th>
-                                </trclass="table-active>
+                                    </trclass="table-active>
                             </thead>
                             <tbody id="myTable">
                                 @if (ViewBag.roleMenu != null)
@@ -109,7 +107,7 @@
                     <h4 class="modal-title">Thêm danh mục</h4>
                 </div>
             
-                    <div class="col-md-7" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
+                    <div class="col-md-12" style="padding-bottom: 12px;padding-top: 12px; padding-left:15px">
                         <div class="col-md-4"><span>Vai trò</span></div>
                         <div class="col-md-8">
                             @if (ViewBag.error != null)
@@ -251,7 +249,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Xem menu phân quyền</h4>
+                    <h4 class="modal-title">Xem danh mục phân quyền</h4>
                 </div>
                 <input hidden id="id_detailrolemenu" value="" />
                 <div class="">
@@ -325,8 +323,8 @@
             "decimal": "",
             "emptyTable": "Không có dữ liệu",
             "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-            "infoEmpty": "Showing 0 to 0 of 0 entries",
-            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoEmpty": "Hiển thị từ 0 đến 0 trong 0 mục",
+            "infoFiltered": "(Trong số _MAX_ total mục)",
             "infoPostFix": "",
             "thousands": ",",
             "lengthMenu": "Hiển thị _MENU_ mục",

@@ -19,47 +19,31 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Sắp xếp menu</h5>
+                    <h4 class="card-title mb-0">Sắp xếp danh mục</h4>
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row">
                         <div class="col-12 d-flex no-block align-items-center">
-                            @*<a href="@Url.Action("Create", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;">
-                                Thêm Menu<i class="fas fa-plus"></i>
-                            </a>*@
+                
 
                             <a href="@Url.Action("SortMenu", "RoleMenus",new {area = "Admin"})" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px;color:white">
-                                Sắp xếp menu<i class="fas fa-plus"></i>
+                                Sắp xếp  <i class=" mx-2 fas fa-sort"></i>
                             </a>
 
-                            @*<div class="ms-auto text-end">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">
-                                                Library
-                                            </li>
-                                        </ol>
-                                    </nav>
-                                </div>*@
                         </div>
                     </div>
 
                 </div>
-
-            </div>
-
-            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
 
 
                     <div class="table-responsive">
-                        <table id="zero_config" class="table  table-bordered">
+                        <table id="zero_config" class="table   table-bordered">
                             @if (ViewBag.Menu != null)
                             {
                                 List<AdvisorManagement.Models.ViewModel.MenuItem> listMenu = (List<AdvisorManagement.Models.ViewModel.MenuItem>)ViewBag.ListMenu;
-                                <thead>
+                                <thead class="">
                                     <tr class=" text-uppercase">
                                         <th><b>STT</b> </th>
                                         <th><b>Tên danh mục</b> </th>
@@ -108,22 +92,24 @@
                 "decimal": "",
                 "emptyTable": "Không có dữ liệu",
                 "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                "infoEmpty": "Showing 0 to 0 of 0 entries",
-                "infoFiltered": "(filtered from _MAX_ total entries)",
+                "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                "infoFiltered": "(Lọc  từ _MAX_ mục)",
                 "infoPostFix": "",
                 "thousands": ",",
                 "lengthMenu": "Hiển thị _MENU_ mục",
                 "loadingRecords": "Đang tải...",
                 "search": "Tìm kiếm:",
-                "zeroRecords": "No matching records found",
+                "zeroRecords": "Không tìm thấy dữ liệu",
                 "paginate": {
                     "first": "First",
                     "last": "Last",
                     "next": "Sau",
                     "previous": "Trước"
-                }
+                },
+
             },
             "iDisplayLength": 15
+
         });
         function myFunction() {
             var input, filter, table, tr, td, i;

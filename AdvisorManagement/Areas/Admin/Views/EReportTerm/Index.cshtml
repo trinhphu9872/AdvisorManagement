@@ -700,10 +700,16 @@
                 input = document.getElementById("semester");
                 const d = new Date();
                 let id = d.getFullYear();
-                $(document).ajaxSend(function () {
-                    $("#overlay").fadeIn();
+         
+                Swal.fire({
+
+                    text: 'Hệ thống đang xử lí !',
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+
+                    },
                 });
-     
                
             $.ajax({
                 url: '@Url.Action("ExportUserAll", "EReportTerm")',
@@ -713,7 +719,8 @@
                 },
                 success: function (data) {
                     if (data.success == false) {
-
+                        Swal.close();
+                        
                         Swal.fire({
                             icon: 'error',
                             title: data.message,
@@ -730,7 +737,12 @@
                         })
 
                     } else {
-             
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Xuất dữ liệu thành công.'
+                        });
                         var bytes = new Uint8Array(data.FileContents);
                         var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                         var downloadUrl = URL.createObjectURL(blob);
@@ -746,11 +758,7 @@
                 error: function (err) {
                     alert(err);
                 },
-            }).done(function () {
-                setTimeout(function () {
-                    $("#overlay").fadeOut(300);
-                }, 500);
-            });
+            })
         }
 
 

@@ -17,9 +17,10 @@
     <!-- ============================================================== -->
     <div class="row">
         <div class="col-12">
+         
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Quản lí kế hoạch năm học</h5>
+                    <h4 class="card-title mb-0">Quản lí kế hoạch năm học</h4>
                 </div>
                 @if (ViewBag.role == "Admin")
                 {
@@ -39,10 +40,6 @@
                         </div>
                     </div>
                 }
-
-            </div>
-
-            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
                     @if (ViewBag.role == "Admin")
@@ -91,14 +88,14 @@
                             <table width="100%" id="zero_config_admin" class="table table-hover table-light table-bordered" role="grid" aria-describedby="zero_config_info">
                                 <thead>
                                     <tr class="table-active text-uppercase">
-                                        <th scop ="col"  style="text-align:center">            <b> STT </b></th>
-                                        <th scop ="col"  style="text-align:center">            <b> Nội dung</b></th>
-                                        <th scop ="col"  style="text-align:center">            <b> Mô tả công việc</b></th>
-                                        <th scop ="col"  style="text-align:center">            <b> Tài nguyên chuẩn bị</b></th>
-                                        <th scop ="col"  style="text-align:center">            <b> Tiêu chí</b></th>
-                                        <th scop ="col"  style="text-align:center">            <b> Ghi chú</b></th>
-                                        <th scop ="col"  hidden>                               <b> year</b></th>
-                                        <th scop ="col"  style="text-align:center" id="action"><b> Hoạt động</b></th>
+                                        <th scop="col" style="text-align:center">            <b> STT </b></th>
+                                        <th scop="col" style="text-align:center">            <b> Nội dung</b></th>
+                                        <th scop="col" style="text-align:center">            <b> Mô tả công việc</b></th>
+                                        <th scop="col" style="text-align:center">            <b> Tài nguyên chuẩn bị</b></th>
+                                        <th scop="col" style="text-align:center">            <b> Tiêu chí</b></th>
+                                        <th scop="col" style="text-align:center">            <b> Ghi chú</b></th>
+                                        <th scop="col" hidden>                               <b> year</b></th>
+                                        <th scop="col" style="text-align:center" id="action"><b> Hoạt động</b></th>
                                     </tr>
                                 </thead>
                                 <tbody id="myTable">

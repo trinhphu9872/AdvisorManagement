@@ -17,6 +17,8 @@
     <!-- ============================================================== -->
     <div class="row">
         <div class="col-12">
+         
+
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-0">Kiểm tra kế hoạch</h4>
@@ -33,9 +35,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
                     <div class="">
@@ -297,8 +296,8 @@
                  "decimal": "",
                  "emptyTable": "Không có dữ liệu",
                  "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                 "infoEmpty": "",
-                 "infoFiltered": "(filtered from _MAX_ total entries)",
+                 "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                 "infoFiltered": "(Lọc  từ _MAX_ mục)",
                  "infoPostFix": "",
                  "thousands": ",",
                  "lengthMenu": "Hiển thị _MENU_ mục",
@@ -362,8 +361,8 @@
                     "decimal": "",
                     "emptyTable": "Không có dữ liệu",
                     "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                    "infoEmpty": "",
-                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                    "infoFiltered": "(Lọc  từ _MAX_ mục)",
                     "infoPostFix": "",
                     "thousands": ",",
                     "lengthMenu": "Hiển thị _MENU_ mục",
@@ -460,6 +459,25 @@
                      { 'data': 'source', 'width': '25%' },
                      { 'data': 'note', 'width': '10%' },
                     ],
+                'language': {
+                    "decimal": "",
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                    "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                    "infoFiltered": "(Lọc  từ _MAX_ mục)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "Không tìm thấy dữ liệu",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                },
                 "autoWidth": false,
                 "aLengthMenu": [[-1], ["All"]],
                 "bLengthChange": false,
@@ -685,6 +703,15 @@
     }
 
     function ExportExcel(id_class) {
+        Swal.fire({
+
+            text: 'Hệ thống đang xử lí !',
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading()
+
+            },
+        });
          $.ajax({
                 url: '@Url.Action("ExportTemplateAdvisor", "PlansAdvisor")',
                 type: 'POST',
@@ -692,7 +719,15 @@
                     id_class: id_class
                 },
                 /*contentType: "application/json; charset=utf-8", */
-                success: function (data) {
+             success: function (data) {
+                 Swal.close();
+
+                 // Show a success message using SweetAlert2
+                 Swal.fire({
+                     icon: 'success',
+                     title: 'Success!',
+                     text: 'Xuất dữ liệu thành công.'
+                 });
                     var bytes = new Uint8Array(data.FileContents);
                     var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     var downloadUrl = URL.createObjectURL(blob);
@@ -724,10 +759,29 @@
                  { 'data': 'user_name', 'width': '40%'},
                  { 'data': 'class_code', 'width': '40%' },
                 ],
-            "autoWidth": false,
-            "aLengthMenu": [[-1], ["All"]],
-            "bLengthChange": false,
-            "bPaginate": false,
+            'language': {
+                "decimal": "",
+                "emptyTable": "Không có dữ liệu",
+                "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                "infoFiltered": "(Lọc  từ _MAX_ mục)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Hiển thị _MENU_ mục",
+                "loadingRecords": "Đang tải...",
+                "search": "Tìm kiếm:",
+                "zeroRecords": "Không tìm thấy dữ liệu",
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Sau",
+                    "previous": "Trước"
+                },
+            },
+            "autoWidth": true,
+            /*             "aLengthMenu": [[-1], ["All"]],*/
+            "bLengthChange": true,
+            "bPaginate": true,
             "bInfo": false,
        });
         dataTable.on('order.dt search.dt', function () {

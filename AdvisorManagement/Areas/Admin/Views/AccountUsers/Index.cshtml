@@ -83,7 +83,7 @@
                     <table id="zero_config" class="table table-hover table-light  table-striped-columns" role="grid" aria-describedby="zero_config_info">
                         <thead>
                             <tr class="table-active text-uppercase">
-                                <th scope="col"><b>              </b> </th>
+                                <th scope="col"><b> STT             </b> </th>
                                 <th scope="col"><b>Mã            </b> </th>
                                 <th scope="col"><b>Họ tên        </b> </th>
                                 <th scope="col"><b>Chức vụ       </b> </th>
@@ -404,8 +404,8 @@
             "decimal": "",
             "emptyTable": "Không có dữ liệu",
             "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-            "infoEmpty": "Showing 0 to 0 of 0 entries",
-            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+            "infoFiltered": "(Lọc  từ _MAX_ mục)",
             "infoPostFix": "",
             "thousands": ",",
             "lengthMenu": "Hiển thị _MENU_ mục",
@@ -661,7 +661,7 @@
             for (const [key, value] of Object.entries(jsonDataEdt)) {
                 formDataEdt.append(key, value);
             }
-            console.log(jsonDataEdt);
+        
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("EditApi", "AccountUsers")',

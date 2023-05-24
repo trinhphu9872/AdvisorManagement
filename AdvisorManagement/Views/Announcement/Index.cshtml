@@ -11,29 +11,26 @@
         <div>
             <div>
                 <div class="row">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title mb-0">Thông báo</h5>
-                        </div>
+                    <div class="card-body">
+                        <h4 class="card-title mb-0">Quản lí thông báo</h4>
+                    </div>
 
-                        <div class="page-breadcrumb">
-                            <div class="row">
-                                <div class="col-12 d-flex no-block align-items-center">
-                                    <a onclick="Clear()" id="clear" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px; width: 200px; color: white">
-                                        Xoá hết thông báo<i style="margin-left:5px" class="fas fa-trash-alt"></i>
-                                    </a>
+                    <div class="page-breadcrumb">
+                        <div class="row">
+                            <div class="col-12 d-flex no-block align-items-center">
+                                <a onclick="Clear()" id="clear" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px; width: 200px; color: white">
+                                    Xoá hết thông báo<i style="margin-left:5px" class="fas fa-trash-alt"></i>
+                                </a>
 
-                                </div>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="col-5" style="margin-top:26px">
                         <table width="100%" class="table table-bordered table-striped table-responsive">
-                            <h2>Gửi thông báo</h2>
+                            <h4>Gửi thông báo</h4>
 
                             <div class="card">
+
                                 <div class="card-body ">
                                     <div class="card-text content ">
 
@@ -50,7 +47,7 @@
                                             <label for="pwd">Nội dung:</label>
                                             <div id="editor"></div>
 
-                               
+
                                         </div>
                                         <div class="form-group">
                                             <label for="pwd">Đính kèm file:</label>
@@ -68,7 +65,7 @@
                                 </div>
                             </div>
                         </table>
-                    </div>                   
+                    </div>
                     <div class="col-7">
 
                         <div id="page-content" class="row">
@@ -76,7 +73,7 @@
                                 <section id="region-main" aria-label="Content">
                                     <span class="notifications" id="user-notifications"></span>
                                     <div role="main" id="yui_3_17_2_1_1681618016053_21" class="mt-4">
-                                        <span id="maincontent"></span><h2 id="yui_3_17_2_1_1681618016053_20">Tất cả thông báo</h2><div class="notification-area" data-region="notification-area" data-user-id="5885" id="yui_3_17_2_1_1681618016053_22" style="background-color :white">
+                                        <span id="maincontent"></span><h4 id="yui_3_17_2_1_1681618016053_20">Tất cả thông báo</h4><div class="notification-area" data-region="notification-area" data-user-id="5885" id="yui_3_17_2_1_1681618016053_22" style="background-color :white">
                                             <div class="control-area" data-region="control-area">
 
                                                 <div style="padding-top: 20px;text-align:center">Bạn đang không có thông báo nào</div>
@@ -278,7 +275,7 @@
                                     -webkit-transition: right .25s;
                                     -o-transition: right .25s;
                                     transition: right .25s
-                                }                           
+                                }
                             }
                         </style>
                     </div>
@@ -507,7 +504,15 @@
                 for (const [key, value] of Object.entries(jsonData)) {
                     formdata.append(key, value);
                 }
-                console.log(formdata);
+                Swal.fire({
+
+                    text: 'Hệ thống đang xử lí !',
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+
+                    },
+                });
          
 
                 $.ajax({
@@ -519,6 +524,9 @@
               /*      contentType: 'application/json; charset=utf-8',*/
                     success: function (data) {
                         if (data.success == true) {
+                            Swal.close();
+
+
                             Swal.fire({
                                 icon: "success",
                                 title: data.message,
@@ -537,6 +545,9 @@
                             })
 
                         } else {
+                            Swal.close();
+
+
                             Swal.fire({
                                 icon: "error",
                                 title: data.message,

@@ -13,13 +13,15 @@
     <!-- ============================================================== -->
     <div class="row">
         <div class="col-12">
+         
+
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Báo cáo cuối học kì</h5>
+                    <h4 class="card-title mb-0">Báo cáo cuối học kì</h4>
                 </div>
                 <div class="page-breadcrumb">
                     <div class="row ">
-                        <div class="col-4 d-flex no-block align-items-center  my-2">
+                        <div class="col-4 d-flex no-block align-items-center  ">
                             <a onclick="ExportTemplate()" class="btn btn-success" style=" margin-left: 5px; width: 150px; color: white">
                                 Xuất báo cáo <i class="fas fa-download"></i>
                             </a>
@@ -29,10 +31,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="card">
-
                 <div class="card-body">
                     <h5 class="card-title mx-4">
                         @foreach (var item in (IEnumerable<AdvisorManagement.Models.EvaluationAdvisor>)ViewData["Evol"])
@@ -266,6 +264,16 @@
                 let check = document.getElementById("txtDanhGia") ? document.getElementById("txtDanhGia").value : null ;
                 const d = new Date();
                 let id = d.getFullYear();
+                Swal.fire({
+
+                    text: 'Hệ thống đang xử lí !',
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+
+                    },
+                });
+
             $.ajax({
                 url: '@Url.Action("ExportTemplateCode", "EReportTerm")',
                 type: 'POST',
@@ -278,7 +286,9 @@
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {
                     if (data.success == false) {
+                        Swal.close();
 
+             
                         Swal.fire({
                             icon: 'error',
                             title: data.message,
@@ -295,6 +305,15 @@
                         })
 
                     } else {
+                        // Close the loading spinner
+                        Swal.close();
+
+                        // Show a success message using SweetAlert2
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Xuất dữ liệu thành công.'
+                        });
                         var bytes = new Uint8Array(data.FileContents);
                         var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                         var downloadUrl = URL.createObjectURL(blob);
