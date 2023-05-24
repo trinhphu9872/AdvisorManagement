@@ -37,16 +37,19 @@
                             <a onclick="ExportExcel()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white ">
                                 Xuất danh sách<i style="margin-left:5px" class="fas fa-download"></i>
                             </a>
+                            <a onclick="DeleteAll()" class="btn btn-danger" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color: white ">
+                                Xoá toàn bộ lớp<i style="margin-left:5px" class="fas fa-dashboard"></i>
+                            </a>
                             @*<div class="ms-auto text-end">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">
-                                                Library
-                                            </li>
-                                        </ol>
-                                    </nav>
-                                </div>*@
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Library
+                    </li>
+                </ol>
+            </nav>
+        </div>*@
                         </div>
                     </div>
 
@@ -871,6 +874,8 @@
 
             }
         });
+
+
         @*if (confirm("Bạn thực sự muốn xóa đề mục này?")) {
             $.ajax({
                 url: '@Url.Action("Delete", "ClassManagements")',
@@ -890,5 +895,78 @@
             })
         }*@
     }
+
+    function DeleteAll() {
+
+         Swal.fire({
+            title: "Bạn thực sự muốn xóa toàn bộ lớp học?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                  $.ajax({
+                        url: '@Url.Action("DeleteAll", "ClassManagements")',
+                        type: 'post',
+
+                        success: function (data) {
+                            if (data.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                 })
+
+
+                             } else {
+                                 Swal.fire(
+                                     'Thông báo',
+                                     data.message
+                                 );
+                             }
+                        }
+                  })
+                //Swal.fire(
+                //    "Deleted!",
+                //    "Your file has been deleted.",
+                //    "success",
+                //)
+                // result.dismiss can be "cancel", "overlay",
+                // "close", and "timer"
+            } else if (result.dismiss === "cancel") {
+
+            }
+        });
+        @*if (confirm("Bạn thực sự muốn xóa đề mục này?")) {
+            $.ajax({
+                url: '@Url.Action("Delete", "ClassManagements")',
+                type: 'post',
+                data: {
+                    id: id_delete
+                },
+                success: function (data) {
+                    if (data.success == true) {
+                        alert(data.message);
+                        dataTable.ajax.reload(null, false);
+                    } else {
+                        alert(data.message);
+                    }
+                }
+
+            })
+        }*@
+    }
+
 
 </script>

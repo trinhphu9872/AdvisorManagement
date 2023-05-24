@@ -91,7 +91,7 @@ namespace AdvisorManagement.Middleware
                                     name = pq.user_name,
                                     course = (int)cl.course,
                                     semester = cl.semester_name
-                                }).OrderBy(x => x.name).ToList();
+                                }).OrderBy(x => x.idClass).ToList();
             if (classAdvisor.Count() != 0)
             {
                 return classAdvisor;
@@ -118,13 +118,7 @@ namespace AdvisorManagement.Middleware
                                      course = (int)cl.course,
                                      semester = cl.semester_name,
                                      create_time = cl.create_time,
-                                 }).OrderByDescending(x => x.create_time).ToList();
-                int i = 1;
-
-                foreach (var item in classList)
-                {
-                    item.ID = i++;
-                }
+                                 }).OrderBy(x => x.idClass).ToList();
                 return classList;
             }
             else
@@ -142,14 +136,7 @@ namespace AdvisorManagement.Middleware
                                      name = pq.user_name,
                                      course = (int)cl.course,
                                      semester = cl.semester_name
-                                 }).OrderByDescending(x => x.create_time).ToList();
-                int i = 1;
-
-                foreach (var item in classList)
-                {
-                    item.ID = i++;
-                }
-
+                                 }).OrderBy(x => x.idClass);
                 return classList;
             }
         }
@@ -172,17 +159,8 @@ namespace AdvisorManagement.Middleware
                                      semester = cl.semester_name,
                                      create_time = cl.create_time,
                                      email = pq.email
-                                 }).ToList();
-                int i = 1;
-
-                foreach (var item in classList)
-                {
-                    item.ID = i++;
-                }
-
-                 return classList.OrderBy(x => x.ID).ToList();
-
-
+                                 }).OrderByDescending(x => x.create_time).ToList();
+                return classList;
             }
             else
             {
@@ -198,14 +176,8 @@ namespace AdvisorManagement.Middleware
                                      name = pq.user_name,
                                      course = (int)cl.course,
                                      semester = cl.semester_name
-                                 }).ToList();
-                int i = 1;
-                foreach (var item in classList)
-                {
-                    item.ID = i++;
-                }
-
-                return classList.OrderBy(x => x.ID).ToList();
+                                 }).OrderBy(x => x.idClass).ToList();
+                return classList;
             }                      
         }
 

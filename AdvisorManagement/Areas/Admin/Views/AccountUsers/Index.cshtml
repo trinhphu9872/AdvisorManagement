@@ -104,8 +104,8 @@
                                         <td><b> @item.user_code </b></td>
                                         <td>@item.user_name</td>
                                         <td style="width:100px">@item.Role.role_name_vn</td>
-
-                                        @if (item.phone != null || item.phone == "")
+                            
+                                        @if (item.phone != null && item.phone != "" )
                                         {
                                             <td>
                                                 @item.phone
@@ -114,7 +114,7 @@
                                         else
                                         {
                                             <td>
-                                                Chưa cập nhật 
+                                                Chưa cập nhật
                                             </td>
                                         }
 
