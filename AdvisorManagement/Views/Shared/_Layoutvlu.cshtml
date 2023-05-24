@@ -37,6 +37,8 @@
 </head>
 
 <body>
+    @* Log *@
+
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -231,23 +233,23 @@
                                 }
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end  animated" aria-labelledby="navbarDropdown">
-                                    @if (Request.IsAuthenticated)
-                                    {
-                                        <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
-                                            <i class="mdi mdi-account me-1 ms-1"></i>
-                                            Tài Khoản
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
-                               
-                                    }
-                                    else
-                                    {
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
+                                @if (Request.IsAuthenticated)
+                                {
+                                    <a class="dropdown-item" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})">
+                                        <i class="mdi mdi-account me-1 ms-1"></i>
+                                        Tài Khoản
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="@Url.Action("SignOut", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Xuất</a>
 
-                                    }
-                                </ul>
+                                }
+                                else
+                                {
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="@Url.Action("Login", "Account",new {area = ""})"><i class="fa fa-power-off me-1 ms-1"></i> Đăng Nhập</a>
+
+                                }
+                            </ul>
                         </li>
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
@@ -416,20 +418,20 @@
                         }
                         @* Merge *@
                         @*<li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})" aria-expanded="false">
-                                <i class="mdi mdi-account me-1 ms-1"></i><span class="hide-menu" style="margin-left: 3px">
-                                    Tài Khoản
-                                </span>
-                            </a>
-                        </li>*@
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="@Url.Action("UserProfile", "Home", new { id = "", email = User.Identity.Name ,area = ""})" aria-expanded="false">
+                                    <i class="mdi mdi-account me-1 ms-1"></i><span class="hide-menu" style="margin-left: 3px">
+                                        Tài Khoản
+                                    </span>
+                                </a>
+                            </li>*@
                         @*<li class="sidebar-item">
-                            <a class="sidebar-link" href="@Url.Action("SignOut", "Account",new {area = ""})">
-                                <i class="fas fa-sign-out-alt"></i><span class="hide-menu" style="margin-left: 3px">
-                                    Đăng xuất
-                                </span>
-                            </a>
+                                <a class="sidebar-link" href="@Url.Action("SignOut", "Account",new {area = ""})">
+                                    <i class="fas fa-sign-out-alt"></i><span class="hide-menu" style="margin-left: 3px">
+                                        Đăng xuất
+                                    </span>
+                                </a>
 
-                        </li>*@
+                            </li>*@
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -535,7 +537,7 @@
     <style type="text/css">
     </style>
     @* Add jquery code for Get Notification & setup signalr *@
-<script type="text/javascript">
+    <script type="text/javascript">
         $(function () {
             //Get số thông báo mới, số thông báo chưa xem
             function setTotalNotification(totalNotif) {
@@ -614,7 +616,7 @@
                 }
             })
         }
-</script>
+    </script>
 
 </body>
 </html>

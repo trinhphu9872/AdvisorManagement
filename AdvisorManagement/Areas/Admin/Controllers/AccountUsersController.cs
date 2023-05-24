@@ -199,7 +199,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                         adCheck.status_id = 0;
                         db.Entry(adCheck).State = EntityState.Modified;
                         db.SaveChanges();
-                        return Json(new { success = true, message = "Tài khoản tạm khoá do giảng viên có chủ nhiệm lớp" });
+                        return Json(new { success = true, message = "Tài khoản giảng viên có chủ nhiệm lớp không thể xoá" });
                     }
                     else
                     {

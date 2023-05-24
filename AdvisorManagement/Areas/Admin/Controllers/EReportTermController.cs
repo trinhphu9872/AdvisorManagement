@@ -55,6 +55,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
      
             var listClass = db.AccountUser.FirstOrDefault(x => x.email == User.Identity.Name).id_role == 1 ?  serviceStd.getClassAdmin(year) : serviceStd.getClassAdvisor(year,User.Identity.Name.ToString());
+            
            
             return Json(new { data = listClass, success = false }, JsonRequestBehavior.AllowGet);
         }

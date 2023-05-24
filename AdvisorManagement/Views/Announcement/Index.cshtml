@@ -403,7 +403,7 @@
             }
         })
     }
-      function DeleteNotification(id_notify) {
+    function DeleteNotification(id_notify) {
         let id_delete = id_notify;
          Swal.fire({
             title: "Bạn thực sự muốn xóa thông báo này?",
@@ -461,8 +461,8 @@
         });
     }
 
-      var formdata = new FormData(); //FormData object
-        $(document).ready(function () {
+    var formdata = new FormData(); //FormData object
+    $(document).ready(function () {
             $("#fileInput").on("change", function () {
                 var fileInput = document.getElementById('fileInput');
                 //Iterating through each files selected in fileInput
@@ -498,19 +498,24 @@
                 var message = `${editorData.toString()}`;
                 var sendtouser = $("#toUser").val();
                 var title = $("#myTitle").val();
+                let jsonData = {
+                    message: message,
+                    userID: sendtouser,
+                    title: title,
+                };
 
+                for (const [key, value] of Object.entries(jsonData)) {
+                    formdata.append(key, value);
+                }
+                console.log(formdata);
+         
 
                 $.ajax({
                     type: "POST",
                     url: "@Url.Action("SendNotification", "Announcement")",
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({
-                        message: message,
-                        userID: sendtouser,
-                        title: title,
-                 
-                    }),
+                    contentType: false,
+                    processData: false,
+                    data: formdata,
               /*      contentType: 'application/json; charset=utf-8',*/
                     success: function (data) {
                         if (data.success == true) {

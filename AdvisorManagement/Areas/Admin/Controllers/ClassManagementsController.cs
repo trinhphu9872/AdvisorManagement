@@ -89,84 +89,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
-            //ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            //ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            //ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            //ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            //{
-            //    var detailClass = db.VLClass.Find(id);
-
-
-            //    //List<string> AV = new List<string>();
-            //    //for(int i =0; i<db.AccountUser.Count();i++)
-            //    //{
-            //    //    var user = db.AccountUser.Find(i);
-            //    //    var advisor = db.Advisor.Find(user.user_code);
-            //    //    if (advisor !=null)
-            //    //    {
-            //    //        AV.Add(user.username);
-            //    //    }
-
-            //    //}
-            //    //ViewBag.Advisor = new SelectList(AV);
-            //    ViewBag.Advisor = db.Advisor.ToList();
-            //    ViewBag.nameUser = db.AccountUser.ToList();
-            //    ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-            //    return View(detailClass);
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
         }
-        //// get create class
-        //public ActionResult Create()
-        //{
-        //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
-        //    return View();
-        //}
 
-        //// post create class
-        //[HttpPost]
-        //public ActionResult Create([Bind(Include = "id,class_code,advisor_code")] VLClass vLClass)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        vLClass.create_time = DateTime.Now;
-        //        db.VLClass.Add(vLClass);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code", vLClass.advisor_code);
-        //    return View(vLClass);
-
-
-
-
-        //}
-
-        // GET: Admin/VLClasses/Create
-        //public ActionResult Create()
-        //{
-        //    ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-        //    ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-        //    ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-        //    ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-        //    ViewBag.advisor_code = new SelectList(db.Advisor, "advisor_code", "advisor_code");
-        //    ViewBag.class_code = new SelectList(db.VLClass, "class_code", "class_code");
-        //    ViewBag.hocky = db.Semester.ToList().OrderBy(x => x.scholastic);
-        //    Session["hocky"] = db.Semester.ToList().OrderBy(x => x.scholastic);
-        //    return View();
-        //}
-
-        // POST: Admin/VLClasses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 
         public ActionResult Create(string class_code, string advisor_code, int year)
@@ -176,6 +100,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 var stringYear = year.ToString();
                 if (db.VLClass.Where(x => x.class_code.Trim().ToUpper() == class_code.Trim().ToUpper() && x.semester_name == stringYear).Count() == 0)
                 {
+                    if (!serviceStd.checkClassCode(class_code))
+                    {
+                        return Json(new { success = false, message = "Mã lớp có kí tự đặc biệt không được phép thêm" });
+
+                    }
                     VLClass vLClass = new VLClass();
                     vLClass.class_code = class_code;
                     vLClass.advisor_code = advisor_code;
@@ -265,27 +194,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
 
-            //List<string> AV = new List<string>();
-            //for(int i =0; i<db.AccountUser.Count();i++)
-            //{
-            //    var user = db.AccountUser.Find(i);
-            //    var advisor = db.Advisor.Find(user.user_code);
-            //    if (advisor !=null)
-            //    {
-            //        AV.Add(user.username);
-            //    }
 
-            //}
-            //ViewBag.Advisor = new SelectList(AV);
-            //ViewBag.Advisor = db.Advisor.ToList();
-            //ViewBag.nameUser = db.AccountUser.ToList();
-            //ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
         }
         // http post edit class
         [HttpPost]
@@ -299,6 +208,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     if (db.VLClass.Where(x => x.class_code.Trim().ToUpper() == class_code.Trim().ToUpper() && x.semester_name == stringYear).Count() == 0)
                     {
+                        if (!serviceStd.checkClassCode(class_code))
+                        {
+                            return Json(new { success = false, message = "Mã lớp có kí tự đặc biệt không được phép thêm" });
+
+                        }
                         vLClass.class_code = class_code;
                         vLClass.advisor_code = advisor_code;
                         vLClass.course = serviceAccount.getCours(class_code);
@@ -460,7 +374,13 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                     }else if(data == null || advisor_code == null || name_advisor == null || email == null || id_class == null ||
                         data.ToString().Trim() == "" || advisor_code == null || name_advisor.ToString().Trim() == "" || email.ToString().Trim() == "" || id_class.ToString().Trim() == "")
                     {
-                        countEmpty++;                      
+                        countEmpty++;
+                    }
+                    else if (!serviceStd.checkClassCode(id_class.ToString()))
+                    {
+                        msgError = "Mã lớp chứa kí tự đặc biệt không thể thêm";
+                        break;
+
                     }
                     else
                     {

@@ -58,6 +58,25 @@ namespace AdvisorManagement.Middleware
             }
             return 0;
         }
+
+
+        public bool checkClassCode(string code)
+        {
+            bool re = true;
+            char[] specialChars = { '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '=', '+',
+                                '[', ']', '{', '}', '\\', '|', ';', '\'', ':', '"', '.', '/',
+                                '?', '<', '>' };
+            foreach (char c in code)
+            {
+                if (Array.IndexOf(specialChars, c) != -1)
+                {
+                   re = false; 
+                   break;
+                }
+            }
+            return re;
+
+        }
         public object getClass(string user_email, int year)
         {
             var classAdvisor = (from pq in db.AccountUser
@@ -72,7 +91,7 @@ namespace AdvisorManagement.Middleware
                                     name = pq.user_name,
                                     course = (int)cl.course,
                                     semester = cl.semester_name
-                                }).OrderBy(x => x.idClass).ToList();
+                                }).OrderBy(x => x.name).ToList();
             if (classAdvisor.Count() != 0)
             {
                 return classAdvisor;
@@ -99,7 +118,13 @@ namespace AdvisorManagement.Middleware
                                      course = (int)cl.course,
                                      semester = cl.semester_name,
                                      create_time = cl.create_time,
-                                 }).OrderBy(x => x.idClass).ToList();
+                                 }).OrderByDescending(x => x.create_time).ToList();
+                int i = 1;
+
+                foreach (var item in classList)
+                {
+                    item.ID = i++;
+                }
                 return classList;
             }
             else
@@ -117,7 +142,14 @@ namespace AdvisorManagement.Middleware
                                      name = pq.user_name,
                                      course = (int)cl.course,
                                      semester = cl.semester_name
-                                 }).OrderBy(x => x.idClass);
+                                 }).OrderByDescending(x => x.create_time).ToList();
+                int i = 1;
+
+                foreach (var item in classList)
+                {
+                    item.ID = i++;
+                }
+
                 return classList;
             }
         }
@@ -140,8 +172,17 @@ namespace AdvisorManagement.Middleware
                                      semester = cl.semester_name,
                                      create_time = cl.create_time,
                                      email = pq.email
-                                 }).OrderByDescending(x => x.create_time).ToList();
-                return classList;
+                                 }).ToList();
+                int i = 1;
+
+                foreach (var item in classList)
+                {
+                    item.ID = i++;
+                }
+
+                 return classList.OrderBy(x => x.ID).ToList();
+
+
             }
             else
             {
@@ -157,8 +198,14 @@ namespace AdvisorManagement.Middleware
                                      name = pq.user_name,
                                      course = (int)cl.course,
                                      semester = cl.semester_name
-                                 }).OrderBy(x => x.idClass).ToList();
-                return classList;
+                                 }).ToList();
+                int i = 1;
+                foreach (var item in classList)
+                {
+                    item.ID = i++;
+                }
+
+                return classList.OrderBy(x => x.ID).ToList();
             }                      
         }
 

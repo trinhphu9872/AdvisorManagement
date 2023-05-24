@@ -51,6 +51,8 @@ namespace AdvisorManagement.Middleware
             ws.Cells[1, 1, 1, 2].Merge = true;
             ws.Cells[1, 1, 1, 2].Value = "TRƯỜNG ĐẠI HỌC VĂN LANG";
             ws.Cells[1, 1, 1, 2].Style.Font.Size = 12;
+            ws.Cells[1, 1, 1, 2].Style.Font.Bold = true;
+
             // 
             ws.Cells[2, 1, 2, 2].Merge = true;
             ws.Cells[2, 1, 2, 2].Value = "KHOA: CÔNG NGHỆ THÔNG TIN";
@@ -63,23 +65,23 @@ namespace AdvisorManagement.Middleware
             //ws.Cells[3, 1, 3, 2].Style.Font.Bold = true;
             //
             //
-            ws.Cells[4, 1, 4, 7].Merge = true;
-            ws.Cells[4, 1, 4, 7].Value = "BÁO CÁO ĐÁNH GIÁ TOÀN CỐ VẤN HỌC TẬP";
-            ws.Cells[4, 1, 4, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-            ws.Cells[4, 1, 4, 7].Style.Font.Size = 14;
-            ws.Cells[4, 1, 4, 7].Style.Font.Bold = true;
+            //ws.Cells[4, 1, 4, 7].Merge = true;
+            //ws.Cells[4, 1, 4, 7].Value = "BÁO CÁO TỔNG KẾT CÔNG TÁC CỐ VẤN HỌC TẬP";
+            //ws.Cells[4, 1, 4, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            //ws.Cells[4, 1, 4, 7].Style.Font.Size = 14;
+            //ws.Cells[4, 1, 4, 7].Style.Font.Bold = true;
             //
             ws.Cells[5, 1, 5, 7].Merge = true;
-            ws.Cells[5, 1, 5, 7].Value = "NĂM HỌC " + (year - 1) + " - " + year;
+            ws.Cells[5, 1, 5, 7].Value = "BÁO CÁO TỔNG KẾT CÔNG TÁC CỐ VẤN HỌC TẬP";
             ws.Cells[5, 1, 5, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
             ws.Cells[5, 1, 5, 7].Style.Font.Size = 14;
             ws.Cells[5, 1, 5, 7].Style.Font.Bold = true;
             //
             ws.Cells[6, 1, 6, 7].Merge = true;
-            ws.Cells[6, 1, 6, 7].Value = "Họ và tên giảng viên " + serviceAccount.getTextName(us_name);
-            ws.Cells[6, 1, 6, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            ws.Cells[6, 1, 6, 7].Value = "NĂM HỌC " + (year - 1) + " - " + year;
+            ws.Cells[6, 1, 6, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
             ws.Cells[6, 1, 6, 7].Style.Font.Size = 14;
-            ws.Cells[6, 1, 6, 7].Style.Font.Bold = false;
+            ws.Cells[6, 1, 6, 7].Style.Font.Bold = true;
 
             // title
             // stt
@@ -92,7 +94,7 @@ namespace AdvisorManagement.Middleware
             ws.Cells[7, 2, 7, 2].Style.Font.Bold = true;
             ws.Cells[7, 3, 7, 3].Merge = true;
             // mô tả
-            ws.Cells[7, 3, 7, 3].Value = "TÊN CỐ VẤN";
+            ws.Cells[7, 3, 7, 3].Value = "HỌ VÀ TÊN CVHT";
             ws.Cells[7, 3, 7, 3].Style.Font.Bold = true;
             ws.Cells[7, 4, 7, 4].Merge = true;
             // tai nguye
@@ -100,7 +102,7 @@ namespace AdvisorManagement.Middleware
             ws.Cells[7, 4, 7, 4].Style.Font.Bold = true;
             ws.Cells[7, 5, 7, 5].Merge = true;
             // tai nguye
-            ws.Cells[7, 5, 7, 5].Value = "CỐ VẤN TỰ ĐÁNH GIÁ";
+            ws.Cells[7, 5, 7, 5].Value = "CVHT TỰ ĐÁNH GIÁ";
             ws.Cells[7, 5, 7, 5].Style.Font.Bold = true;
             ws.Cells[7, 6, 7, 6].Merge = true;
             // tai nguye
@@ -109,7 +111,7 @@ namespace AdvisorManagement.Middleware
             ws.Cells[7, 7, 7, 7].Merge = true;
 
             // tai nguye
-            ws.Cells[7, 7, 7, 7].Value = "Ghi Chú";
+            ws.Cells[7, 7, 7, 7].Value = "GHI CHÚ";
             ws.Cells[7, 7, 7, 7].Style.Font.Bold = true;
             ws.Cells[7, 8, 7, 8].Merge = true;
 
@@ -132,17 +134,41 @@ namespace AdvisorManagement.Middleware
 
 
             ws.Column(10).Style.Font.Size = 13;
-            /* ws.Cells["A:AZ"].AutoFitColumns();*/
+
             ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Top.Style = ExcelBorderStyle.Thin;
             ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Right.Style = ExcelBorderStyle.Thin;
             ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
             ws.Cells[5, 1, rowStart - 1, 7].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+
+            ws.Cells[rowStart + 2, 3, rowStart + 2, 4].Merge = true;
+            ws.Cells[rowStart + 2, 3, rowStart + 2, 4].Style.Font.Bold = true;
+            ws.Cells[rowStart + 2, 3, rowStart + 2, 4].Value = "Ban chủ nhiệm khoa";
+            ws.Cells[rowStart + 2, 3, rowStart + 2, 4].Style.Font.Bold = true;
+            ws.Cells[rowStart + 2, 3, rowStart + 2, 4].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+
+            ws.Cells[rowStart + 6, 3, rowStart + 6, 4].Merge = true;
+            ws.Cells[rowStart + 6, 3, rowStart + 6, 4].Value = "TS. BÙI MINH PHỤNG";
+            ws.Cells[rowStart + 6, 3, rowStart + 6, 4].Style.Font.Italic = false;
+            ws.Cells[rowStart + 6, 3, rowStart + 6, 4].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+
 
 
             ws.Cells[rowStart + 1, 6, rowStart + 1, 8].Merge = true;
             ws.Cells[rowStart + 1, 6, rowStart + 1, 8].Value = "TP. Hồ Chí Minh, ngày   tháng   năm " + (year );
             ws.Cells[rowStart + 1, 6, rowStart + 1, 8].Style.Font.Italic = true;
             ws.Cells[rowStart + 1, 6, rowStart + 1, 8].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            ws.Cells[rowStart + 2, 6, rowStart + 2, 8].Merge = true;
+            ws.Cells[rowStart + 2, 6, rowStart + 2, 8].Value = "Người tổng hợp";
+            ws.Cells[rowStart + 2, 6, rowStart + 2, 8].Style.Font.Bold = true;
+            ws.Cells[rowStart + 2, 6, rowStart + 2, 8].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+            ws.Cells[rowStart + 6, 6, rowStart + 6, 8].Merge = true;
+            ws.Cells[rowStart + 6, 6, rowStart + 6, 8].Value = serviceAccount.getTextName(us_name);
+            ws.Cells[rowStart + 6, 6, rowStart + 6, 8].Style.Font.Italic = false;
+            ws.Cells[rowStart + 6, 6, rowStart + 6, 8].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
 
 
 
