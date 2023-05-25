@@ -1382,18 +1382,11 @@
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Areas\Admin\Views\RoleMenus\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\RoleMenus\Delete.cshtml" />
-    <Content Include="Areas\Admin\Views\RoleMenus\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\RoleMenus\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\Index.cshtml" />
     <Content Include="Areas\Admin\Views\RoleMenus\SortMenu.cshtml" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\AccountUsers\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ClassManagements\EditClass.cshtml" />
     <Content Include="Areas\Admin\Views\ClassManagements\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ClassManagements\Delete.cshtml" />
-    <Content Include="Areas\Admin\Views\ClassManagements\Create.cshtml" />
     <Content Include="Assets\images\big\Thumbs.db" />
     <Content Include="Assets\libs\bootstrap\dist\css\bootstrap-grid.css.map" />
     <Content Include="Assets\libs\bootstrap\dist\css\bootstrap-grid.min.css.map" />
@@ -1597,7 +1590,6 @@
     <Content Include="Dist\css\icons\weather-icons\sass\weather-icons.min.scss" />
     <Content Include="Dist\css\icons\weather-icons\sass\weather-icons.scss" />
     <Content Include="Dist\css\materialdesignicons.min.css.map" />
-    <Content Include="Areas\Admin\Views\ClassManagements\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Assets\User\assets\images\bg-bread.webp" />
     <Content Include="Assets\User\assets\css\font\fontawesome\webfonts\fa-brands-400.ttf" />
@@ -1679,6 +1671,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Views\ErrorPage\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

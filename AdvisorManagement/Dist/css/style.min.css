@@ -66,6 +66,8 @@
   }
 }
 
+
+
 body {
   margin: 0;
   font-family: var(--bs-font-sans-serif);
@@ -12201,10 +12203,10 @@ select.form-select.form-control-line {
   opacity: 1
 }
 
-.sidebar-nav ul .sidebar-item.selected>.sidebar-link {
-  background: #27a9e3;
-  opacity: 1
-}
+    .sidebar-nav ul .sidebar-item.selected > .sidebar-link {
+        background: #d41b29;
+        opacity: 1
+    }
 
 .sidebar-nav ul .sidebar-item .first-level {
   padding: 0 0 10px 0

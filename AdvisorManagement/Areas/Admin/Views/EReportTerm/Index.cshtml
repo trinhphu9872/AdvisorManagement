@@ -53,10 +53,12 @@
                 <div class="card-body">
                     <h5 class="card-title">
                     </h5>
-                    <div class="">
+        
+                    <div class="col-2 row mx-3">
+
                         <label for="cars">Năm học:</label>
-                        <select id="year" name="year" onchange="filterFunction()">
-                            <option selected value="0">ALL</option>
+                        <select id="year" name="year" onchange="filterFunction()" class="col-6 form-control">
+                            <option selected value="0">Tất cả</option>
                             @foreach (var item in listYearAdvisor)
                             {
                                 var i = int.Parse(item.semester_name) - 1;
@@ -66,6 +68,7 @@
                     </div>
 
                     <div class="table-responsive" style="margin-top:10px">
+
                         <table width="100%" id="zero_config_advisor" class="table table-light table-hover table-bordered" role="grid" aria-describedby="zero_config_info">
                             <thead>
                                 <tr class="table-active text-uppercase">
@@ -396,7 +399,7 @@
 <script src="~/Assets/extra-libs/DataTables/datatables.min.js"></script>
 <script>
         //Lấy data khi vừa vào web admin
-         var dataTable = $("#zero_config_advisor").DataTable({
+         @*var dataTable = $("#zero_config_advisor").DataTable({
          'ajax': {
                 'url': '@Url.Action("GetListClass", "EReportTerm")',
                 'data': function (d) {
@@ -441,12 +444,15 @@
              }
 
          });
+
+
          dataTable.on('order.dt search.dt', function () {
                 let i = 1;
                 dataTable.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
                     this.data(i++);
                 });
-         }).draw();
+         }).draw();*@
+        this.filterFunction();
         this.ReadInit();
 
             function ReadInit() {
@@ -540,7 +546,31 @@
                          },
                          { 'data': 'name', 'width': '25%' },
                          { 'data': 'course', 'width': '30%' },
-                         ],
+                    ],
+                'language': {
+                    "decimal": "",
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                    "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                    "infoFiltered": "(Được lọc  từ _MAX_ mục)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "Không tìm thấy dữ liệu",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                    "autoWidth": true,
+                    /*             "aLengthMenu": [[-1], ["All"]],*/
+                    "bLengthChange": true,
+                    "bPaginate": true,
+                    "bInfo": false,
+                },
                  });
             dataTable.on('order.dt search.dt', function () {
                 let i = 1;

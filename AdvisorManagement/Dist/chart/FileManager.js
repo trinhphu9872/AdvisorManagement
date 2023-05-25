@@ -46,15 +46,10 @@
                     pointFormat: 'File đã nộp: {point.y}'
                 },
                 title: {
-                    text: 'Số file minh chứng của cố vấn học tập',
+                    text: 'Số File Minh Chứng',
                     align: 'center'
                 },
-                subtitle: {
-                    text: 'Source: ' +
-                        '<a href="https://ofv.no/registreringsstatistikk"' +
-                        'target="_blank">Capstone Team 09</a>',
-                    align: 'center'
-                },
+  
                 legend: {
                     enabled: false
                 },
@@ -68,7 +63,6 @@
                     colorByPoint: true
                 }]
             });
-
 
 
 

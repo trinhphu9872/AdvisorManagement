@@ -13,7 +13,6 @@ namespace AdvisorManagement
         private static string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
         private static string aadInstance = EnsureTrailingSlash(ConfigurationManager.AppSettings["ida:AADInstance"]);
         private static string tenantId = ConfigurationManager.AppSettings["ida:TenantId"];
-
         private static string authority = aadInstance + tenantId + "/v2.0";
 
         public void ConfigureAuth(IAppBuilder app)

@@ -78,8 +78,21 @@
             </div>
 
             <div class="">
+         
 
                 <div class="table-responsive">
+                    <div class="mx-4 my-2 col-4">
+                        <label for="cars">Lọc theo chức vụ: </label>
+
+                        <select id="roleSelect" name="roleSelect" class="form-control" onchange="OrderRole()">
+                            <option value=" ">Tất cả</option>
+                            @foreach (var item in rolelist)
+                            {
+                                <option value="@item.role_name_vn">@item.role_name_vn</option>
+                            }
+
+                        </select>
+                    </div>
                     <table id="zero_config" class="table table-hover table-light  table-striped-columns" role="grid" aria-describedby="zero_config_info">
                         <thead>
                             <tr class="table-active text-uppercase">
@@ -104,8 +117,8 @@
                                         <td><b> @item.user_code </b></td>
                                         <td>@item.user_name</td>
                                         <td style="width:100px">@item.Role.role_name_vn</td>
-                            
-                                        @if (item.phone != null && item.phone != "" )
+
+                                        @if (item.phone != null && item.phone != "")
                                         {
                                             <td>
                                                 @item.phone
@@ -203,9 +216,13 @@
                     <div class="col-md-4"><span>Phân quyền :</span></div>
                     <div class="col-md-11">
                         <select id="txt_id_role" name="txt_id_role" style=" width: 155px; height: 35px; text-align: center; font-size: 15px;">
+
+
+
                             @foreach (var item in rolelist)
                             {
-                                <option value="@item.id">@item.role_name_vn</option>
+                          
+                                <option value="@item.role_name_vn">@item.role_name_vn</option>
                             }
                         </select>
                     </div>
@@ -371,6 +388,7 @@
 </script>
 @* CRUD *@
 <script>
+
     function myFunction() {
         var input, filter, table, tr, td, i;
         input = document.getElementById("semester");
@@ -396,7 +414,14 @@
             });
         });
     });
+    function OrderRole() {
+        var input = document.getElementById("roleSelect").value;
 
+    
+        var table = $("#zero_config").DataTable();
+        table.search(input).draw();
+
+    }
 
     $("#zero_config").DataTable({
         "aaSorting": [],
@@ -443,7 +468,7 @@
              },
              success: function (data) {
                  if (data.success == true) {
-              
+
                      $('#detail_code').val(data.detail_code);
                      $('#detail_name').val(data.detail_name);
                      $('#detail_street').val(data.detail_street);
@@ -609,7 +634,7 @@
             },
             success: function (data) {
                 if (data.success == true) {
-          
+
                     $('#modalUpdate').modal("show");
                     $('#id_edit').val(id_title);
                     $("#txtEmailEdit").val(data.detail_mail);
@@ -661,7 +686,7 @@
             for (const [key, value] of Object.entries(jsonDataEdt)) {
                 formDataEdt.append(key, value);
             }
-        
+
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("EditApi", "AccountUsers")',

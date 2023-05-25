@@ -40,12 +40,12 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 SqlConnection conStr = new SqlConnection(connect);
                 conStr.Open();
                 // cmd Student
-                SqlCommand cmdStudent = new SqlCommand("SELECT Count(student_code) as student from Student;", conStr);
+                SqlCommand cmdStudent = new SqlCommand("SELECT Count(user_code) as student from AccountUser where id_role = 3;", conStr);
                 DataTable dt = new DataTable();
                 SqlDataAdapter commandStudent = new SqlDataAdapter(cmdStudent);
                 commandStudent.Fill(dt);
                 // cmd Advisor
-                SqlCommand cmdAdvisor = new SqlCommand("SELECT Count(advisor_code) as advisor from Advisor;", conStr);
+                SqlCommand cmdAdvisor = new SqlCommand("SELECT Count(user_code) as advisor from AccountUser where id_role = 2;", conStr);
                 DataTable dt1 = new DataTable();
                 SqlDataAdapter commandAdvisor = new SqlDataAdapter(cmdAdvisor);
                 commandAdvisor.Fill(dt1);

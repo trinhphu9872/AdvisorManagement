@@ -58,24 +58,23 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <div class="col-md-4">
-                        <label for="cars">Chọn học kỳ:</label>
-
-                        <select id="semester" name="semester" onchange="myFunction()">
-                            <option selected value="@yearNow">@yearLast - @yearNow</option>
-                            @foreach (var item in hocky)
-                            {
-                                var i = int.Parse(item.semester_name) - 1;
-                                <option value="@item.semester_name">@i - @item.semester_name</option>
-                            }
-
-                        </select>
-                    </div>
-                    @*<div class="searchbar">
-                            <input id="myInput" onkeyup="myFunction()" class="search_input" type="text" name="" placeholder="Tìm kiếm từ khoá"
-                        </div>*@
+  
                     <div class="table-responsive">
+                        <div class="col-md-4">
+                            <label for="cars">Chọn học kỳ:</label>
+
+
+                            <select id="semester" name="semester" class="form-control" onchange="myFunction()">
+                                <option selected value="@yearNow">@yearLast - @yearNow</option>
+                                @foreach (var item in hocky)
+                                {
+                                    var i = int.Parse(item.semester_name) - 1;
+                                    <option value="@item.semester_name">@i - @item.semester_name</option>
+                                }
+
+                            </select>
+                        </div>
+                        </div>
                         <table width="100%" id="zero_config_admin" class="table table-hover table-light table-bordered">
                             <thead>
                                 <tr class="table-active text-uppercase">
@@ -289,7 +288,7 @@
             </div>
             <div class="modal-footer">
                 <button onclick="HideModalImport()" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button id="btnImportExcel" class="btn btn-primary" type="submit">Import</button>
+                <button id="btnImportExcel" class="btn btn-primary" type="submit">Thêm danh sách</button>
             </div>
         </div>
     </div>

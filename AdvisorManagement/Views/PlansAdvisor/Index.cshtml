@@ -44,10 +44,10 @@
                     <h5 class="card-title"></h5>
                     @if (ViewBag.role == "Admin")
                     {
-                        <div class="">
+                        <div class="col-4 row mx-3">
                             <label for="cars">Năm học:</label>
 
-                            <select id="semester" name="semester" onchange="myFunction()">
+                            <select id="semester" name="semester" onchange="myFunction()"  class="col-6 ">
                                 <option selected value="@yearNow">@yearLast - @yearNow</option>
                                 @foreach (var item in listYear)
                                 {
@@ -68,9 +68,9 @@
                     }
                     else
                     {
-                        <div class="">
+                        <div class="col-4 row mx-3" >
                             <label for="cars">Năm học:</label>
-                            <select id="year" name="year" onchange="filterFunction()">
+                            <select class="col-6" id="year" name="year" onchange="filterFunction()">
                                 <option selected value="@yearNow">@yearLast - @yearNow</option>
                                 @foreach (var item in listYearAdvisor)
                                 {

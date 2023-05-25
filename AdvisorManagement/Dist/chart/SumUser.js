@@ -30,7 +30,7 @@
                     }
                 },
                 title: {
-                    text: 'Tổng số sinh viên và cố vấn học tập',
+                    text: 'Người dùng',
                     align: 'center'
                 },
                 accessibility: {
