@@ -156,6 +156,31 @@ namespace AdvisorManagement.Middleware
             }
         }
 
+        public bool checkClassCode(string code)
+        {
+            bool re = true;
+            char[] specialChars = { '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '=', '+',
+                                '[', ']', '{', '}', '\\', '|', ';', '\'', ':', '"', '.', '/',
+                                '?', '<', '>' };
+            foreach (char c in code)
+            {
+                if (Array.IndexOf(specialChars, c) != -1)
+                {
+                    re = false;
+                    break;
+                }
+            }
+            return re;
+
+        }
+
+        public bool checkSpace(string text)
+        {
+            // Replace with your string to check
+
+            bool containsOnlySpaces = text.All(c => c == ' ');
+            return containsOnlySpaces;
+        }
         // Register Advisor Profile
         public string AdvisorProfile(string mail, AccountUser account)
         {
@@ -627,9 +652,11 @@ namespace AdvisorManagement.Middleware
 
         public bool IsValidVietnameseName(string name)
         {
-            string pattern = @"^([A-ZĐ][a-zđ]*)(\s[A-ZĐ][a-zđ]*)+$";
+            string pattern = @"^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]*$";
             return Regex.IsMatch(name, pattern);
         }
+
+       
 
         public int getIdMail(string mail)
         {

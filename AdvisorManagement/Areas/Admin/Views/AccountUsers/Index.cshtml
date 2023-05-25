@@ -405,7 +405,7 @@
             "emptyTable": "Không có dữ liệu",
             "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
             "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
-            "infoFiltered": "(Lọc  từ _MAX_ mục)",
+            "infoFiltered": "(Được lọc  từ _MAX_ mục)",
             "infoPostFix": "",
             "thousands": ",",
             "lengthMenu": "Hiển thị _MENU_ mục",
@@ -449,7 +449,7 @@
                      $('#detail_street').val(data.detail_street);
                      $('#detail_mail').val(data.detail_mail);
                      $('#detail_phone').val(data.detail_phone == "" || data.detail_phone == null ? "Số điện thoại chưa cập nhật" : data.detail_phone );
-                     $('#detail_img').attr('src',`${host}${data.detail_img.replace("~","")}`);
+                     $('#detail_img').attr('src', `${host}/CP25Team09${data.detail_img.replace("~","")}`);
                      $('#id_detailUser').val(data.id_detailUser);
                      $('#modalDetail').modal("show");
                  } else {
@@ -616,7 +616,7 @@
                     $("#txtNameEdit").val(data.detail_name);
                     $("#txtPhoneEdit").val(data.detail_phone);
                     //$("#textAddressEdit").val(data.detail_street);
-                    $('#imagePreviewEdit').attr('src', `${host}${data.detail_img.replace("~", "")}`);
+                    $('#imagePreviewEdit').attr('src', `${host}/CP25Team09${data.detail_img.replace("~", "")}`);
                 } else {
                     Swal.fire({
                         icon: 'error',

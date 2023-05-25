@@ -323,8 +323,8 @@
             "decimal": "",
             "emptyTable": "Không có dữ liệu",
             "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-            "infoEmpty": "Hiển thị từ 0 đến 0 trong 0 mục",
-            "infoFiltered": "(Trong số _MAX_ total mục)",
+            "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+            "infoFiltered": "(Được lọc  từ _MAX_ mục)",
             "infoPostFix": "",
             "thousands": ",",
             "lengthMenu": "Hiển thị _MENU_ mục",
@@ -407,7 +407,7 @@
                                 $('#modalUpdate').modal('hide');
                                 Swal.fire({
                                     icon: "success",
-                                    title: 'Menu đã cập nhập thành công',
+                                    title: data.message,
                                     showClass: {
                                         popup: 'animate__animated animate__fadeInDown'
                                     },
@@ -422,7 +422,7 @@
                             } else {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Menu đã thêm thành công',
+                                    title: data.message,
                                     showClass: {
                                         popup: 'animate__animated animate__fadeInDown'
                                     },

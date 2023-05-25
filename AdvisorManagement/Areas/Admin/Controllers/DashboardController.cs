@@ -50,7 +50,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 SqlDataAdapter commandAdvisor = new SqlDataAdapter(cmdAdvisor);
                 commandAdvisor.Fill(dt1);
 
-                string[] name = { "Student", "Advisor" };
+                string[] name = { "Sinh viên", "CVHT" };
                 string[] value = new string[2];
                 value[0] = dt.Rows[0]["student"].ToString();
                 value[1] = dt1.Rows[0]["advisor"].ToString();

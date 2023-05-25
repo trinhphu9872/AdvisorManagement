@@ -89,13 +89,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         public ActionResult Create([Bind(Include = "id,id_role,id_menu")] RoleMenu roleMenu)
         {
 
-            //if (serviceAccount.getPermission(User.Identity.Name, routePermission))
-            //{
-            //    ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
-            //    ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
-            //    ViewBag.avatar = serviceAccount.getAvatar(User.Identity.Name);
-            //    if (ModelState.IsValid)
-            //    {
+
             if (db.AccountUser.FirstOrDefault(x => x.email == User.Identity.Name).id_role != 1)
             {
                 ViewBag.Error = "Sai phan quyen";
@@ -111,17 +105,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             db.SaveChanges();
             return Json(new { success = true, message = "Thêm danh mục thành công" });
 
-            //}
-            //ViewBag.id_Menu = new SelectList(db.Menu, "id", "nameMenu", roleMenu.id_menu);
-            //ViewBag.id_Role = new SelectList(db.Role, "id", "roleName", roleMenu.id_role);
 
-            //ViewBag.menu = serviceMenu.getMenu(User.Identity.Name);
-            //    return View(roleMenu);
-            //}
-            //else
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.ProxyAuthenticationRequired);
-            //}
 
         }
 
@@ -153,6 +137,11 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             //{
             if (ModelState.IsValid)
             {
+                var checkRole = db.RoleMenu.Where(x => x.id_role == roleMenu.id_role && x.id_menu == roleMenu.id_menu).ToList();
+                if (checkRole.Count > 0)
+                {
+                    return Json(new { success = false, message = "Đã tồn tại danh mục theo phân quyền" });
+                }
                 db.Entry(roleMenu).State = EntityState.Modified;
                 db.SaveChanges();
                 return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);

@@ -25,6 +25,7 @@ using OfficeOpenXml.DataValidation;
 using MimeKit;
 using AdvisorManagement.Hubs;
 using MailKit;
+using System.Security.Principal;
 
 namespace AdvisorManagement.Controllers
 {
@@ -187,6 +188,20 @@ namespace AdvisorManagement.Controllers
                 if(content != "" && describe != "" && source !="" && evaluate != "") { 
                 var year = servicePlan.getYear();
                 PlanAdvisor plan = new PlanAdvisor();
+                if (idtitle < 0)
+                {
+                    return Json(new { success = false, message = "Vui lòng điển số thứ tự lớn hơn 0 " });
+                }
+                bool isBoolean = bool.TryParse(int.Parse(evaluate.Trim()).ToString(), out _);
+                if (isBoolean)
+                {
+                    return Json(new { success = false, message = "Vui lòng điền chữ số " });
+
+                }
+                if (int.Parse(evaluate.Trim()) < 0)
+                {
+                    return Json(new { success = false, message = "Vui lòng tiêu chí lớn hơn 0 " });
+                }
                 plan.number_title = idtitle;
                 plan.content = content;
                 plan.year = year;
@@ -229,6 +244,20 @@ namespace AdvisorManagement.Controllers
             {
                 if (numTitle != null && content != "" && describe != "" && source!= "" && evaluate !="")
                 {
+                    if (numTitle < 0)
+                    {
+                        return Json(new { success = false, message = "Vui lòng điển số thứ tự lớn hơn 0 " });
+                    }
+                    bool isBoolean = bool.TryParse(int.Parse(evaluate.Trim()).ToString(), out _);
+                    if (isBoolean)
+                    {
+                        return Json(new { success = false, message = "Vui lòng điền chữ số " });
+
+                    }
+                    if (int.Parse(evaluate.Trim()) < 0)
+                    {
+                        return Json(new { success = false, message = "Vui lòng tiêu chí lớn hơn 0 " });
+                    }
                     var title = db.PlanAdvisor.SingleOrDefault(x => x.id == id);
                     title.number_title = numTitle;
                     title.content = content;
@@ -236,6 +265,7 @@ namespace AdvisorManagement.Controllers
                     title.source = source;
                     title.note = note;
                     title.evaluate = evaluate;
+          
                     db.SaveChanges();
                     return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
                 }

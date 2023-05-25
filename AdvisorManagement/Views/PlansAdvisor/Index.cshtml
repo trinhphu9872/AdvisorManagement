@@ -353,8 +353,8 @@
                  "decimal": "",
                  "emptyTable": "Không có dữ liệu",
                  "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                 "infoEmpty": "Showing 0 to 0 of 0 entries",
-                 "infoFiltered": "(filtered from _MAX_ total entries)",
+                 "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                 "infoFiltered": "(Được lọc  từ _MAX_ mục)",
                  "infoPostFix": "",
                  "thousands": ",",
                  "lengthMenu": "Hiển thị _MENU_ mục",
@@ -405,8 +405,8 @@
                  "decimal": "",
                  "emptyTable": "Không có dữ liệu",
                  "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                 "infoEmpty": "",
-                 "infoFiltered": "(filtered from _MAX_ total entries)",
+                 "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                 "infoFiltered": "(Được lọc  từ _MAX_ mục)",
                  "infoPostFix": "",
                  "thousands": ",",
                  "lengthMenu": "Hiển thị _MENU_ mục",
@@ -477,8 +477,8 @@
                     "decimal": "",
                     "emptyTable": "Không có dữ liệu",
                     "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                    "infoEmpty": "",
-                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                    "infoFiltered": "(Được lọc  từ _MAX_ mục)",
                     "infoPostFix": "",
                     "thousands": ",",
                     "lengthMenu": "Hiển thị _MENU_ mục",
@@ -531,8 +531,8 @@
                     "decimal": "",
                     "emptyTable": "Không có dữ liệu",
                     "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                    "infoEmpty": "",
-                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                    "infoFiltered": "(Được lọc  từ _MAX_ mục)",
                     "infoPostFix": "",
                     "thousands": ",",
                     "lengthMenu": "Hiển thị _MENU_ mục",
@@ -582,8 +582,8 @@
                     "decimal": "",
                     "emptyTable": "Không có dữ liệu",
                     "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                    "infoEmpty": "",
-                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                    "infoFiltered": "(Được lọc  từ _MAX_ mục)",
                     "infoPostFix": "",
                     "thousands": ",",
                     "lengthMenu": "Hiển thị _MENU_ mục",
@@ -762,7 +762,7 @@
                     if (data.success == false) {
                         Swal.fire({
                             icon: "error",
-                            title: "Vui lòng nhập đầy đủ trường dữ liệu",
+                            title: data.message,
                             showClass: {
                                 popup: 'animate__animated animate__fadeInDown'
                             },
@@ -801,7 +801,7 @@
             } else {
                 Swal.fire({
                     icon: "error",
-                    title: "Vui lòng nhập đầy đủ trường dữ liệu",
+                    title: data.message,
                     showClass: {
                         popup: 'animate__animated animate__fadeInDown'
                     },
@@ -925,6 +925,15 @@
         function ExportTemplate() {
             input = document.getElementById("semester");
             let id = input.value.toUpperCase();
+            Swal.fire({
+
+                text: 'Hệ thống đang xử lí !',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+            });
             $.ajax({
                 url: '@Url.Action("ExportTemplate", "PlansAdvisor")',
                 type: 'POST',
@@ -933,6 +942,12 @@
                 },
                 /*contentType: "application/json; charset=utf-8", */
                 success: function (data) {
+                    Swal.close();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Xuất dữ liệu thành công.'
+                    });
                     var bytes = new Uint8Array(data.FileContents);
                     var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     var downloadUrl = URL.createObjectURL(blob);
@@ -944,6 +959,7 @@
                     document.body.removeChild(a);
                 },
                 error: function (err) {
+                    Swal.close();
                     alert(err);
                 },
             })

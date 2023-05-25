@@ -117,9 +117,14 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điển tên " });
                 }
-                if (serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
+                if (!serviceAccount.checkClassCode(account.user_name.Trim()))
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên không chứa kí tự đặc biệt" });
+                }
+
+                if (!serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập đúng họ và tên" });
                 }
                 if (account.phone == null)
                 {
@@ -284,9 +289,13 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng điển tên " });
                 }
-                if (serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
+                if (!serviceAccount.checkClassCode(account.user_name.Trim()))
                 {
                     return Json(new { success = false, message = "Vui lòng điền tên không chứa kí tự đặc biệt" });
+                }
+                if (!serviceAccount.IsValidVietnameseName(account.user_name.Trim()))
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập đúng họ và tên" });
                 }
                 if (account.phone == null)
                 {

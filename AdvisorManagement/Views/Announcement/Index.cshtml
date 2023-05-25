@@ -304,44 +304,66 @@
 
 
     $('#icon_attach').click(function () { $('#fileInput').trigger('click'); });
-             function Clear() {
-              $.ajax({
-                    url:'@Url.Action("ClearNotification", "Announcement")',
-                    type: 'post',
-                    success: function (data) {
-                        if (data.success == true) {
-                            Swal.fire({
-                                icon: "success",
-                                title: data.message,
-                                showClass: {
-                                    popup: 'animate__animated animate__fadeInDown'
-                                },
-                                hideClass: {
-                                    popup: 'animate__animated animate__fadeOutUp'
-                                }
-                            }).then(function (result) {
-                                if (result.value) {
-                                    location.reload();
-                                }
-                            })
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: data.message,
-                                showClass: {
-                                    popup: 'animate__animated animate__fadeInDown'
-                                },
-                                hideClass: {
-                                    popup: 'animate__animated animate__fadeOutUp'
-                                }
-                            }).then(function (result) {
-                                if (result.value) {
-                                    location.reload();
-                                }
-                            })
+    function Clear() {
+
+                        Swal.fire({
+                    title: "Bạn thực sự muốn xóa toàn bộ thông báo này?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xóa",
+                    cancelButtonText: "Hủy",
+                    reverseButtons: true
+                        }).then(function (result) {
+                            if (result.value) {
+                                        $.ajax({
+                                            url:'@Url.Action("ClearNotification", "Announcement")',
+                                            type: 'post',
+                                            success: function (data) {
+                                                if (data.success == true) {
+                                                    Swal.fire({
+                                                        icon: "success",
+                                                        title: data.message,
+                                                        showClass: {
+                                                            popup: 'animate__animated animate__fadeInDown'
+                                                        },
+                                                        hideClass: {
+                                                            popup: 'animate__animated animate__fadeOutUp'
+                                                        }
+                                                    }).then(function (result) {
+                                                        if (result.value) {
+                                                            location.reload();
+                                                        }
+                                                    })
+                                                } else {
+                                                    Swal.fire({
+                                                        icon: "error",
+                                                        title: data.message,
+                                                        showClass: {
+                                                            popup: 'animate__animated animate__fadeInDown'
+                                                        },
+                                                        hideClass: {
+                                                            popup: 'animate__animated animate__fadeOutUp'
+                                                        }
+                                                    }).then(function (result) {
+                                                        if (result.value) {
+                                                            location.reload();
+                                                        }
+                                                    })
                         }
                     }
                 })
+                                //Swal.fire(
+                                //    "Deleted!",
+                                //    "Your file has been deleted.",
+                                //    "success",
+                                //)
+                                // result.dismiss can be "cancel", "overlay",
+                                // "close", and "timer"
+                            } else if (result.dismiss === "cancel") {
+
+                            }
+                        });
+
          }
 
     $(function () {
@@ -377,8 +399,10 @@
                 $('.content-area').append($('<div class="header" style="width: calc(100%);" data-region="header"><div style = "width: calc(100%);" ><div class="timestamp"><i onclick="DeleteNotification(' + data.notify[0].id + ')" class="fas fa-trash-alt fa-2x"></i></div><div class="timestamp">' + moment(data.notify[0].date).format("DD/MM HH:mm") + '</div><div style="font-weight: bold;">' + data.notify[0].title + '</div></div></div ><div class="content" data - region="content"> <div id = "showEditor" > ' + data.notify[0].message + '</div> </div> '  ));
                 if (data.notify[0].file_attach != null) {
                     var filenames = data.notify[0].file_attach.split(";");
+                    $('.content-area .content').append($('<div class="mb-3" style="margin-left: 15px;">Danh sách file đính kèm: </div>'));
+
                     for (let i = 0; i < filenames.length; i++) {
-                        $('.content-area').append($('<div style="margin-left: 15px;"><a href="@Url.Action("DownloadFileAttach", "Announcement")?id=' + data.notify[0].id + '&file_name=' + filenames[i] + '" style="max-width:400px" class="label label-primary">' + filenames[i] + '</a></div>'));
+                        $('.content-area .content').append($('<div class="mb-2" style="margin-left: 15px;"><a href="@Url.Action("DownloadFileAttach", "Announcement")?id=' + data.notify[0].id + '&file_name=' + filenames[i] + '" style="max-width:400px" class="label label-primary">' + filenames[i] + '</a></div>'));
                     }
                 }
                 $('.content-area').append($(' <div class="footer" data-region="footer"><p width="600" border="0" style="padding:0 48px 48px 48px; color:#707070; font-family:Arial; font-size:12px; line-height:125%; text-align:center;">KHOA CÔNG NGHỆ THÔNG TIN - TRƯỜNG ĐẠI HỌC VĂN LANG</p></div>'));
@@ -431,6 +455,7 @@
                                 }).then(function (result) {
                                     location.reload();
                                     jQuery('.content-area').empty();
+
                                     /*if (result.value) {
 
                                         jQuery('.content-area').empty();
@@ -513,7 +538,7 @@
 
                     },
                 });
-         
+
 
                 $.ajax({
                     type: "POST",
@@ -542,6 +567,8 @@
                                 editorData.setData('');
                                 jQuery('#filelist').empty();
                                 deleteFormData(formdata);
+
+                                location.reload();
                             })
 
                         } else {
@@ -560,6 +587,8 @@
                             }).then(function () {
                                 deleteFormData(formdata);
                                 jQuery('#filelist').empty();
+
+
                             })
                         }
                     },

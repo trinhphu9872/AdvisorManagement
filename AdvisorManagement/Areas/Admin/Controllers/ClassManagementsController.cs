@@ -106,8 +106,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
                     }
                     VLClass vLClass = new VLClass();
-                    vLClass.class_code = class_code;
-                    vLClass.advisor_code = advisor_code;
+                    vLClass.class_code = class_code.Trim();
+                    vLClass.advisor_code = advisor_code.Trim();
                     vLClass.create_time = DateTime.Now;
                     vLClass.semester_name = year.ToString();
                     vLClass.course = serviceAccount.getCours(class_code);
@@ -276,8 +276,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                             return Json(new { success = false, message = "Mã lớp có kí tự đặc biệt không được phép thêm" });
 
                         }
-                        vLClass.class_code = class_code;
-                        vLClass.advisor_code = advisor_code;
+                        vLClass.class_code = class_code.Trim();
+                        vLClass.advisor_code = advisor_code.Trim();
                         vLClass.course = serviceAccount.getCours(class_code);
                         db.SaveChanges();
                         return Json(new { success = true, message = "Cập nhật thành công" }, JsonRequestBehavior.AllowGet);
