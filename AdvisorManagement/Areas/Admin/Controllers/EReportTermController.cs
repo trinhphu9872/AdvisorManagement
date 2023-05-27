@@ -40,6 +40,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             ViewBag.Name = serviceAccount.getTextName(User.Identity.Name);
             ViewBag.RoleName = serviceAccount.getRoleTextName(User.Identity.Name);
             var role = serviceStd.getRoles(User.Identity.Name);
+            ViewBag.course = db.VLClass.DistinctBy(i => i.course).OrderBy(x => x.course).ToList();
+
             ViewBag.role = role;
             Session["role"] = role; 
             var year = servicePlan.getYear();           

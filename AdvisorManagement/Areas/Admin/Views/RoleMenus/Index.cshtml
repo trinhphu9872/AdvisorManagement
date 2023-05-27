@@ -469,14 +469,25 @@
                 success: function (data) {
                     if (data.success == false) {
                         Swal.fire({
-                            icon: 'error',
+                            icon: "error",
                             title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function () {
+                            //deleteFormData(formdata);
+                            //jQuery('#filelist').empty();
+
+
                         })
                     } else {
                         $("#modalCreate").modal("hide");
                         Swal.fire({
                             icon: "success",
-                            title: 'Menu đã thêm thành công',
+                            title: data.message,
                             showClass: {
                                 popup: 'animate__animated animate__fadeInDown'
                             },
@@ -541,7 +552,7 @@
                             if (data.success == true) {
                                 Swal.fire({
                                     icon: "success",
-                                    title: 'Menu đã xóa thành công',
+                                    title: data.message,
                                     showClass: {
                                         popup: 'animate__animated animate__fadeInDown'
                                     },
@@ -556,10 +567,21 @@
                             
                              
                              } else {
-                                 Swal.fire(
-                                     'Thông báo',
-                                     data.message
-                                 );
+                                Swal.fire({
+                                    icon: "error",
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function () {
+                                    //deleteFormData(formdata);
+                                    //jQuery('#filelist').empty();
+
+
+                                })
                              }
                         }
                   })

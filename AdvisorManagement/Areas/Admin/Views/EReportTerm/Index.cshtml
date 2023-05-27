@@ -6,6 +6,8 @@
     Layout = "~/Views/Shared/_Layoutvlu.cshtml";
 
     List<VLClass> listYearAdvisor = (List<VLClass>)ViewBag.listYear;
+    List<VLClass> courseList = (List<VLClass>)ViewBag.course;
+
     var yearNow = (int)Session["yearNow"];
     var yearLast = yearNow - 1;
 }
@@ -16,11 +18,11 @@
     <!-- ============================================================== -->
     <div class="row">
         <div class="col-12">
-     
+
 
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-0">Báo cáo cuối học kì</h5>
+                    <h4 class="card-title mb-0">Báo cáo cuối học kì</h4>
 
 
 
@@ -34,15 +36,15 @@
                                     Danh mục đánh giá <i style="margin-left:5px" class="fas fa-clipboard-list"></i>
 
                                 </a>
-                                <a onclick="ReadAllUser()" class="btn btn-danger" style=" margin-left: 5px; width: 230px; color: white">
-                                    Danh mục đánh giá giảng viên
+                                <a onclick="ReadAllUser()" class="btn btn-danger" style=" margin-left: 5px; width: 250px; color: white">
+                                    Danh mục đánh giá giảng viên <i style="margin-left:5px" class="fas fa-list"></i>
                                 </a>
 
                             }
                             else if (int.Parse(Session["RoleName"].ToString()) == 2)
                             {
-                                <a onclick="ReadAllUser()" class="btn btn-danger" style=" margin-left: 5px; width: 230px; color: white">
-                                    Danh mục đánh giá giảng viên
+                                <a onclick="ReadAllUser()" class="btn btn-danger" style=" margin-left: 5px; width: 250px; color: white">
+                                    Danh mục đánh giá giảng viên <i style="margin-left:5px" class="fas fa-list"></i>
                                 </a>
                             }
 
@@ -53,18 +55,35 @@
                 <div class="card-body">
                     <h5 class="card-title">
                     </h5>
-        
-                    <div class="col-2 row mx-3">
 
-                        <label for="cars">Năm học:</label>
-                        <select id="year" name="year" onchange="filterFunction()" class="col-6 form-control">
-                            <option selected value="0">Tất cả</option>
-                            @foreach (var item in listYearAdvisor)
-                            {
-                                var i = int.Parse(item.semester_name) - 1;
-                                <option value="@item.semester_name">@i - @item.semester_name</option>
-                            }
-                        </select>
+                    <div class="col-8  mx-3">
+                        <div class="row">
+                            <div class="col-5">
+                                <label for="cars">Năm học:</label>
+                                <select id="year" name="year" onchange="filterFunction()" class="form-control">
+                                    <option selected value="0">Tất cả</option>
+                                    @foreach (var item in listYearAdvisor)
+                                    {
+                                        var i = int.Parse(item.semester_name) - 1;
+                                        <option value="@item.semester_name">@i - @item.semester_name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-5">
+
+                                <label for="cars">Khoá :</label>
+                                <select id="courseF" name="courseF" onchange="filterCourseFunction()" class=" form-control">
+                                    <option selected value="">Tất cả</option>
+                                    @foreach (var item in courseList)
+                                    {
+
+                                        <option value="@item.course"> @item.course</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="table-responsive" style="margin-top:10px">
@@ -324,7 +343,7 @@
                 <div class="modal-content">
                     @*                <span class="close" style="color: #aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>*@
                     <div class="modal-header">
-                       @* <button onclick="ExportUserAll()" class="btn btn-info">Xuất đánh giá tổng thể <i class="fas fa-tasks"></i></button>*@
+                        @* <button onclick="ExportUserAll()" class="btn btn-info">Xuất đánh giá tổng thể <i class="fas fa-tasks"></i></button>*@
 
                         <input hidden id="id_evol_user" value="" />
                         <h4 class="modal-title">Đánh giá cá nhân</h4>
@@ -523,6 +542,14 @@
 
             }
 
+
+        function filterCourseFunction() {
+            var input = document.getElementById("courseF").value;
+
+
+            var table = $("#zero_config_advisor").DataTable();
+            table.columns(3).search(input).draw();
+        }
         function filterFunction() {
             $("#zero_config_advisor").dataTable().fnDestroy();
             var dataTable = $("#zero_config_advisor").DataTable({
@@ -651,7 +678,7 @@
                 if (jQuery('#showEvolUser').val() != null || jQuery('#showEvolUser').val() != "") {
                     $("#modalEvolUser").modal('show');
 
-                    } else { 
+                    } else {
 
                     jQuery('#showEvolUser').empty();
                     $("#zero_config_evol_user").dataTable().fnDestroy();
@@ -729,7 +756,7 @@
                 input = document.getElementById("semester");
                 const d = new Date();
                 let id = d.getFullYear();
-         
+
                 Swal.fire({
 
                     text: 'Hệ thống đang xử lí !',
@@ -739,7 +766,7 @@
 
                     },
                 });
-               
+
             $.ajax({
                 url: '@Url.Action("ExportUserAll", "EReportTerm")',
                 type: 'POST',
@@ -749,7 +776,7 @@
                 success: function (data) {
                     if (data.success == false) {
                         Swal.close();
-                        
+
                         Swal.fire({
                             icon: 'error',
                             title: data.message,
@@ -929,12 +956,22 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: data.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then(function (result) {
+                                if (result.value) {
+                                    location.reload();
+                                }
                             })
                         } else {
                             $("#modalCreate").modal("hide");
                             Swal.fire({
                                 icon: "success",
-                                title: 'Thêm tiêu chí thành công',
+                                title: data.message,
                                 showClass: {
                                     popup: 'animate__animated animate__fadeInDown'
                                 },
@@ -1010,7 +1047,7 @@
                                 $('#modalUpdate').modal('hide');
                                 Swal.fire({
                                     icon: "success",
-                                    title: 'Tiêu chí đã cập nhập thành công',
+                                    title: data.message,
                                     showClass: {
                                         popup: 'animate__animated animate__fadeInDown'
                                     },
@@ -1025,7 +1062,7 @@
                             } else {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Tiêu chí đã cập nhật thành công',
+                                    title: data.message,
                                     showClass: {
                                         popup: 'animate__animated animate__fadeInDown'
                                     },
@@ -1067,7 +1104,7 @@
                             if (data.success == true) {
                                 Swal.fire({
                                     icon: "success",
-                                    title: 'Tiêu chí này đã xóa thành công',
+                                    title: data.message,
                                     showClass: {
                                         popup: 'animate__animated animate__fadeInDown'
                                     },
@@ -1080,10 +1117,20 @@
                                     }
                                  })
                              } else {
-                                 Swal.fire(
-                                     'Thông báo',
-                                     data.message
-                                 );
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+
+                                    }
+                                })
                              }
                         }
                   })

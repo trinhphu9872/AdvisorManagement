@@ -402,7 +402,7 @@
                     $('.content-area .content').append($('<div class="mb-3" style="margin-left: 15px;">Danh sách file đính kèm: </div>'));
 
                     for (let i = 0; i < filenames.length; i++) {
-                        $('.content-area .content').append($('<div class="mb-2" style="margin-left: 15px;"><a href="@Url.Action("DownloadFileAttach", "Announcement")?id=' + data.notify[0].id + '&file_name=' + filenames[i] + '" style="max-width:400px" class="label label-primary">' + filenames[i] + '</a></div>'));
+                        $('.content-area .content').append($('<div class="mb-2" style="margin-left: 15px;"><a href="@Url.Action("DownloadFileAttach", "Announcement")?id=' + data.notify[0].id + '&file_name=' + filenames[i] + '" style="max-width:400px" class="p-2 label label-danger text-white">' + filenames[i] + '</a></div>'));
                     }
                 }
                 $('.content-area').append($(' <div class="footer" data-region="footer"><p width="600" border="0" style="padding:0 48px 48px 48px; color:#707070; font-family:Arial; font-size:12px; line-height:125%; text-align:center;">KHOA CÔNG NGHỆ THÔNG TIN - TRƯỜNG ĐẠI HỌC VĂN LANG</p></div>'));
@@ -503,7 +503,7 @@
                         "0% Complete (success)" +
                         "</div>" +
                         "</div>";*/
-                    processBar += "<div id='" + srandomid + "' ><label style=\"max-width:400px\" class=\"label label-primary\">"
+                    processBar += "<div id='" + srandomid + "' ><label style=\"max-width:400px\" class=\"p-2 label label-danger text-white\">"
                                 + fileInput.files[i].name + "</label> <a href='#' onclick='DeleteFile(\"" + srandomid + "\")'><i class=\"fas fa-trash-alt\"></i></a><br/><div class=\"progress\">" +
                         "<div id='" + processID + "' class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:0%\">" +
                         "0% Complete (success)" +
@@ -514,7 +514,7 @@
                 $("#filelist").append(processBar);
             });
             $("#submit").click(function (e) {
-                e.preventDefault();
+       /*         e.preventDefault();*/
                 const editorData = myEditor.getData();
 
                 var message = `${editorData.toString()}`;
@@ -562,11 +562,11 @@
                                     popup: 'animate__animated animate__fadeOutUp'
                                 }
                             }).then(function () {
-                                $("#toUser").val("");
-                                $("#myTitle").val("");
-                                editorData.setData('');
-                                jQuery('#filelist').empty();
-                                deleteFormData(formdata);
+                                //$("#toUser").val("");
+                                //$("#myTitle").val("");
+                                //editorData.setData('');
+                                //jQuery('#filelist').empty();
+                                //deleteFormData(formdata);
 
                                 location.reload();
                             })
@@ -585,8 +585,8 @@
                                     popup: 'animate__animated animate__fadeOutUp'
                                 }
                             }).then(function () {
-                                deleteFormData(formdata);
-                                jQuery('#filelist').empty();
+                                //deleteFormData(formdata);
+                                //jQuery('#filelist').empty();
 
 
                             })

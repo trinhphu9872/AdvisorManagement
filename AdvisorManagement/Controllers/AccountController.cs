@@ -85,7 +85,8 @@ namespace AdvisorManagement.Controllers
             {
                 accountService.UserProfile((ClaimsIdentity)User.Identity);
                 this.init();
-                return RedirectToAction("Index", "Home", new { area = "" });
+                return RedirectToAction("UserProfile", "Home", new { email = User.Identity.Name });
+
             }
             else
             {

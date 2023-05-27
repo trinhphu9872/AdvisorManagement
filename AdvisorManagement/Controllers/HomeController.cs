@@ -29,6 +29,11 @@ namespace AdvisorManagement.Controllers
         public ActionResult Index()
         {
             this.init();
+            if (int.Parse(accountService.getRoleTextName(User.Identity.Name)) == 3)
+            {
+                 return RedirectToAction("UserProfile","Home", new { email = User.Identity.Name }); 
+            }
+   
             return View();
         }
         public ActionResult UserProfile(string email)

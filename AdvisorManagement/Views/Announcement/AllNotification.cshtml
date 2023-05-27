@@ -274,7 +274,7 @@
                     $('.content-area .content').append($('<div class="mb-3" style="margin-left: 15px;">Danh sách file đính kèm: </div>'));
 
                     for (let i = 0; i < filenames.length; i++) {
-                        $('.content-area .content').append($('<div class="mb-2" style="margin-left: 15px;"><a href="@Url.Action("DownloadFileAttach", "Announcement")?id=' + data.notify[0].id + '&file_name=' + filenames[i] + '" style="max-width:400px" class="label label-primary">' + filenames[i] + '</a></div>'));
+                        $('.content-area .content').append($('<div class="mb-2 " style="margin-left: 15px;"><a href="@Url.Action("DownloadFileAttach", "Announcement")?id=' + data.notify[0].id + '&file_name=' + filenames[i] + '" style="max-width:400px" class="p-2 label label-danger text-white">' + filenames[i] + '</a></div>'));
                     }
                 }
 

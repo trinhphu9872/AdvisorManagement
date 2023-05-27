@@ -22,8 +22,8 @@
                 <div class="page-breadcrumb">
                     <div class="row">
                         <div class="col-12 d-flex no-block align-items-center">
-                            <a onclick="Upload()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 150px; color:white">
-                                Upload<i class="fas fa-plus"></i>
+                            <a onclick="Upload()" class="btn btn-success" style="margin-bottom: 5px; margin-left: 5px; width: 250px; color:white">
+                                Cập nhật minh chứng  <i class="fas fa-plus"></i>
                             </a>
                         </div>
                     </div>
@@ -142,7 +142,29 @@
                          }
                      },
                   ],
-              "order": [[4, "desc"]],           
+
+              'language': {
+                  "decimal": "",
+                  "emptyTable": "Không có dữ liệu",
+                  "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                  "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                  "infoFiltered": "(Được lọc  từ _MAX_ mục)",
+                  "infoPostFix": "",
+                  "thousands": ",",
+                  "lengthMenu": "Hiển thị _MENU_ mục",
+                  "loadingRecords": "Đang tải...",
+                  "search": "Tìm kiếm:",
+                  "zeroRecords": "Không tìm thấy dữ liệu",
+                  "paginate": {
+                      "first": "First",
+                      "last": "Last",
+                      "next": "Sau",
+                      "previous": "Trước"
+                  },
+              },
+
+
+              "order": [[4, "desc"]],
          });
             dataTable.on('order.dt search.dt', function () {
                 let i = 1;
@@ -206,21 +228,113 @@
                 data: formData,
                 success: function (data) {
                     if (data.success == false) {
-                        alert(data.message);
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+
+                            }
+                        })
+
                     } else {
-                        $("#myModal").modal("hide");
-                        $("#motaPlan").val("");
-                        $("#fileExcel").val("");
-                        alert(data.message);
-                        dataTable.ajax.reload(null, false);
+                        Swal.fire({
+                            icon: "success",
+                            title: data.message,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                $("#myModal").modal("hide");
+                                $("#motaPlan").val("");
+                                $("#fileExcel").val("");
+
+                                dataTable.ajax.reload(null, false);
+
+
+                            }
+                        })
+
                     }
                 }
              })
         })
     })
    //Sự kiện xóa
-         function Delete(id) {
-             if (confirm("Bạn thực sự muốn xóa minh chứng này?")) {
+        function Delete(id) {
+                    Swal.fire({
+            title: "Bạn thực sự muốn xóa minh chứng này?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.value) {
+                 $.ajax({
+                            url: '@Url.Action("DeleteProof", "PlansAdvisor")',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    },
+                        success: function (data) {
+                            if (data.success == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        location.reload();
+                                    }
+                                 })
+                             } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.message,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        
+                                    }
+                                })
+                             }
+                        }
+                  })
+                //Swal.fire(
+                //    "Deleted!",
+                //    "Your file has been deleted.",
+                //    "success",
+                //)
+                // result.dismiss can be "cancel", "overlay",
+                // "close", and "timer"
+            } else if (result.dismiss === "cancel") {
+
+            }
+        });
+
+             @*if (confirm("Bạn thực sự muốn xóa minh chứng này?")) {
                 $.ajax({
                     url: '@Url.Action("DeleteProof", "PlansAdvisor")',
                     type: 'POST',
@@ -236,6 +350,6 @@
                          }
                     }
                 })
-            }
+            }*@
          }
     </script>
