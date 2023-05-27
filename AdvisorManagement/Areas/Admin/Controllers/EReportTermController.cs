@@ -202,31 +202,72 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
         public List<AdminCheckEvol> EvalData()
         {
-            var lsEvol = db.PlanStatus.ToList();
-            List<AdminCheckEvol> AdminEval = new List<AdminCheckEvol>();
-            int index = 1;
-            foreach (var item in lsEvol)
-            {
-                var sql = db.VLClass.Where(x => x.id == item.id_class).ToList();
-                if (sql.Count > 0)
-                {
-                    var classItem = db.VLClass.FirstOrDefault(x => x.id == item.id_class);
+            //var lsEvol = db.PlanStatus.ToList();
+            //List<AdminCheckEvol> AdminEval = new List<AdminCheckEvol>();
+            //int index = 1;
+            //foreach (var item in lsEvol)
+            //{
+            //    var sql = db.VLClass.Where(x => x.id == item.id_class).ToList();
+            //    if (sql.Count > 0)
+            //    {
+            //        var classItem = db.VLClass.FirstOrDefault(x => x.id == item.id_class);
 
-                    AdminCheckEvol adminCheckItem = new AdminCheckEvol();
-                    adminCheckItem.stt = index;
-                    adminCheckItem.id = classItem.id;
-                    adminCheckItem.class_id = classItem.class_code;
-                    adminCheckItem.name_advisor = db.AccountUser.FirstOrDefault(y => y.user_code == classItem.advisor_code).user_name;
-                    adminCheckItem.evol_sys = this.getDes(classItem.id)[0].rank_type;
-                    adminCheckItem.eval_advisor = item.eval_advisor == null ? "Giảng viên chưa đánh giá" : item.eval_advisor;
-                    adminCheckItem.eval_admin = item.eval_admin == null ? "Khoa chưa đánh giá" : item.eval_admin;
-                    adminCheckItem.note = "";
-                    AdminEval.Add(adminCheckItem);
-                    index++;
-                }
+            //        AdminCheckEvol adminCheckItem = new AdminCheckEvol();
+            //        adminCheckItem.stt = index;
+            //        adminCheckItem.id = classItem.id;
+            //        adminCheckItem.class_id = classItem.class_code;
+            //        adminCheckItem.name_advisor = db.AccountUser.FirstOrDefault(y => y.user_code == classItem.advisor_code).user_name;
+            //        adminCheckItem.evol_sys = this.getDes(classItem.id)[0].rank_type;
+            //        adminCheckItem.eval_advisor = item.eval_advisor == null ? "Giảng viên chưa đánh giá" : item.eval_advisor;
+            //        adminCheckItem.eval_admin = item.eval_admin == null ? "Khoa chưa đánh giá" : item.eval_admin;
+            //        adminCheckItem.note = "";
+            //        AdminEval.Add(adminCheckItem);
+            //        index++;
+            //    }
+            //}
+            //return AdminEval.OrderBy(x => x.name_advisor).ToList();
+
+            var EvalSelect =   (from PL in db.PlanStatus 
+                                join VL in db.VLClass on PL.id_class equals VL.id
+                                join US in db.AccountUser on VL.advisor_code equals US.user_code
+                                select new Models.ViewModel.AdminCheckEvol
+                                {
+                                   id = VL.id,
+                                   class_id = VL.class_code,
+                                   name_advisor = US.user_name,
+                                   evol_sys = null,
+                                   eval_advisor  = PL.eval_advisor == null ? "CVHT chưa đánh giá" : PL.eval_advisor,
+                                   eval_admin = PL.eval_admin == null ? "Khoa chưa đánh giá" : PL.eval_admin,
+                                   note = ""
+                                }).OrderBy(x =>  x.name_advisor).ToList();
+            foreach (var item in EvalSelect)
+            {
+                item.evol_sys = GetSystem(item.id);
             }
-            return AdminEval.OrderBy(x => x.name_advisor).ToList();
+
+            return EvalSelect;
+
+
+
         }
+
+
+        private string GetSystem(int? id_class)
+        {
+            var reportClass = db.PlanClass.Where(x => x.id_class == id_class).ToList().OrderBy(x => x.number_title);
+            int maxIndex = (int)reportClass.Where(x => x.id_class == id_class).Max(x => x.number_title);
+            int stack = 0;
+            foreach (var item in reportClass)
+            {
+                var z = db.ProofPlan.Where(x => x.id_titleplan == item.id).Count();
+                stack += z >= int.Parse(item.evaluate) ? 1 : 0;
+
+            }
+            double checkEval = (stack / maxIndex) * 100;
+            return db.EvaluationAdvisor.FirstOrDefault(x => x.rank_count <= checkEval && checkEval < x.rank_end).rank_type;
+        }
+
+
 
         [HttpGet]
         public ActionResult GetEvolUserTable()

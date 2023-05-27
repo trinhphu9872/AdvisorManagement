@@ -55,6 +55,8 @@ namespace AdvisorManagement.Areas.Admin.Controllers
                 Session["nameUser"] = db.AccountUser.ToList();
                 var year = servicePlan.getYear();
                 var yearNow = year.ToString();
+                ViewBag.course = db.VLClass.DistinctBy(i => i.course).OrderBy(x => x.course).ToList();
+
                 var namhoc = db.VLClass.Where(x=>x.semester_name != yearNow).DistinctBy(x=>x.semester_name).OrderByDescending(x=>x.semester_name).ToList();
                 ViewBag.hocky = namhoc;
                 Session["hocky"] = namhoc;

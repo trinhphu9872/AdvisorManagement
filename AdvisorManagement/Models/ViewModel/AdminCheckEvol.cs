@@ -16,6 +16,6 @@ namespace AdvisorManagement.Models.ViewModel
         public string evol_sys { get; set; }
         public string eval_advisor { get; set;}
         public string eval_admin { get; set; }
-        public string note { get; set; }
+        public string note { get; set; } = string.Empty;
     }
 }

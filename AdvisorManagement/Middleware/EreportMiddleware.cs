@@ -117,9 +117,10 @@ namespace AdvisorManagement.Middleware
 
 
             int rowStart = 8;
+            int index = 1;
             foreach (var item in evolAll)
             {
-                ws.Cells[string.Format("A{0}", rowStart)].Value = item.stt;
+                ws.Cells[string.Format("A{0}", rowStart)].Value = index;
                 ws.Cells[string.Format("A{0}", rowStart)].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 ws.Cells[string.Format("B{0}", rowStart)].Value = item.class_id;
                 ws.Cells[string.Format("C{0}", rowStart)].Value = item.name_advisor;
@@ -127,7 +128,7 @@ namespace AdvisorManagement.Middleware
                 ws.Cells[string.Format("E{0}", rowStart)].Value = item.eval_advisor;
                 ws.Cells[string.Format("F{0}", rowStart)].Value = item.eval_admin;
                 ws.Cells[string.Format("G{0}", rowStart)].Value = item.note;
-
+                index++;
                 rowStart++;
 
             }

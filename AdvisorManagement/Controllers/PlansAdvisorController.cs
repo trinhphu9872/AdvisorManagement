@@ -623,6 +623,8 @@ namespace AdvisorManagement.Controllers
             ViewBag.listProof = db.ProofPlan.Where(x => x.id_creator == id_account).ToList();
             var year = servicePlan.getYear();
             ViewBag.listYear = db.PlanAdvisor.Where(x => x.year < year).DistinctBy(x => x.year).ToList();
+            ViewBag.course = db.VLClass.DistinctBy(i => i.course).OrderBy(x => x.course).ToList();
+
             var user_code = db.AccountUser.Find(id_account).user_code;
             ViewBag.listYearAdvisor = db.VLClass.DistinctBy(x => x.semester_name).OrderByDescending(x => x.semester_name).ToList();
             var listClass = db.VLClass.OrderBy(x => x.semester_name).ToList();

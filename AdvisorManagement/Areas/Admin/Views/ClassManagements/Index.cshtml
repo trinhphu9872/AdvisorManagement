@@ -8,6 +8,8 @@
     IEnumerable<VLClass> hocky = ViewBag.hocky as IEnumerable<VLClass>;
     IEnumerable<VLClass> listClass = ViewBag.listClass as IEnumerable<VLClass>;
     IEnumerable<Advisor> advisor = ViewBag.Advisor as IEnumerable<Advisor>;
+    List<VLClass> courseList = (List<VLClass>)ViewBag.course;
+
     var yearNow = (int)Session["yearNow"];
     var yearLast = yearNow - 1;
 }
@@ -58,40 +60,70 @@
                     </div>
                 </div>
                 <div class="card-body">
-  
-                    <div class="table-responsive">
-                        <div class="col-md-4">
-                            <label for="cars">Chọn học kỳ:</label>
+                    <div class="col-8  mx-3">
+                        <div class="row">
+                            <div class="col-5">
+                                <label for="cars">Chọn học kỳ:</label>
 
+                               <select id="semester" name="semester" class="form-control" onchange="myFunction()">
+                                    <option selected value="@yearNow">@yearLast - @yearNow</option>
+                                    @foreach (var item in hocky)
+                                    {
+                                        var i = int.Parse(item.semester_name) - 1;
+                                        <option value="@item.semester_name">@i - @item.semester_name</option>
+                                    }
 
-                            <select id="semester" name="semester" class="form-control" onchange="myFunction()">
-                                <option selected value="@yearNow">@yearLast - @yearNow</option>
-                                @foreach (var item in hocky)
-                                {
-                                    var i = int.Parse(item.semester_name) - 1;
-                                    <option value="@item.semester_name">@i - @item.semester_name</option>
-                                }
+                                </select>
+                            </div>
+                            <div class="col-5">
 
-                            </select>
+                                <label for="cars">Khoá :</label>
+                                <select id="courseF" name="courseF" onchange="filterCourseFunction()" class=" form-control">
+                                    <option selected value="">Tất cả</option>
+                                    @foreach (var item in courseList)
+                                    {
+
+                                        <option value="@item.course"> @item.course</option>
+
+                                    }
+                                </select>
+                            </div>
                         </div>
-                        </div>
-                        <table width="100%" id="zero_config_admin" class="table table-hover table-light table-bordered">
-                            <thead>
-                                <tr class="table-active text-uppercase">
-                                    <th><b>Stt       </b></th>
-                                    <th><b>Mã lớp    </b></th>
-                                    <th><b>MGV       </b></th>
-                                    <th><b>CVHT      </b></th>
-                                    <th><b>Email     </b></th>
-                                    <th><b>Ngày tạo  </b></th>
-                                    <th><b>Khóa      </b></th>
-                                    <th><b>Hoạt động </b></th>
-                                </tr>
-                            </thead>
-                            <tbody id="myTable">
-                            </tbody>
-                        </table>
+
                     </div>
+                    <div class="table-responsive">
+                        @*<div class="col-md-4">
+                <label for="cars">Chọn học kỳ:</label>
+
+
+                <select id="semester" name="semester" class="form-control" onchange="myFunction()">
+                    <option selected value="@yearNow">@yearLast - @yearNow</option>
+                    @foreach (var item in hocky)
+                    {
+                        var i = int.Parse(item.semester_name) - 1;
+                        <option value="@item.semester_name">@i - @item.semester_name</option>
+                    }
+
+                </select>
+            </div>*@
+                    </div>
+                    <table width="100%" id="zero_config_admin" class="table table-hover table-light table-bordered">
+                        <thead>
+                            <tr class="table-active text-uppercase">
+                                <th><b>Stt       </b></th>
+                                <th><b>Mã lớp    </b></th>
+                                <th><b>MGV       </b></th>
+                                <th><b>CVHT      </b></th>
+                                <th><b>Email     </b></th>
+                                <th><b>Ngày tạo  </b></th>
+                                <th><b>Khóa      </b></th>
+                                <th><b>Hoạt động </b></th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        </tbody>
+                    </table>
+                </div>
                 </div>
             </div>
         </div>
@@ -299,7 +331,14 @@
 
 <script>
 
+    function filterCourseFunction() {
+     
+        var input = document.getElementById("courseF").value;
 
+
+        var table = $("#zero_config_admin").DataTable();
+        table.columns(6).search(input).draw();
+    }
 
     //Lấy data khi vừa vào web admin
        //Lấy data khi vừa vào web admin

@@ -173,7 +173,7 @@
                                     <th scope="col" style="text-align:center"><b>Phần mềm đánh giá </b>    </th>
                                     <th scope="col" style="text-align:center"><b>Cố vấn tự đánh giá       </b>     </th>
                                     <th scope="col" style="text-align:center"><b>Khoa đánh giá     </b>      </th>
-                                    <th scope="col" style="text-align:center"><b>Ghi chú           </b>      </th>
+                                    @*<th scope="col" style="text-align:center"><b>Ghi chú           </b>      </th>*@
                                     <th scope="col" style="text-align:center"><b>Chỉnh sửa         </b>      </th>
 
                                 </tr>
@@ -358,7 +358,7 @@
                                     <th scope="col" style="text-align:center"><b>Phần mềm đánh giá </b>    </th>
                                     <th scope="col" style="text-align:center"><b>Cố vấn tự đánh giá       </b>     </th>
                                     <th scope="col" style="text-align:center"><b>Khoa đánh giá     </b>      </th>
-                                    <th scope="col" style="text-align:center"><b>Ghi chú           </b>      </th>
+                                    @*<th scope="col" style="text-align:center"><b>Ghi chú           </b>      </th>*@
                                     <th scope="col" style="text-align:center"><b>Chỉnh sửa         </b>      </th>
 
                                 </tr>
@@ -496,7 +496,7 @@
                          { 'data': 'evol_sys', 'width': '10%' },
                          { 'data': 'eval_advisor', 'width': '10%' },
                          { 'data': 'eval_admin', 'width': '10%' },
-                         { 'data': 'note', 'width': '10%' },
+         /*                { 'data': 'note', 'width': '10%' },*/
                          {
                              'data': 'id', 'width': '10%', 'render': function (data) {
                                  return '<button onclick="UpdateAdminReport(' + data + ')" class="btn btn-danger">Đánh giá <i class="fas fa-tasks" ></i></button >'
@@ -697,11 +697,11 @@
                                      return '<a id="proof" href="@Url.Action("ReportClass", "EReportTerm")/' + row.id + '/" >' + data + '</a>';
                                  }
                                 },
-                             { 'data': 'name_advisor', 'width': '15%' },
+                             { 'data': 'name_advisor', 'width': '13%' },
                              { 'data': 'evol_sys', 'width': '10%' },
                              { 'data': 'eval_advisor', 'width': '10%' },
                              { 'data': 'eval_admin', 'width': '10%' },
-                             { 'data': 'note', 'width': '10%' },
+                 /*            { 'data': 'note', 'width': '10%' },*/
                              {
                                  'data': 'id', 'width': '10%', 'render': function (data) {
                                      return '<button onclick="UpdateAdminReport(' + data + ')" class="btn btn-danger">Đánh giá <i class="fas fa-tasks" ></i></button >'
