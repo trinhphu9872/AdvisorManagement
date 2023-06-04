@@ -216,13 +216,10 @@
                     <div class="col-md-4"><span>Phân quyền :</span></div>
                     <div class="col-md-11">
                         <select id="txt_id_role" name="txt_id_role" style=" width: 155px; height: 35px; text-align: center; font-size: 15px;">
-
-
-
                             @foreach (var item in rolelist)
                             {
                           
-                                <option value="@item.role_name_vn">@item.role_name_vn</option>
+                                <option value="@item.id">@item.role_name_vn</option>
                             }
                         </select>
                     </div>
@@ -522,6 +519,7 @@
                 id_role: $("#txt_id_role").val(),
                 ImageUpload: file
             };
+            console.log(jsonData);
 
             for (const [key, value] of Object.entries(jsonData)) {
                 formData.append(key, value);

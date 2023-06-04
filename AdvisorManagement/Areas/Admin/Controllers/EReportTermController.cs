@@ -264,7 +264,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
 
             }
             double checkEval = (stack / maxIndex) * 100;
-            return db.EvaluationAdvisor.FirstOrDefault(x => x.rank_count <= checkEval && checkEval < x.rank_end).rank_type;
+            return db.EvaluationAdvisor.FirstOrDefault(x => x.rank_count <= checkEval && checkEval <= x.rank_end).rank_type;
         }
 
 
@@ -433,7 +433,7 @@ namespace AdvisorManagement.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng 1 kí tự theo chuẩn" });
             }
-            if (this.checkAplha(avl.rank_type))
+            if (!this.checkAplha(avl.rank_type))
             {
                 return Json(new { success = false, message = "Vui lòng điền loại tiêu chí theo dạng A - Z" });
             }

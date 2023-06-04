@@ -636,6 +636,8 @@
                     } else {
                         $('#fileExcel').val(null);
                         $("#myModal").modal("hide");
+                        Swal.close();
+
                         Swal.fire({
                             icon: "success",
                             title: data.message,
@@ -675,6 +677,15 @@
             formData.append("class_code", classcode);
             formData.append("advisor_code", advisorcode);
             formData.append("year", @yearNow);
+            Swal.fire({
+
+                text: 'Hệ thống đang xử lí !',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+            });
 
             $.ajax({
                 type: 'POST',
@@ -684,6 +695,8 @@
                 data: formData,
                 success: function (data) {
                     if (data.success == false) {
+                        Swal.close();
+
                         Swal.fire({
                             icon: 'error',
                             title: data.message,
@@ -700,6 +713,8 @@
                          })
                     } else {
                         $("#modalCreate").modal("hide");
+                        Swal.close();
+
                         Swal.fire({
                             icon: "success",
                             title: data.message,
