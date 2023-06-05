@@ -22,53 +22,7 @@
          
 
 
-            //// Set up the chart
-            //Highcharts.chart('chartClass', {
-            //    chart: {
-            //        type: 'cylinder',
-            //        options3d: {
-            //            enabled: true,
-            //            alpha: 15,
-            //            beta: 15,
-            //            depth: 50,
-            //            viewDistance: 25
-            //        }
-            //    },
-            //    title: {
-            //        text: 'Số lớp cố vấn đảm nhận'
-            //    },
-            //    subtitle: {
-            //        text: 'Source: ' +
-            //            '<a href="https://www.fhi.no/en/id/infectious-diseases/coronavirus/daily-reports/daily-reports-COVID19/"' +
-            //            'target="_blank">Capstone Team 09</a>'
-            //    },
-            //    xAxis: {
-            //        categories: JsonDataCLName,
-            //        title: {
-            //            text: 'Cố vấn'
-            //        }
-            //    },
-            //    yAxis: {
-            //        title: {
-            //            margin: 20,
-            //            text: 'Tổng lớp'
-            //        }
-            //    },
-            //    tooltip: {
-            //        headerFormat: '<b>Số lượng lớp: {point.x}</b><br>'
-            //    },
-            //    plotOptions: {
-            //        series: {
-            //            depth: 25,
-            //            colorByPoint: true
-            //        }
-            //    },
-            //    series: [{
-            //        data: JsonDataCLValue,
-            //        name: 'Số lượng lớp',
-            //        showInLegend: false
-            //    }]
-            //});
+ 
      
             const chart = Highcharts.chart('container', {
                 title: {
@@ -92,7 +46,7 @@
                 xAxis: {
                     categories: JsonDataCLName,
                     title: {
-                        text : "CVHT khoa"
+                        text : ""
                     }
                 },
                 yAxis: {
@@ -110,29 +64,6 @@
                     showInLegend: false
                 }]
             });
-
-            document.getElementById('plain').addEventListener('click', () => {
-                chart.update({
-                    chart: {
-                        inverted: false,
-                        polar: false
-                    },
-
-                });
-            });
-
-            document.getElementById('inverted').addEventListener('click', () => {
-                chart.update({
-                    chart: {
-                        inverted: true,
-                        polar: false
-                    },
-
-                });
-            });
-
-
-
 
 
 

@@ -7,6 +7,7 @@ using System.Web;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
 
 namespace AdvisorManagement.Areas.Admin.Controllers
 {
@@ -69,23 +70,26 @@ namespace AdvisorManagement.Areas.Admin.Controllers
         {
             try
             {
-
+                int index = 0;
                 SqlConnection conStr = new SqlConnection(connect);
                 conStr.Open();
-
-                // cmd Advisor
-                SqlCommand cmdAdvisor = new SqlCommand("SELECT A.user_name, count(B.id) as file_up from AccountUser A,ProofPlan B Where A.id_role = 2 and B.id_creator = A.id Group by A.user_name;", conStr);
+     
+                SqlCommand cmdAdvisor = new SqlCommand("exec exec_pivot", conStr);
                 DataTable dt = new DataTable();
                 SqlDataAdapter commandAdvisor = new SqlDataAdapter(cmdAdvisor);
                 commandAdvisor.Fill(dt);
-
-                string[] nameAd = new string[dt.Rows.Count];
-                string[] valueAd = new string[dt.Rows.Count];
-                for (int i = 0; i < nameAd.Length; i++)
+                string[] nameAd = db.EvaluationAdvisor.Select(x => x.rank_type).ToArray();
+                int indexAd = nameAd.Length;
+                string[] valueAd = new string[indexAd + 1];
+                for (int i = 0; i < indexAd; i++)
                 {
-                    nameAd[i] = dt.Rows[i]["user_name"].ToString();
-                    valueAd[i] = dt.Rows[i]["file_up"].ToString();
+                    index += int.Parse(dt.Rows[0][nameAd[i]].ToString());
+                    valueAd[i] = dt.Rows[0][nameAd[i]].ToString();
                 }
+                Array.Resize(ref nameAd, nameAd.Length + 1);
+                nameAd[indexAd] = "Giảng viên chưa đánh giá";
+                valueAd[indexAd] = (int.Parse(db.PlanStatus.Count().ToString()) - index).ToString();
+
                 conStr.Close();
                 return Json(new { nameAd, valueAd }, JsonRequestBehavior.AllowGet);
             }
