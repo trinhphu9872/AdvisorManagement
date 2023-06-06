@@ -219,7 +219,7 @@ namespace AdvisorManagement.Controllers
             }
             catch
             {
-                return Json(new { success = false, message = "Vui lòng chọn file excel hoặc word" });
+                return Json(new { success = false, message = "Thêm không thành công" });
             }
         }
 

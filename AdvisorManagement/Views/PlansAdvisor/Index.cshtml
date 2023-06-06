@@ -440,7 +440,8 @@
                 selectYearNow()
             }
         }
-        function seleclYear() {
+    function seleclYear() {
+        document.getElementById("copy").hidden = false;
             $("#zero_config_admin").dataTable().fnDestroy();
             $("#zero_config_admin").DataTable({
              'ajax': {
@@ -462,7 +463,6 @@
                      { 'data': 'note', 'width': '30%' },
                      {
                          'data': 'id', 'visible': false, 'render': function (data) {
-                             document.getElementById("copy").hidden = false;
                              document.getElementById("action").hidden = true;
                                  return '<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>'
                          }
@@ -494,7 +494,8 @@
                 }
              });
         }
-        function selectYearNow() {
+    function selectYearNow() {
+            document.getElementById("copy").hidden = true;
             $("#zero_config_admin").dataTable().fnDestroy();
             $("#zero_config_admin").DataTable({
              'ajax': {
@@ -516,8 +517,7 @@
                      { 'data': 'note', 'width': '10%' },
                      {
                          'data': 'id', 'width': '30%', 'render': function (data) {
-                             document.getElementById("action").hidden = false;
-                             document.getElementById("copy").hidden = true;
+                             document.getElementById("action").hidden = false;                             
                              return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data +')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > @*<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
                          }
                      },
@@ -877,7 +877,14 @@
         $(document).on('click', "button[name=copy]", function () {
             input = document.getElementById("semester");
             let year = input.value.toUpperCase();
-            if (confirm("Bạn muốn sao chép template năm " + year +"?")) {
+            Swal.fire({
+                text: 'Hệ thống đang xử lí !',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+            });
             $.ajax({
                 url: '@Url.Action("Copy", "PlansAdvisor")',
                 type: 'POST',
@@ -918,7 +925,6 @@
                      }
                 }
             })
-        }
         })
 
         //Export template
@@ -926,7 +932,6 @@
             input = document.getElementById("semester");
             let id = input.value.toUpperCase();
             Swal.fire({
-
                 text: 'Hệ thống đang xử lí !',
                 timerProgressBar: true,
                 didOpen: () => {

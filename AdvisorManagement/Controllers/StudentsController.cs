@@ -127,81 +127,99 @@ namespace AdvisorManagement.Controllers
                 return Json(new { success = false, message = "Lấy thông tin thất bại" }, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
         [HttpPost]
-        public ActionResult AddStudent(string mssv, string email,string name, string phone, int status, string gender, string address)
+        public ActionResult AddStudent(string mssv, string email, string name, string phone, int status, string gender, string address)
         {
             try
             {
                 if (mssv.Trim() != "" && email.Trim() != "" && name.Trim() != "" && phone.Trim() != "" && address.Trim() != "")
                 {
+                    if (!serviceAccount.IsValidVietnameseName(name.Trim()))
+                    {
+                        return Json(new { success = false, message = "Vui lòng nhập đúng họ và tên" });
+                    }
+                    if (!serviceAccount.IsPhoneNumberValid(phone.Trim()))
+                    {
+                        return Json(new { success = false, message = "Số điện thoại không đúng định dạng" });
+                    }
+                    if (!serviceAccount.IsValidEmail(email))
+                    {
+                        return Json(new { success = false, message = "Email không đúng định dạng" });
+                    }
+                    if (!serviceAccount.IsValidEmail(email))
+                    {
+                        return Json(new { success = false, message = "Email không thuộc tổ chức" });
+                    }
+                    if (db.AccountUser.FirstOrDefault(x => x.user_code == mssv) != null)
+                    {
+                        if (db.AccountUser.FirstOrDefault(x => x.user_code == mssv).id_role == 2 || db.AccountUser.FirstOrDefault(x => x.user_code == mssv).id_role == 1)
+                        {
+                            return Json(new { success = false, message = "Không thể thêm tài khoản đã thuộc phân quyền khác sinh viên" });
+                        }
+                    }
+
                     var classCode = Session["id_class"];
                     string[] mailGet = email.ToString().Trim().Split('@');
-                    if (mailGet[mailGet.Length - 1] == "vanlanguni.vn")
+                    string[] mssvGet = mailGet[mailGet.Length - 2].ToString().Trim().Split('.');
+                    if (mssvGet[mssvGet.Length - 1].ToString().Trim().ToUpper() == mssv.ToString().Trim().ToUpper())
                     {
-                        string[] mssvGet = mailGet[mailGet.Length - 2].ToString().Trim().Split('.');
-                        if (mssvGet[mssvGet.Length-1].ToString().Trim().ToUpper() == mssv.ToString().Trim().ToUpper())
+                        if (db.ListStudents.Where(x => x.id_class == (int)classCode && x.student_code.ToUpper().Trim() == mssv.ToUpper().Trim()).Count() == 0)
                         {
-                           if(db.ListStudents.Where(x=>x.id_class == (int)classCode && x.student_code.ToUpper().Trim() == mssv.ToUpper().Trim()).Count() == 0)
+                            var status_name = db.StudentStatus.Find(status).status_name;
+                            if (db.AccountUser.Where(t => t.user_code.ToUpper().Trim() == mssv.ToUpper().Trim()).Count() == 0)
                             {
-                                var status_name = db.StudentStatus.Find(status).status_name;
-                                if (db.AccountUser.Where(t => t.user_code.ToUpper().Trim() == mssv.ToUpper().Trim()).Count() == 0)
+                                //import db
+                                serviceStudents.saveAccount(mssv.ToString(), name.ToString(), phone.ToString(), email.ToString(), address, gender, db);
+                            }
+                            else
+                            {
+                                serviceStudents.UpdateAccount(mssv.ToString(), name.ToString(), phone.ToString(), address, gender.ToString(), db);
+                            }
+                            //check exist student
+                            if (db.Student.Where(t => t.student_code.Equals(mssv.ToString())).Count() == 0)
+                            {
+                                //import db
+                                serviceStudents.saveStudent(mssv.ToString(), status_name.ToString(), db, (int)classCode);
+                            }
+                            else
+                            {
+                                serviceStudents.UpdateStudentImport(mssv.ToString(), status_name.ToString(), db, (int)classCode);
+                            }
+                            var checkExist = db.ListStudents.Where(x => x.id_class == (int)classCode).Where(y => y.student_code == mssv).ToList().Count();
+                            if (checkExist == 0)
+                            {
+                                var yearNow = servicePlan.getYear().ToString();
+                                var listClass = db.VLClass.Where(x => x.semester_name == yearNow).Select(x => x.id).ToList();
+                                foreach (var item in listClass)
                                 {
-                                    //import db
-                                    serviceStudents.saveAccount(mssv.ToString(), name.ToString(), phone.ToString(), email.ToString(), address, gender, db);
-                                }
-                                else
-                                {
-                                    serviceStudents.UpdateAccount(mssv.ToString(), name.ToString(), phone.ToString(), address, gender.ToString(), db);
-                                }
-                                //check exist student
-                                if (db.Student.Where(t => t.student_code.Equals(mssv.ToString())).Count() == 0)
-                                {
-                                    //import db
-                                    serviceStudents.saveStudent(mssv.ToString(), status_name.ToString(), db, (int)classCode);
-                                }
-                                else
-                                {
-                                    serviceStudents.UpdateStudentImport(mssv.ToString(), status_name.ToString(), db, (int)classCode);
-                                }
-                                var checkExist = db.ListStudents.Where(x => x.id_class == (int)classCode).Where(y => y.student_code == mssv).ToList().Count();
-                                if (checkExist == 0)
-                                {
-                                    var yearNow = servicePlan.getYear().ToString();
-                                    var listClass = db.VLClass.Where(x => x.semester_name == yearNow).Select(x => x.id).ToList();
-                                    foreach (var item in listClass)
+                                    var checkExistImport = db.ListStudents.Where(x => x.id_class == (int)item).Where(y => y.student_code == mssv).ToList().Count();
+                                    if (checkExistImport == 0)
                                     {
-                                        var checkExistImport = db.ListStudents.Where(x => x.id_class == (int)item).Where(y => y.student_code == mssv).ToList().Count();
-                                        if (checkExistImport == 0)
+                                        serviceStudents.AddListStudent((int)classCode, mssv.ToString());
+                                    }
+                                    else
+                                    {
+                                        if (item != (int)classCode)
                                         {
-                                            serviceStudents.AddListStudent((int)classCode, mssv.ToString());
-                                        }
-                                        else
-                                        {
-                                            if (item != (int)classCode)
-                                            {
-                                                var student = db.ListStudents.SingleOrDefault(x => x.id_class == item && x.student_code == mssv);
-                                                db.ListStudents.Remove(student);
-                                                db.SaveChanges();
-                                            }
+                                            var student = db.ListStudents.SingleOrDefault(x => x.id_class == item && x.student_code == mssv);
+                                            db.ListStudents.Remove(student);
+                                            db.SaveChanges();
                                         }
                                     }
                                 }
                             }
-                            else
-                            {
-                                return Json(new { success = false, message = "Sinh viên đã thuộc lớp học này" }, JsonRequestBehavior.AllowGet);
-                            }
                         }
                         else
                         {
-                            return Json(new { success = false, message = "Mã số sinh viên không hợp lệ" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { success = false, message = "Sinh viên đã thuộc lớp học này" }, JsonRequestBehavior.AllowGet);
                         }
                     }
                     else
                     {
-                        return Json(new { success = false, message = "Email không hợp lệ" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { success = false, message = "Mã số sinh viên hoặc email không hợp lệ" }, JsonRequestBehavior.AllowGet);
                     }
+
                     return Json(new { success = true, message = "Thêm sinh viên thành công" }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -212,17 +230,25 @@ namespace AdvisorManagement.Controllers
             }
             catch (Exception)
             {
-                return Json(new { success = false, message = "Cập nhật thất bại" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Thêm thất bại" }, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpPost]
-        public ActionResult UpdateStudent(int id, string name, string phone, int status, string gender, string address )
+        public ActionResult UpdateStudent(int id, string name, string phone, int status, string gender, string address)
         {
             try
             {
-                if(name.Trim() != "" && phone.Trim() != "" && address.Trim()!="")
+                if (name.Trim() != "" && phone.Trim() != "" && address.Trim() != "")
                 {
+                    if (!serviceAccount.IsValidVietnameseName(name.Trim()))
+                    {
+                        return Json(new { success = false, message = "Vui lòng nhập đúng họ và tên" });
+                    }
+                    if (!serviceAccount.IsPhoneNumberValid(phone.Trim()))
+                    {
+                        return Json(new { success = false, message = "Số điện thoại không đúng định dạng" });
+                    }
                     AccountUser user = db.AccountUser.Find(id);
                     user.user_name = name;
                     user.phone = phone;
@@ -237,7 +263,7 @@ namespace AdvisorManagement.Controllers
                 {
                     return Json(new { success = false, message = "Vui lòng nhập đầy đủ thông tin" }, JsonRequestBehavior.AllowGet);
                 }
-                
+
             }
             catch (Exception)
             {
@@ -266,7 +292,7 @@ namespace AdvisorManagement.Controllers
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);
-                        }   
+                        }
                         filePath = path + Path.GetFileName(postedfile.FileName);
                         string extension = Path.GetExtension(postedfile.FileName);
                         postedfile.SaveAs(filePath);
@@ -278,29 +304,35 @@ namespace AdvisorManagement.Controllers
                         }
                         int countAdd = 0;
                         int countUpdate = 0;
-                        ImportData(out countAdd, out countUpdate, filePath);
-                        if (countAdd !=0 && countUpdate!=0)
+                        string msgError = "";
+                        string msg = "";
+                        int countInvalid = 0;
+                        int countExist = 0;
+                        int countEmpty = 0;
+                        ImportData(out countAdd, out countUpdate, filePath, out msgError, out msg, out countInvalid, out countExist, out countEmpty);
+                        if (countAdd != 0 || countUpdate != 0 || countInvalid != 0 || countExist != 0 || countEmpty !=0)
                         {
-                            return Json(new 
-                            { 
-                                success = true, 
-                                message = "Thêm " + countAdd.ToString() + " sinh viên mới" +"\n" +
-                                          "Cập nhật thông tin " + countUpdate.ToString() + " sinh viên"});
-                        }else if(countAdd != 0)
-                        {
-                            return Json(new
+                            if (countAdd != 0)
                             {
-                                success = true,
-                                message = "Thêm " + countAdd.ToString() + " sinh viên mới"                                                                     
-                            });
-                        }
-                        else if(countUpdate != 0)
-                        {
-                            return Json(new
+                                msg += "Thêm " + countAdd.ToString() + " sinh viên mới" + "\n";
+                            }
+                            if (countUpdate != 0)
                             {
-                                success = true,
-                                message = "Cập nhật " + countUpdate.ToString() + " sinh viên"
-                            });
+                                msg += "Cập nhật " + countUpdate.ToString() + " sinh viên" + "\n";
+                            }
+                            if (countInvalid != 0)
+                            {
+                                msg += countInvalid.ToString() + " sinh viên không thực hiện thêm vì dữ liệu sai định dạng" + "\n";
+                            }
+                            if (countEmpty != 0)
+                            {
+                                msg += countEmpty.ToString() + " sinh viên không được thêm vì thiếu dữ liệu" + "\n";
+                            }
+                            if (countExist != 0)
+                            {
+                                msg += countExist.ToString() + " sinh viên đã thuộc lớp học" + "\n";
+                            }                           
+                            return Json(new { success = true, message = msg });
                         }
                         else
                         {
@@ -318,12 +350,17 @@ namespace AdvisorManagement.Controllers
                 return Json(new { success = false, message = "Please upload excel file" });
             }
         }
-        private bool ImportData(out int countAdd, out int countUpdate, string filePath)
+        private bool ImportData(out int countAdd, out int countUpdate, string filePath, out string msgError, out string msg, out int countInvalid, out int countExist, out int countEmpty)
         {
 
             var result = false;
             countAdd = 0;
             countUpdate = 0;
+            msgError = string.Empty;
+            msg = string.Empty;
+            countInvalid = 0;
+            countEmpty = 0;
+            countExist = 0;
             try
             {
                 /* String path = Server.MapPath("/") + "\\import\\class.xlsx";*/
@@ -341,7 +378,7 @@ namespace AdvisorManagement.Controllers
                     Object name = worksheet.Cells[startRow, startColumn + 1].Value;
                     Object phone = worksheet.Cells[startRow, startColumn + 11].Value;
                     Object email = worksheet.Cells[startRow, startColumn + 12].Value;
-/*                    Object id_class = worksheet.Cells[startRow, startColumn + 21].Value;*/
+                    /*                    Object id_class = worksheet.Cells[startRow, startColumn + 21].Value;*/
                     Object status = worksheet.Cells[startRow, startColumn + 10].Value;
                     Object gender = worksheet.Cells[startRow, startColumn + 4].Value;
                     Object address1 = worksheet.Cells[startRow, startColumn + 7].Value;
@@ -350,84 +387,109 @@ namespace AdvisorManagement.Controllers
                     var isSuccessAcc = false;
                     var isSuccessStd = false;
                     var classCode = Session["id_class"];
-                    if (data != null && mssv != null && name != null && phone != null
-                        && email != null != null && status != null && gender != null)
-                    {
-                        
-                            var address = address1.ToString() + ", " + address2.ToString() + ", " + address3.ToString();
-                            //check exist account
-                            if (db.AccountUser.Where(t => t.email.Equals(email.ToString())).Count() == 0)
+                        if (data == null && mssv == null && name == null && phone == null && email == null 
+                        && status == null && gender == null && address1 == null && address2 == null && address3 == null)
+                        {
+                                 break;              
+                        }
+                        else if (data == null || mssv == null || name == null || phone == null || email == null 
+                        || status == null || gender == null || address1 == null || address2 == null || address3 == null ||
+                        data.ToString().Trim() == "" || mssv.ToString().Trim() == "" || name.ToString().Trim() == "" || phone.ToString().Trim() == "" || email.ToString().Trim() == ""
+                        || status.ToString().Trim() == "" || gender.ToString().Trim() == "" || address1.ToString().Trim() == "" || address2.ToString().Trim() == "" || address3.ToString().Trim() == "")
+                        {
+                            countEmpty++;
+                        }
+                        else if (!serviceAccount.IsValidVietnameseName(name.ToString().Trim()))
+                        {
+                            countInvalid++;
+                        }
+                        else if (!serviceAccount.IsPhoneNumberValid(phone.ToString().Trim()))
+                        {
+                            countInvalid++;
+                        }
+                        else if (!serviceAccount.IsValidEmail(email.ToString().Trim()))
+                        {
+                            countInvalid++;
+                        }
+                        else if (!serviceAccount.IsValidEmail(email.ToString().Trim()))
+                        {
+                            countInvalid++;
+                        }
+                        else
+                        {
+                            string[] mailGet = email.ToString().Trim().Split('@');
+                            string[] mssvGet = mailGet[mailGet.Length - 2].ToString().Trim().Split('.');
+                            if (mssvGet[mssvGet.Length - 1].ToString().Trim().ToUpper() == mssv.ToString().Trim().ToUpper())
                             {
-                                //import db
-                                serviceStudents.saveAccount(mssv.ToString(), name.ToString(), phone.ToString(), email.ToString(), address, gender, db);
-                            }
-                            else
-                            {
-                                isSuccessAcc = serviceStudents.UpdateAccount(mssv.ToString(), name.ToString(), phone.ToString(), address, gender.ToString(), db);
-                            }
-                            //check exist student
-                            if (db.Student.Where(t => t.student_code.Equals(mssv.ToString())).Count() == 0)
-                            {
-                                //import db
-                                serviceStudents.saveStudent(mssv.ToString(), status.ToString(), db, (int)classCode);
-                            }
-                            else
-                            {
-                                isSuccessStd = serviceStudents.UpdateStudentImport(mssv.ToString(), status.ToString(), db, (int)classCode);
-                            }
-                            var checkExist = db.ListStudents.Where(x=>x.id_class == (int)classCode).Where(y=>y.student_code == mssv).ToList().Count();
-                            if (checkExist == 0)
-                            {
-                                var yearNow = servicePlan.getYear().ToString();                               
-                                var listClass = db.VLClass.Where(x=>x.semester_name == yearNow).Select(x=>x.id).ToList();
-                                foreach(var item in listClass)
-                                {                                    
-                                    var checkExistImport = db.ListStudents.Where(x => x.id_class == (int)item).Where(y => y.student_code == mssv).ToList().Count();
-                                    if(checkExistImport == 0)
+                                if (db.ListStudents.Where(x => x.id_class == (int)classCode && x.student_code.ToUpper().Trim() == mssv.ToString().ToUpper().Trim()).Count() == 0)
+                                {
+                                    var address = address1.ToString() + ", " + address2.ToString() + ", " + address3.ToString();
+                                    //check exist account
+                                    if (db.AccountUser.Where(t => t.user_code.ToUpper().Trim() == mssv.ToString().ToUpper().Trim()).Count() == 0)
                                     {
-                                        var checkTrue = serviceStudents.AddListStudent((int)classCode, mssv.ToString());
-                                        if (checkTrue)
-                                        {
-                                            countAdd++;                                           
-                                        }                                      
+                                        //import db
+                                        serviceStudents.saveAccount(mssv.ToString(), name.ToString(), phone.ToString(), email.ToString(), address, gender, db);
                                     }
                                     else
                                     {
-                                        if(item != (int)classCode)
+                                        isSuccessAcc = serviceStudents.UpdateAccount(mssv.ToString(), name.ToString(), phone.ToString(), address, gender.ToString(), db);
+                                    }
+                                    //check exist student
+                                    if (db.Student.Where(t => t.student_code.Equals(mssv.ToString())).Count() == 0)
+                                    {
+                                        //import db
+                                        serviceStudents.saveStudent(mssv.ToString(), status.ToString(), db, (int)classCode);
+                                    }
+                                    else
+                                    {
+                                        isSuccessStd = serviceStudents.UpdateStudentImport(mssv.ToString(), status.ToString(), db, (int)classCode);
+                                    }
+                                    var checkExist = db.ListStudents.Where(x => x.id_class == (int)classCode).Where(y => y.student_code == mssv).ToList().Count();
+                                    if (checkExist == 0)
+                                    {
+                                        var yearNow = servicePlan.getYear().ToString();
+                                        var listClass = db.VLClass.Where(x => x.semester_name == yearNow).Select(x => x.id).ToList();
+                                        foreach (var item in listClass)
                                         {
-                                        var student = db.ListStudents.SingleOrDefault(x => x.id_class == item && x.student_code == mssv);
-                                        db.ListStudents.Remove(student);
-                                        db.SaveChanges();
-                                    }                                                                        
+                                            var checkExistImport = db.ListStudents.Where(x => x.id_class == (int)item).Where(y => y.student_code == mssv).ToList().Count();
+                                            if (checkExistImport == 0)
+                                            {
+                                                var checkTrue = serviceStudents.AddListStudent((int)classCode, mssv.ToString());
+                                                if (checkTrue)
+                                                {
+                                                    countAdd++;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (item != (int)classCode)
+                                                {
+                                                    var student = db.ListStudents.SingleOrDefault(x => x.id_class == item && x.student_code == mssv);
+                                                    db.ListStudents.Remove(student);
+                                                    db.SaveChanges();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (isSuccessAcc || isSuccessStd)
+                                    {
+                                        countUpdate++;
                                     }
                                 }
-                            }
-                          /*  else
-                            {*/
-                          /*  var yearNow = servicePlan.getYear().ToString();
-                            var listClass = db.VLClass.Where(x => x.semester_name == yearNow).Select(x => x.id).ToList();
-                            foreach (var item in listClass)
-                            {
-                                var checkExistImport = db.ListStudents.Where(x => x.id_class == (int)item).Where(y => y.student_code == mssv).ToList().Count();
-                                if (checkExistImport != 0)
+                                else
                                 {
-                                    if(item.ToString() != classCode.ToString())
-                                    {
-                                        var student = db.ListStudents.SingleOrDefault(x => x.id_class == item && x.student_code == mssv);
-                                        db.ListStudents.Remove(student);
-                                        db.SaveChanges();
-                                        serviceStudents.AddListStudent((int)classCode, mssv.ToString());
-                                        c
-                                    }                                                                     
-                                }                                
+                                    countExist++;
+                                   /* return Json(new { success = false, message = "Sinh viên đã thuộc lớp học này" }, JsonRequestBehavior.AllowGet);*/
+                                }
                             }
-                        }*/
-                            if(isSuccessAcc || isSuccessStd)
+                            else
                             {
-                                countUpdate++;
+                                countInvalid++;
+                                /*return Json(new { success = false, message = "Mã số sinh viên hoặc email không hợp lệ" }, JsonRequestBehavior.AllowGet);*/
                             }
-                        
-                    }
+                           
+                        }
+                                
                     startRow++;
                 }
                 while (data != null);
@@ -438,6 +500,7 @@ namespace AdvisorManagement.Controllers
             }
             return result;
         }
+
 
         public void ExcelExport()
         {
