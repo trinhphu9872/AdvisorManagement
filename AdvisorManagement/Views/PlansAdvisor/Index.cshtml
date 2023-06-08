@@ -44,7 +44,7 @@
                     <h5 class="card-title"></h5>
                     @if (ViewBag.role == "Admin")
                     {
-                        <div class="col-4 row mx-3">
+                        <div class="col-6 row mx-3">
                             <label for="cars">Năm học:</label>
 
                             <select id="semester" name="semester" onchange="myFunction()"  class="col-6 ">
@@ -61,7 +61,7 @@
                             <a onclick="ExportTemplate()" class="btn btn-success" style=" margin-left: 5px; width: 150px; color: white">
                                 Xuất template <i class="fas fa-download"></i>
                             </a>
-                            <button hidden id="copy" name="copy" class="btn btn-success" style="margin-left: 5px; width: 150px; height: 35px; color: white">
+                            <button hidden id="copy" name="copy" class="btn btn-success" style="margin-left: 5px; width: 200px; height: 35px; color: white">
                                 Sao chép template <i class="fas fa-copy"></i>
                             </button>
                         </div>
@@ -440,113 +440,125 @@
                 selectYearNow()
             }
         }
-    function seleclYear() {
-        document.getElementById("copy").hidden = false;
-            $("#zero_config_admin").dataTable().fnDestroy();
-            $("#zero_config_admin").DataTable({
-             'ajax': {
-                    'url': '@Url.Action("GetData", "PlansAdvisor")',
-                    'data': function (d) {
-                     var input = document.getElementById("semester");
-                        filter = input.value.toUpperCase();
-                     d.year = filter ;
-                     },
-                    'type': 'get',
-                    'datatype':'json',
+     function seleclYear() {
+         document.getElementById("copy").hidden = false;
+         $("#zero_config_admin").dataTable().fnDestroy();
+         var dataTableA = $("#zero_config_admin").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetData", "PlansAdvisor")',
+                'data': function (d) {
+                 var input = document.getElementById("semester");
+                 filter = input.value.toUpperCase();
+                 d.year = filter ;
                  },
-             'columns':
-                 [
-                     { 'data': 'number_title', 'width': '5%' },
-                     { 'data': 'content', 'width': '25%' },
-                     { 'data': 'describe', 'width': '30%' },
-                     { 'data': 'source', 'width': '25%' },
-                     { 'data': 'note', 'width': '30%' },
-                     {
-                         'data': 'id', 'visible': false, 'render': function (data) {
-                             document.getElementById("action").hidden = true;
-                                 return '<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>'
-                         }
-                     },
-                    ],
-                'bAutoWidth': false,
-                'responsive': false,
-                "order": [[0, "asc"]],
-                'ordering': false,
-                'rowsGroup': [0, 1],
-                'language': {
-                    "decimal": "",
-                    "emptyTable": "Không có dữ liệu",
-                    "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                    "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
-                    "infoFiltered": "(Được lọc  từ _MAX_ mục)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Hiển thị _MENU_ mục",
-                    "loadingRecords": "Đang tải...",
-                    "search": "Tìm kiếm:",
-                    "zeroRecords": "Không tìm thấy dữ liệu",
-                    "paginate": {
-                        "first": "First",
-                        "last": "Last",
-                        "next": "Sau",
-                        "previous": "Trước"
-                    },
-                }
-             });
+                'type': 'get',
+                'datatype':'json',
+         },
+         'columns':
+             [
+                 { 'data': 'number_title', 'width': '0%' },
+                 { 'data': 'content', 'width': '20%' },
+                 { 'data': 'describe', 'width': '20%' },
+                 { 'data': 'source', 'width': '20%' },
+                 { 'data': 'evaluate', 'width': '   10%' },
+                 { 'data': 'note', 'width': '15%' },
+                 {
+                     'data': 'id', 'width': '20%', 'render': function (data) {
+                         return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button >@* <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
+                     }
+                 },
+                 ],
+             'bAutoWidth': false,
+             'responsive': false,
+             "order": [[0, "asc"]],
+             'ordering': false,
+             'rowsGroup': [0,1],
+             'language': {
+                 "decimal": "",
+                 "emptyTable": "Không có dữ liệu",
+                 "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                 "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                 "infoFiltered": "(Được lọc  từ _MAX_ mục)",
+                 "infoPostFix": "",
+                 "thousands": ",",
+                 "lengthMenu": "Hiển thị _MENU_ mục",
+                 "loadingRecords": "Đang tải...",
+                 "search": "Tìm kiếm:",
+                 "zeroRecords": "Không tìm thấy dữ liệu",
+                 "paginate": {
+                     "first": "First",
+                     "last": "Last",
+                     "next": "Sau",
+                     "previous": "Trước"
+                 },
+             }
+         });
+         dataTableA.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTableA.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
         }
     function selectYearNow() {
             document.getElementById("copy").hidden = true;
             $("#zero_config_admin").dataTable().fnDestroy();
-            $("#zero_config_admin").DataTable({
-             'ajax': {
-                    'url': '@Url.Action("GetData", "PlansAdvisor")',
-                    'data': function (d) {
-                     var input = document.getElementById("semester");
-                     filter = input.value.toUpperCase();
-                     d.year = filter ;
-                     },
-                    'type': 'get',
-                    'datatype':'json',
-             },
-             'columns':
-                 [
-                     { 'data': 'number_title', 'width': '5%' },
-                     { 'data': 'content', 'width': '25%' },
-                     { 'data': 'describe', 'width': '30%' },
-                     { 'data': 'source', 'width': '25%' },
-                     { 'data': 'note', 'width': '10%' },
-                     {
-                         'data': 'id', 'width': '30%', 'render': function (data) {
-                             document.getElementById("action").hidden = false;                             
-                             return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data +')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button > @*<a id="proof" href="@Url.Action("Details", "PlansAdvisor")/'+ data +'/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
-                         }
-                     },
-                    ],
-                'bAutoWidth': false,
-                'responsive': false,
-                "order": [[0, "asc"]],
-                'ordering': false,
-                'rowsGroup': [0, 1],
-                'language': {
-                    "decimal": "",
-                    "emptyTable": "Không có dữ liệu",
-                    "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
-                    "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
-                    "infoFiltered": "(Được lọc  từ _MAX_ mục)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Hiển thị _MENU_ mục",
-                    "loadingRecords": "Đang tải...",
-                    "search": "Tìm kiếm:",
-                    "zeroRecords": "Không tìm thấy dữ liệu",
-                    "paginate": {
-                        "first": "First",
-                        "last": "Last",
-                        "next": "Sau",
-                        "previous": "Trước"
-                    },
-                }
-            });
+        var dataTableA = $("#zero_config_admin").DataTable({
+         'ajax': {
+                'url': '@Url.Action("GetData", "PlansAdvisor")',
+                'data': function (d) {
+                 var input = document.getElementById("semester");
+                 filter = input.value.toUpperCase();
+                 d.year = filter ;
+                 },
+                'type': 'get',
+                'datatype':'json',
+         },
+         'columns':
+             [
+                 { 'data': 'number_title', 'width': '0%' },
+                 { 'data': 'content', 'width': '20%' },
+                 { 'data': 'describe', 'width': '20%' },
+                 { 'data': 'source', 'width': '20%' },
+                 { 'data': 'evaluate', 'width': '   10%' },
+                 { 'data': 'note', 'width': '15%' },
+                 {
+                     'data': 'id', 'width': '20%', 'render': function (data) {
+                         return '<button onclick="Update(' + data + ')" class="btn btn-info">Sửa <i class="fas fa-tasks" ></i></button > <button onclick="Delete(' + data + ')" class="btn btn-danger" >Xóa <i class="fas fa-trash-alt" ></i ></button >@* <a id="proof" href="@Url.Action("Details", "PlansAdvisor")/' + data + '/" class="btn btn-info">Minh chứng <i class="fas fa-edit"></i></a>*@'
+                     }
+                 },
+                 ],
+             'bAutoWidth': false,
+             'responsive': false,
+             "order": [[0, "asc"]],
+             'ordering': false,
+             'rowsGroup': [0,1],
+             'language': {
+                 "decimal": "",
+                 "emptyTable": "Không có dữ liệu",
+                 "info": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+                 "infoEmpty": "Hiển thị 0 từ 0 đến 0 mục",
+                 "infoFiltered": "(Được lọc  từ _MAX_ mục)",
+                 "infoPostFix": "",
+                 "thousands": ",",
+                 "lengthMenu": "Hiển thị _MENU_ mục",
+                 "loadingRecords": "Đang tải...",
+                 "search": "Tìm kiếm:",
+                 "zeroRecords": "Không tìm thấy dữ liệu",
+                 "paginate": {
+                     "first": "First",
+                     "last": "Last",
+                     "next": "Sau",
+                     "previous": "Trước"
+                 },
+             }
+         });
+         dataTableA.on('order.dt search.dt', function () {
+                let i = 1;
+                dataTableA.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
     }
 
         function filterFunction() {
